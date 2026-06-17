@@ -1,0 +1,14 @@
+# Claude Code 会话运行时产物
+.claude/scheduled_tasks.lock
+.claude/worktrees/
+
+# Python / 运行时产物
+.env
+__pycache__
+*.pyc
+.langgraph_api/
+deep_research.egg-info/
+
+# 评估/冒烟运行的本地产物（日志与结果快照不入库）
+*.log
+research_eval_*.json

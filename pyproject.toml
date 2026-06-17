@@ -1,0 +1,77 @@
+[project]
+name = "deep_research"
+version = "0.1.0"
+description = "Build a deep research agent from scratch"
+requires-python = ">=3.11,<3.14"
+dependencies = [
+    "langgraph>=1.0.0",
+    "langchain>=1.0.0",
+    "langchain-openai>=1.0.0",
+    "langchain-anthropic>=1.0.0",
+    "langchain_community>=0.4",
+    "langchain_tavily>=0.2.12",
+    "langchain_mcp_adapters>=0.1.11",
+    "pydantic>=2.0.0",
+    "rich>=14.0.0",
+    "jupyter>=1.0.0",
+    "ipykernel>=6.20.0",
+    "tavily-python>=0.5.0",
+    "json-repair>=0.59.10",
+    "python-frontmatter>=1.1.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "langgraph-cli[inmem]>=0.4.26",
+    "mypy>=1.11.1",
+ "ruff>=0.6.1",
+]
+
+[build-system]
+requires = ["setuptools>=73.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["deep_research"]
+
+[tool.setuptools.package-dir]
+"deep_research" = "src/deep_research"
+
+[tool.setuptools.package-data]
+"*" = ["py.typed"]
+"deep_research" = ["skills/*.md"]
+
+[tool.ruff]
+lint.select = [
+    "E",    # pycodestyle
+    "F",    # pyflakes
+    "I",    # isort
+    "D",    # pydocstyle
+    "D401", # First line should be in imperative mood
+    "T201",
+    "UP",
+]
+lint.ignore = [
+    "UP006",
+    "UP007",
+    "UP035",
+    "D417",
+    "E501",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["D", "UP"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.pytest.ini_options]
+# 让测试可以 `from scripts import ...` —— scripts/ 是 namespace 包,
+# 默认不会被 pytest 加入 sys.path; 而 `python -m scripts.xxx` 走的是 cwd
+# 入栈, 测试需要显式声明.
+pythonpath = ["."]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.3",
+]
