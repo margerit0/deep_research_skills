@@ -1,0 +1,14 @@
+{
+    "dockerfile_lines": [],
+    "graphs": {
+      "scope_research": "./src/deep_research/research_agent_scope.py:scope_research",
+      "research_agent_skills": "./src/deep_research/research_agent_skills.py:researcher_agent_skills",
+      "research_agent_supervisor": "./src/deep_research/multi_agent_supervisor.py:supervisor_agent",
+      "research_agent_full": "./src/deep_research/research_agent_full.py:agent"
+    },
+    "python_version": "3.11",
+    "env": ".env",
+    "dependencies": [
+      "."
+    ]
+  }
