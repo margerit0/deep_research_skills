@@ -1,0 +1,158 @@
+{
+  "measurements": {
+    "root": {
+      "width": 1024,
+      "height": 980.671875
+    },
+    "glass": [
+      {
+        "class": "cw-sidebar",
+        "filter": "blur(24px) saturate(1.45)",
+        "background": "rgba(248, 251, 255, 0.5)"
+      },
+      {
+        "class": "cw-composer",
+        "filter": "blur(24px) saturate(1.45)",
+        "background": "rgba(255, 255, 255, 0.75)"
+      },
+      {
+        "class": "cw-node cursor-interaction",
+        "filter": "blur(24px) saturate(1.45)",
+        "background": "rgba(255, 255, 255, 0.72)"
+      },
+      {
+        "class": "cw-node cursor-interaction",
+        "filter": "blur(24px) saturate(1.45)",
+        "background": "rgba(255, 255, 255, 0.72)"
+      },
+      {
+        "class": "cw-node cw-supervisor cursor-interaction",
+        "filter": "blur(24px) saturate(1.45)",
+        "background": "rgba(255, 255, 255, 0.72)"
+      },
+      {
+        "class": "cw-node cw-fork cursor-interaction",
+        "filter": "blur(24px) saturate(1.45)",
+        "background": "rgba(255, 255, 255, 0.72)"
+      },
+      {
+        "class": "cw-node cw-fork cursor-interaction",
+        "filter": "blur(24px) saturate(1.45)",
+        "background": "rgba(234, 243, 255, 0.81)"
+      },
+      {
+        "class": "cw-node cw-fork cursor-interaction",
+        "filter": "blur(24px) saturate(1.45)",
+        "background": "rgba(255, 255, 255, 0.72)"
+      },
+      {
+        "class": "cw-node cw-report cursor-interaction",
+        "filter": "blur(24px) saturate(1.45)",
+        "background": "rgba(255, 255, 255, 0.72)"
+      },
+      {
+        "class": "cw-inspector",
+        "filter": "blur(24px) saturate(1.45)",
+        "background": "rgba(255, 255, 255, 0.75)"
+      }
+    ],
+    "pickers": [
+      {
+        "width": 81.328125,
+        "height": 28
+      },
+      {
+        "width": 82.15625,
+        "height": 28
+      }
+    ]
+  },
+  "checks": [
+    "All 7 graph nodes update all 3 inspector views; pending node has no fabricated output or events",
+    "Inspector keyboard tabs, Escape, focus return and reopen",
+    "Compact radio menus, keyboard selection, one open menu, Escape, outside click; current run model stays unchanged",
+    "IME composition, Shift+Enter, local send and selection snapshot",
+    "Graph collapse, run progression, completed researcher output, pending/new run reset and captured model",
+    "State restoration and stale same-client revision protection",
+    "Light/dark 1024/900/736/390/320 layouts and both open menus; reduced motion",
+    "Touch targets at least 44 px; node selection and inspector tabs on a 320 px touch layout"
+  ],
+  "layouts": [
+    {
+      "theme": "light",
+      "width": 1024,
+      "rootWidth": 1024,
+      "overflow": [],
+      "filter": "blur(24px) saturate(1.45)"
+    },
+    {
+      "theme": "light",
+      "width": 900,
+      "rootWidth": 900,
+      "overflow": [],
+      "filter": "blur(24px) saturate(1.45)"
+    },
+    {
+      "theme": "light",
+      "width": 736,
+      "rootWidth": 736,
+      "overflow": [],
+      "filter": "blur(24px) saturate(1.45)"
+    },
+    {
+      "theme": "light",
+      "width": 390,
+      "rootWidth": 390,
+      "overflow": [],
+      "filter": "blur(24px) saturate(1.45)"
+    },
+    {
+      "theme": "light",
+      "width": 320,
+      "rootWidth": 320,
+      "overflow": [],
+      "filter": "blur(24px) saturate(1.45)"
+    },
+    {
+      "theme": "dark",
+      "width": 1024,
+      "rootWidth": 1024,
+      "overflow": [],
+      "filter": "blur(24px) saturate(1.45)"
+    },
+    {
+      "theme": "dark",
+      "width": 900,
+      "rootWidth": 900,
+      "overflow": [],
+      "filter": "blur(24px) saturate(1.45)"
+    },
+    {
+      "theme": "dark",
+      "width": 736,
+      "rootWidth": 736,
+      "overflow": [],
+      "filter": "blur(24px) saturate(1.45)"
+    },
+    {
+      "theme": "dark",
+      "width": 390,
+      "rootWidth": 390,
+      "overflow": [],
+      "filter": "blur(24px) saturate(1.45)"
+    },
+    {
+      "theme": "dark",
+      "width": 320,
+      "rootWidth": 320,
+      "overflow": [],
+      "filter": "blur(24px) saturate(1.45)"
+    }
+  ],
+  "diagnostics": {
+    "errors": [],
+    "consoleErrors": [],
+    "requestFailures": [],
+    "iconSource": "Installed Lucide UMD and pinned Floating UI assets embedded only in the local standalone preview."
+  }
+}
