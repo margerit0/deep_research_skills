@@ -5,6 +5,7 @@ export const backendConfigSchema = z.object({
   graph_id: z.literal('research_agent_full'),
   model_selection: z.literal('server'),
   skills_mode: z.literal('auto'),
+  research_events_version: z.literal(1).optional(),
   models: z
     .array(
       z.object({
@@ -26,6 +27,38 @@ export const researchStatusSchema = z.enum([
 export const researchPhaseSchema = z.enum(['clarify', 'brief', 'research', 'writing', 'complete'])
 export const sourceSchema = z.object({ title: z.string(), url: z.string() })
 export const errorSchema = z.object({ code: z.string(), message: z.string(), node: z.string() })
+export const researchEventSchema = z.object({
+  version: z.literal(1),
+  id: z.uuid(),
+  research_id: z.string().min(1),
+  turn_id: z.string().min(1),
+  sequence: z.number().int().positive(),
+  at: z.iso.datetime({ offset: true }),
+  task_id: z.uuid(),
+  round: z.number().int().positive(),
+  kind: z.enum([
+    'delegated',
+    'model_started',
+    'model_finished',
+    'model_failed',
+    'tool_started',
+    'tool_finished',
+    'tool_failed',
+    'compression_started',
+    'compression_finished',
+    'compression_failed',
+    'completed',
+    'failed',
+  ]),
+  elapsed_ms: z.number().int().nonnegative(),
+  topic: z.string().max(2050).optional(),
+  tool: z.enum(['tavily_search', 'load_skill', 'think_tool', 'unknown']).optional(),
+  query: z.string().max(1050).optional(),
+  sources: z.array(sourceSchema).max(50).optional(),
+  source_count: z.number().int().nonnegative().optional(),
+  output: z.string().max(8050).optional(),
+})
+export type ResearchEvent = z.infer<typeof researchEventSchema>
 export const messageSchema = z.object({
   id: z.string(),
   type: z.enum(['human', 'ai']),
@@ -53,6 +86,7 @@ export const liveResearchSchema = z.object({
   notes: z.array(z.string()),
   sources: z.array(sourceSchema),
   errors: z.array(errorSchema),
+  events: z.array(researchEventSchema).default([]),
   observations: z.array(
     z.object({ at: z.string(), phase: researchPhaseSchema, status: researchStatusSchema }),
   ),
@@ -80,6 +114,16 @@ export const graphValuesSchema = z.object({
   notes: z.array(z.string()).optional(),
   sources: z.array(sourceSchema).optional(),
   research_errors: z.array(errorSchema).optional(),
+  // Unknown event versions must not prevent report/status recovery.
+  research_events: z
+    .array(z.unknown())
+    .transform((events) =>
+      events.flatMap((event) => {
+        const parsed = researchEventSchema.safeParse(event)
+        return parsed.success ? [parsed.data] : []
+      }),
+    )
+    .optional(),
   messages: z
     .array(
       z.object({

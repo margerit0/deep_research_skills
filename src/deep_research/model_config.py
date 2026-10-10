@@ -83,6 +83,7 @@ def public_model_config() -> dict:
         "graph_id": "research_agent_full",
         "model_selection": "server",
         "skills_mode": "auto",
+        "research_events_version": 1,
         "models": [dict(_model_snapshots[role]) for role in MODEL_ROLES if role in _model_snapshots],
     }
 

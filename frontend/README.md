@@ -9,6 +9,7 @@
 ```powershell
 cd D:\deep_research_public_preview
 $env:PYTHONUTF8 = '1'
+$env:NO_PROXY = '*'
 uv sync --locked --extra dev
 uv run --locked --extra dev langgraph dev --no-browser --allow-blocking
 ```
@@ -43,11 +44,15 @@ npm run format:check
 
 1. 在真实会话输入研究问题。模型按钮展示后端六个角色的实际配置，Skills 固定自动；本轮没有按次模型或手选 Skills 参数。
 2. 若助手提出澄清问题，界面显示“等待补充”。在同一输入框回答，继续同一轮研究、同一个服务端 thread；一次 LangGraph run 的结束不代表报告已完成。
-3. 查看实际研究简报、阶段状态和最终 Markdown 报告。来源列表来自搜索工具返回值，报告引用编号以正文为准。真实模式不显示模拟研究员、耗时、来源数量或执行事件。
+3. 查看实际研究简报、阶段状态和最终 Markdown 报告。来源列表来自搜索工具返回值，报告引用编号以正文为准。研究员节点由实际委派事件生成，展示协调轮次、检索、Skills 加载、笔记压缩及完成 / 失败；检查器中的任务、查询、笔记与耗时均来自后端。
 4. 成功、失败和部分完成分别显示。部分研究员失败时保留有效成果；写作失败时展示已有笔记及来源。没有有效研究结果时不调用报告模型。
 5. 刷新后回读当前运行与检查点，等待回读完成再发送。终态后再次提交会在同一会话创建新的研究批次，历史报告保留在本地记录中。
 
-接口和状态映射详见 [后端接口约定](docs/backend-contract.md)。阶段状态目前每 2 秒回读；检查器中的时间表示浏览器观察到状态的时间。细粒度研究员事件、逐 token 报告流和完整断线恢复不在本轮范围内。
+接口和状态映射详见 [后端接口约定](docs/backend-contract.md)。阶段状态每 2 秒回读；研究员进度通过原生 SSE 事件流更新。主阶段的“回读”记录使用浏览器观察时间，研究员记录使用后端时间，耗时截至最近一条后端事件。点击“定位当前”可定位正在执行的研究任务。
+
+事件流中断时会提示“事件重连中”，仍继续回读阶段和结果；接收事件不会再次提交研究。刷新后保留本地事件，并读取服务端可用的事件缓冲与最终检查点。研究子流程结束时事件记录写入检查点；进程在此前意外退出、事件缓冲丢失且浏览器未收到的细节仍可能缺失。逐 token 报告和完整断线恢复留待后续。
+
+更新后需重启后端，`/atlas/config` 的 `research_events_version: 1` 表示支持本轮事件协议；旧后端仍可显示主阶段和报告，不会生成虚构研究员。供应商问题按用户要求暂缓处理，当前真实模型完整闭环仍待验收；事件与界面验证使用明确标注的替身，结果见验收记录。
 
 发送前会先保存提交标识；网络响应丢失时按标识查找已有运行，不会自动重发。无法确认是否接受、或服务端会话已不存在时，可以“重新读取状态”或新建研究，旧内容继续保留。浏览器存储不可写时允许保存内存草稿，但禁用真实提交，以免刷新丢失提交标识。多标签页协同编辑和跨设备会话发现尚未实现。
 
@@ -68,7 +73,7 @@ $env:ATLAS_TEST_PORT = '5174'
 npm test
 ```
 
-遇到开发服务热更新后仍显示旧模块或空模块时，重启该开发服务再刷新页面。
+遇到开发服务热更新后仍显示旧模块或空模块时，重启该开发服务再刷新页面。Vite 已忽略 `test-results/` 与 `playwright-report/` 的文件监听，生成测试报告不会触发工作台重新加载。
 
 ## 保留的模拟会话与交互
 
@@ -86,35 +91,38 @@ npm test
 
 模拟会话和全流程演示里的模型 / Skills 菜单只是示例，不代表真实后端支持按次切换。其回复、阶段、耗时、来源数量、节点输入输出、事件与报告都来自 `mock.ts` / `demo.ts`。真实会话单独使用 `live` 状态和 LangGraph 接口，绝不以模拟结果补齐缺失数据。
 
-模拟示例沿用三个研究员，模拟新问题使用两个研究员。真实图谱先展示四个主阶段；研究员明细和多轮委派待后续事件接口接入，不从示例推断真实研究员数量。
+模拟示例沿用三个研究员，模拟新问题使用两个研究员。真实图谱保留四个主阶段，只根据实际事件增加研究任务节点；后续协调轮次的委派有独立任务标识，不从示例推断研究员数量。缺少完成事件的任务不会因为运行结束就显示完成。
 
 完整图仍按 `clarify_with_user → write_research_brief → supervisor_subgraph → final_report_generation` 展示。研究员内部的模型 / 工具循环和 `compress_research` 保留在检查器里。
 
 ## 代码结构
 
-| 位置                                  | 职责                                           |
-| ------------------------------------- | ---------------------------------------------- |
-| `src/components/`                     | 导航、消息、输入框、菜单、图谱、节点检查器     |
-| `src/state/useWorkspace.ts`           | 不可变状态转换、会话选择、版本化本地存储与恢复 |
-| `src/state/useLiveResearch.ts`        | 提交记录、后台运行回读、澄清续问与网络状态     |
-| `src/api/langgraph.ts`                | 配置和原生 LangGraph thread / run / state API  |
-| `src/data/liveSchema.ts` / `live.ts`  | 真实接口校验、状态映射及阶段节点适配           |
-| `src/components/LiveConversation.tsx` | 真实消息、报告、失败信息与检索来源             |
-| `src/components/BackendControls.tsx`  | 后端实际模型与自动 Skills 展示                 |
-| `src/state/useDemo.ts`                | 独立演示会话、可暂停时钟、播放控制及后台暂停   |
-| `src/data/demo.ts`                    | 18 幕脚本、逐字文本和演示节点视图              |
-| `src/components/DemoPlayer.tsx`       | 演示播放器、章节导航与场景跟随                 |
-| `src/data/schema.ts`                  | 运行、节点、会话类型和存储校验                 |
-| `src/data/mock.ts`                    | 模拟运行、阶段与节点视图适配                   |
-| `src/data/example-nodes.json`         | 已确认示例中的静态数据                         |
-| `src/apple.css`                       | 从已确认主 HTML 提取的 Apple 色板与原始样式    |
-| `src/app.css`                         | 独立应用的滚动、窄屏导航与布局适配             |
-| `src/demo.css`                        | 演示播放器、图谱 / 消息动效与减少动态效果适配  |
-| `tests/workspace.spec.ts`             | 行为与响应式浏览器验证                         |
-| `tests/demo.spec.ts`                  | 完整播放、时钟控制、会话隔离与窄屏演示验证     |
-| `tests/live.spec.ts`                  | 使用 HTTP 替身的真实模式浏览器回归             |
-| `tests/live-api.spec.ts`              | 显式启用的原生 LangGraph API / 真实模型联调    |
+| 位置                                  | 职责                                              |
+| ------------------------------------- | ------------------------------------------------- |
+| `src/components/`                     | 导航、消息、输入框、菜单、图谱、节点检查器        |
+| `src/state/useWorkspace.ts`           | 不可变状态转换、会话选择、版本化本地存储与恢复    |
+| `src/state/useLiveResearch.ts`        | 提交记录、后台运行回读、澄清续问与网络状态        |
+| `src/api/langgraph.ts`                | 配置和原生 LangGraph thread / run / state API     |
+| `src/api/researchStream.ts`           | 原生 custom SSE、UTF-8 分片与事件校验             |
+| `src/data/liveSchema.ts` / `live.ts`  | 真实接口校验、状态映射及阶段节点适配              |
+| `src/data/researchEvents.ts`          | 研究 / 提交归属、事件去重、实际研究员节点和时间线 |
+| `src/components/LiveConversation.tsx` | 真实消息、报告、失败信息与检索来源                |
+| `src/components/BackendControls.tsx`  | 后端实际模型与自动 Skills 展示                    |
+| `src/state/useDemo.ts`                | 独立演示会话、可暂停时钟、播放控制及后台暂停      |
+| `src/data/demo.ts`                    | 18 幕脚本、逐字文本和演示节点视图                 |
+| `src/components/DemoPlayer.tsx`       | 演示播放器、章节导航与场景跟随                    |
+| `src/data/schema.ts`                  | 运行、节点、会话类型和存储校验                    |
+| `src/data/mock.ts`                    | 模拟运行、阶段与节点视图适配                      |
+| `src/data/example-nodes.json`         | 已确认示例中的静态数据                            |
+| `src/apple.css`                       | 从已确认主 HTML 提取的 Apple 色板与原始样式       |
+| `src/app.css`                         | 独立应用的滚动、窄屏导航与布局适配                |
+| `src/demo.css`                        | 演示播放器、图谱 / 消息动效与减少动态效果适配     |
+| `tests/workspace.spec.ts`             | 行为与响应式浏览器验证                            |
+| `tests/demo.spec.ts`                  | 完整播放、时钟控制、会话隔离与窄屏演示验证        |
+| `tests/live.spec.ts`                  | 使用 HTTP 替身的真实模式浏览器回归                |
+| `tests/live-events.spec.ts`           | 事件流、并行 / 多轮任务、刷新隔离与窄屏回归       |
+| `tests/live-api.spec.ts`              | 显式启用的原生 LangGraph API / 真实模型联调       |
 
 `scripts/import-design.mjs` 记录一次性迁移方式。日常开发与构建不运行它；手动运行会重新生成 `apple.css` 和示例 JSON。应用不引用 `ui-drafts/`，也不依赖 `window.openai`、`Tweak`、`viz-carousel`、iframe 或宿主图标库。Lucide 图标随应用打包。
 
-下一阶段继续接入细粒度研究员事件、完整断线恢复和按次模型 / Skills 契约。服务端凭据继续留在后端 `.env`。
+下一阶段继续完善完整断线恢复和按次模型 / Skills 契约。供应商恢复后重跑真实研究闭环验收；服务端凭据继续留在后端 `.env`。

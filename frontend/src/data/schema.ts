@@ -78,4 +78,5 @@ export interface NodeDetail {
   output: string
   events: [string, string, string][]
   researcher: boolean
+  modelRole?: string
 }

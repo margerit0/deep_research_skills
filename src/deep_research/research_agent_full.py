@@ -14,6 +14,7 @@ from langgraph.types import Command, Overwrite
 from deep_research.model_config import get_chat_model, public_model_config
 from deep_research.multi_agent_supervisor import supervisor_agent
 from deep_research.prompts import final_report_generation_prompt
+from deep_research.research_events import capture_research_events
 from deep_research.research_agent_scope import (
     clarify_with_user as scope_clarify,
     write_research_brief as scope_brief,
@@ -94,6 +95,7 @@ def prepare_research(state: AgentState) -> Command:
         "supervisor_status": "",
         "research_errors": [],
         "sources": [],
+        "research_events": [],
     }
     if not same_research:
         # Prior studies remain in frontend history, not in the next scoping prompt.
@@ -155,32 +157,39 @@ def write_research_brief(state: AgentState) -> Command:
 
 async def supervisor_subgraph(state: AgentState) -> Command:
     """Gate writing on actual findings, keeping partial successes visible."""
-    try:
-        result = await supervisor_agent.ainvoke(
-            {
-                "supervisor_messages": state["supervisor_messages"],
-                "research_brief": state["research_brief"],
-                "notes": [],
-                "raw_notes": [],
-                "sources": [],
-                "research_errors": [],
-                "research_iterations": 0,
-                "supervisor_status": "",
-            }
-        )
-    except Exception as exc:
-        log_node_failure(logger, "supervisor_subgraph", exc)
-        return Command(
-            goto=END,
-            update=_failure(
-                state,
-                "supervisor_subgraph",
-                "research_failed",
-                "研究流程异常结束，未生成报告。",
-            ),
-        )
+    with capture_research_events(
+        state.get("active_research_id", ""), state.get("active_turn_id", "")
+    ) as events:
+        try:
+            result = await supervisor_agent.ainvoke(
+                {
+                    "supervisor_messages": state["supervisor_messages"],
+                    "research_brief": state["research_brief"],
+                    "notes": [],
+                    "raw_notes": [],
+                    "sources": [],
+                    "research_errors": [],
+                    "research_iterations": 0,
+                    "supervisor_status": "",
+                }
+            )
+        except Exception as exc:
+            log_node_failure(logger, "supervisor_subgraph", exc)
+            return Command(
+                goto=END,
+                update={
+                    **_failure(
+                        state,
+                        "supervisor_subgraph",
+                        "research_failed",
+                        "研究流程异常结束，未生成报告。",
+                    ),
+                    "research_events": events,
+                },
+            )
     notes = [note for note in result.get("notes", []) if is_research_note(note)]
     update = {
+        "research_events": events,
         "notes": Overwrite(notes),
         "raw_notes": Overwrite(result.get("raw_notes", [])),
         "supervisor_messages": Overwrite(result.get("supervisor_messages", [])),

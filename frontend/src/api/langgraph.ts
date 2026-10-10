@@ -66,6 +66,9 @@ export async function createRun(thread: LiveThread, research: LiveResearch, turn
         multitask_strategy: 'reject',
         if_not_exists: 'reject',
         durability: 'sync',
+        ...(research.config.research_events_version === 1
+          ? { stream_mode: ['custom'], stream_resumable: true }
+          : {}),
       }),
     }),
   )

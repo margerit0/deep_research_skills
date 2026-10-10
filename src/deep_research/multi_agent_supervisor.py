@@ -27,6 +27,7 @@ from langgraph.types import Command
 
 from deep_research.model_config import get_chat_model
 from deep_research.prompts import lead_researcher_prompt
+from deep_research.research_events import emit_research_event, researcher_task
 from deep_research.research_agent_skills import researcher_agent_skills as researcher_agent
 from deep_research.state_multi_agent_supervisor import (
     SupervisorState,
@@ -162,9 +163,22 @@ async def supervisor_tools(state: SupervisorState) -> Command[Literal["superviso
 
         async def investigate(call):
             topic = call["args"]["research_topic"]
-            return await researcher_agent.ainvoke({
-                "researcher_messages": [HumanMessage(content=topic)], "research_topic": topic
-            })
+            with researcher_task(call["id"], topic, state.get("research_iterations", 1)):
+                try:
+                    result = await researcher_agent.ainvoke({
+                        "researcher_messages": [HumanMessage(content=topic)], "research_topic": topic
+                    })
+                except Exception:
+                    emit_research_event("failed")
+                    raise
+                content = message_text(result.get("compressed_research"))
+                valid = is_research_note(content)
+                emit_research_event(
+                    "completed" if valid else "failed",
+                    sources=result.get("sources", []),
+                    output=content if valid else "该任务未返回有效的研究笔记。",
+                )
+                return result
 
         # return_exceptions retains successful siblings when one researcher fails.
         results = await asyncio.gather(*[investigate(call) for call in research_calls], return_exceptions=True)

@@ -19,6 +19,7 @@ from langchain_core.messages import (
 from langgraph.graph import END, START, StateGraph
 
 from deep_research.model_config import get_chat_model, get_agent_rate_limiter
+from deep_research.research_events import emit_research_event
 from deep_research.prompts import (
     compress_research_human_message,
     compress_research_system_prompt,
@@ -97,21 +98,24 @@ def _has_real_search_results(messages) -> bool:
 
 def llm_call(state: ResearcherState):
     """决定下一步动作：搜索、思考、加载 skill 或结束研究。"""
-    return {
-        "researcher_messages": [
-            model_with_tools.invoke(
-                [
-                    SystemMessage(
-                        content=research_agent_prompt_with_skills.format(
-                            date=get_today_str(),
-                            skills_index=format_skills_index(),
-                        )
+    emit_research_event("model_started")
+    try:
+        response = model_with_tools.invoke(
+            [
+                SystemMessage(
+                    content=research_agent_prompt_with_skills.format(
+                        date=get_today_str(),
+                        skills_index=format_skills_index(),
                     )
-                ]
-                + state["researcher_messages"]
-            )
-        ]
-    }
+                )
+            ]
+            + state["researcher_messages"]
+        )
+    except Exception:
+        emit_research_event("model_failed")
+        raise
+    emit_research_event("model_finished")
+    return {"researcher_messages": [response]}
 
 
 def tool_node(state: ResearcherState):
@@ -120,8 +124,23 @@ def tool_node(state: ResearcherState):
 
     observations = []
     for tc in tool_calls:
-        tool = tools_by_name[tc["name"]]
-        observations.append(tool.invoke(tc["args"]))
+        name = tc["name"]
+        # Only query/skill names are public. think_tool reasoning is never emitted.
+        query = tc["args"].get("query" if name == "tavily_search" else "skill_name")
+        emit_research_event("tool_started", tool=name, query=query)
+        try:
+            observation = tools_by_name[name].invoke(tc["args"])
+        except Exception:
+            emit_research_event("tool_failed", tool=name)
+            raise
+        observations.append(observation)
+        emit_research_event(
+            "tool_finished",
+            tool=name,
+            sources=extract_search_sources(message_text(observation))
+            if name == "tavily_search"
+            else None,
+        )
 
     tool_outputs = [
         ToolMessage(
@@ -171,8 +190,14 @@ def compress_research(state: ResearcherState) -> dict:
         + list(researcher_messages)
         + [HumanMessage(content=compress_research_human_message)]
     )
-    response = compress_model.invoke(messages)
+    emit_research_event("compression_started")
+    try:
+        response = compress_model.invoke(messages)
+    except Exception:
+        emit_research_event("compression_failed")
+        raise
     compressed = message_text(response.content)
+    emit_research_event("compression_finished" if compressed else "compression_failed")
 
     # 防御 2: compress 模型偶发返回空 → 用明确标记代替空字符串.
     if not compressed:

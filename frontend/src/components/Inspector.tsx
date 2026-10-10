@@ -21,14 +21,16 @@ export function Inspector({
   onClose: () => void
 }) {
   const { state, dispatch, isLive, liveRun } = controller
-  const role = (
-    {
-      clarify: 'SCOPING',
-      brief: 'SCOPING',
-      supervisor: 'SUPERVISOR',
-      report: 'FINAL_REPORT',
-    } as Record<string, string>
-  )[node.id]
+  const role =
+    node.modelRole ??
+    (
+      {
+        clarify: 'SCOPING',
+        brief: 'SCOPING',
+        supervisor: 'SUPERVISOR',
+        report: 'FINAL_REPORT',
+      } as Record<string, string>
+    )[node.id]
   const actualModel = liveRun?.config.models.find((model) => model.role === role)?.model ?? '待执行'
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([])
   const pending = node.status === 'pending'
@@ -37,6 +39,7 @@ export function Inspector({
       id="cw-inspector"
       className="cw-inspector"
       data-status={node.status}
+      data-live={isLive || undefined}
       aria-label="节点检查器"
       onKeyDown={(e) => {
         if (e.key === 'Escape') {
@@ -209,7 +212,7 @@ export function Inspector({
           </ol>
         ) : (
           <div className="cw-inspector-empty">
-            {isLive ? '暂无该阶段的状态回读记录。' : '等待该节点开始执行。'}
+            {isLive ? '暂无该节点的执行记录。' : '等待该节点开始执行。'}
           </div>
         )}
       </div>

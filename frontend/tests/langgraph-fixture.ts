@@ -30,6 +30,8 @@ export interface Submission {
   metadata: Record<string, string>
   multitask_strategy: string
   assistant_id: string
+  stream_mode?: string[]
+  stream_resumable?: boolean
 }
 
 export async function fakeLangGraph(page: Page) {

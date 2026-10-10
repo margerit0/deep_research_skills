@@ -7,6 +7,7 @@ import { Icon } from './Icon'
 import { Inspector } from './Inspector'
 import { StatusMark } from './StatusMark'
 import { currentLiveNode, livePhaseText, liveStatusText } from '../data/live'
+import { currentResearcherNode } from '../data/researchEvents'
 
 interface Wire {
   d: string
@@ -96,6 +97,7 @@ export function Graph({ controller }: { controller: WorkspaceController }) {
       aria-pressed={node.id === selected.id}
       aria-expanded={node.id === selected.id && state.inspectorOpen}
       aria-controls="cw-inspector"
+      title={isLive && node.researcher ? node.input : undefined}
       onClick={() => inspectNode(node.id)}
     >
       {node.researcher ? (
@@ -160,7 +162,24 @@ export function Graph({ controller }: { controller: WorkspaceController }) {
                 ? phaseText[run.stage]
                 : '等待提交研究问题'}
         </span>
-        <span>{isLive ? '真实数据' : '演示数据'}</span>
+        <span
+          title={
+            isLive && live.eventConnections[thread.id] === 'retrying'
+              ? '事件连接暂时中断，阶段状态仍会回读；不会重复提交研究。'
+              : undefined
+          }
+        >
+          {isLive
+            ? liveRun?.status === 'running' && liveRun.config.research_events_version === 1
+              ? {
+                  connecting: '连接事件流',
+                  live: '实时事件',
+                  retrying: '事件重连中',
+                  ended: '真实数据',
+                }[live.eventConnections[thread.id] ?? 'connecting']
+              : '真实数据'
+            : '演示数据'}
+        </span>
       </div>
       <div ref={flow} className="cw-flow">
         <svg className="cw-wires" aria-hidden="true">
@@ -221,7 +240,7 @@ export function Graph({ controller }: { controller: WorkspaceController }) {
             </>
           ) : (
             <div className="cw-await-workers">
-              {isLive ? '研究任务由后端协调' : '任务开始后展示研究员'}
+              {isLive ? '收到实际委派后展示研究员' : '任务开始后展示研究员'}
             </div>
           )}
         </div>
@@ -233,7 +252,11 @@ export function Graph({ controller }: { controller: WorkspaceController }) {
           className="cw-quiet"
           onClick={() =>
             inspectNode(
-              isLive ? currentLiveNode(liveRun) : demo.active ? demo.currentNode : currentNode(run),
+              isLive
+                ? (currentResearcherNode(liveRun) ?? currentLiveNode(liveRun))
+                : demo.active
+                  ? demo.currentNode
+                  : currentNode(run),
             )
           }
         >

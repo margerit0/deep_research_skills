@@ -6,13 +6,14 @@
 """
 
 import operator
-from typing_extensions import Optional, Annotated, List, Sequence, NotRequired
+from typing_extensions import Optional, Annotated, Sequence, NotRequired
 
 from langchain_core.messages import BaseMessage
 from langgraph.graph import MessagesState
 from langgraph.graph.message import add_messages
 from pydantic import BaseModel, Field
 from deep_research.workflow_contract import ResearchError, ResearchPhase, ResearchSource, ResearchStatus
+from deep_research.research_events import ResearchEvent
 
 # ===== 状态定义 (STATE DEFINITIONS) =====
 
@@ -52,6 +53,7 @@ class AgentState(MessagesState):
     research_errors: list[ResearchError]
     sources: list[ResearchSource]
     effective_config: dict
+    research_events: list[ResearchEvent]
 
 # ===== 结构化输出模式 (STRUCTURED OUTPUT SCHEMAS) =====
 

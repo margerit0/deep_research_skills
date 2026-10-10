@@ -1,18 +1,35 @@
 import { useEffect, useRef, useState } from 'react'
 import * as api from '../api/langgraph'
-import type { BackendConfig, LiveResearch } from '../data/liveSchema'
+import type { BackendConfig, LiveResearch, ResearchEvent } from '../data/liveSchema'
 import type { Thread, Workspace } from '../data/schema'
 import { applySnapshot } from '../data/live'
+import { streamResearchEvents } from '../api/researchStream'
 
-export interface LiveUpdate {
-  type: 'live'
-  threadId: string
-  research: LiveResearch
-  submission?: boolean
-  clearDraft?: string
-}
+export type LiveUpdate =
+  | {
+      type: 'live'
+      threadId: string
+      research: LiveResearch
+      submission?: boolean
+      clearDraft?: string
+    }
+  | {
+      type: 'live-events'
+      threadId: string
+      researchId: string
+      turnId: string
+      runId: string
+      events: ResearchEvent[]
+    }
 type Sync = { state: 'loading' | 'ready' | 'error'; message?: string }
 type Connection = { config?: BackendConfig; loading: boolean; error?: string }
+type EventConnection = 'connecting' | 'live' | 'retrying' | 'ended'
+type EventStream = {
+  runId: string
+  cursor: string
+  retryAt: number
+  controller?: AbortController
+}
 
 export function useLiveResearch(
   workspace: Workspace,
@@ -27,6 +44,81 @@ export function useLiveResearch(
   const syncing = useRef(new Set<string>())
   const sending = useRef(new Set<string>())
   const mounted = useRef(true)
+  const streams = useRef(new Map<string, EventStream>())
+  const [eventConnections, setEventConnections] = useState<Record<string, EventConnection>>({})
+
+  function updateEventConnection(id: string, value: EventConnection) {
+    if (mounted.current)
+      setEventConnections((previous) =>
+        previous[id] === value ? previous : { ...previous, [id]: value },
+      )
+  }
+
+  function syncStreams() {
+    if (!mounted.current) return
+    const candidates = current.current.threads.filter((thread) => {
+      const research = thread.live?.researches.at(-1)
+      return (
+        research?.status === 'running' &&
+        research.config.research_events_version === 1 &&
+        research.turns.at(-1)?.runId
+      )
+    })
+    for (const [id, stream] of streams.current) {
+      const candidate = candidates.find((thread) => thread.id === id)
+      if (candidate?.live?.researches.at(-1)?.turns.at(-1)?.runId !== stream.runId) {
+        stream.controller?.abort()
+        streams.current.delete(id)
+        updateEventConnection(id, 'ended')
+      }
+    }
+    for (const thread of candidates) {
+      const research = thread.live!.researches.at(-1)!
+      const turn = research.turns.at(-1)!
+      const stream = streams.current.get(thread.id) ?? {
+        runId: turn.runId!,
+        cursor: '-1',
+        retryAt: 0,
+      }
+      streams.current.set(thread.id, stream)
+      if (stream.controller || stream.retryAt > Date.now()) continue
+      const controller = new AbortController()
+      stream.controller = controller
+      updateEventConnection(thread.id, 'connecting')
+      void streamResearchEvents(thread.live!, turn.runId!, {
+        signal: controller.signal,
+        after: stream.cursor,
+        onOpen: () => updateEventConnection(thread.id, 'live'),
+        onCursor: (id) => {
+          stream.cursor = id
+        },
+        onEvent: (event) => {
+          if (!mounted.current || controller.signal.aborted) return
+          commitRef.current({
+            type: 'live-events',
+            threadId: thread.id,
+            researchId: research.id,
+            turnId: turn.id,
+            runId: turn.runId!,
+            events: [event],
+          })
+        },
+      })
+        .then(() => {
+          if (!controller.signal.aborted) updateEventConnection(thread.id, 'ended')
+        })
+        .catch(() => {
+          if (!controller.signal.aborted) updateEventConnection(thread.id, 'retrying')
+        })
+        .finally(() => {
+          if (streams.current.get(thread.id) !== stream || controller.signal.aborted) return
+          stream.controller = undefined
+          stream.retryAt = Date.now() + 5000
+          // A stream's end is not a business result. Always reread run + checkpoint.
+          void refresh(thread.id)
+        })
+    }
+  }
 
   async function connect() {
     setConnection({ loading: true })
@@ -139,6 +231,7 @@ export function useLiveResearch(
       notes: [],
       sources: [],
       errors: [],
+      events: [],
       observations: continuing ? last.observations : [],
     }
     // Durable outbox BEFORE either POST. If storage fails, there is no network write.
@@ -213,19 +306,27 @@ export function useLiveResearch(
     void connect()
     return () => {
       mounted.current = false
+      for (const stream of streams.current.values()) stream.controller?.abort()
+      streams.current.clear()
     }
   }, [])
   useEffect(() => {
     void refresh(workspace.activeThreadId)
   }, [workspace.activeThreadId])
   useEffect(() => {
+    syncStreams()
+  }, [workspace])
+  useEffect(() => {
     const tick = () => {
       for (const thread of current.current.threads) {
         const last = thread.live?.researches.at(-1)
         if (last?.status === 'running') void refresh(thread.id)
       }
+      syncStreams()
     }
     const focus = () => {
+      for (const stream of streams.current.values()) stream.retryAt = 0
+      syncStreams()
       void refresh(current.current.activeThreadId)
     }
     const interval = window.setInterval(tick, 2000)
@@ -238,5 +339,5 @@ export function useLiveResearch(
     }
   }, [])
 
-  return { connection, sync, send, refresh, connect }
+  return { connection, sync, send, refresh, connect, eventConnections }
 }

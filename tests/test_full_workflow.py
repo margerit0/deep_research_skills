@@ -3,6 +3,7 @@
 import asyncio
 import json
 import os
+import threading
 from types import SimpleNamespace
 from unittest.mock import AsyncMock, patch
 
@@ -24,6 +25,13 @@ for key in ("LLM_API_KEY", "OPENAI_API_KEY", "TAVILY_API_KEY"):
 
 from deep_research import atlas_api, model_config, multi_agent_supervisor as supervisor
 from deep_research import research_agent_full as full, research_agent_scope as scope
+from deep_research import research_agent_skills as worker
+from deep_research.research_events import (
+    capture_research_events,
+    emit_research_event,
+    researcher_task,
+)
+from deep_research.utils import format_search_output
 from deep_research.workflow_contract import extract_search_sources, merge_sources
 
 
@@ -167,6 +175,10 @@ def test_new_research_clears_all_reduced_channels_and_report(harness):
     assert third["research_status"] == "awaiting_input"
     assert third["final_report"] == third["report_research_id"] == ""
     assert third["notes"] == third["raw_notes"] == third["supervisor_messages"] == []
+    assert third["research_events"] == []
+    assert {event["research_id"] for event in second["research_events"]} == {
+        "research-b"
+    }
 
 
 @pytest.mark.parametrize(
@@ -336,3 +348,211 @@ def test_qwen_payload_diagnostic_survives_full_graph_without_credentials(
     assert "total_tokens" in caplog.text
     assert "private-endpoint" not in caplog.text
     assert "payload_diagnostic" not in str(result["research_errors"])
+
+
+def test_research_events_stream_before_child_finishes_and_match_checkpoint(harness):
+    """Use the actual nested graph and sync tools, not a mocked event writer."""
+    release_search = threading.Event()
+
+    def research(messages):
+        used = {
+            message.name for message in messages if isinstance(message, ToolMessage)
+        }
+        if "load_skill" not in used:
+            calls = [
+                {
+                    "id": "skill",
+                    "name": "load_skill",
+                    "args": {"skill_name": "academic-research"},
+                }
+            ]
+        elif "tavily_search" not in used:
+            calls = [
+                {
+                    "id": "search",
+                    "name": "tavily_search",
+                    "args": {"query": "public query"},
+                },
+                {
+                    "id": "think",
+                    "name": "think_tool",
+                    "args": {"reflection": "PRIVATE REASONING"},
+                },
+            ]
+        else:
+            calls = []
+        return AIMessage(content="PRIVATE MODEL TEXT", tool_calls=calls)
+
+    def search(_args):
+        assert release_search.wait(10), (
+            "The custom event must arrive while the child is running"
+        )
+        return format_search_output(
+            {SOURCE["url"]: {"title": SOURCE["title"], "content": "RAW TOOL TEXT"}}
+        )
+
+    async def collect():
+        seen, final = [], None
+        try:
+            async for mode, value in harness.graph.astream(
+                request("Question", "research-stream", "turn-stream"),
+                harness.config,
+                stream_mode=["custom", "values"],
+            ):
+                if mode == "custom":
+                    assert value["type"] == "atlas.research_event"
+                    event = value["event"]
+                    seen.append(event)
+                    if (
+                        event["kind"] == "tool_started"
+                        and event["tool"] == "tavily_search"
+                    ):
+                        release_search.set()
+                else:
+                    final = value
+        finally:
+            release_search.set()
+        return seen, final
+
+    with (
+        patch.object(supervisor, "researcher_agent", worker.researcher_agent_skills),
+        patch.object(worker, "model_with_tools", SimpleNamespace(invoke=research)),
+        patch.object(
+            worker,
+            "compress_model",
+            SimpleNamespace(
+                invoke=lambda _: AIMessage(content="Valid compressed notes")
+            ),
+        ),
+        patch.dict(
+            worker.tools_by_name,
+            {
+                "tavily_search": SimpleNamespace(invoke=search),
+                "load_skill": SimpleNamespace(invoke=lambda _: "PRIVATE SKILL BODY"),
+                "think_tool": SimpleNamespace(invoke=lambda _: "PRIVATE REASONING"),
+            },
+        ),
+    ):
+        events, final = invoke(collect())
+    assert final["research_status"] == "succeeded"
+    assert events == final["research_events"]
+    assert [event["sequence"] for event in events] == list(range(1, len(events) + 1))
+    assert {event["research_id"] for event in events} == {"research-stream"}
+    assert {event["turn_id"] for event in events} == {"turn-stream"}
+    assert len({event["task_id"] for event in events}) == 1
+    assert events[0]["kind"] == "delegated"
+    assert events[-1]["kind"] == "completed"
+    assert events[-1]["output"] == "Valid compressed notes"
+    assert events[-1]["sources"] == [SOURCE]
+    assert {"compression_started", "compression_finished"} <= {
+        event["kind"] for event in events
+    }
+    serialized = json.dumps(events)
+    assert "PRIVATE" not in serialized and "RAW TOOL TEXT" not in serialized
+    assert "public query" in serialized and "academic-research" in serialized
+    assert harness.graph.get_state(harness.config).values["research_events"] == events
+
+
+def test_parallel_and_later_delegations_keep_distinct_task_outcomes(harness):
+    def delegate(call_id, topic):
+        return {
+            "id": call_id,
+            "name": "ConductResearch",
+            "args": {"research_topic": topic},
+        }
+
+    harness.planner.side_effect = [
+        AIMessage(
+            content="", tool_calls=[delegate("same-id", "One"), delegate("two", "Two")]
+        ),
+        AIMessage(content="", tool_calls=[delegate("same-id", "Three")]),
+        AIMessage(
+            content="",
+            tool_calls=[{"id": "done", "name": "ResearchComplete", "args": {}}],
+        ),
+    ]
+
+    async def investigate(state):
+        if state["research_topic"] == "Two":
+            raise RuntimeError("PRIVATE PROVIDER PAYLOAD")
+        await asyncio.sleep(0)
+        return {"compressed_research": state["research_topic"], "sources": [SOURCE]}
+
+    harness.researcher.side_effect = investigate
+    final = invoke(
+        harness.graph.ainvoke(
+            request("Question", "research-rounds", "turn-rounds"), harness.config
+        )
+    )
+    events = final["research_events"]
+    delegated = [event for event in events if event["kind"] == "delegated"]
+    assert [(event["round"], event["topic"]) for event in delegated] == [
+        (1, "One"),
+        (1, "Two"),
+        (2, "Three"),
+    ]
+    assert len({event["task_id"] for event in delegated}) == 3
+    outcomes = {
+        event["task_id"]: event["kind"]
+        for event in events
+        if event["kind"] in {"failed", "completed"}
+    }
+    assert [outcomes[event["task_id"]] for event in delegated] == [
+        "completed",
+        "failed",
+        "completed",
+    ]
+    assert final["research_status"] == "partial" and final["final_report"]
+    assert "PRIVATE PROVIDER PAYLOAD" not in str(events)
+
+
+def test_simultaneous_threads_do_not_share_event_recorders(harness):
+    async def run_both():
+        return await asyncio.gather(
+            *[
+                harness.graph.ainvoke(
+                    request("Question", f"research-{i}", f"turn-{i}"),
+                    {"configurable": {"thread_id": f"thread-{i}"}},
+                )
+                for i in range(2)
+            ]
+        )
+
+    for index, result in enumerate(invoke(run_both())):
+        assert result["research_status"] == "succeeded"
+        assert result["research_events"]
+        assert {event["research_id"] for event in result["research_events"]} == {
+            f"research-{index}"
+        }
+        assert {event["turn_id"] for event in result["research_events"]} == {
+            f"turn-{index}"
+        }
+
+
+def test_event_payload_redaction_and_stream_failure_do_not_break_research(monkeypatch):
+    monkeypatch.setenv("LLM_API_KEY", "secret-event-test-key")
+    with capture_research_events("research", "turn") as events:
+        with researcher_task("call", "topic secret-event-test-key", 1):
+            emit_research_event(
+                "tool_started", tool="think_tool", query="PRIVATE REASONING"
+            )
+            emit_research_event(
+                "tool_started",
+                tool="tavily_search",
+                query="query secret-event-test-key",
+            )
+            emit_research_event("completed", output="x" * 9000, sources=[SOURCE])
+    assert "secret-event-test-key" not in str(events)
+    assert "PRIVATE REASONING" not in str(events)
+    assert "[redacted]" in str(events)
+    assert events[-1]["output"].endswith("…（已截断）")
+    assert len(events[-1]["output"]) < 8050
+    # A disconnected observer never changes the graph's business outcome.
+    with patch(
+        "deep_research.research_events.get_stream_writer",
+        return_value=lambda _: (_ for _ in ()).throw(RuntimeError("closed")),
+    ):
+        with capture_research_events("research", "turn") as events:
+            with researcher_task("call", "topic", 1):
+                emit_research_event("completed", output="valid result")
+    assert events[-1]["kind"] == "completed"

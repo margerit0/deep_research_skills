@@ -1,6 +1,7 @@
 import type { GraphValues, LiveResearch } from './liveSchema'
 import type { NodeDetail, NodeStatus } from './schema'
 import type { ServerRun } from '../api/langgraph'
+import { eventTimeline, getResearcherNodes, mergeResearchEvents } from './researchEvents'
 
 export const liveStatusText = {
   running: '运行中',
@@ -80,6 +81,7 @@ export function applySnapshot(
     )
     next.sources = (values.sources ?? []).filter((source) => safeHttpUrl(source.url))
     next.errors = values.research_errors ?? []
+    next.events = mergeResearchEvents(run, values.research_events ?? [])
     next.report =
       values.report_research_id === run.id &&
       ['succeeded', 'partial'].includes(values.research_status ?? '')
@@ -183,7 +185,7 @@ export function getLiveNodes(run?: LiveResearch): NodeDetail[] {
     'supervisor_subgraph',
     'final_report_generation',
   ]
-  return ids.map((id, index) => {
+  const mainNodes: NodeDetail[] = ids.map((id, index) => {
     let status: NodeStatus =
       !run || index > active ? 'pending' : index < active ? 'completed' : 'running'
     if (run?.status === 'awaiting_input' && index === 0) status = 'waiting'
@@ -255,14 +257,22 @@ export function getLiveNodes(run?: LiveResearch): NodeDetail[] {
         (status === 'failed' || status === 'partial'
           ? '本阶段未返回完整结果。'
           : '等待节点返回结果。'),
-      events: (run?.observations ?? [])
-        .filter((event) => currentLiveNode({ ...run!, phase: event.phase }) === id)
-        .map((event) => [
-          new Date(event.at).toLocaleTimeString(),
-          `回读：${liveStatusText[event.status]}`,
-          livePhaseText[event.phase],
-        ]),
+      events:
+        id === 'supervisor' && run?.events.length
+          ? eventTimeline(
+              run.events.filter((event) =>
+                ['delegated', 'completed', 'failed'].includes(event.kind),
+              ),
+            )
+          : (run?.observations ?? [])
+              .filter((event) => currentLiveNode({ ...run!, phase: event.phase }) === id)
+              .map((event) => [
+                new Date(event.at).toLocaleTimeString('zh-CN', { hour12: false }),
+                `回读：${liveStatusText[event.status]}`,
+                livePhaseText[event.phase],
+              ]),
       researcher: false,
     }
   })
+  return [...mainNodes.slice(0, 3), ...getResearcherNodes(run), mainNodes[3]]
 }

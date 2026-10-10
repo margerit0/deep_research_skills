@@ -176,6 +176,12 @@ button {
   font-size: 13px;
   line-height: 1.8;
 }
+#atlas-conversation-workspace .cw-inspector[data-live='true'] .cw-event {
+  grid-template-columns: 48px 12px minmax(0, 1fr);
+}
+#atlas-conversation-workspace .cw-inspector[data-live='true'] .cw-event-time {
+  white-space: nowrap;
+}
 #atlas-conversation-workspace .cw-report-markdown h1 {
   font-size: 20px;
 }

@@ -10,5 +10,9 @@ export default defineConfig(({ mode }) => {
       rewrite: (path: string) => path.replace(/^\/api/, ''),
     },
   }
-  return { plugins: [react()], server: { proxy }, preview: { proxy } }
+  return {
+    plugins: [react()],
+    server: { proxy, watch: { ignored: ['**/test-results/**', '**/playwright-report/**'] } },
+    preview: { proxy },
+  }
 })

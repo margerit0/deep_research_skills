@@ -7,6 +7,7 @@ import { apiUrl } from '../api/langgraph'
 import { currentLiveNode, getLiveNodes } from '../data/live'
 import { useLiveResearch } from './useLiveResearch'
 import type { LiveUpdate } from './useLiveResearch'
+import { mergeResearchEvents } from '../data/researchEvents'
 
 export const STORAGE_KEY = 'atlas-workspace:v1'
 type Action =
@@ -149,6 +150,30 @@ function reducer(state: Workspace, action: Action): Workspace {
         { selectedNode: currentNode(next) },
       )
     }
+    case 'live-events': {
+      const target = state.threads.find((t) => t.id === action.threadId)
+      const existing = target?.live?.researches.at(-1)
+      const turn = existing?.turns.at(-1)
+      if (
+        !target?.live ||
+        !existing ||
+        existing.id !== action.researchId ||
+        turn?.id !== action.turnId ||
+        turn.runId !== action.runId
+      )
+        return state
+      const events = mergeResearchEvents(existing, action.events)
+      if (events.length === existing.events.length) return state
+      return update({
+        ...target,
+        live: {
+          ...target.live,
+          researches: target.live.researches.map((research) =>
+            research.id === existing.id ? { ...research, events } : research,
+          ),
+        },
+      })
+    }
     case 'live': {
       const target = state.threads.find((t) => t.id === action.threadId)
       if (!target?.live || target.source !== 'live') return state
@@ -167,7 +192,14 @@ function reducer(state: Workspace, action: Action): Workspace {
             ...target.live,
             researches: existing
               ? target.live.researches.map((r) =>
-                  r.id === action.research.id ? action.research : r,
+                  r.id === action.research.id
+                    ? {
+                        ...action.research,
+                        events: action.submission
+                          ? action.research.events
+                          : mergeResearchEvents(action.research, r.events),
+                      }
+                    : r,
                 )
               : [...target.live.researches, action.research],
           },
