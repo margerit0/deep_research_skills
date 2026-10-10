@@ -11,7 +11,9 @@ export function Composer({ controller }: { controller: WorkspaceController }) {
   const lastLive = thread.live?.researches.at(-1)
   const liveBusy =
     isLive &&
-    (lastLive?.status === 'running' || (lastLive && live.sync[thread.id]?.state !== 'ready'))
+    (lastLive?.status === 'running' ||
+      (lastLive?.execution && lastLive.execution.status !== 'completed') ||
+      (lastLive && live.sync[thread.id]?.state !== 'ready'))
   const canSend =
     !demo.active && (!isLive || (!!live.connection.config && !liveBusy && !storageError))
   const [localOpen, setLocalOpen] = useState<'model' | 'skill' | null>(null)

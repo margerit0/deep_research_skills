@@ -1,4 +1,4 @@
-"""Read-only Atlas capabilities, mounted alongside the native LangGraph API.
+"""Atlas acceptance, execution recovery and read APIs alongside LangGraph.
 
 LangGraph loads the root .env before importing apps/graphs. Standalone scripts
 must do the same before importing graph modules.
@@ -11,6 +11,7 @@ from starlette.routing import Route
 
 from deep_research.model_config import MODEL_ROLES, public_model_config
 from deep_research.event_journal import EventIdentity, get_event_journal
+from deep_research.submission_api import get_receipt, recover, submit
 
 
 async def config(request):
@@ -68,6 +69,21 @@ async def events(request):
 app = Starlette(
     routes=[
         Route("/atlas/config", config, methods=["GET"]),
+        Route(
+            "/atlas/threads/{thread_id:uuid}/submissions/{turn_id:uuid}",
+            submit,
+            methods=["POST"],
+        ),
+        Route(
+            "/atlas/threads/{thread_id:uuid}/submissions/{turn_id:uuid}",
+            get_receipt,
+            methods=["GET"],
+        ),
+        Route(
+            "/atlas/threads/{thread_id:uuid}/submissions/{turn_id:uuid}/recoveries/{attempt_id:uuid}",
+            recover,
+            methods=["POST"],
+        ),
         Route(
             "/atlas/threads/{thread_id:uuid}/runs/{run_id:uuid}/events",
             events,

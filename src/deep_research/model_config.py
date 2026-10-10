@@ -80,6 +80,8 @@ MODEL_ROLES = ("SCOPING", "SUPERVISOR", "RESEARCHER", "SUMMARIZATION", "COMPRESS
 
 def public_model_config() -> dict:
     """Return only configuration of constructed models, never credentials or URLs."""
+    from deep_research.atlas_runtime import submissions_enabled
+
     return {
         "contract_version": 1,
         "graph_id": "research_agent_full",
@@ -87,6 +89,7 @@ def public_model_config() -> dict:
         "skills_mode": "auto",
         "research_events_version": 1,
         **({"research_event_replay_version": 1} if journal_path() is not None else {}),
+        **({"submission_recovery_version": 1} if submissions_enabled() else {}),
         "models": [dict(_model_snapshots[role]) for role in MODEL_ROLES if role in _model_snapshots],
     }
 

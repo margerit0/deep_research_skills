@@ -9,6 +9,7 @@ import { useLiveResearch } from './useLiveResearch'
 import type { LiveUpdate } from './useLiveResearch'
 import { mergeResearchEvents } from '../data/researchEvents'
 import { recoveryScope, savedRecovery } from '../data/eventRecovery'
+import { applyReceipt } from '../data/executionRecovery'
 
 export const STORAGE_KEY = 'atlas-workspace:v1'
 type Action =
@@ -160,7 +161,7 @@ function reducer(state: Workspace, action: Action): Workspace {
         !existing ||
         existing.id !== action.researchId ||
         turn?.id !== action.turnId ||
-        turn.runId !== action.runId
+        (turn.eventRunId ?? turn.runId) !== action.runId
       )
         return state
       const events = mergeResearchEvents(existing, action.events)
@@ -187,14 +188,17 @@ function reducer(state: Workspace, action: Action): Workspace {
         JSON.stringify(recovery) === JSON.stringify(existing.eventRecovery)
       )
         return state
+      const recovered = { ...existing, events, eventRecovery: recovery }
+      const next =
+        existing.execution && ['interrupted', 'blocked'].includes(existing.execution.status)
+          ? applyReceipt(recovered, existing.execution)
+          : recovered
       return update({
         ...target,
         live: {
           ...target.live,
           researches: target.live.researches.map((research) =>
-            research.id === existing.id
-              ? { ...research, events, eventRecovery: recovery }
-              : research,
+            research.id === existing.id ? next : research,
           ),
         },
       })

@@ -34,7 +34,7 @@ from deep_research.research_agent_full import agent
 
 ## 星图工作台真实模式
 
-独立前端已接入 `research_agent_full`，启动方式见 [frontend/README.md](../frontend/README.md)，接口定义见 [backend-contract.md](../frontend/docs/backend-contract.md)。`langgraph.json` 的自定义 HTTP app 提供只读 `/atlas/config` 和 `/atlas/threads/{thread_id}/runs/{run_id}/events`。配置只返回实际构造的六个模型角色及能力，回放只返回安全研究员事件；不包含密钥或提供商 URL。会话和运行仍使用 LangGraph 原生 API。
+独立前端已接入 `research_agent_full`，启动方式见 [frontend/README.md](../frontend/README.md)，接口定义见 [backend-contract.md](../frontend/docs/backend-contract.md)。自定义 HTTP app 提供配置、事件回放，以及 1B 的 `/atlas/threads/{thread_id}/submissions/{turn_id}` 受理 / 对账和 `/recoveries/{attempt_id}` 恢复入口。配置只返回实际构造的六个模型角色及能力，事件与回执不包含密钥、提供商 URL 或原始异常。运行、检查点及 SSE 仍由 LangGraph 管理。
 
 前端默认用 Vite 的 `/api` 转发访问 2024 端口。它不读取根目录后端 `.env`，也不把本地模拟模型菜单的选择传给后端。调整后端模型、凭据或 Skills 文件后要重启服务，让导入时快照生效。`--allow-blocking` 与现有同步研究工具保持兼容；不要借此认为整个图是同步运行的。
 
@@ -50,7 +50,13 @@ from deep_research.research_agent_full import agent
 
 排查时分别核对事件流、事件日志和业务状态。SSE 关闭或日志 `sealed` 都不表示研究成功；已提交的日志在进程停止后仍可分页读取，最终结果仍核对 run 和 checkpoint。后端可能保留旧 `running` 状态但没有续跑，旧捕获过程的非终态任务会标为“完成状态未确认”。浏览器将事件和恢复位置一起保存，存储失败不推进位置；重连、聚焦与网络恢复只读，不增加 run。
 
-本轮完成单进程本地服务的观察与记录恢复，未承诺幂等受理或任意节点的执行恢复。`test_event_journal.py` 覆盖写入、退出、并发初始化、迁移和过期；`live-recovery.spec.ts` 覆盖分页、位置重置、存储失败、终态缺失和窄屏提示；原生恢复验收核对停机前事件全部补回且 run 数仍为两次。
+1A 的事件回放不启动执行。1B 在持久化单进程本地服务中增加幂等受理与三个经过验证的父检查点恢复：澄清、简报、报告写作。`supervisor_subgraph` 中途退出尚不能安全续跑；保留确认过的成果并新建研究。恢复可能再次调用当前模型节点，写作恢复不重跑已完成的检索和压缩。
+
+1B 默认受理库为 `.langgraph_api/atlas-submissions.sqlite3`，`ATLAS_SUBMISSION_DB` 非空时可改路径。受理记录不随事件保留期删除；原文、内容摘要、run / attempt 身份与终态位置均属于本地后端数据。备份或移动服务时保留受理库、原生 `.langgraph_api` 和事件库；缺少任一执行依据时不猜测请求未发生。
+
+`atlas_runtime.py` 将私有运行时依赖集中到版本适配层，仅启用已经验收的 LangGraph 1.1.3 / API 0.8.7 / inmem 0.28.1。它为原生持久化对象安装串行同步写入，在受理、节点调用和确认终态前设置刷盘边界，不修改安装目录中的包文件。升级依赖后先重跑故障测试，再更新版本支持；不要仅删除版本限制。`ATLAS_SUBMISSIONS_ENABLED=false` 可关闭新能力；旧提交仍按旧协议回读。
+
+`test_submission_journal.py` 验证并发固定身份、旧进程阻止执行、检查点归属 / 输入摘要、终态位置及迁移。`live-submissions.spec.ts` 验证响应丢失、重试、冲突、恢复记录落盘、结果隔离和成果保留。`submission-api.spec.ts` 在 `.local/atlas-submission-api/case-*` 启动专属原生后端，立即在受理、模型或工具内部停止进程，检查实际 run 列表与持久工具计数；不等待十秒后台刷盘，不读取生产 `.env`。普通 API、1A、1B 的默认专用端口和复现命令均见接口文档。
 
 2026-10-10 用户确认当前网关问题由供应商后续修复，要求跳过连接排障并继续事件图谱开发。保持指定模型、地址、本地密钥与 `NO_PROXY=*`，未关闭 TLS 校验。供应商恢复前，替身验收不能代表完整真实研究已通过。
 

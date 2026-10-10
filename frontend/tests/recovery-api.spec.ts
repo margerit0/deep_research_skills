@@ -40,6 +40,7 @@ test('native API: recover unseen events after stopping the backend inside a rese
         env: {
           LANGGRAPH_DISABLE_FILE_PERSISTENCE: 'false',
           LANGSMITH_TRACING: 'false',
+          ATLAS_SUBMISSIONS_ENABLED: 'false',
           ATLAS_EVENT_DB: join(dir, 'events.sqlite3'),
           ATLAS_RECOVERY_FIXTURE_DIR: dir,
           ATLAS_RECOVERY_FIXTURE_ID: nonce,

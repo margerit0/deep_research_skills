@@ -7,7 +7,7 @@ export function recoveryScope(thread: LiveThread, research: LiveResearch): Event
     threadId: thread.threadId,
     researchId: research.id,
     turnId: turn.id,
-    runId: turn.runId!,
+    runId: turn.eventRunId ?? turn.runId!,
     sequence: 0,
     gap: false,
     sealed: false,

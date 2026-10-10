@@ -1,6 +1,7 @@
 import { lazy, Suspense, useEffect, useRef } from 'react'
 import type { WorkspaceController } from '../state/useWorkspace'
 import { currentLiveNode, livePhaseText, liveStatusText, safeHttpUrl } from '../data/live'
+import { executionMessage } from '../data/executionRecovery'
 import { Composer } from './Composer'
 import { Icon } from './Icon'
 
@@ -52,6 +53,25 @@ export function LiveConversation({ controller }: { controller: WorkspaceControll
               <Icon name="reset" />
               重新读取状态
             </button>
+            {sync?.retrySubmission && researches.at(-1)?.turns.at(-1)?.transport !== 'rejected' && (
+              <button
+                type="button"
+                className="cw-quiet"
+                disabled={controller.storageError}
+                onClick={() => void live.retrySubmission(thread.id)}
+              >
+                重试同一提交
+              </button>
+            )}
+            {researches.length > 0 && (
+              <button
+                type="button"
+                className="cw-quiet"
+                onClick={() => controller.dispatch({ type: 'new', source: 'live' })}
+              >
+                新建研究并保留记录
+              </button>
+            )}
           </div>
         )}
         {!researches.length && (
@@ -98,7 +118,13 @@ export function LiveConversation({ controller }: { controller: WorkspaceControll
                 <div className="cw-activity" data-testid="live-status" data-status={run.status}>
                   <div className="cw-activity-title" role="status">
                     <Icon name="activity" />
-                    <span>{liveStatusText[run.status]}</span>
+                    <span>
+                      {run.execution?.status === 'interrupted'
+                        ? '执行已中断'
+                        : run.execution?.status === 'blocked'
+                          ? '执行状态待核实'
+                          : liveStatusText[run.status]}
+                    </span>
                   </div>
                   <p className="cw-muted">
                     {run.status === 'awaiting_input'
@@ -116,6 +142,50 @@ export function LiveConversation({ controller }: { controller: WorkspaceControll
                     <Icon name="external" />
                   </button>
                 </div>
+                {run.execution && executionMessage(run.execution) && (
+                  <div
+                    className="cw-connection-alert"
+                    role="status"
+                    data-testid="execution-recovery-note"
+                  >
+                    <p>{executionMessage(run.execution)}</p>
+                    {run.id === researches.at(-1)?.id && (
+                      <>
+                        {run.execution.retry_allowed && (
+                          <button
+                            type="button"
+                            className="cw-quiet"
+                            disabled={controller.storageError || sync?.state === 'loading'}
+                            onClick={() => void live.retrySubmission(thread.id)}
+                          >
+                            重试同一提交
+                          </button>
+                        )}
+                        {run.execution.recovery.allowed && (
+                          <button
+                            type="button"
+                            className="cw-quiet"
+                            disabled={controller.storageError || sync?.state === 'loading'}
+                            onClick={() => void live.recoverExecution(thread.id)}
+                          >
+                            {run.turns.at(-1)?.recoveryRequest
+                              ? '重试恢复请求'
+                              : run.execution.recovery.node === 'final_report_generation'
+                                ? '继续生成报告'
+                                : '从检查点继续'}
+                          </button>
+                        )}
+                        <button
+                          type="button"
+                          className="cw-quiet"
+                          onClick={() => controller.dispatch({ type: 'new', source: 'live' })}
+                        >
+                          新建研究并保留记录
+                        </button>
+                      </>
+                    )}
+                  </div>
+                )}
                 {(run.eventRecovery?.gap ||
                   (live.replayStates[thread.id] &&
                     live.replayStates[thread.id].runId === run.turns.at(-1)?.runId &&

@@ -52,13 +52,17 @@ npm run format:check
 
 事件流中断时会提示“事件重连中”，仍继续回读阶段和结果；接收事件不会再次提交研究。安全事件在发送前写入本地 SQLite 日志，刷新或后端重启后按原有归属分页补回，事件与恢复位置一起保存。连接失败以最高 30 秒的退避重试，聚焦或网络恢复时及时对账。
 
-读取暂时失败会提示重试；日志过期、丢失或缺少终态时显示记录不完整。后端重启后若旧任务没有终态证据，节点显示“完成状态未确认”；原生 run 仍可能显示运行中，这不证明执行已经继续。回放只恢复观察记录，保留已确认的笔记、来源和报告，不自动重新提交或恢复执行。
+读取暂时失败会提示重试；日志过期、丢失或缺少终态时显示记录不完整。后端重启后若旧任务没有终态证据，节点显示“完成状态未确认”。回放只恢复观察记录；1B 的执行恢复使用下述独立入口，不因一次重连而自动启动。
 
-更新后需重启后端，`/atlas/config` 的 `research_events_version: 1` 表示支持事件协议，`research_event_replay_version: 1` 表示启用持久回放。旧后端仍可显示主阶段和报告，不会生成虚构研究员。供应商问题按用户要求暂缓处理，当前真实模型完整闭环仍待验收；事件与界面验证使用明确标注的替身，结果见验收记录。
+更新后需重启后端，`/atlas/config` 的 `research_events_version: 1` 表示支持事件协议，`research_event_replay_version: 1` 表示启用持久回放，`submission_recovery_version: 1` 表示支持提交确认与受限执行恢复。旧后端与旧缓存继续使用原有契约。供应商问题按用户要求暂缓处理，当前真实模型完整闭环仍待验收；验证使用明确标注的替身，结果见验收记录。
 
 默认日志路径为后端工作目录的 `.langgraph_api/atlas-events.sqlite3`，目录需可写并在重启时保留。后端 `.env` 可选配置 `ATLAS_EVENT_DB` 和 `ATLAS_EVENT_RETENTION_DAYS`（默认 30，范围 1–3650）；保留期从最后写入开始计算。独立评估不写此日志，关闭文件持久化的普通替身默认也不写。当前保证适用于单进程本地服务。
 
-发送前会先保存提交标识；网络响应丢失时按标识查找已有运行，不会自动重发。无法确认是否接受、或服务端会话已不存在时，可以“重新读取状态”或新建研究，旧内容继续保留。浏览器存储不可写时允许保存内存草稿，但禁用真实提交，以免刷新丢失提交标识。多标签页协同编辑和跨设备会话发现尚未实现。
+支持 1B 的新提交会先保存标识、原文和前一 turn，再由服务端持久化受理意图及固定 run ID。响应丢失后按回执对账；确认尚未执行时可以“重试同一提交”，始终沿用原标识。内容变化、并发提交或其他标签页已经推进会话时由服务端拒绝。确认完成后回读固定检查点，后续研究不会覆盖原结果。
+
+后端重启后，界面会明确显示执行中断。只有验证过的澄清、简报和报告写作检查点提供“从检查点继续”或“继续生成报告”；恢复请求有独立标识，响应丢失后也能对账。恢复可能再次调用当前节点的模型，已完成的检索和笔记压缩不会因写作恢复而重跑。研究子流程内部中断、服务端会话丢失或检查点不完整时，保留确认过的笔记 / 来源 / 报告，并提供“新建研究并保留记录”。
+
+默认受理库为 `.langgraph_api/atlas-submissions.sqlite3`，可设 `ATLAS_SUBMISSION_DB`，空值使用默认。它与原生检查点、事件库都应保留；受理标识不随事件保留期删除。1B 只支持已经验收的持久化单进程本地运行时，依赖版本变化后会停止声明此能力。浏览器存储不可写时允许保存内存草稿，但禁止提交和创建恢复请求。完整多标签页协同编辑和跨设备会话发现尚未实现。
 
 ## 全流程动画演示
 
@@ -101,36 +105,38 @@ npm test
 
 ## 代码结构
 
-| 位置                                                   | 职责                                                  |
-| ------------------------------------------------------ | ----------------------------------------------------- |
-| `src/components/`                                      | 导航、消息、输入框、菜单、图谱、节点检查器            |
-| `src/state/useWorkspace.ts`                            | 不可变状态转换、会话选择、版本化本地存储与恢复        |
-| `src/state/useLiveResearch.ts`                         | 提交记录、后台运行回读、澄清续问与网络状态            |
-| `src/api/langgraph.ts`                                 | 配置和原生 LangGraph thread / run / state API         |
-| `src/api/researchStream.ts`                            | 原生 custom SSE、UTF-8 分片与事件校验                 |
-| `src/api/eventReplay.ts` / `src/data/eventRecovery.ts` | 持久事件分页校验、恢复作用域、恢复位置与退避          |
-| `src/data/liveSchema.ts` / `live.ts`                   | 真实接口校验、状态映射及阶段节点适配                  |
-| `src/data/researchEvents.ts`                           | 研究 / 提交归属、事件去重、实际研究员节点和时间线     |
-| `src/components/LiveConversation.tsx`                  | 真实消息、报告、失败信息与检索来源                    |
-| `src/components/BackendControls.tsx`                   | 后端实际模型与自动 Skills 展示                        |
-| `src/state/useDemo.ts`                                 | 独立演示会话、可暂停时钟、播放控制及后台暂停          |
-| `src/data/demo.ts`                                     | 18 幕脚本、逐字文本和演示节点视图                     |
-| `src/components/DemoPlayer.tsx`                        | 演示播放器、章节导航与场景跟随                        |
-| `src/data/schema.ts`                                   | 运行、节点、会话类型和存储校验                        |
-| `src/data/mock.ts`                                     | 模拟运行、阶段与节点视图适配                          |
-| `src/data/example-nodes.json`                          | 已确认示例中的静态数据                                |
-| `src/apple.css`                                        | 从已确认主 HTML 提取的 Apple 色板与原始样式           |
-| `src/app.css`                                          | 独立应用的滚动、窄屏导航与布局适配                    |
-| `src/demo.css`                                         | 演示播放器、图谱 / 消息动效与减少动态效果适配         |
-| `tests/workspace.spec.ts`                              | 行为与响应式浏览器验证                                |
-| `tests/demo.spec.ts`                                   | 完整播放、时钟控制、会话隔离与窄屏演示验证            |
-| `tests/live.spec.ts`                                   | 使用 HTTP 替身的真实模式浏览器回归                    |
-| `tests/live-events.spec.ts`                            | 事件流、并行 / 多轮任务、刷新隔离与窄屏回归           |
-| `tests/live-recovery.spec.ts`                          | 日志回放、断线刷新、存储失败、缺口和窄屏提示          |
-| `tests/recovery-api.spec.ts`                           | 专用持久化后端在研究中停止、重启与事件回放验收        |
-| `tests/live-api.spec.ts`                               | 显式启用的原生 LangGraph API / 真实模型联调           |
-| `../tests/atlas_fixture_server.py`                     | 使用独立目录、明确关闭持久化的普通原生 API 替身启动器 |
+| 位置                                                              | 职责                                                  |
+| ----------------------------------------------------------------- | ----------------------------------------------------- |
+| `src/components/`                                                 | 导航、消息、输入框、菜单、图谱、节点检查器            |
+| `src/state/useWorkspace.ts`                                       | 不可变状态转换、会话选择、版本化本地存储与恢复        |
+| `src/state/useLiveResearch.ts`                                    | 提交记录、后台运行回读、澄清续问与网络状态            |
+| `src/api/langgraph.ts`                                            | 配置和原生 LangGraph thread / run / state API         |
+| `src/api/submissions.ts` / `src/data/executionRecovery.ts`        | 幂等提交回执、恢复尝试与中断成果保留                  |
+| `src/api/researchStream.ts`                                       | 原生 custom SSE、UTF-8 分片与事件校验                 |
+| `src/api/eventReplay.ts` / `src/data/eventRecovery.ts`            | 持久事件分页校验、恢复作用域、恢复位置与退避          |
+| `src/data/liveSchema.ts` / `live.ts`                              | 真实接口校验、状态映射及阶段节点适配                  |
+| `src/data/researchEvents.ts`                                      | 研究 / 提交归属、事件去重、实际研究员节点和时间线     |
+| `src/components/LiveConversation.tsx`                             | 真实消息、报告、失败信息与检索来源                    |
+| `src/components/BackendControls.tsx`                              | 后端实际模型与自动 Skills 展示                        |
+| `src/state/useDemo.ts`                                            | 独立演示会话、可暂停时钟、播放控制及后台暂停          |
+| `src/data/demo.ts`                                                | 18 幕脚本、逐字文本和演示节点视图                     |
+| `src/components/DemoPlayer.tsx`                                   | 演示播放器、章节导航与场景跟随                        |
+| `src/data/schema.ts`                                              | 运行、节点、会话类型和存储校验                        |
+| `src/data/mock.ts`                                                | 模拟运行、阶段与节点视图适配                          |
+| `src/data/example-nodes.json`                                     | 已确认示例中的静态数据                                |
+| `src/apple.css`                                                   | 从已确认主 HTML 提取的 Apple 色板与原始样式           |
+| `src/app.css`                                                     | 独立应用的滚动、窄屏导航与布局适配                    |
+| `src/demo.css`                                                    | 演示播放器、图谱 / 消息动效与减少动态效果适配         |
+| `tests/workspace.spec.ts`                                         | 行为与响应式浏览器验证                                |
+| `tests/demo.spec.ts`                                              | 完整播放、时钟控制、会话隔离与窄屏演示验证            |
+| `tests/live.spec.ts`                                              | 使用 HTTP 替身的真实模式浏览器回归                    |
+| `tests/live-events.spec.ts`                                       | 事件流、并行 / 多轮任务、刷新隔离与窄屏回归           |
+| `tests/live-recovery.spec.ts`                                     | 日志回放、断线刷新、存储失败、缺口和窄屏提示          |
+| `tests/recovery-api.spec.ts`                                      | 专用持久化后端在研究中停止、重启与事件回放验收        |
+| `tests/live-submissions.spec.ts` / `tests/submission-api.spec.ts` | 1B 浏览器回归、原生受理 / 执行故障与调用计数          |
+| `tests/live-api.spec.ts`                                          | 显式启用的原生 LangGraph API / 真实模型联调           |
+| `../tests/atlas_fixture_server.py`                                | 使用独立目录、明确关闭持久化的普通原生 API 替身启动器 |
 
 `scripts/import-design.mjs` 记录一次性迁移方式。日常开发与构建不运行它；手动运行会重新生成 `apple.css` 和示例 JSON。应用不引用 `ui-drafts/`，也不依赖 `window.openai`、`Tweak`、`viz-carousel`、iframe 或宿主图标库。Lucide 图标随应用打包。
 
-观察与记录恢复的原生 API 验收命令见 [接口约定](docs/backend-contract.md)，它使用独立的临时持久化目录。下一阶段按 [后续计划](docs/next-steps.md) 完成提交确认与执行中断恢复，再贯通按次模型 / Skills 和真实报告流式显示。供应商恢复后重跑真实研究闭环验收；服务端凭据继续留在后端 `.env`。
+1A 与 1B 的原生 API 验收命令见 [接口约定](docs/backend-contract.md)，均使用独立的临时持久化目录。下一阶段按 [后续计划](docs/next-steps.md) 贯通按次模型 / Skills，再实现真实报告流式显示。供应商恢复后重跑真实研究闭环验收；服务端凭据继续留在后端 `.env`。

@@ -14,7 +14,11 @@ test('native LangGraph API: clarification, answer, report, sources and reload', 
   let posts = 0
   let streamConnections = 0
   page.on('request', (request) => {
-    if (request.method() === 'POST' && /\/threads\/[^/]+\/runs$/.test(request.url())) posts++
+    if (
+      request.method() === 'POST' &&
+      /\/threads\/[^/]+\/(?:runs|submissions\/[^/]+)$/.test(request.url())
+    )
+      posts++
     if (request.method() === 'GET' && /\/runs\/[^/]+\/stream\?/.test(request.url()))
       streamConnections++
   })

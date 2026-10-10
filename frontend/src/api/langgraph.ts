@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { backendConfigSchema, graphValuesSchema } from '../data/liveSchema'
+import { backendConfigSchema, graphValuesSchema, serverRunSchema } from '../data/liveSchema'
 import type { LiveResearch, LiveThread, LiveTurn } from '../data/liveSchema'
 import { ApiError } from './errors'
 export { ApiError } from './errors'
@@ -18,12 +18,7 @@ async function request(base: string, path: string, init?: RequestInit): Promise<
   return response.json()
 }
 
-const runSchema = z.object({
-  run_id: z.string(),
-  thread_id: z.string(),
-  status: z.enum(['pending', 'running', 'success', 'error', 'timeout', 'interrupted']),
-  metadata: z.record(z.string(), z.unknown()).default({}),
-})
+const runSchema = serverRunSchema
 const snapshotSchema = z.object({
   values: graphValuesSchema,
   next: z.array(z.string()).default([]),
@@ -106,6 +101,11 @@ export async function findRun(
   }
 }
 
-export async function getState(thread: LiveThread) {
-  return snapshotSchema.parse(await request(thread.serverUrl, `/threads/${thread.threadId}/state`))
+export async function getState(thread: LiveThread, checkpointId?: string) {
+  return snapshotSchema.parse(
+    await request(
+      thread.serverUrl,
+      `/threads/${thread.threadId}/state${checkpointId ? `/${encodeURIComponent(checkpointId)}` : ''}`,
+    ),
+  )
 }

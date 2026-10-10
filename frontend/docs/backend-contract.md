@@ -1,6 +1,6 @@
 # 星图工作台后端接口约定 · v1
 
-工作台使用 `langgraph.json` 注册的 `research_agent_full`。自定义接口提供只读配置和事件回放；会话、运行和检查点继续使用 LangGraph 原生 HTTP API。前端不拥有模型、Tavily 或 LangSmith 凭据。
+工作台使用 `langgraph.json` 注册的 `research_agent_full`。自定义接口提供配置、事件回放、幂等受理和受限执行恢复；会话、运行、检查点与 SSE 仍由 LangGraph 管理。前端不拥有模型、Tavily 或 LangSmith 凭据。
 
 ## 标识及生命周期
 
@@ -9,12 +9,14 @@
 | `Thread.id` / `live.threadId`     | 工作台 / LangGraph thread | 新真实会话使用同一个 UUID，首次发送才创建服务端 thread |
 | `LiveResearch.id` / `research_id` | 一轮逻辑研究              | 首问与所有澄清回答保持不变；终态后新问题换一个 UUID    |
 | `LiveTurn.id` / `turn_id`         | 一次用户提交              | 每次回答一个 UUID，同时用作 HumanMessage.id            |
-| `LiveTurn.runId` / `run_id`       | 一次 LangGraph 执行       | 服务端生成；一轮逻辑研究可有多次 run                   |
+| `LiveTurn.runId` / `run_id`       | 当前执行尝试              | 服务端先生成并持久化；恢复尝试使用新的 run             |
+| `attempt_id`                      | 提交 / 恢复尝试           | 初次受理等于 turn ID；每次恢复独立 UUID，相同请求重用  |
+| `LiveTurn.eventRunId`             | 研究事件来源              | 写作恢复继续回放原检索 run；不误用新 run 的空事件日志  |
 | `report_research_id`              | 报告归属                  | 只有与当前研究标识相等，且业务状态正确，报告才可展示   |
 
 所有标识和用户输入在发送网络请求前持久化。创建 thread 使用 `if_exists: do_nothing`；创建 run 使用 `multitask_strategy: reject`，禁止并发排队修改同一 thread。浏览器单次提交也有内存锁。
 
-原生 run 创建接口不接受客户端指定 `run_id`。因此客户端把提交标识保存到 run metadata，响应丢失时以 `atlas_research_id` + `atlas_turn_id` 回查。刷新、定时轮询、“重新读取状态”均不会再次 POST 创建 run。尚无法确认的提交保持锁定，用户可新建另一个会话；本轮不承诺断网后的自动重发或跨标签页 exactly-once。
+原生 HTTP run 创建接口不接受客户端指定 `run_id`。1B 使用可选的 `submission_recovery_version: 1` 契约，由服务端持久化固定 UUID 后调用锁定版本的内部 `create_valid_run(run_id=...)`。旧提交、旧后端仍按 metadata 查找运行，不自动转为可重试操作。所有观察回读均不自动 POST 执行；新契约在经过对账后提供显式重试 / 恢复入口。
 
 ## HTTP 请求
 
@@ -28,10 +30,14 @@
 | `GET /threads/{thread_id}/runs/{run_id}`                                                      | 回读已知运行的执行状态                              |
 | `GET /threads/{thread_id}/runs?limit=100&offset=...`                                          | 丢失响应后按 metadata 查找原提交，支持分页          |
 | `GET /threads/{thread_id}/state`                                                              | 读取最新检查点，不依赖浏览器是否一直打开            |
+| `GET /threads/{thread_id}/state/{checkpoint_id}`                                              | 回读已确认 turn 的固定终态检查点                    |
 | `GET /threads/{thread_id}/runs/{run_id}/stream?stream_mode=custom&cancel_on_disconnect=false` | 观察已创建运行的研究员事件，不启动或取消研究        |
 | `GET /atlas/threads/{thread_id}/runs/{run_id}/events`                                         | 分页回放持久化研究员事件，不创建或继续运行          |
+| `POST /atlas/threads/{thread_id}/submissions/{turn_id}`                                       | 新提交或以原标识重试受理                            |
+| `GET /atlas/threads/{thread_id}/submissions/{turn_id}`                                        | 对账受理、当前尝试、终态与恢复条件                  |
+| `POST /atlas/threads/{thread_id}/submissions/{turn_id}/recoveries/{attempt_id}`               | 显式恢复已验证的父检查点，或重试同一恢复受理        |
 
-创建 run 的示例（所有 ID 为示意值）：
+旧契约直接创建 run 的示例（所有 ID 为示意值；新契约见下方 1B 章节）：
 
 ```json
 {
@@ -146,6 +152,63 @@
 
 前端按后端地址、thread、research、turn、run 隔离恢复位置；只有事件与位置一起写入 `localStorage` 成功，才推进可持久化位置。保存失败时保留内存事件和未确认提示，稍后重新读取。每次最多读取四页，剩余内容后续补回；先核对原生 run / checkpoint，回放不会覆盖业务结果。日志接口暂时不可达或研究期间长期缺少日志时提示重试；过期、替换、已知缺口、终态缺失时显示记录不完整。
 
+## 提交确认与执行恢复 · v1
+
+`submission_recovery_version: 1` 只在锁定的 LangGraph 1.1.3、API 0.8.7、inmem runtime 0.28.1 且原生文件持久化启用时声明。`ATLAS_SUBMISSIONS_ENABLED=false` 可关闭能力。版本更新后默认关闭，先跑原生故障验收再调整 `atlas_runtime.py`；不要仅修改版本断言。普通非持久化替身和 1A 专项仍使用旧契约。
+
+初次提交先以原生 `POST /threads` 创建 UUID 会话，再调用受理接口。请求必须包含不可变内容与前一 turn，服务端不接受客户端模型参数、任意 checkpoint 或运行策略：
+
+```json
+{
+  "research_id": "research-uuid",
+  "text": "研究问题或澄清回答",
+  "expected_turn_id": null
+}
+```
+
+同 thread 的下一次提交将 `expected_turn_id` 设为上一 turn ID。服务端检查已有受理、执行状态和检查点；并发或过时的提交返回 409。相同 turn 和完全相同的内容返回原受理，相同 turn 搭配不同内容、研究归属或前一 turn 返回 409。澄清回答仍是新 turn；已完成研究不能再用原 research ID 发起新 turn。
+
+SQLite 受理意图包含固定 run UUID，在创建原生 run 之前提交。原生线程信息先持久化，原生 run 受理完成后再持久化；分配 UUID 不代表模型已执行。图节点在外部调用前必须成功提交进程归属和节点输入摘要，并持久化原生检查点。重启后的旧执行不能直接重放原问题。对尚未开始的意图重试会完成原受理，使用同一个 run UUID，而不是再产生一个执行身份。
+
+受理库默认 `.langgraph_api/atlas-submissions.sqlite3`，`ATLAS_SUBMISSION_DB` 可覆盖，空值沿用默认。使用 WAL、FULL 同步及事务。它保存提交原文、标识、不可变内容摘要、尝试历史和终态检查点位置，不保存凭据；不按事件日志的 30 天保留期清除。请一并备份受理库、原生 `.langgraph_api` 与事件库。文件删除、损坏或版本不一致时关闭恢复，不据此猜测请求未执行。
+
+回执的 `version/thread_id/research_id/turn_id/attempt_id/run_id` 必须全部校验，`attempts` 按顺序列出 `{attempt_id, run_id, kind}`。`event_run_id` 指向实际检索事件所属运行；报告恢复不把旧事件归到新的写作 run。`run` 只包含安全的原生身份 / 状态 / 归属，客户端仍读取检查点判断业务结果。
+
+| 回执状态      | 含义与入口                                                                       |
+| ------------- | -------------------------------------------------------------------------------- |
+| `accepted`    | 已记录原执行或恢复尝试，继续观察                                                 |
+| `retryable`   | 有受理记录但没有节点执行证据，`retry_allowed` 允许使用原内容继续受理             |
+| `completed`   | 此 turn 有归属正确的终态检查点；`checkpoint_id` 固定结果位置，不等于研究业务成功 |
+| `interrupted` | 执行已结束或所属进程已退出；只在 `recovery.allowed` 为 true 时允许恢复           |
+| `blocked`     | 会话、运行或可验证检查点缺失，保留成果，不自动重建                               |
+| `rejected`    | 受理发生明确冲突，保留原输入                                                     |
+
+查询一个尚无记录的提交返回 404 `submission_unknown`；若会话不存在则为 `thread_missing`。只有按新契约持久化的提交能利用前者安全重试，旧 metadata 查询没有这一保证。无效请求返回 400，冲突返回 409，存储或运行时暂不可用返回 503；异常正文不会进入前端。
+
+确认 `completed` 前会持久化原生检查点并记录其位置。后续回读使用该 checkpoint，避免新 turn 的状态覆盖旧成果。重复提交已完成 turn 不新增 run；即使终态原生状态仍短暂是 `running`，归属正确的持久终态可以确认完成。业务 `awaiting_input`、`failed`、`partial` 也可能对应已完成的一次 turn，仍按原业务契约展示。
+
+恢复只支持后端重启后、拥有原始受理记录的三个父图节点：
+
+| 下一节点                  | 验证和重复调用范围                                                             |
+| ------------------------- | ------------------------------------------------------------------------------ |
+| `clarify_with_user`       | active IDs、阶段、原 run、节点输入摘要与实际模型标识一致；澄清模型可能再次调用 |
+| `write_research_brief`    | 同上，保留已确认的澄清消息；简报模型可能再次调用                               |
+| `final_report_generation` | 同上且存在有效笔记；写作模型可能再次调用，已完成检索和压缩不重跑               |
+
+`supervisor_subgraph` 是尚未拆分的父研究节点，不能从其中一个工具任意续跑。缺少输入摘要、多个下一节点、旧 / 不完整检查点、归属不匹配、模型标识改变或同进程尚不能证明停止时均拒绝恢复。原生异常正文不作为允许恢复的依据。
+
+点击恢复后，浏览器先保存独立 attempt UUID 与下列请求，再提交。后端重新核对当前状态、原 run 与精确 checkpoint，退役旧进程的孤立 run，并以 `input: null` 创建新 run；不重新发送 HumanMessage。
+
+```json
+{
+  "research_id": "research-uuid",
+  "parent_run_id": "interrupted-run-uuid",
+  "checkpoint_id": "verified-checkpoint-uuid"
+}
+```
+
+恢复响应丢失、恢复受理中再次退出时沿用原 attempt；不同恢复操作不能重复消费同一过时的父 run。当前模型节点的内部重试策略保持原样，不承诺任意崩溃下外部请求只发生一次。恢复观察不会增加 run；恢复执行会新增一个明确归属的 run，验收需分别统计。
+
 ## 恢复保证与边界
 
 正常状态每 2 秒回读，连接失败使用带少量抖动、最高 30 秒的退避；SSE、状态回读、事件回放分别管理。刷新、切换会话、窗口重新聚焦或网络恢复时也会对账，同一 run 在当前页面只有一个 SSE 观察连接。后台真实研究可在用户查看另一会话或演示时继续完成并接收事件。界面保留四个主阶段，研究员节点由实际委派动态加入。
@@ -154,9 +217,9 @@
 
 本次依据锁定的 LangGraph 1.1.3、API 0.8.7、inmem runtime 0.28.1、CLI 0.4.26 验证。开发运行时的 SSE `message_stores` 位于进程内存，重启会丢失；原生持久化还存在约 10 秒的后台刷盘边界。新增日志保证已提交事件可以在父研究节点返回前、进程停止后从同一数据库补回，不依赖这两个边界。
 
-这保证观察与记录恢复。开发后端重启后可能保留旧 run 的 `running` 状态而没有继续执行；日志用进程身份识别旧捕获过程，将未确认任务显示为“完成状态未确认”，并提示执行是否继续尚未确认。研究业务状态仍由原生 run / checkpoint 判定，回放不自动恢复执行或重新提交。日志文件丢失、保留期已过、从未成功提交的事件不保证补回；既有笔记、来源和报告继续保留。
+1A 保证观察与记录恢复；事件日志不会自行恢复执行。1B 受理回执识别旧进程，提供上述三个经过验证的恢复边界，不能仅信任原生 `running` 状态。日志中的未确认任务仍显示“完成状态未确认”；无法续跑时保留本地、检查点和后续回放中已确认的笔记、来源与报告。日志文件丢失、保留期已过、从未成功提交的事件不保证补回。
 
-本实现面向单进程本地开发服务；SQLite 文件和进程身份不是多实例部署的共享执行协调协议。幂等受理、执行检查点恢复、逐 token 报告、跨设备会话发现和多用户权限仍属后续范围。
+本实现面向单进程本地开发服务；SQLite 文件和进程身份不是多实例部署的共享执行协调协议。未纳入恢复白名单的节点、逐 token 报告、跨设备会话发现和多用户权限仍属后续范围。
 
 ## 原生 API 的可复现替身验证
 
@@ -200,6 +263,32 @@ npm test -- tests/recovery-api.spec.ts --workers=1 --output test-results/recover
 `recovery-api.spec.ts` 为每次测试在 `.local/atlas-recovery-api/case-*` 建立独立配置、数据库和原生持久化目录；使用模型 / 搜索替身，拒绝复用已占用的后端端口，并在提交前核对专属服务标识和前端代理。它在检索工具内部阻塞，确认父检查点尚无事件、浏览器也未收到事件，再停止专用后端、重启同一目录，只开放日志回放。测试核对事件 UUID 全部恢复、旧任务完成状态未确认、无虚构报告，服务端仍只有两次 run，最后停止该测试进程。
 
 该用例等待原生运行元数据独立刷盘后再停止，以便核对两次 run；事件日志已在等待前提交。它不证明提交应答丢失时的幂等受理或执行自动续跑。`test_event_journal.py` 另以直接退出子进程验证不依赖最后检查点或 finalizer 的事件落盘。
+
+### 1B 受理与执行故障验收
+
+先显式启动专用前端，保留到测试结束（端口占用时换一组空闲端口）：
+
+```powershell
+cd frontend
+$env:ATLAS_BACKEND_URL = 'http://127.0.0.1:2027'
+$env:NO_PROXY = '*'
+npm run dev -- --port 5177 --strictPort
+```
+
+另一个终端运行：
+
+```powershell
+cd frontend
+$env:ATLAS_TEST_PORT = '5177'
+$env:ATLAS_SUBMISSION_API = '1'
+$env:ATLAS_SUBMISSION_PORT = '2027'
+$env:NO_PROXY = '*'
+npm test -- tests/submission-api.spec.ts --workers=1 --output test-results/submission-native
+```
+
+测试器通过 `tests/atlas_submission_server.py` 启动实际原生服务，每个用例使用 `.local/atlas-submission-api/case-*` 独立目录，明确启用持久化，不读取生产 `.env`。替身的模型 / 工具调用计数先同步提交 SQLite。测试拒绝占用的后端端口，核对每次进程身份，在指定受理 / 模型 / 工具内部立即强制退出，不等待十秒后台刷盘。
+
+8 项覆盖：响应丢失及完成 turn 重复请求 / 并发冲突；原生创建前与创建后但确认前退出；澄清、简报、写作中退出并从检查点继续；研究工具中退出与服务端会话丢失；恢复受理中再次退出。写作用例同时通过 Chrome 点击恢复、丢失恢复响应、刷新和窄屏截图。每项结束停止自己的进程，`native-evidence.json` 保存进程身份与调用数，原生 run 列表另在断言中核对。用例中的直接完整首问加一次恢复为 **2 个 run**，不要与“先澄清一次再回答”的普通两次提交混为一谈。
 
 当前 CLI 0.4.26 / API 0.8.7 会覆盖 `LANGGRAPH_DISABLE_FILE_PERSISTENCE`，其配置校验又会过滤顶层 `disable_persistence`。因此旧命令仅在 `env` 中设为 true，不能证明已关闭持久化。普通替身使用上述专用启动器，提前设置环境并直接传入原生服务参数；恢复用例明确启用持久化、提前注入环境且使用独立目录。不要用正常开发数据目录进行强制停止验收。
 

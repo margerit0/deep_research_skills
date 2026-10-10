@@ -10,6 +10,7 @@ export async function readEventPage(
   signal: AbortSignal,
 ) {
   const turn = research.turns.at(-1)!
+  const eventRunId = turn.eventRunId ?? turn.runId!
   const query = new URLSearchParams({
     research_id: research.id,
     turn_id: turn.id,
@@ -18,14 +19,14 @@ export async function readEventPage(
   })
   if (journalId) query.set('journal_id', journalId)
   const response = await fetch(
-    `${thread.serverUrl}/atlas/threads/${encodeURIComponent(thread.threadId)}/runs/${encodeURIComponent(turn.runId!)}/events?${query}`,
+    `${thread.serverUrl}/atlas/threads/${encodeURIComponent(thread.threadId)}/runs/${encodeURIComponent(eventRunId)}/events?${query}`,
     { cache: 'no-store', signal: AbortSignal.any([signal, AbortSignal.timeout(15000)]) },
   )
   if (!response.ok) throw new ApiError(response.status)
   const page = eventPageSchema.parse(await response.json())
   if (
     page.thread_id !== thread.threadId ||
-    page.run_id !== turn.runId ||
+    page.run_id !== eventRunId ||
     page.research_id !== research.id ||
     page.turn_id !== turn.id ||
     page.next_sequence > page.last_sequence

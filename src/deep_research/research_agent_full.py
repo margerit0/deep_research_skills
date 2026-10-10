@@ -20,6 +20,7 @@ from deep_research.research_agent_scope import (
     write_research_brief as scope_brief,
 )
 from deep_research.state_scope import AgentInputState, AgentState
+from deep_research.submission_journal import guard_execution
 from deep_research.utils import get_today_str
 from deep_research.workflow_contract import (
     is_research_note,
@@ -49,6 +50,7 @@ def _failure(state, node, code, text):
 
 def prepare_research(state: AgentState) -> Command:
     """Start a clean batch or continue exactly the pending clarification."""
+    guard_execution(state, "prepare_research")
     humans = [m for m in state.get("messages", []) if isinstance(m, HumanMessage)]
     if not humans or not message_text(humans[-1].content):
         return Command(
@@ -64,7 +66,7 @@ def prepare_research(state: AgentState) -> Command:
         else str(uuid4())
     )
     # Defense in depth for an intentionally retried, already completed HTTP input.
-    # The browser never automatically POSTs an ambiguous submission a second time.
+    # The durable Atlas endpoint also deduplicates before creating any native run.
     if turn_id == state.get("active_turn_id") and state.get("research_status") in {
         "awaiting_input",
         "succeeded",
@@ -105,6 +107,7 @@ def prepare_research(state: AgentState) -> Command:
 
 def clarify_with_user(state: AgentState) -> Command:
     """Keep the shared structured-output/Qwen fallback and mark END as waiting."""
+    guard_execution(state, "clarify_with_user")
     try:
         result = scope_clarify(state)
         waiting = result.goto == END
@@ -135,6 +138,7 @@ def clarify_with_user(state: AgentState) -> Command:
 
 def write_research_brief(state: AgentState) -> Command:
     """Checkpoint the real brief before entering the research subgraph."""
+    guard_execution(state, "write_research_brief")
     try:
         result = scope_brief(state)
         if not result["research_brief"].strip():
@@ -157,6 +161,7 @@ def write_research_brief(state: AgentState) -> Command:
 
 async def supervisor_subgraph(state: AgentState) -> Command:
     """Gate writing on actual findings, keeping partial successes visible."""
+    guard_execution(state, "supervisor_subgraph")
     with capture_research_events(
         state.get("active_research_id", ""), state.get("active_turn_id", "")
     ) as events:
@@ -217,6 +222,7 @@ async def supervisor_subgraph(state: AgentState) -> Command:
 
 async def final_report_generation(state: AgentState):
     """Write from valid notes; an empty/failed writer leaves a partial result."""
+    guard_execution(state, "final_report_generation")
     notes = [note for note in state.get("notes", []) if is_research_note(note)]
     if not notes:
         return _failure(

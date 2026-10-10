@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
 import * as api from '../api/langgraph'
+import * as submissions from '../api/submissions'
 import type { BackendConfig, LiveResearch, ResearchEvent } from '../data/liveSchema'
 import type { Thread, Workspace } from '../data/schema'
 import { applySnapshot } from '../data/live'
+import { applyReceipt } from '../data/executionRecovery'
 import { streamResearchEvents } from '../api/researchStream'
 import { readEventPage } from '../api/eventReplay'
 import { retryDelay, savedRecovery } from '../data/eventRecovery'
@@ -33,7 +35,7 @@ export type LiveUpdate =
         unconfirmedBefore: number
       }
     }
-type Sync = { state: 'loading' | 'ready' | 'error'; message?: string }
+type Sync = { state: 'loading' | 'ready' | 'error'; message?: string; retrySubmission?: boolean }
 type Connection = { config?: BackendConfig; loading: boolean; error?: string }
 type EventConnection = 'connecting' | 'live' | 'retrying' | 'ended'
 type EventStream = {
@@ -124,7 +126,7 @@ export function useLiveResearch(
           threadId: thread.id,
           researchId: research.id,
           turnId: turn.id,
-          runId: turn.runId,
+          runId: turn.eventRunId ?? turn.runId,
           events: page.events,
           replay: {
             journalId: page.journal_id ?? journalId,
@@ -176,7 +178,9 @@ export function useLiveResearch(
       return (
         research?.status === 'running' &&
         research.config.research_events_version === 1 &&
-        research.turns.at(-1)?.runId
+        research.turns.at(-1)?.runId &&
+        (!research.turns.at(-1)?.eventRunId ||
+          research.turns.at(-1)?.eventRunId === research.turns.at(-1)?.runId)
       )
     })
     for (const [id, stream] of streams.current) {
@@ -302,6 +306,25 @@ export function useLiveResearch(
     const turnId = research.turns.at(-1)!.id
     syncing.current.add(threadId)
     try {
+      if (research.turns.at(-1)!.submissionVersion === 1) {
+        const receipt = await submissions.getReceipt(thread.live, research)
+        const snapshot =
+          receipt.run && !['blocked', 'rejected'].includes(receipt.status)
+            ? await api.getState(thread.live, receipt.checkpoint_id)
+            : undefined
+        if (!mounted.current) return
+        const latest = current.current.threads
+          .find((t) => t.id === threadId)
+          ?.live?.researches.at(-1)
+        if (!latest || latest.id !== research.id || latest.turns.at(-1)?.id !== turnId) return
+        submissions.validateReceipt(thread.live, latest, receipt)
+        const next = applyReceipt(latest, receipt, snapshot?.values)
+        commitRef.current({ type: 'live', threadId, research: next })
+        updateSync(threadId, { state: 'ready' })
+        syncRetries.current.delete(threadId)
+        await recoverEvents(thread, next, force)
+        return
+      }
       const serverRun = await api.findRun(thread.live, research)
       if (!serverRun) {
         const failures = (retry?.failures ?? 0) + 1
@@ -324,14 +347,30 @@ export function useLiveResearch(
       syncRetries.current.delete(threadId)
       await recoverEvents(thread, next, force)
     } catch (error) {
+      const latest = current.current.threads
+        .find((item) => item.id === threadId)
+        ?.live?.researches.at(-1)
+      if (latest?.id !== research.id || latest.turns.at(-1)?.id !== turnId) return
+      const rejected = latest.turns.at(-1)?.transport === 'rejected'
       const failures = (retry?.failures ?? 0) + 1
       syncRetries.current.set(threadId, { failures, at: Date.now() + retryDelay(failures) })
       updateSync(threadId, {
         state: 'error',
+        retrySubmission:
+          error instanceof submissions.SubmissionError &&
+          error.status === 404 &&
+          error.reason === 'submission_unknown' &&
+          !rejected,
         message:
-          error instanceof api.ApiError && error.status === 404
-            ? '服务端找不到此会话或运行。保留本地记录；不会自动重建或重发。'
-            : '暂时无法回读研究状态。已保留本地内容，将继续尝试连接；不会重复提交。',
+          error instanceof submissions.SubmissionError &&
+          error.status === 404 &&
+          error.reason === 'submission_unknown'
+            ? rejected
+              ? '此次提交发生冲突或被拒绝。已保留输入和成果，可新建研究。'
+              : '服务端尚无此提交记录。可使用原提交标识安全重试。'
+            : error instanceof api.ApiError && error.status === 404
+              ? '服务端找不到此会话或运行。保留本地记录；不会自动重建或重发。'
+              : '暂时无法回读研究状态。已保留本地内容，将继续尝试连接；不会重复提交。',
       })
       // Progress can survive even when native dev run metadata was not flushed.
       await recoverEvents(thread, research, force)
@@ -348,6 +387,7 @@ export function useLiveResearch(
     if (!config || !live || !prompt || sending.current.has(thread.id) || last?.status === 'running')
       return
     if (last && sync[thread.id]?.state !== 'ready') return
+    if (last?.execution && last.execution.status !== 'completed') return
     sending.current.add(thread.id)
     try {
       // A restarted backend may have new process-level configuration. Refresh
@@ -372,6 +412,9 @@ export function useLiveResearch(
       text: prompt,
       submittedAt: new Date().toISOString(),
       transport: 'sending' as const,
+      ...(config.submission_recovery_version === 1
+        ? { submissionVersion: 1 as const, expectedTurnId: last?.turns.at(-1)?.id ?? null }
+        : {}),
     }
     const continuing = last?.status === 'awaiting_input'
     const research: LiveResearch = {
@@ -411,6 +454,16 @@ export function useLiveResearch(
     updateSync(thread.id, { state: 'loading' })
     try {
       if (!last) await api.createThread(live)
+      if (turn.submissionVersion === 1) {
+        const receipt = await submissions.submitResearch(live, research)
+        if (mounted.current)
+          commitRef.current({
+            type: 'live',
+            threadId: thread.id,
+            research: applyReceipt(research, receipt),
+          })
+        return
+      }
       const serverRun = await api.createRun(live, research, turn)
       if (!mounted.current) return
       commitRef.current({
@@ -428,7 +481,9 @@ export function useLiveResearch(
       // 4xx (except a conflict) is a definite rejection. Timeouts, 5xx and lost
       // responses are ambiguous: preserve the ID and reconcile without reposting.
       const rejected =
-        error instanceof api.ApiError && [400, 401, 403, 404, 422].includes(error.status)
+        error instanceof api.ApiError &&
+        ([400, 401, 403, 404, 422].includes(error.status) ||
+          (turn.submissionVersion === 1 && error.status === 409))
       commitRef.current({
         type: 'live',
         threadId: thread.id,
@@ -458,6 +513,95 @@ export function useLiveResearch(
     } finally {
       sending.current.delete(thread.id)
       void refresh(thread.id)
+    }
+  }
+
+  async function retrySubmission(threadId: string) {
+    const thread = current.current.threads.find((item) => item.id === threadId)
+    const research = thread?.live?.researches.at(-1)
+    if (
+      !thread?.live ||
+      !research ||
+      research.turns.at(-1)?.submissionVersion !== 1 ||
+      sending.current.has(threadId) ||
+      syncing.current.has(threadId)
+    )
+      return
+    if (research.turns.at(-1)?.transport === 'rejected') return
+    if (!research.execution?.retry_allowed && !sync[threadId]?.retrySubmission) return
+    sending.current.add(threadId)
+    updateSync(threadId, { state: 'loading' })
+    try {
+      // Re-persist the original immutable envelope before every authorized retry.
+      if (!commitRef.current({ type: 'live', threadId, research }, true))
+        throw new Error('Storage unavailable')
+      const receipt = await submissions.submitResearch(thread.live, research)
+      if (mounted.current)
+        commitRef.current({ type: 'live', threadId, research: applyReceipt(research, receipt) })
+    } catch {
+      updateSync(threadId, {
+        state: 'error',
+        message: '提交确认暂时未完成，原提交标识已保留。正在重新读取状态。',
+      })
+    } finally {
+      sending.current.delete(threadId)
+      void refresh(threadId)
+    }
+  }
+
+  async function recoverExecution(threadId: string) {
+    const thread = current.current.threads.find((item) => item.id === threadId)
+    const research = thread?.live?.researches.at(-1)
+    if (
+      !thread?.live ||
+      !research ||
+      research.turns.at(-1)?.submissionVersion !== 1 ||
+      sending.current.has(threadId) ||
+      syncing.current.has(threadId)
+    )
+      return
+    sending.current.add(threadId)
+    updateSync(threadId, { state: 'loading' })
+    try {
+      // A displayed button is not proof that a checkpoint is still current.
+      const receipt = await submissions.getReceipt(thread.live, research)
+      let next = applyReceipt(research, receipt)
+      const boundary = receipt.recovery
+      const existing = next.turns.at(-1)!.recoveryRequest
+      if (!existing && (!boundary.allowed || !boundary.checkpoint_id || !boundary.node)) {
+        commitRef.current({ type: 'live', threadId, research: next })
+        return
+      }
+      const recoveryRequest = existing ?? {
+        id: crypto.randomUUID(),
+        parentRunId: receipt.run_id,
+        checkpointId: boundary.checkpoint_id!,
+        node: boundary.node!,
+      }
+      next = {
+        ...next,
+        turns: next.turns.map((turn, index) =>
+          index === next.turns.length - 1 ? { ...turn, recoveryRequest } : turn,
+        ),
+      }
+      if (!commitRef.current({ type: 'live', threadId, research: next }, true)) {
+        updateSync(threadId, {
+          state: 'error',
+          message: '浏览器无法保存恢复标识，请恢复本地存储后再继续。',
+        })
+        return
+      }
+      const accepted = await submissions.resumeResearch(thread.live, next)
+      if (mounted.current)
+        commitRef.current({ type: 'live', threadId, research: applyReceipt(next, accepted) })
+    } catch {
+      updateSync(threadId, {
+        state: 'error',
+        message: '恢复请求结果待确认，已保留恢复标识。正在重新读取状态。',
+      })
+    } finally {
+      sending.current.delete(threadId)
+      void refresh(threadId)
     }
   }
 
@@ -511,5 +655,15 @@ export function useLiveResearch(
     }
   }, [])
 
-  return { connection, sync, send, refresh, connect, eventConnections, replayStates }
+  return {
+    connection,
+    sync,
+    send,
+    refresh,
+    connect,
+    eventConnections,
+    replayStates,
+    retrySubmission,
+    recoverExecution,
+  }
 }

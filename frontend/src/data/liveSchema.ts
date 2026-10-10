@@ -7,6 +7,7 @@ export const backendConfigSchema = z.object({
   skills_mode: z.literal('auto'),
   research_events_version: z.literal(1).optional(),
   research_event_replay_version: z.literal(1).optional(),
+  submission_recovery_version: z.literal(1).optional(),
   models: z
     .array(
       z.object({
@@ -102,11 +103,56 @@ export const messageSchema = z.object({
   content: z.string(),
   name: z.string().optional(),
 })
+export const serverRunSchema = z.object({
+  run_id: z.string(),
+  thread_id: z.string(),
+  status: z.enum(['pending', 'running', 'success', 'error', 'timeout', 'interrupted']),
+  metadata: z.record(z.string(), z.unknown()).default({}),
+})
+export const submissionReceiptSchema = z.object({
+  version: z.literal(1),
+  thread_id: z.string(),
+  research_id: z.string(),
+  turn_id: z.string(),
+  attempt_id: z.string(),
+  run_id: z.string(),
+  event_run_id: z.string(),
+  checkpoint_id: z.string().optional(),
+  status: z.enum(['accepted', 'completed', 'retryable', 'interrupted', 'blocked', 'rejected']),
+  reason: z.string(),
+  retry_allowed: z.boolean(),
+  attempts: z
+    .array(
+      z.object({ attempt_id: z.string(), run_id: z.string(), kind: z.enum(['submit', 'resume']) }),
+    )
+    .min(1),
+  recovery: z.object({
+    allowed: z.boolean(),
+    reason: z.string(),
+    checkpoint_id: z.string().optional(),
+    node: z
+      .enum(['clarify_with_user', 'write_research_brief', 'final_report_generation'])
+      .optional(),
+  }),
+  run: serverRunSchema.nullable(),
+})
+export type SubmissionReceipt = z.infer<typeof submissionReceiptSchema>
 export const turnSchema = z.object({
   id: z.string(),
   text: z.string(),
   submittedAt: z.string(),
   runId: z.string().optional(),
+  eventRunId: z.string().optional(),
+  submissionVersion: z.literal(1).optional(),
+  expectedTurnId: z.string().nullable().optional(),
+  recoveryRequest: z
+    .object({
+      id: z.uuid(),
+      parentRunId: z.string(),
+      checkpointId: z.string(),
+      node: z.string(),
+    })
+    .optional(),
   transport: z.enum(['sending', 'accepted', 'uncertain', 'rejected']),
 })
 export const liveResearchSchema = z.object({
@@ -126,6 +172,7 @@ export const liveResearchSchema = z.object({
   events: z.array(researchEventSchema).default([]),
   // A damaged recovery position must not discard the user's conversation.
   eventRecovery: eventRecoverySchema.optional().catch(undefined),
+  execution: submissionReceiptSchema.optional().catch(undefined),
   observations: z.array(
     z.object({ at: z.string(), phase: researchPhaseSchema, status: researchStatusSchema }),
   ),
