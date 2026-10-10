@@ -140,6 +140,14 @@ let qaBrowser;
     assert.equal(await frame.locator('[data-detail-model]').innerText(),'DeepSeek V3.2');
     assert.match(await frame.locator('[data-detail-input]').innerText(),/研究离线搜索工具/);
     checks.push('Graph collapse, run progression, completed researcher output, pending/new run reset and captured model');
+    // The standalone host commits iframe messages asynchronously. Reload only
+    // after this exact UI snapshot reaches storage, rather than racing its port.
+    const savedClient=await frame.evaluate(()=>window.openai.widgetState.privateContent.client);
+    await page.waitForFunction(client=>Object.keys(localStorage).some(key=>{
+      if(!key.startsWith('codex:visualization-widget-state-v2:'))return false;
+      const saved=JSON.parse(localStorage.getItem(key));
+      return saved?.privateContent?.client?.id===client.id&&saved.privateContent.client.revision===client.revision;
+    }),savedClient);
     await page.reload({waitUntil:'load'});
     const restored = page.frames().find(frame=>frame.parentFrame());
     await restored.locator('#atlas-conversation-workspace').waitFor();
@@ -147,7 +155,7 @@ let qaBrowser;
     assert.equal(saved.privateContent.atlasConversation.activeThread,'draft');
     assert.equal(saved.privateContent.atlasConversation.draft.runModel,'deepseek');
     // Seed a clean representative run through the supported widget-state event.
-    await restored.evaluate(()=>window.dispatchEvent(new CustomEvent('openai:set_globals',{detail:{globals:{widgetState:{privateContent:{atlasConversation:{model:'qwen',skill:'auto',graph:true,inspector:true,inspectorTab:'overview',selected:'b',activeThread:'example',draftText:'',example:{stage:'research',runModel:'qwen',runSkill:'auto',followups:[]},draft:{exists:false,title:'新研究',stage:'idle',runModel:null,runSkill:'auto',followups:[]}},design:{theme:'system',graphWidth:360,radius:13,blur:24}}}}}})));
+    await restored.evaluate(()=>window.dispatchEvent(new CustomEvent('openai:set_globals',{detail:{globals:{widgetState:{privateContent:{atlasConversation:{model:'qwen',skill:'auto',graph:true,inspector:true,inspectorTab:'overview',selected:'b',activeThread:'example',draftText:'',example:{stage:'research',runModel:'qwen',runSkill:'auto',followups:[]},draft:{exists:false,title:'新研究',stage:'idle',runModel:null,runSkill:'auto',followups:[]}},design:{theme:'system',graphWidth:350,radius:14,blur:28,reflection:65}}}}}})));
     const live=restored;
     await live.locator('#cw-model').click();
     await live.locator('[data-model-value="deepseek"]').click();
@@ -162,7 +170,7 @@ let qaBrowser;
     checks.push('State restoration and stale same-client revision protection');
     for(const theme of ['light','dark']){
       await page.emulateMedia({colorScheme:theme,reducedMotion:'reduce'});
-      for(const width of [1024,900,736,390,320]){
+      for(const width of [1440,1024,900,736,390,320]){
         await page.setViewportSize({width:width+32,height:1180});
         await page.waitForTimeout(80);
         const size=await live.evaluate(()=>{
@@ -182,7 +190,7 @@ let qaBrowser;
         if(width===1024||width===390)await live.locator('#atlas-conversation-workspace').screenshot({path:path.join(output,`atlas-glass-${theme}-${width}.png`)});
       }
     }
-    checks.push('Light/dark 1024/900/736/390/320 layouts and both open menus; reduced motion');
+    checks.push('Light/dark 1440/1024/900/736/390/320 layouts and both open menus; reduced motion');
     const touch=await browser.newContext({viewport:{width:352,height:1000},colorScheme:'light',hasTouch:true,isMobile:true,deviceScaleFactor:1});
     const touchPage=await touch.newPage();
     await touchPage.goto(pathToFileURL(preview).href,{waitUntil:'load'});
@@ -203,5 +211,7 @@ let qaBrowser;
   console.log(JSON.stringify(report));
   await browser.close();
   assert.equal(errors.length,0,'No UI runtime errors');
+  assert.equal(consoleErrors.length,0,'No browser console errors');
+  assert.equal(requestFailures.length,0,'No failed preview resource requests');
   await fs.copyFile(source,path.join(rootDir,'preview','atlas-glass-workspace.html'));
 })().catch(async error=>{console.error(error);if(qaBrowser)await qaBrowser.close();process.exitCode=1;});

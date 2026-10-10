@@ -1,0 +1,58 @@
+{
+  "palette": "pearl-silver",
+  "menus": [
+    {
+      "theme": "light",
+      "name": "model",
+      "background": "rgb(255, 255, 255)",
+      "gradient": "none",
+      "blur": "none",
+      "radius": "11px",
+      "highlight": "none",
+      "width": 232
+    },
+    {
+      "theme": "light",
+      "name": "skill",
+      "background": "rgb(255, 255, 255)",
+      "gradient": "none",
+      "blur": "none",
+      "radius": "11px",
+      "highlight": "none",
+      "width": 232
+    },
+    {
+      "theme": "dark",
+      "name": "model",
+      "background": "rgb(41, 44, 50)",
+      "gradient": "none",
+      "blur": "none",
+      "radius": "11px",
+      "highlight": "none",
+      "width": 232
+    },
+    {
+      "theme": "dark",
+      "name": "skill",
+      "background": "rgb(41, 44, 50)",
+      "gradient": "none",
+      "blur": "none",
+      "radius": "11px",
+      "highlight": "none",
+      "width": 232
+    }
+  ],
+  "reflection": {
+    "x": "51px",
+    "y": "21px",
+    "mask": "exclude, exclude",
+    "pointerEvents": "none"
+  },
+  "reducedMotion": true,
+  "reducedTransparency": {
+    "filter": "none",
+    "background": "rgb(250, 251, 252)",
+    "reflection": "0"
+  },
+  "conversationStateUnchanged": true
+}

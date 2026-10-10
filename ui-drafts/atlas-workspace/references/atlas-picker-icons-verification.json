@@ -1,0 +1,59 @@
+{
+  "results": [
+    {
+      "theme": "light",
+      "icons": [
+        {
+          "name": "chevron-down",
+          "width": 11,
+          "height": 11,
+          "pixels": 72
+        },
+        {
+          "name": "layers",
+          "width": 13,
+          "height": 13,
+          "pixels": 72
+        },
+        {
+          "name": "chevron-down",
+          "width": 11,
+          "height": 11,
+          "pixels": 72
+        }
+      ],
+      "noHostLibrary": true,
+      "mouseAndKeyboardMenus": true,
+      "narrowMenus": true,
+      "lateHostWithoutDuplicates": true
+    },
+    {
+      "theme": "dark",
+      "icons": [
+        {
+          "name": "chevron-down",
+          "width": 11,
+          "height": 11,
+          "pixels": 72
+        },
+        {
+          "name": "layers",
+          "width": 13,
+          "height": 13,
+          "pixels": 72
+        },
+        {
+          "name": "chevron-down",
+          "width": 11,
+          "height": 11,
+          "pixels": 72
+        }
+      ],
+      "noHostLibrary": true,
+      "mouseAndKeyboardMenus": true,
+      "narrowMenus": true,
+      "lateHostWithoutDuplicates": true
+    }
+  ],
+  "errors": []
+}
