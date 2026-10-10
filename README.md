@@ -192,12 +192,12 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 ```bash
 git clone <你的仓库地址>
 cd deep_research_skills
-uv sync          # 自动创建虚拟环境并安装依赖
+uv sync --locked --extra dev  # 安装运行、测试及 LangGraph 本地 API 依赖
 ```
 
 ### 配置 `.env`
 
-在项目根目录下创建 `.env`。**模型按「角色」配置**：每个角色至少给一个 `{ROLE}_MODEL`；端点与 key 可以用全局 `LLM_BASE_URL` / `LLM_API_KEY` 统一指定，也可用 `{ROLE}_BASE_URL` / `{ROLE}_API_KEY` 单独覆盖。
+首次配置可参考根目录的 [.env.example](.env.example) 创建本地 `.env`，已有配置可直接沿用。**模型按「角色」配置**：每个角色至少给一个 `{ROLE}_MODEL`；端点与 key 可以用全局 `LLM_BASE_URL` / `LLM_API_KEY` 统一指定，也可用 `{ROLE}_BASE_URL` / `{ROLE}_API_KEY` 单独覆盖。
 
 ```env
 # ── 搜索 ──
@@ -232,16 +232,21 @@ FINAL_REPORT_MODEL=gpt-4o
 
 ### 运行
 
-用 LangGraph 本地开发服务器加载任一图，在 LangGraph Studio 里交互调试：
+启动 LangGraph 本地 API 服务后，自建 React 界面可以通过服务调用研究图：
 
 ```bash
-uv run langgraph dev
+uv run --locked --extra dev langgraph dev --no-browser
 ```
+
+Windows PowerShell 若出现控制台 GBK 编码错误，先执行 `$env:PYTHONUTF8 = "1"` 再启动服务。
 
 或在代码中直接调用端到端图（图内含并行 async 节点，用 `ainvoke`）：
 
 ```python
 import asyncio
+from dotenv import load_dotenv
+
+load_dotenv()
 from deep_research.research_agent_full import agent
 
 async def main():
@@ -258,5 +263,11 @@ asyncio.run(main())
 ## ✅ 测试
 
 ```bash
-uv run pytest
+uv run --locked --extra dev pytest
 ```
+
+## 开发与维护
+
+- [本地开发与维护](docs/maintenance.md)：配置、网关兼容、重试与评估排障。
+- [架构约定](docs/architecture-decisions.md)：Skills 加载、证据过滤、失败信号和评估边界。
+- [历史评估记录](docs/evaluation-history.md)：提示词与摘要器调整的实验依据及局限。

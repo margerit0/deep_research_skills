@@ -4,14 +4,26 @@ import json
 import os
 from types import SimpleNamespace
 import unittest
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 from langchain_core.messages import AIMessage, HumanMessage
 from pydantic import BaseModel
 
+os.environ.setdefault("SCOPING_MODEL", "dummy/model")
+os.environ.setdefault("LLM_API_KEY", "test-key")
 os.environ.setdefault("OPENAI_API_KEY", "test-key")
 
 from deep_research import research_agent_scope
+
+
+def _fake_openai_client(*, return_value=None, side_effect=None):
+    client = MagicMock()
+    create = client.chat.completions.with_raw_response.create
+    if side_effect is not None:
+        create.side_effect = side_effect
+    else:
+        create.return_value = return_value
+    return client
 
 
 class _FakeStructuredOutputModel:
@@ -177,7 +189,7 @@ class ResearchAgentScopeTests(unittest.TestCase):
         )
         fake_model.model_name = "Qwen/Qwen3.5-397B-A17B"
         raw_http_response = SimpleNamespace(
-            read=lambda: json.dumps(
+            content=json.dumps(
                 {
                     "choices": [
                         {
@@ -194,6 +206,7 @@ class ResearchAgentScopeTests(unittest.TestCase):
             ).encode("utf-8"),
         )
 
+        fake_client = _fake_openai_client(return_value=raw_http_response)
         with (
             patch.dict(
                 os.environ,
@@ -204,7 +217,7 @@ class ResearchAgentScopeTests(unittest.TestCase):
                 clear=False,
             ),
             patch.object(research_agent_scope, "model", fake_model),
-            patch("urllib.request.urlopen", return_value=raw_http_response) as mock_urlopen,
+            patch("deep_research.structured_output_fallback.OpenAI", return_value=fake_client),
         ):
             result = research_agent_scope.write_research_brief(
                 {
@@ -222,7 +235,7 @@ class ResearchAgentScopeTests(unittest.TestCase):
         )
         self.assertIsNone(fake_model.structured_model)
         self.assertIsNone(fake_model.bound_kwargs)
-        self.assertEqual(mock_urlopen.call_count, 1)
+        self.assertEqual(fake_client.chat.completions.with_raw_response.create.call_count, 1)
 
     def test_write_research_brief_uses_raw_http_fallback_when_qwen_response_has_null_choices(self):
         fake_model = _FakeModel(
@@ -235,7 +248,7 @@ class ResearchAgentScopeTests(unittest.TestCase):
         )
         fake_model.model_name = "Qwen/Qwen3.5-397B-A17B"
         raw_http_response = SimpleNamespace(
-            read=lambda: json.dumps(
+            content=json.dumps(
                 {
                     "choices": [
                         {
@@ -252,6 +265,7 @@ class ResearchAgentScopeTests(unittest.TestCase):
             ).encode("utf-8"),
         )
 
+        fake_client = _fake_openai_client(return_value=raw_http_response)
         with (
             patch.dict(
                 os.environ,
@@ -262,7 +276,7 @@ class ResearchAgentScopeTests(unittest.TestCase):
                 clear=False,
             ),
             patch.object(research_agent_scope, "model", fake_model),
-            patch("urllib.request.urlopen", return_value=raw_http_response) as mock_urlopen,
+            patch("deep_research.structured_output_fallback.OpenAI", return_value=fake_client),
         ):
             result = research_agent_scope.write_research_brief(
                 {
@@ -278,7 +292,7 @@ class ResearchAgentScopeTests(unittest.TestCase):
             result["research_brief"],
             "Research the best milk tea shops in Hangzhou.",
         )
-        self.assertEqual(mock_urlopen.call_count, 1)
+        self.assertEqual(fake_client.chat.completions.with_raw_response.create.call_count, 1)
 
 
 class StructuredOutputFallbackTests(unittest.TestCase):
@@ -294,7 +308,7 @@ class StructuredOutputFallbackTests(unittest.TestCase):
             response=EvalResult(research_brief="This path should be skipped."),
         )
         raw_http_response = SimpleNamespace(
-            read=lambda: json.dumps(
+            content=json.dumps(
                 {
                     "choices": [
                         {
@@ -311,10 +325,11 @@ class StructuredOutputFallbackTests(unittest.TestCase):
             ).encode("utf-8")
         )
 
+        fake_client = _fake_openai_client(return_value=raw_http_response)
         with patch(
-            "deep_research.structured_output_fallback.urllib.request.urlopen",
-            return_value=raw_http_response,
-        ) as mock_urlopen:
+            "deep_research.structured_output_fallback.OpenAI",
+            return_value=fake_client,
+        ):
             result = invoke_with_structured_output_fallback(
                 fake_model,
                 EvalResult,
@@ -328,7 +343,7 @@ class StructuredOutputFallbackTests(unittest.TestCase):
             result.research_brief,
             "Research the best milk tea shops in Hangzhou.",
         )
-        self.assertEqual(mock_urlopen.call_count, 1)
+        self.assertEqual(fake_client.chat.completions.with_raw_response.create.call_count, 1)
         self.assertIsNone(fake_model.bound_kwargs)
 
     def test_invoke_with_structured_output_fallback_uses_raw_http_when_qwen_response_has_null_choices(self):
@@ -346,7 +361,7 @@ class StructuredOutputFallbackTests(unittest.TestCase):
             ),
         )
         raw_http_response = SimpleNamespace(
-            read=lambda: json.dumps(
+            content=json.dumps(
                 {
                     "choices": [
                         {
@@ -363,10 +378,11 @@ class StructuredOutputFallbackTests(unittest.TestCase):
             ).encode("utf-8"),
         )
 
+        fake_client = _fake_openai_client(return_value=raw_http_response)
         with patch(
-            "deep_research.structured_output_fallback.urllib.request.urlopen",
-            return_value=raw_http_response,
-        ) as mock_urlopen:
+            "deep_research.structured_output_fallback.OpenAI",
+            return_value=fake_client,
+        ):
             result = invoke_with_structured_output_fallback(
                 fake_model,
                 EvalResult,
@@ -381,7 +397,7 @@ class StructuredOutputFallbackTests(unittest.TestCase):
             "Research the best milk tea shops in Hangzhou.",
         )
         self.assertIsNone(fake_model.bound_kwargs)
-        self.assertEqual(mock_urlopen.call_count, 1)
+        self.assertEqual(fake_client.chat.completions.with_raw_response.create.call_count, 1)
 
     def test_invoke_with_structured_output_fallback_retries_raw_http_once_for_qwen_null_choices(self):
         from deep_research.structured_output_fallback import (
@@ -399,7 +415,7 @@ class StructuredOutputFallbackTests(unittest.TestCase):
         )
         retry_responses = [
             SimpleNamespace(
-                read=lambda: json.dumps(
+                content=json.dumps(
                     {
                         "id": "chatcmpl-first",
                         "object": "",
@@ -416,7 +432,7 @@ class StructuredOutputFallbackTests(unittest.TestCase):
                 ).encode("utf-8")
             ),
             SimpleNamespace(
-                read=lambda: json.dumps(
+                content=json.dumps(
                     {
                         "choices": [
                             {
@@ -434,10 +450,11 @@ class StructuredOutputFallbackTests(unittest.TestCase):
             ),
         ]
 
+        fake_client = _fake_openai_client(side_effect=retry_responses)
         with patch(
-            "deep_research.structured_output_fallback.urllib.request.urlopen",
-            side_effect=retry_responses,
-        ) as mock_urlopen:
+            "deep_research.structured_output_fallback.OpenAI",
+            return_value=fake_client,
+        ):
             result = invoke_with_structured_output_fallback(
                 fake_model,
                 EvalResult,
@@ -451,7 +468,7 @@ class StructuredOutputFallbackTests(unittest.TestCase):
             result.research_brief,
             "Research the best milk tea shops in Hangzhou.",
         )
-        self.assertEqual(mock_urlopen.call_count, 2)
+        self.assertEqual(fake_client.chat.completions.with_raw_response.create.call_count, 2)
 
     def test_invoke_with_structured_output_fallback_reports_provider_diagnostics_on_terminal_invalid_payload(self):
         from deep_research.structured_output_fallback import (
@@ -468,7 +485,7 @@ class StructuredOutputFallbackTests(unittest.TestCase):
             ),
         )
         invalid_response = SimpleNamespace(
-            read=lambda: json.dumps(
+            content=json.dumps(
                 {
                     "id": "chatcmpl-f0fb0721",
                     "object": "",
@@ -485,9 +502,10 @@ class StructuredOutputFallbackTests(unittest.TestCase):
             ).encode("utf-8")
         )
 
+        fake_client = _fake_openai_client(side_effect=[invalid_response, invalid_response])
         with patch(
-            "deep_research.structured_output_fallback.urllib.request.urlopen",
-            side_effect=[invalid_response, invalid_response],
+            "deep_research.structured_output_fallback.OpenAI",
+            return_value=fake_client,
         ):
             with self.assertRaises(ValueError) as exc_info:
                 invoke_with_structured_output_fallback(
@@ -499,6 +517,7 @@ class StructuredOutputFallbackTests(unittest.TestCase):
                     model_name="Qwen/Qwen3.5-397B-A17B",
                 )
 
+        self.assertEqual(fake_client.chat.completions.with_raw_response.create.call_count, 2)
         error_text = str(exc_info.exception)
         self.assertIn("choices_type=NoneType", error_text)
         self.assertIn("model=Qwen/Qwen3.5-397B-A17B", error_text)
@@ -544,7 +563,6 @@ class StructuredOutputFallbackTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-
 
 
 

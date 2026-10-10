@@ -86,4 +86,7 @@ uv run python -m scripts.supervisor.fetch_last_supervisor_eval --only-failures -
 ## 容错说明
 
 - 单条 example 失败（如 Tavily 偶发空响应、网关 5xx 重试耗尽）只 **log 不中断**，批量评估能跑完，失败条目在 LangSmith UI 标红供逐条排查。
-- 所有 judge / target 调用都过 `structured_output_fallback` + 退避重试；瞬时故障一般会自愈，持续失败再查端点与限流配置。
+- 结构化 judge 调用和 Scoping 节点复用 `structured_output_fallback`；评估 target 与 judge 另有退避重试。持续失败时检查实际异常、端点和并发配置。
+- 批次退出码为 0 不代表所有用例成功或 feedback 完整。回读时核对用例数、agent 错误和缺失评分，区分真实零分与没有评分。
+
+结构化反馈字段、重试层次及历史排障经验见 [维护说明](maintenance.md)；历史分数的口径与局限见 [评估记录](evaluation-history.md)。

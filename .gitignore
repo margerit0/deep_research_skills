@@ -4,6 +4,10 @@
 
 # Python / 运行时产物
 .env
+.env.*
+!.env.example
+.venv/
+.pytest_cache/
 __pycache__
 *.pyc
 .langgraph_api/
@@ -12,6 +16,9 @@ deep_research.egg-info/
 # 评估/冒烟运行的本地产物（日志与结果快照不入库）
 *.log
 research_eval_*.json
+
+# Local migration archives and evaluation evidence
+.local/
 
 # Open Design 本地出稿工作区（草稿不入库, 定稿手动缝合进 frontend/）
 open_design/

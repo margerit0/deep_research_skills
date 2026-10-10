@@ -1,0 +1,67 @@
+# 本地开发与维护
+
+本文按当前 `src/deep_research/` 实现整理。历史排障记录中的旧包名、旧目录、配额状态和待办不作为当前开发指令。架构约定见 [架构决策](architecture-decisions.md)，历史实验见 [评估记录](evaluation-history.md)。
+
+## 环境与入口
+
+在项目根目录执行：
+
+```powershell
+$env:PYTHONUTF8 = "1"
+uv sync --locked --extra dev
+uv run --locked --extra dev pytest
+uv run --locked --extra dev langgraph dev --no-browser
+```
+
+`--extra dev` 安装 `pyproject.toml` 中的 LangGraph CLI/API 等可选开发依赖；默认的 dev dependency group 主要提供 pytest，两者不是同一项配置。`--locked` 使用已提交的锁文件并检查其与项目配置一致。
+
+单元测试自带导入阶段所需的默认模型配置，对模型和搜索调用使用测试替身，不依赖真实密钥。Qwen fallback 测试拦截当前 SDK 的原始响应调用，并验证空 `choices` 的重试与最终诊断。
+
+开发依赖也包含 HTTPX 与 Requests 的 SOCKS 支持，用于当前进程通过 `HTTP_PROXY`、`HTTPS_PROXY` 或 `ALL_PROXY` 使用 SOCKS 代理的情况。HTTPX 需要 `socksio`，Tavily 使用的 Requests 需要 `PySocks`；这些依赖不改变代理地址或路由。
+
+首次配置使用根目录 [.env.example](../.env.example) 创建本地 `.env`，填写模型角色和凭据。已有本地配置可以沿用。不要搬运旧虚拟环境；用当前项目的锁文件同步依赖。
+
+`langgraph.json` 从项目根目录读取 `.env`。自行编写 Python 入口时，必须在导入任何研究图模块之前调用 `load_dotenv()`，因为模型会在模块导入阶段实例化：
+
+```python
+from dotenv import load_dotenv
+
+load_dotenv()
+from deep_research.research_agent_full import agent
+```
+
+自建 React 界面可以连接 LangGraph API。模型、Tavily 和 LangSmith 凭据保留在后端环境中；前端配置只需提供后端地址。
+
+## 结构化输出与网关兼容
+
+Scoping 节点和 LangSmith 结构化评估器复用 [structured_output_fallback.py](../src/deep_research/structured_output_fallback.py)。新增评估器应调用共享 helper，避免独立实现一套 `with_structured_output()` 路径。
+
+当前 helper 对符合其判定条件的 Qwen 模型使用 `/no_think` JSON 路径，经 OpenAI SDK 的 `with_raw_response.create()` 读取原始响应，再由项目代码检查 `choices`、提取 JSON、执行 schema 校验和有限重试。保留这一层的诊断信息；不要把空 `choices` 当成有效结果。不同网关对 `enable_thinking` 的支持不同，替换模型或端点时需要验证相应路径。
+
+2026 年 5 月的一次 403 故障由特定网关对旧 urllib 客户端签名的拦截造成，后来更换了 transport。该记录说明排障应对比请求头、响应状态和客户端行为，不能把所有 403 都归因于同一个原因。后续的 `KeyError('research_brief')` 也可能只是上游失败后缺少输出的连带结果。
+
+网页摘要是另一个调用点：[utils.py](../src/deep_research/utils.py) 显式采用 `method="function_calling"`。2026 年 6 月曾因默认结构化输出方式与网关不兼容而大量降级为截断原文；研究覆盖率下降时应检查摘要阶段日志。
+
+## 重试、并发与失败输出
+
+- Tavily 的自定义 `tavily.errors.TimeoutError` 与 Python 内建 `TimeoutError`、`requests.exceptions.Timeout` 不同，修改重试逻辑时要核对实际异常类型。
+- Tavily 调用点的重试、评估整案重试、压缩与最终报告模型的重试处在不同层。调参时核算整体尝试次数与成本，避免叠加出过大的重试量。
+- `AGENT_RPM` 在单个进程中由 researcher、网页摘要和 compression 共享。评估的 example 并发与 judge 并发另行控制；降低一个参数不代表另一个也降低。
+- 无有效搜索结果或压缩输出为空时，研究员返回以 `## 研究未完成` 开头的标记。界面应展示失败状态，而不是把该文本当成成功报告。
+- 本地进程异常结束后，远端追踪的状态可能滞后。排障同时检查本地进程、日志和远端记录。
+
+## 评估明细必须可回读
+
+当前 Scoping 评估器与回读脚本使用以下约定：
+
+| 数据 | Feedback 字段 |
+|---|---|
+| 数值评分 | `score` |
+| 文本摘要或理由 | `comment` |
+| 逐项结构化明细 | `value.individual_evaluations` |
+
+历史文档曾推荐把明细写入 `metadata`，该建议后来被纠正；当时 `extra` 路径也没有保存所需数据。维护这里时以 [写入实现](../scripts/scoping/run_scoping_eval.py) 和 [回读实现](../scripts/scoping/fetch_last_eval.py) 为准，并验证写入后能读回。
+
+`error_handling="log"` 允许批量评估在部分调用失败后继续，因此退出码为 0 或打印“评估已完成”不能证明每条用例都有有效评分。应核对用例数量、agent 错误、缺失 feedback，以及各项明细；缺失评分与真实零分应分开统计。
+
+运行方法见 [评估操作手册](evaluation.md)。真实评估会调用模型、搜索服务和 LangSmith，先用 `--limit 1 --max-concurrency 1` 检查改动路径，再按需要扩大。对照实验使用明确的 `--project-name` 回读，记录模型、judge、数据集版本及失败数量。

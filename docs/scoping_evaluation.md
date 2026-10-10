@@ -43,7 +43,7 @@ START → │ clarify_with_user  │ ─yes──→ │ write_research_brief �
 ### 3.1 位置
 
 - LangSmith 上的数据集名: `deep_research_scoping` (可通过 `LANGSMITH_DATASET` 环境变量覆盖)
-- 本地源代码: `scripts/upload_scoping_dataset.py` 中的 `TEST_CASES` 列表
+- 本地源代码: `scripts/scoping/upload_scoping_dataset.py` 中的 `TEST_CASES` 列表
 
 ### 3.2 结构
 
@@ -117,9 +117,9 @@ START → │ clarify_with_user  │ ─yes──→ │ write_research_brief �
 
 ### 5.1 评估器 1:`evaluate_success_criteria` (覆盖度)
 
-**位置**: `scripts/run_scoping_eval.py:110-155`
+**位置**: `scripts/scoping/run_scoping_eval.py` 的 `evaluate_success_criteria`
 
-**Prompt**: `BRIEF_CRITERIA_PROMPT` (见 `src/deep_research/prompts.py:454`)
+**Prompt**: `BRIEF_CRITERIA_PROMPT` (见 `src/deep_research/prompts.py`)
 
 **输入**:
 - `outputs["research_brief"]` — agent 生成的简报
@@ -137,9 +137,9 @@ START → │ clarify_with_user  │ ─yes──→ │ write_research_brief �
 
 ### 5.2 评估器 2:`evaluate_no_assumptions` (反幻觉)
 
-**位置**: `scripts/run_scoping_eval.py:157-176`
+**位置**: `scripts/scoping/run_scoping_eval.py` 的 `evaluate_no_assumptions`
 
-**Prompt**: `BRIEF_HALLUCINATION_PROMPT` (见 `src/deep_research/prompts.py:519`)
+**Prompt**: `BRIEF_HALLUCINATION_PROMPT` (见 `src/deep_research/prompts.py`)
 
 **输入**: 同上
 
@@ -206,16 +206,16 @@ cd deep_research_skills
 source .venv/Scripts/activate
 
 # 1) 上传数据集 (只需第一次, 之后改用 --recreate 覆盖)
-python -m scripts.upload_scoping_dataset
+python -m scripts.scoping.upload_scoping_dataset
 
 # 2) 小规模冒烟 (验证流程通不通, 省 token)
-python -m scripts.run_scoping_eval --limit 2
+python -m scripts.scoping.run_scoping_eval --limit 2
 
 # 3) 全量评估
-python -m scripts.run_scoping_eval
+python -m scripts.scoping.run_scoping_eval
 
 # 4) 迭代 prompt 后再次评估, 用不同 prefix 便于对比
-python -m scripts.run_scoping_eval --experiment-prefix "v2-tighter-prompt"
+python -m scripts.scoping.run_scoping_eval --experiment-prefix "v2-tighter-prompt"
 ```
 
 ### 7.3 查看结果
@@ -235,12 +235,12 @@ LangSmith UI: <https://smith.langchain.com/>
 | 路径 | 角色 |
 |------|------|
 | `src/deep_research/research_agent_scope.py` | scope agent 实现,导出 `scope_research` |
-| `src/deep_research/prompts.py:454` | `BRIEF_CRITERIA_PROMPT` (评估器 1 的 judge prompt) |
-| `src/deep_research/prompts.py:519` | `BRIEF_HALLUCINATION_PROMPT` (评估器 2 的 judge prompt) |
+| `src/deep_research/prompts.py` | `BRIEF_CRITERIA_PROMPT` (评估器 1 的 judge prompt) |
+| `src/deep_research/prompts.py` | `BRIEF_HALLUCINATION_PROMPT` (评估器 2 的 judge prompt) |
 | `src/deep_research/model_config.py` | 统一模型工厂 `get_chat_model(role)` |
 | `src/deep_research/structured_output_fallback.py` | 结构化输出的 fallback 实现(兼容多 provider) |
-| `scripts/upload_scoping_dataset.py` | **创建并上传数据集**(含 10 个中文用例) |
-| `scripts/run_scoping_eval.py` | **触发评估实验**(含两个评估器) |
+| `scripts/scoping/upload_scoping_dataset.py` | **创建并上传数据集**(含 10 个中文用例) |
+| `scripts/scoping/run_scoping_eval.py` | **触发评估实验**(含两个评估器) |
 | `docs/scoping_evaluation.md` | 本文档 |
 
 ---
@@ -249,7 +249,7 @@ LangSmith UI: <https://smith.langchain.com/>
 
 ### 9.1 加新的测试用例
 
-编辑 `scripts/upload_scoping_dataset.py` 的 `TEST_CASES` 列表,追加新的字典即可。**注意保持结构**:
+编辑 `scripts/scoping/upload_scoping_dataset.py` 的 `TEST_CASES` 列表,追加新的字典即可。**注意保持结构**:
 
 ```python
 {
@@ -269,14 +269,14 @@ LangSmith UI: <https://smith.langchain.com/>
 然后跑:
 
 ```bash
-python -m scripts.upload_scoping_dataset --recreate
+python -m scripts.scoping.upload_scoping_dataset --recreate
 ```
 
 `--recreate` 会先删后建,避免和老数据集冲突。
 
 ### 9.2 调整评估标准 (改 judge 行为)
 
-**不要**改 `scripts/run_scoping_eval.py`,改 `src/deep_research/prompts.py`:
+**不要**改 `scripts/scoping/run_scoping_eval.py`,改 `src/deep_research/prompts.py`:
 
 - 想让 judge 更严:在 `BRIEF_CRITERIA_PROMPT` 的 `<evaluation_guidelines>` 中收紧 CAPTURED 的条件
 - 想让 judge 更宽容:增加 "等效概念也算覆盖" 这类条款
@@ -287,7 +287,7 @@ python -m scripts.upload_scoping_dataset --recreate
 例如想加 "brief 的简洁度评估":
 
 1. 在 `prompts.py` 加新 prompt 例如 `BRIEF_CONCISENESS_PROMPT`
-2. 在 `scripts/run_scoping_eval.py` 加一个 schema (例 `Conciseness(BaseModel)`) 和一个评估函数 `evaluate_conciseness`
+2. 在 `scripts/scoping/run_scoping_eval.py` 加一个 schema (例 `Conciseness(BaseModel)`) 和一个评估函数 `evaluate_conciseness`
 3. 把它追加到 `client.evaluate(evaluators=[...])` 的列表里
 
 LangSmith UI 会自动新增一列指标,无需额外配置。
@@ -301,7 +301,7 @@ LangSmith UI 会自动新增一列指标,无需额外配置。
 JUDGE_MODEL=gpt-5            # 或 claude-opus-4-7 之类更强的
 
 # 命令行
-python -m scripts.run_scoping_eval --judge-role JUDGE
+python -m scripts.scoping.run_scoping_eval --judge-role JUDGE
 ```
 
 `get_chat_model("JUDGE")` 会自动读取 `JUDGE_MODEL` 环境变量。这种 "agent 用便宜模型 + judge 用强模型" 的组合在 prompt 迭代期特别有用。
