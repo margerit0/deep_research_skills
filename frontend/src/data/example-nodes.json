@@ -1,0 +1,251 @@
+{
+  "nodes": {
+    "clarify": {
+      "title": "需求澄清",
+      "description": "确认研究问题、范围和交付要求，等待必要的补充信息。",
+      "tool": "范围界定",
+      "query": "研究范围、比较对象与来源要求。"
+    },
+    "brief": {
+      "title": "研究简报",
+      "description": "将已确认的需求整理成简报，供协调器拆解研究任务。",
+      "tool": "write_research_brief",
+      "query": "技术路线 / 商业模式 / 隐私风险；保留关键结论的来源。"
+    },
+    "supervisor": {
+      "title": "研究协调器",
+      "description": "并行分配研究任务，收集研究员笔记，按需继续委派。",
+      "tool": "ConductResearch",
+      "query": "技术与产品 / 商业与增长 / 隐私与风险"
+    },
+    "a": {
+      "title": "技术与产品",
+      "description": "比较检索增强、模型架构与代表性 AI 搜索产品的核心能力。",
+      "tool": "compress_research",
+      "query": "6 条来源 · 研究笔记已返回协调器"
+    },
+    "b": {
+      "title": "商业与增长",
+      "description": "核验 AI 搜索产品的订阅定价、商业模式与分发渠道。",
+      "tool": "tavily_search · 第 2 轮",
+      "query": "AI search pricing business model"
+    },
+    "c": {
+      "title": "隐私与风险",
+      "description": "核验隐私政策与引用可追溯性，将证据整理为研究笔记。",
+      "tool": "compress_research",
+      "query": "3 条来源 · 正在压缩研究笔记"
+    },
+    "report": {
+      "title": "最终报告",
+      "description": "综合研究简报和已汇总的笔记，撰写带来源索引的报告。",
+      "tool": "final_report_generation",
+      "query": "等待协调器确认研究完成。"
+    }
+  },
+  "inspection": {
+    "clarify": {
+      "id": "clarify_with_user",
+      "path": "完整研究图 / 范围界定",
+      "icon": "messages-square",
+      "duration": "3.1 s",
+      "countLabel": "比较维度",
+      "count": "3 项",
+      "input": "确认比较维度、研究范围与来源要求。",
+      "output": "范围：技术路线、商业模式、隐私风险\n交付：带可核验来源的对比报告",
+      "events": [
+        [
+          "00:00",
+          "读取研究问题",
+          "提取比较对象与交付要求"
+        ],
+        [
+          "00:03",
+          "确认研究范围",
+          "研究范围已确认，进入简报节点"
+        ]
+      ]
+    },
+    "brief": {
+      "id": "write_research_brief",
+      "path": "完整研究图 / 研究准备",
+      "icon": "file-text",
+      "duration": "5.8 s",
+      "countLabel": "研究方向",
+      "count": "3 个",
+      "input": "已确认的用户需求\n保留关键结论的来源与引用要求",
+      "output": "research_brief\n技术与产品 / 商业与增长 / 隐私与风险\n输出：对比结论、证据与来源索引",
+      "events": [
+        [
+          "00:03",
+          "接收需求",
+          "读取已确认的研究范围"
+        ],
+        [
+          "00:06",
+          "生成研究简报",
+          "整理比较维度与证据要求"
+        ],
+        [
+          "00:09",
+          "简报已就绪",
+          "交给研究协调器拆解任务"
+        ]
+      ]
+    },
+    "supervisor": {
+      "id": "supervisor_subgraph",
+      "path": "完整研究图 / 并行调度子图",
+      "icon": "network",
+      "duration": "1m 33s",
+      "doneDuration": "2m 09s",
+      "countLabel": "研究员",
+      "count": "3 位",
+      "input": "research_brief\n围绕技术、商业和隐私并行研究",
+      "output": "已收回 1 / 3 份研究笔记\n仍有 2 位研究员执行中\n可按覆盖情况继续委派",
+      "doneOutput": "notes\n3 份压缩研究笔记已汇总\n研究覆盖已确认，交给最终报告节点",
+      "events": [
+        [
+          "00:09",
+          "拆解研究方向",
+          "分配技术、商业和隐私任务"
+        ],
+        [
+          "00:12",
+          "ConductResearch",
+          "3 位研究员开始并行研究"
+        ],
+        [
+          "01:06",
+          "收到技术研究笔记",
+          "等待其他研究员，按需继续委派"
+        ]
+      ]
+    },
+    "a": {
+      "id": "researcher_agent_skills / compress_research",
+      "path": "并行研究 / 研究员 01",
+      "icon": "cpu",
+      "duration": "54.2 s",
+      "countLabel": "来源",
+      "count": "6 条",
+      "input": "research_topic\n比较检索增强、模型架构与产品能力",
+      "output": "compressed_research\n检索增强与引用机制的比较笔记\n6 条来源，已返回协调器",
+      "events": [
+        [
+          "00:12",
+          "接收研究任务",
+          "技术路线与代表产品"
+        ],
+        [
+          "00:16",
+          "load_skill → tavily_search",
+          "加载产品对比方法并检索证据"
+        ],
+        [
+          "00:54",
+          "compress_research",
+          "压缩检索结果，保留来源"
+        ],
+        [
+          "01:06",
+          "研究笔记已返回",
+          "6 条来源已交给协调器"
+        ]
+      ]
+    },
+    "b": {
+      "id": "researcher_agent_skills / tool_node",
+      "path": "并行研究 / 研究员 02",
+      "icon": "briefcase-business",
+      "duration": "36.4 s",
+      "doneDuration": "1m 12s",
+      "countLabel": "来源",
+      "count": "4 条",
+      "doneCount": "5 条",
+      "input": "research_topic\n核验订阅定价、商业模式与分发渠道",
+      "output": "tavily_search · 第 2 轮\n已收集 4 条来源，继续交叉核验\n压缩研究笔记尚未生成",
+      "doneOutput": "compressed_research\n订阅定价、商业模式与分发渠道笔记\n5 条来源，已返回协调器",
+      "events": [
+        [
+          "01:06",
+          "接收补充任务",
+          "核验商业模式与当前订阅定价"
+        ],
+        [
+          "01:09",
+          "load_skill",
+          "加载本轮研究方法"
+        ],
+        [
+          "01:14",
+          "tavily_search",
+          "检索定价页面与商业化信息"
+        ],
+        [
+          "01:42",
+          "tavily_search · 第 2 轮",
+          "正在交叉核验来源"
+        ]
+      ]
+    },
+    "c": {
+      "id": "researcher_agent_skills / compress_research",
+      "path": "并行研究 / 研究员 03",
+      "icon": "shield-check",
+      "duration": "1m 29s",
+      "doneDuration": "1m 44s",
+      "countLabel": "来源",
+      "count": "3 条",
+      "input": "research_topic\n核验隐私政策、数据留存与引用可追溯性",
+      "output": "compress_research\n3 条来源已收集\n正在整理隐私风险与证据",
+      "doneOutput": "compressed_research\n隐私政策、数据留存与引用风险笔记\n3 条来源，已返回协调器",
+      "events": [
+        [
+          "00:13",
+          "接收研究任务",
+          "隐私政策与引用可追溯性"
+        ],
+        [
+          "00:19",
+          "tavily_search",
+          "检索隐私政策与数据说明"
+        ],
+        [
+          "01:28",
+          "来源收集完成",
+          "3 条来源进入研究笔记"
+        ],
+        [
+          "01:42",
+          "compress_research",
+          "正在压缩已收集的证据"
+        ]
+      ]
+    },
+    "report": {
+      "id": "final_report_generation",
+      "path": "完整研究图 / 研究交付",
+      "icon": "file-check-2",
+      "duration": "0.0 s",
+      "doneDuration": "38.0 s",
+      "countLabel": "研究笔记",
+      "count": "3 份",
+      "input": "research_brief + notes\n研究简报及 3 份压缩研究笔记",
+      "output": "正在生成报告，尚未返回 final_report。",
+      "doneOutput": "final_report\n技术路线 / 商业模式 / 隐私风险\n含对比结论与 14 条来源索引",
+      "events": [
+        [
+          "02:18",
+          "接收研究材料",
+          "读取简报与 3 份压缩笔记"
+        ],
+        [
+          "02:18",
+          "生成最终报告",
+          "综合结论并整理来源索引"
+        ]
+      ]
+    }
+  }
+}

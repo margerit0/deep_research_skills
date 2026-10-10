@@ -4,6 +4,8 @@
 
 整个系统围绕一个核心理念——**Skills 渐进式披露（progressive disclosure）**：研究员不把全部领域知识硬塞进 system prompt，而是先看到一份精简的方法论索引，真正动手前再用工具按需加载对应的研究方法论。这样既省上下文，又能让不同类型的问题（学术、新闻、人物、产品）走各自最合适的检索套路。
 
+「星图工作台」React + TypeScript 前端位于 [`frontend/`](frontend/README.md)，已实现 Apple 银白界面、运行图谱与本地交互。当前使用模拟数据，尚未接入后端。在该目录执行 `npm ci`、`npm run dev` 即可独立启动。
+
 ---
 
 ## 🧭 整体架构

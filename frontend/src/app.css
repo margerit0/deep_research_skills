@@ -1,0 +1,202 @@
+:root {
+  color-scheme: light dark;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  min-width: 320px;
+  background: light-dark(#f5f5f7, #19191c);
+}
+button {
+  cursor: pointer;
+}
+#atlas-conversation-workspace {
+  min-height: 100dvh;
+}
+#atlas-conversation-workspace .cw-header {
+  padding-right: 18px;
+}
+#atlas-conversation-workspace .cw-header-title {
+  overflow: hidden;
+}
+#atlas-conversation-workspace .cw-header h1 {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+#atlas-conversation-workspace .cw-sidebar {
+  min-height: 0;
+}
+#atlas-conversation-workspace .cw-thread-list {
+  overflow-y: auto;
+}
+#atlas-conversation-workspace .cw-thread > span:last-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+#atlas-conversation-workspace .cw-message-pair > .cw-agent-message {
+  margin-top: 26px;
+}
+#atlas-conversation-workspace .cw-keep-phrase {
+  display: inline-block;
+}
+#atlas-conversation-workspace .cw-agent-content,
+#atlas-conversation-workspace .cw-detail-description,
+#atlas-conversation-workspace .cw-inspector h2 {
+  overflow-wrap: anywhere;
+}
+#atlas-conversation-workspace .cw-brief {
+  width: 100%;
+}
+#atlas-conversation-workspace .cw-brief-foot {
+  display: block;
+}
+#atlas-conversation-workspace .cw-report-message p {
+  margin-top: 8px;
+}
+#atlas-conversation-workspace .cw-forks {
+  grid-template-columns: repeat(var(--worker-columns, 3), minmax(0, 1fr));
+}
+#atlas-conversation-workspace .cw-await-workers {
+  text-align: center;
+  font-size: 11px;
+  color: var(--cw-muted);
+  padding: 0 0 10px;
+}
+#atlas-conversation-workspace .cw-picker-menu {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+#atlas-conversation-workspace .cw-picker-trigger {
+  max-width: 200px;
+}
+#atlas-conversation-workspace .cw-send {
+  margin-left: 6px;
+}
+#atlas-conversation-workspace .cw-composer textarea {
+  max-height: 200px;
+}
+#atlas-conversation-workspace .cw-storage-alert {
+  color: var(--cw-warn);
+  font-size: 12px;
+  padding: 8px 18px;
+}
+#atlas-conversation-workspace .cw-drawer {
+  padding: 0;
+  border: 0;
+  margin: 8px auto 8px 8px;
+  width: min(290px, calc(100vw - 32px));
+  height: calc(100dvh - 16px);
+  max-height: none;
+  background: var(--cw-solid);
+  color: var(--cw-text);
+  border-radius: 21px;
+}
+#atlas-conversation-workspace .cw-drawer::backdrop {
+  background: #11182750;
+  backdrop-filter: blur(6px);
+}
+#atlas-conversation-workspace .cw-drawer .cw-sidebar {
+  display: flex;
+  height: 100%;
+}
+#atlas-conversation-workspace .cw-drawer-close {
+  margin-left: auto;
+}
+@media (min-width: 661px) {
+  #atlas-conversation-workspace {
+    height: 100dvh;
+    min-height: 600px;
+  }
+  #atlas-conversation-workspace .cw-main,
+  #atlas-conversation-workspace .cw-workarea,
+  #atlas-conversation-workspace .cw-conversation {
+    min-height: 0;
+  }
+  #atlas-conversation-workspace .cw-sidebar {
+    overflow: auto;
+  }
+  #atlas-conversation-workspace .cw-messages {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  #atlas-conversation-workspace .cw-graph-panel {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  #atlas-conversation-workspace .cw-graph-header,
+  #atlas-conversation-workspace .cw-flow,
+  #atlas-conversation-workspace .cw-inspector {
+    flex-shrink: 0;
+  }
+}
+@media (min-width: 661px) and (max-width: 980px) {
+  #atlas-conversation-workspace {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  #atlas-conversation-workspace > .cw-sidebar {
+    display: none;
+  }
+  #atlas-conversation-workspace .cw-mobile-brand,
+  #atlas-conversation-workspace .cw-new-mobile {
+    display: grid;
+  }
+}
+@media (max-width: 660px) {
+  #atlas-conversation-workspace {
+    min-height: 100dvh;
+  }
+  #atlas-conversation-workspace .cw-header {
+    grid-template-columns: 25px minmax(0, 1fr) auto auto;
+    padding: 13px 12px 13px 16px;
+  }
+  #atlas-conversation-workspace .cw-theme {
+    grid-column: 3;
+    grid-row: 1;
+  }
+  #atlas-conversation-workspace .cw-new-mobile {
+    grid-column: 4;
+    grid-row: 1;
+  }
+  #atlas-conversation-workspace .cw-conversation {
+    min-height: 800px;
+  }
+  #atlas-conversation-workspace .cw-messages {
+    flex: 1;
+  }
+  #atlas-conversation-workspace .cw-picker-trigger {
+    max-width: 150px;
+  }
+  #atlas-conversation-workspace .cw-composer-toolbar {
+    gap: 0;
+  }
+}
+@media (pointer: coarse) {
+  #atlas-conversation-workspace .cw-graph-toggle,
+  #atlas-conversation-workspace .cw-thread,
+  #atlas-conversation-workspace .cw-new-chat,
+  #atlas-conversation-workspace .cw-open-graph,
+  #atlas-conversation-workspace .cw-skill-remove,
+  #atlas-conversation-workspace .cw-mobile-brand {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  #atlas-conversation-workspace .cw-header {
+    grid-template-columns: 44px minmax(0, 1fr) auto auto;
+  }
+}
+@media (prefers-reduced-transparency: reduce) {
+  #atlas-conversation-workspace .cw-drawer::backdrop {
+    backdrop-filter: none;
+  }
+  #atlas-conversation-workspace .cw-thread[aria-current='page'],
+  #atlas-conversation-workspace .cw-picker-menu {
+    background: var(--cw-solid);
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "types": ["node"],
+    "tsBuildInfoFile": "./node_modules/.cache/tsconfig.tools.tsbuildinfo"
+  },
+  "include": ["vite.config.ts", "playwright.config.ts", "tests"]
+}

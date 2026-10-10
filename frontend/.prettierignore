@@ -1,0 +1,8 @@
+dist/
+node_modules/
+playwright-report/
+test-results/
+package-lock.json
+src/apple.css
+src/data/example-nodes.json
+docs/screenshots/
