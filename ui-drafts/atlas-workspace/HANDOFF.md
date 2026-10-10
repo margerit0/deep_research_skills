@@ -1,10 +1,14 @@
 # 前端交互稿交接
 
-更新：2026-10-10（三套配色候选稿）。项目：`D:/deep_research_public_preview`。
+更新：2026-10-10（已选定 Apple 银白，准备新会话实施）。项目：`D:/deep_research_public_preview`。
 
 这份说明用于在新的聊天中继续改进同一份设计。当前仍是交互设计稿阶段，尚未开发正式 React 前端，也没有把界面接到真实模型或 LangGraph 运行。
 
-## 本轮最新进展：配色待用户选择
+## 最新决定：实施 Apple 银白
+
+用户已选定 **Apple 银白**，计划在新会话实施。请以 [Apple 前端实施交接](APPLE_IMPLEMENTATION.md) 为下一轮入口，其中包含必读文件、视觉基准、建议分期、迁移注意事项与起始请求。React 开发与后端接入尚未开始；下文“继续改稿”的工作方式仅适用于修改设计稿，不能覆盖新会话明确提出的正式开发要求。
+
+## 配色设计记录
 
 按用户要求，先将之前全部 UI 改动提交为 `712bb45`（`design: preserve atlas liquid glass workspace baseline`），然后继续制作配色稿。该提交保留原银灰液体玻璃版。
 
@@ -14,7 +18,7 @@
 - **Claude 暖陶**：暖纸底、深棕文字、陶土强调、较低反光；深色为暖炭棕。
 - **青绿 · 林间**：雾绿底、深绿文字、低饱和青绿强调；深色为森林绿。
 
-三套都从同一份 `atlas-conversation-workspace.html` 生成，使用根节点 `data-palette="apple|claude|forest"` 选择色板。源码暂以 Apple 为首屏，**不代表用户已经选定**。只修改了色彩变量与对应填充，保留布局、字体、图谱、节点检查器、28 px 模型/Skills 按钮、232 px 实色菜单和图标兼容显示。
+三套都从同一份 `atlas-conversation-workspace.html` 生成，使用根节点 `data-palette="apple|claude|forest"` 选择色板。源码以 Apple 为首屏，现已被用户选为实施方向；Claude 与青绿保留为对照记录。只修改了色彩变量与对应填充，保留布局、字体、图谱、节点检查器、28 px 模型/Skills 按钮、232 px 实色菜单和图标兼容显示。该轮改动已提交为 `e99140f`。
 
 `scripts/build-colorways.cjs` 生成三套独立片段/完整预览和轮播对照；不要手动修改生成副本。轮播里的 DOM、CSS 和 SVG marker 标识已隔离；会话保存仍使用同一个快照，以便对照相同的研究内容。原有外观、宽度、圆角与玻璃参数控件继续可用。`preview/atlas-glass-*` 为 Apple 首屏的兼容入口。
 
@@ -135,6 +139,6 @@ Windows 命令执行曾反复出现沙箱初始化失败；`apply_patch` 在本�
 
 ## 可粘贴到新聊天的起始请求
 
-> 请先读取 `D:/deep_research_public_preview/ui-drafts/atlas-workspace/HANDOFF.md` 以及里面的最新版 HTML 和参考图。这是我已选择的「星图工作台」对话版交互稿，请从现有稿件继续，不要重新设计三套方案。当前只改进设计和本地交互，不开始正式 React 开发或后端接入。请先展示当前版本，我接下来会给出具体修改意见。
+正式实施使用 [Apple 前端实施交接](APPLE_IMPLEMENTATION.md) 末尾的起始请求。该请求建议先完成 React + TypeScript 界面和本地交互，再单独接入后端；范围以用户在新会话中的指令为准。
 
 上下文准备参考：OpenAI Docs 的 [Codex prompting](https://developers.openai.com/codex/prompting/) 建议结合相关文件、明确约束、界面参考和验证方式，并通过小范围反馈持续迭代。

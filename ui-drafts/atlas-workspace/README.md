@@ -1,6 +1,6 @@
 # 星图工作台 UI 草稿
 
-这里保存截至 2026-10-10 的三套配色候选稿：Apple 银白、Claude 暖陶、青绿 · 林间。共用已确定的对话布局、悬浮侧栏与图谱、带边缘光感的输入框，以及节点检查器。模型和 Skills 菜单仍是 Codex 风格的紧凑实色浮层。当前仅包含设计稿和本地演示交互；用户尚未选择最终配色。改色前的银灰基线已提交为 `712bb45`。
+这里保存截至 2026-10-10 的三套配色稿：Apple 银白、Claude 暖陶、青绿 · 林间。用户已选定 **Apple 银白**，准备在新会话实施；入口见 [Apple 前端实施交接](APPLE_IMPLEMENTATION.md)。共用已确定的对话布局、悬浮侧栏与图谱、带边缘光感的输入框，以及节点检查器。模型和 Skills 菜单仍是 Codex 风格的紧凑实色浮层。当前仅包含设计稿和本地演示交互，正式 React 前端尚未开始。配色稿提交为 `e99140f`，改色前的银灰基线为 `712bb45`。
 
 ## 打开与继续修改
 
@@ -14,6 +14,7 @@
 | 路径 | 内容 |
 | --- | --- |
 | `atlas-conversation-workspace.html` | 后续编辑的主源码 |
+| `APPLE_IMPLEMENTATION.md` | 已选 Apple 银白的正式前端实施交接与新会话起始请求 |
 | `atlas-colorways.html` | 从主源码生成的三套配色轮播片段，用于对话展示 |
 | `preview/atlas-{apple,claude,forest}-*` | 三套独立片段及带内嵌资源的完整预览 |
 | `preview/atlas-colorways-preview.html` | 完整轮播对照预览 |
