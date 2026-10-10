@@ -1,0 +1,344 @@
+{
+  "layouts": [
+    {
+      "key": "apple",
+      "theme": "light",
+      "width": 1440,
+      "height": 961.25,
+      "overflow": []
+    },
+    {
+      "key": "apple",
+      "theme": "light",
+      "width": 1024,
+      "height": 961.25,
+      "overflow": []
+    },
+    {
+      "key": "apple",
+      "theme": "light",
+      "width": 736,
+      "height": 961.25,
+      "overflow": []
+    },
+    {
+      "key": "apple",
+      "theme": "light",
+      "width": 390,
+      "height": 1830.921875,
+      "overflow": []
+    },
+    {
+      "key": "apple",
+      "theme": "light",
+      "width": 320,
+      "height": 1870.109375,
+      "overflow": []
+    },
+    {
+      "key": "claude",
+      "theme": "light",
+      "width": 1440,
+      "height": 961.25,
+      "overflow": []
+    },
+    {
+      "key": "claude",
+      "theme": "light",
+      "width": 1024,
+      "height": 961.25,
+      "overflow": []
+    },
+    {
+      "key": "claude",
+      "theme": "light",
+      "width": 736,
+      "height": 961.25,
+      "overflow": []
+    },
+    {
+      "key": "claude",
+      "theme": "light",
+      "width": 390,
+      "height": 1830.921875,
+      "overflow": []
+    },
+    {
+      "key": "claude",
+      "theme": "light",
+      "width": 320,
+      "height": 1870.109375,
+      "overflow": []
+    },
+    {
+      "key": "forest",
+      "theme": "light",
+      "width": 1440,
+      "height": 961.25,
+      "overflow": []
+    },
+    {
+      "key": "forest",
+      "theme": "light",
+      "width": 1024,
+      "height": 961.25,
+      "overflow": []
+    },
+    {
+      "key": "forest",
+      "theme": "light",
+      "width": 736,
+      "height": 961.25,
+      "overflow": []
+    },
+    {
+      "key": "forest",
+      "theme": "light",
+      "width": 390,
+      "height": 1830.921875,
+      "overflow": []
+    },
+    {
+      "key": "forest",
+      "theme": "light",
+      "width": 320,
+      "height": 1870.109375,
+      "overflow": []
+    },
+    {
+      "key": "apple",
+      "theme": "dark",
+      "width": 1440,
+      "height": 961.25,
+      "overflow": []
+    },
+    {
+      "key": "apple",
+      "theme": "dark",
+      "width": 1024,
+      "height": 961.25,
+      "overflow": []
+    },
+    {
+      "key": "apple",
+      "theme": "dark",
+      "width": 736,
+      "height": 961.25,
+      "overflow": []
+    },
+    {
+      "key": "apple",
+      "theme": "dark",
+      "width": 390,
+      "height": 1830.921875,
+      "overflow": []
+    },
+    {
+      "key": "apple",
+      "theme": "dark",
+      "width": 320,
+      "height": 1870.109375,
+      "overflow": []
+    },
+    {
+      "key": "claude",
+      "theme": "dark",
+      "width": 1440,
+      "height": 961.25,
+      "overflow": []
+    },
+    {
+      "key": "claude",
+      "theme": "dark",
+      "width": 1024,
+      "height": 961.25,
+      "overflow": []
+    },
+    {
+      "key": "claude",
+      "theme": "dark",
+      "width": 736,
+      "height": 961.25,
+      "overflow": []
+    },
+    {
+      "key": "claude",
+      "theme": "dark",
+      "width": 390,
+      "height": 1830.921875,
+      "overflow": []
+    },
+    {
+      "key": "claude",
+      "theme": "dark",
+      "width": 320,
+      "height": 1870.109375,
+      "overflow": []
+    },
+    {
+      "key": "forest",
+      "theme": "dark",
+      "width": 1440,
+      "height": 961.25,
+      "overflow": []
+    },
+    {
+      "key": "forest",
+      "theme": "dark",
+      "width": 1024,
+      "height": 961.25,
+      "overflow": []
+    },
+    {
+      "key": "forest",
+      "theme": "dark",
+      "width": 736,
+      "height": 961.25,
+      "overflow": []
+    },
+    {
+      "key": "forest",
+      "theme": "dark",
+      "width": 390,
+      "height": 1830.921875,
+      "overflow": []
+    },
+    {
+      "key": "forest",
+      "theme": "dark",
+      "width": 320,
+      "height": 1870.109375,
+      "overflow": []
+    }
+  ],
+  "colors": [
+    {
+      "key": "apple",
+      "theme": "light",
+      "base": [
+        245,
+        245,
+        247,
+        1
+      ],
+      "ratios": {
+        "text/base": 15.46,
+        "muted/base": 5.56,
+        "faint/base": 4.78,
+        "muted/selected": 5.09,
+        "active/selected": 5.5,
+        "active/soft": 5.5,
+        "good/soft": 4.71,
+        "menu": 16.83
+      }
+    },
+    {
+      "key": "claude",
+      "theme": "light",
+      "base": [
+        244,
+        241,
+        233,
+        1
+      ],
+      "ratios": {
+        "text/base": 11.88,
+        "muted/base": 5.36,
+        "faint/base": 4.68,
+        "muted/selected": 4.72,
+        "active/selected": 5.01,
+        "active/soft": 5.2,
+        "good/soft": 4.8,
+        "menu": 13.19
+      }
+    },
+    {
+      "key": "forest",
+      "theme": "light",
+      "base": [
+        237,
+        242,
+        238,
+        1
+      ],
+      "ratios": {
+        "text/base": 10.61,
+        "muted/base": 5.24,
+        "faint/base": 4.66,
+        "muted/selected": 4.6,
+        "active/selected": 5.92,
+        "active/soft": 6.11,
+        "good/soft": 4.68,
+        "menu": 11.88
+      }
+    },
+    {
+      "key": "apple",
+      "theme": "dark",
+      "base": [
+        25,
+        25,
+        28,
+        1
+      ],
+      "ratios": {
+        "text/base": 16.11,
+        "muted/base": 8.71,
+        "faint/base": 7.36,
+        "muted/selected": 5.35,
+        "active/selected": 6.21,
+        "active/soft": 8.24,
+        "good/soft": 8.71,
+        "menu": 12.77
+      }
+    },
+    {
+      "key": "claude",
+      "theme": "dark",
+      "base": [
+        37,
+        34,
+        30,
+        1
+      ],
+      "ratios": {
+        "text/base": 13.12,
+        "muted/base": 7.96,
+        "faint/base": 6.76,
+        "muted/selected": 4.75,
+        "active/selected": 5.29,
+        "active/soft": 7.03,
+        "good/soft": 7.17,
+        "menu": 11.11
+      }
+    },
+    {
+      "key": "forest",
+      "theme": "dark",
+      "base": [
+        27,
+        36,
+        32,
+        1
+      ],
+      "ratios": {
+        "text/base": 13.57,
+        "muted/base": 9.25,
+        "faint/base": 7.53,
+        "muted/selected": 5.23,
+        "active/selected": 6.17,
+        "active/soft": 8.05,
+        "good/soft": 7.42,
+        "menu": 10.05
+      }
+    }
+  ],
+  "checks": [
+    "Three live variants; no duplicate IDs or SVG markers; carousel retains interactions",
+    "Light/dark palettes and 320–1440 px layouts",
+    "Text token contrast >= 4.5 for base, selected, status and opaque menu surfaces (before decorative gradients)",
+    "28 px picker buttons; opaque 232 px / 11 px menus; node inspector and collapsible graph"
+  ],
+  "errors": [],
+  "requestFailures": []
+}

@@ -5,19 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="referrer" content="no-referrer">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src 'unsafe-inline' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
-<title>Atlas Conversation Workspace</title>
+<title>Atlas Apple Workspace</title>
 <style>:root{color-scheme:light dark;background:light-dark(rgb(255 255 255), rgb(24 24 24))}html,body{margin:0}body{box-sizing:border-box;padding:1rem;background:inherit}iframe{display:block;width:100%;height:calc(100vh - 2rem);margin:0 auto;border:0}</style>
 
 </head>
 <body>
-<iframe id="codex-visualization" sandbox="allow-scripts" referrerpolicy="no-referrer" title="Atlas Conversation Workspace" data-srcdoc="&lt;!doctype html&gt;
+<iframe id="codex-visualization" sandbox="allow-scripts" referrerpolicy="no-referrer" title="Atlas Apple Workspace" data-srcdoc="&lt;!doctype html&gt;
 &lt;html lang=&quot;en&quot; data-visualize-standalone&gt;
 &lt;head&gt;
 &lt;meta charset=&quot;utf-8&quot;&gt;
 &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
 &lt;meta name=&quot;referrer&quot; content=&quot;no-referrer&quot;&gt;
 &lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;default-src &#x27;none&#x27;; script-src &#x27;unsafe-inline&#x27; &#x27;unsafe-eval&#x27; &#x27;wasm-unsafe-eval&#x27; blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src &#x27;unsafe-inline&#x27; blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src &#x27;none&#x27;; object-src &#x27;none&#x27;; base-uri &#x27;none&#x27;; form-action &#x27;none&#x27;&quot;&gt;
-&lt;title&gt;Atlas Conversation Workspace&lt;/title&gt;
+&lt;title&gt;Atlas Apple Workspace&lt;/title&gt;
 &lt;style&gt;:root {
   color-scheme: light dark;
   background-color: var(
@@ -1788,24 +1788,31 @@ html&gt;body{padding:0}&lt;/style&gt;
 &lt;/script&gt;
 &lt;style&gt;
 #atlas-conversation-workspace {
-  --cw-bg: light-dark(#f0f1f3,#17191d); --cw-nav: light-dark(#ffffff80,#2a2d3280);
-  --cw-panel: light-dark(#ffffff64,#24272d85); --cw-card: light-dark(#ffffffb0,#33373fad);
-  --cw-input: light-dark(#ffffffbc,#2d3138de); --cw-text: light-dark(#292e36,#eceef2);
-  --cw-muted: light-dark(#626c79,#b1b7c2); --cw-faint: light-dark(#687381,#a1aab8);
-  --cw-line: light-dark(#444e6418,#d5dbea1a); --cw-edge: light-dark(#8e9eb570,#8693a96b);
-  --cw-accent: light-dark(#58739b,#a5b9db); --cw-accent-soft: light-dark(#637fa61c,#98add222);
-  --cw-accent-text: light-dark(#45638e,#bed0ef); --cw-good: light-dark(#36785f,#9bd7bd);
-  --cw-good-soft: light-dark(#b9d8c938,#71bc9c1e); --cw-warn: light-dark(#906b38,#d9c195);
-  --cw-warn-soft: light-dark(#e6d7b944,#b58a4426); --cw-shadow: light-dark(#28364a0c,#02040835);
-  --cw-menu-bg: light-dark(#ffffff,#292c32); --cw-menu-hover: light-dark(#f0f1f3,#3a3e45);
-  --cw-menu-border: light-dark(#ffffffb8,#d5dce828); --cw-menu-shadow: light-dark(#252a361c,#00000066);
-  --cw-menu-outline: light-dark(#e0e2e6,#454950);
-  --cw-sheen: light-dark(#ffffffd9,#e5eaf31c); --cw-solid: light-dark(#fafbfc,#282c33);
-  --cw-wall-silver: light-dark(#bcc9d850,#3f4b6138); --cw-wall-pearl: light-dark(#ddd9d038,#3c374429);
-  --cw-wall-mist: light-dark(#cad2da38,#39434a29); --cw-glass-blur: 28px;
-  --cw-glaze: light-dark(#ffffff94,#e4eaf216); --cw-glaze-soft: light-dark(#ffffff12,#c9d4e006);
-  --cw-rim: light-dark(#ffffffd9,#e2e9f342); --cw-rim-shade: light-dark(#77839924,#080c1480);
-  --cw-lift: light-dark(#25334a16,#02050e50); --cw-reflection-strength: .65;
+  /* Apple-inspired silver: neutral surfaces with a small, clear blue accent. */
+  --cw-bg: light-dark(#f5f5f7,#19191c); --cw-nav: light-dark(#ffffff96,#29292e96);
+  --cw-panel: light-dark(#ffffff70,#242429a3); --cw-card: light-dark(#ffffffc7,#36363cc7);
+  --cw-input: light-dark(#ffffffde,#2d2d33ed); --cw-text: light-dark(#1d1d1f,#f5f5f7);
+  --cw-muted: light-dark(#626269,#b6b6be); --cw-faint: light-dark(#6c6c74,#a7a7b1);
+  --cw-line: light-dark(#30303916,#e1e1ea1c); --cw-edge: light-dark(#8b939f80,#a4adbd70);
+  --cw-accent: light-dark(#0068d6,#70adff); --cw-accent-soft: light-dark(#007aff12,#69a6ff20);
+  --cw-accent-text: light-dark(#005bbb,#a0c7ff); --cw-good: light-dark(#337458,#9bd7b9);
+  --cw-good-soft: light-dark(#43836712,#71bc9c1e); --cw-warn: light-dark(#8c6530,#dbbf8c);
+  --cw-warn-soft: light-dark(#b5853514,#b58a4426); --cw-shadow: light-dark(#20232b09,#00000038);
+  --cw-menu-bg: light-dark(#ffffff,#2c2c30); --cw-menu-hover: light-dark(#f1f1f4,#3b3b42);
+  --cw-menu-border: light-dark(#ffffffcc,#dedee829); --cw-menu-shadow: light-dark(#25252b1b,#00000066);
+  --cw-menu-outline: light-dark(#dedee3,#48484e);
+  --cw-sheen: light-dark(#ffffffe6,#eeeef51c); --cw-solid: light-dark(#fcfcfd,#2b2b31);
+  --cw-wall-silver: light-dark(#ced9e746,#45485638); --cw-wall-pearl: light-dark(#e8e7e538,#38363d29);
+  --cw-wall-mist: light-dark(#d7e3ee30,#36434e29); --cw-glass-blur: 28px;
+  --cw-glaze: light-dark(#ffffff99,#eeeef516); --cw-glaze-soft: light-dark(#ffffff14,#dddde706);
+  --cw-rim: light-dark(#ffffffe6,#e2e9f33d); --cw-rim-shade: light-dark(#7783991c,#080c1470);
+  --cw-lift: light-dark(#252e4012,#02050e50); --cw-reflection-strength: .65;
+  --cw-brand-top: light-dark(#515156,#68686f); --cw-brand-bottom: light-dark(#242427,#353539);
+  --cw-brand-ink: #ffffff; --cw-brand-rim: #ffffff45;
+  --cw-send-top: light-dark(#343438,#e7e7ee); --cw-send-bottom: light-dark(#1d1d1f,#bcbcc8);
+  --cw-thread-fill: light-dark(#ffffffa6,#b7c3d51c); --cw-bubble: light-dark(#ffffff85,#b9becb16);
+  --cw-selected: light-dark(#dcebfbcf,#284364e6); --cw-cluster: light-dark(#ffffff18,#10121b12);
+  --cw-tabs: light-dark(#7676800f,#08081038);
   --cw-graph-width: 350px; --cw-radius: 14px;
   width: 100%; min-height: 900px; display: grid; grid-template-columns: 146px minmax(0,1fr); gap: 10px; padding: 10px;
   position: relative; isolation: isolate;
@@ -1813,6 +1820,59 @@ html&gt;body{padding:0}&lt;/style&gt;
   color: var(--cw-text); border: 1px solid var(--cw-sheen); border-radius: 28px;
   box-shadow: inset 0 1px 0 var(--cw-sheen),0 12px 42px var(--cw-shadow);
   font: 14px/1.6 -apple-system,BlinkMacSystemFont,&quot;SF Pro Text&quot;,&quot;Segoe UI&quot;,&quot;Microsoft YaHei&quot;,sans-serif;
+}
+/* Palette-only alternatives; all layout and interaction rules remain shared. */
+#atlas-conversation-workspace[data-palette=&quot;claude&quot;] {
+  --cw-bg: light-dark(#f4f1e9,#25221e); --cw-nav: light-dark(#e8e2d687,#302b258f);
+  --cw-panel: light-dark(#eae4d783,#302b258f); --cw-card: light-dark(#fffcf5d6,#40382ecc);
+  --cw-input: light-dark(#fffdf8ef,#342e27f2); --cw-text: light-dark(#342e27,#f0e9dd);
+  --cw-muted: light-dark(#6b6156,#c3b6a5); --cw-faint: light-dark(#746a60,#b3a897);
+  --cw-line: light-dark(#62523c1b,#e8d9bd1d); --cw-edge: light-dark(#aa988077,#bdac9670);
+  --cw-accent: light-dark(#b56546,#e4a384); --cw-accent-soft: light-dark(#b5654614,#d28d6824);
+  --cw-accent-text: light-dark(#984729,#edb698); --cw-good: light-dark(#526b44,#b7c99d);
+  --cw-good-soft: light-dark(#6b7f4914,#9bac7020); --cw-warn: light-dark(#876528,#dec18b);
+  --cw-warn-soft: light-dark(#aa83241a,#aa832425); --cw-shadow: light-dark(#58432909,#100d093c);
+  --cw-menu-bg: light-dark(#fffdf8,#342e27); --cw-menu-hover: light-dark(#ede8de,#463d32);
+  --cw-menu-border: light-dark(#fffdf6ab,#e4d0ad25); --cw-menu-shadow: light-dark(#4937241d,#00000066);
+  --cw-menu-outline: light-dark(#dcd5c9,#594f43);
+  --cw-sheen: light-dark(#fffdf9ad,#f6e4c512); --cw-solid: light-dark(#fbf8f1,#342e27);
+  --cw-wall-silver: light-dark(#dbc8b028,#76614b28); --cw-wall-pearl: light-dark(#ead8be36,#69543922);
+  --cw-wall-mist: light-dark(#e4d5bd24,#60503d20);
+  --cw-glaze: light-dark(#fffdf537,#f3dbb00a); --cw-glaze-soft: light-dark(#fffdf50c,#f3dbb004);
+  --cw-rim: light-dark(#fffef7a3,#f3dbb026); --cw-rim-shade: light-dark(#8a70551c,#150e0860);
+  --cw-lift: light-dark(#5f483011,#100b0650);
+  --cw-brand-top: light-dark(#c47c5c,#d49b79); --cw-brand-bottom: light-dark(#a8583a,#9a6043);
+  --cw-brand-ink: #fff8ed; --cw-brand-rim: #fff1d530;
+  --cw-send-top: light-dark(#b66a4a,#e1b394); --cw-send-bottom: light-dark(#9d5134,#c89270);
+  --cw-thread-fill: light-dark(#fffaf2b8,#ead3ae12); --cw-bubble: light-dark(#e8e1d4b0,#ddc6a513);
+  --cw-selected: light-dark(#f0decbdb,#624330e6); --cw-cluster: light-dark(#fffcf512,#19100814);
+  --cw-tabs: light-dark(#7560420f,#120d0738);
+}
+#atlas-conversation-workspace[data-palette=&quot;forest&quot;] {
+  --cw-bg: light-dark(#edf2ee,#1b2420); --cw-nav: light-dark(#e0ebe38f,#28372e90);
+  --cw-panel: light-dark(#dfe9e283,#25342b9c); --cw-card: light-dark(#f9fdf9ce,#34483acd);
+  --cw-input: light-dark(#f9fcf9eb,#2b3b30ed); --cw-text: light-dark(#253b30,#e7efe8);
+  --cw-muted: light-dark(#57685b,#b8cabc); --cw-faint: light-dark(#5f7062,#a5b7a8);
+  --cw-line: light-dark(#3d61451b,#d0e5ce1d); --cw-edge: light-dark(#87a28d85,#8eb49b72);
+  --cw-accent: light-dark(#366b55,#92c5a6); --cw-accent-soft: light-dark(#39775a14,#8bcda124);
+  --cw-accent-text: light-dark(#295d45,#b8dfc4); --cw-good: light-dark(#596d33,#becf91);
+  --cw-good-soft: light-dark(#7a8e4314,#a3bd6420); --cw-warn: light-dark(#8a6c33,#dec28b);
+  --cw-warn-soft: light-dark(#b0934d19,#b0934d24); --cw-shadow: light-dark(#24452d0a,#0810093c);
+  --cw-menu-bg: light-dark(#fafffa,#2d3b31); --cw-menu-hover: light-dark(#e5ede6,#3b5142);
+  --cw-menu-border: light-dark(#fafffab8,#d8efdb26); --cw-menu-shadow: light-dark(#243d2a1c,#00000066);
+  --cw-menu-outline: light-dark(#cedbd0,#4e6856);
+  --cw-sheen: light-dark(#fafffad1,#d7efdf19); --cw-solid: light-dark(#f8fbf7,#2c3b30);
+  --cw-wall-silver: light-dark(#b7d2bc38,#375e4932); --cw-wall-pearl: light-dark(#dedbc334,#50533324);
+  --cw-wall-mist: light-dark(#c8ddce2c,#3b5b4930);
+  --cw-glaze: light-dark(#fafff94d,#d4f0de10); --cw-glaze-soft: light-dark(#fafff90e,#cce1d005);
+  --cw-rim: light-dark(#fafffad1,#d4f0de30); --cw-rim-shade: light-dark(#65836b22,#0b160d70);
+  --cw-lift: light-dark(#2b4b3312,#06130b50);
+  --cw-brand-top: light-dark(#5c806a,#7d9f87); --cw-brand-bottom: light-dark(#31563f,#3c624b);
+  --cw-brand-ink: #f6fff7; --cw-brand-rim: #e3ffdf3b;
+  --cw-send-top: light-dark(#467559,#b4d3ba); --cw-send-bottom: light-dark(#2b553c,#89ad93);
+  --cw-thread-fill: light-dark(#f8fff7a6,#b6d4be17); --cw-bubble: light-dark(#dce8df9c,#b4d5bc13);
+  --cw-selected: light-dark(#d1e5d6da,#31553ee6); --cw-cluster: light-dark(#fafff818,#0c1a1114);
+  --cw-tabs: light-dark(#4f77580f,#08140b38);
 }
 #atlas-conversation-workspace * { box-sizing: border-box; }
 #atlas-conversation-workspace button,
@@ -2050,18 +2110,18 @@ html&gt;body{padding:0}&lt;/style&gt;
 }
 #atlas-conversation-workspace .cw-sidebar { box-shadow: inset 0 1px 0 var(--cw-sheen),0 9px 32px var(--cw-shadow); }
 #atlas-conversation-workspace .cw-header { background: transparent; }
-#atlas-conversation-workspace .cw-brand-icon { background: linear-gradient(150deg,light-dark(#596677,#77859b),light-dark(#2d3747,#3b485d)); color: #f6f9ff; box-shadow: inset 0 1px 0 #ffffff45,0 3px 7px var(--cw-lift); }
+#atlas-conversation-workspace .cw-brand-icon { background: linear-gradient(150deg,var(--cw-brand-top),var(--cw-brand-bottom)); color: var(--cw-brand-ink); box-shadow: inset 0 1px 0 var(--cw-brand-rim),0 3px 7px var(--cw-lift); }
 #atlas-conversation-workspace .cw-new-chat { background: linear-gradient(155deg,var(--cw-glaze),transparent),var(--cw-card); border-color: var(--cw-menu-border); box-shadow: inset 0 1px 0 var(--cw-sheen),0 4px 10px var(--cw-shadow); border-radius: 13px; }
-#atlas-conversation-workspace .cw-thread[aria-current=&quot;page&quot;] { background: light-dark(#ffffff99,#a5b1c51c); box-shadow: inset 0 1px 0 var(--cw-sheen),0 3px 12px var(--cw-shadow); border-radius: 11px; }
+#atlas-conversation-workspace .cw-thread[aria-current=&quot;page&quot;] { background: var(--cw-thread-fill); box-shadow: inset 0 1px 0 var(--cw-sheen),0 3px 12px var(--cw-shadow); border-radius: 11px; }
 #atlas-conversation-workspace .cw-conversation { background: transparent; }
-#atlas-conversation-workspace .cw-user-bubble { background: linear-gradient(135deg,var(--cw-glaze-soft),transparent),light-dark(#ffffff70,#a4aeba16); border: 1px solid var(--cw-menu-border); box-shadow: inset 0 1px 0 var(--cw-sheen); border-radius: 19px 19px 6px 19px; }
+#atlas-conversation-workspace .cw-user-bubble { background: linear-gradient(135deg,var(--cw-glaze-soft),transparent),var(--cw-bubble); border: 1px solid var(--cw-menu-border); box-shadow: inset 0 1px 0 var(--cw-sheen); border-radius: 19px 19px 6px 19px; }
 #atlas-conversation-workspace .cw-agent-icon { border-radius: 9px; background: var(--cw-card); box-shadow: inset 0 1px 0 var(--cw-sheen),0 2px 7px var(--cw-shadow); }
 #atlas-conversation-workspace .cw-brief { background: linear-gradient(135deg,var(--cw-glaze-soft),transparent),var(--cw-card); border-color: var(--cw-menu-border); border-radius: 14px; box-shadow: inset 0 1px 0 var(--cw-sheen),0 4px 12px var(--cw-shadow); }
 #atlas-conversation-workspace .cw-brief-icon { background: var(--cw-accent-soft); color: var(--cw-accent-text); border-radius: 8px; }
 #atlas-conversation-workspace .cw-composer { border-color: var(--cw-menu-border); border-radius: 23px; padding-top: 17px; box-shadow: inset 0 1px 0 var(--cw-sheen),inset 0 -1px 0 var(--cw-rim-shade),0 12px 30px var(--cw-lift),0 0 0 1px var(--cw-line); transition: box-shadow .18s,border-color .18s; }
 #atlas-conversation-workspace .cw-composer:focus-within { border-color: var(--cw-edge); box-shadow: inset 0 1px 0 var(--cw-sheen),0 0 0 3px var(--cw-accent-soft),0 14px 32px var(--cw-lift); }
 #atlas-conversation-workspace .cw-composer textarea { min-height: 68px; }
-#atlas-conversation-workspace .cw-send { color: var(--cw-solid); background: linear-gradient(145deg,light-dark(#606d80,#c5cedc),light-dark(#343e4e,#91a0b6)); box-shadow: inset 0 1px 0 var(--cw-rim),0 3px 7px var(--cw-shadow); }
+#atlas-conversation-workspace .cw-send { color: var(--cw-solid); background: linear-gradient(145deg,var(--cw-send-top),var(--cw-send-bottom)); box-shadow: inset 0 1px 0 var(--cw-rim),0 3px 7px var(--cw-shadow); }
 #atlas-conversation-workspace .cw-send:disabled { opacity: .38; }
 #atlas-conversation-workspace .cw-graph-toggle { border-radius: 10px; }
 #atlas-conversation-workspace .cw-graph-toggle[aria-expanded=&quot;true&quot;] { background: var(--cw-card); border-color: var(--cw-menu-border); box-shadow: inset 0 1px 0 var(--cw-sheen),0 3px 9px var(--cw-shadow); }
@@ -2070,9 +2130,9 @@ html&gt;body{padding:0}&lt;/style&gt;
 #atlas-conversation-workspace .cw-graph-subheader { padding-top: 11px; }
 #atlas-conversation-workspace .cw-flow { padding: 17px 12px 12px; background-image: radial-gradient(var(--cw-line) .7px,transparent .7px); background-size: 18px 18px; }
 #atlas-conversation-workspace .cw-node { border-color: var(--cw-menu-border); padding: 8px 10px; }
-#atlas-conversation-workspace .cw-node[aria-pressed=&quot;true&quot;] { background: linear-gradient(145deg,var(--cw-glaze),transparent 65%),light-dark(#dce5f0c4,#3e4c61d1); border-color: var(--cw-accent); box-shadow: inset 0 1px 0 var(--cw-sheen),0 0 0 3px var(--cw-accent-soft),0 6px 15px var(--cw-lift); }
+#atlas-conversation-workspace .cw-node[aria-pressed=&quot;true&quot;] { background: linear-gradient(145deg,var(--cw-glaze),transparent 65%),var(--cw-selected); border-color: var(--cw-accent); box-shadow: inset 0 1px 0 var(--cw-sheen),0 0 0 3px var(--cw-accent-soft),0 6px 15px var(--cw-lift); }
 #atlas-conversation-workspace .cw-top-nodes { gap: 20px; margin-bottom: 18px; }
-#atlas-conversation-workspace .cw-cluster { padding: 25px 9px 10px; border-style: dashed; background: light-dark(#ffffff18,#101c2912); border-radius: 16px; }
+#atlas-conversation-workspace .cw-cluster { padding: 25px 9px 10px; border-style: dashed; background: var(--cw-cluster); border-radius: 16px; }
 #atlas-conversation-workspace .cw-supervisor { max-width: 178px; margin-bottom: 18px; }
 #atlas-conversation-workspace .cw-fork { padding: 8px 6px; }
 #atlas-conversation-workspace .cw-fork .cw-node-name { margin-top: 5px; }
@@ -2089,7 +2149,7 @@ html&gt;body{padding:0}&lt;/style&gt;
 #atlas-conversation-workspace .cw-inspector[data-status=&quot;running&quot;] .cw-detail-status { color: var(--cw-accent-text); background: var(--cw-accent-soft); }
 #atlas-conversation-workspace .cw-inspector[data-status=&quot;completed&quot;] .cw-detail-status { color: var(--cw-good); background: var(--cw-good-soft); }
 #atlas-conversation-workspace .cw-inspector[data-status=&quot;waiting&quot;] .cw-detail-status { color: var(--cw-warn); background: var(--cw-warn-soft); }
-#atlas-conversation-workspace .cw-inspector-tabs { display: grid; grid-template-columns: 1fr 1.1fr 1.1fr; gap: 3px; padding: 3px; border-radius: 9px; background: light-dark(#6c89ab12,#050c1b38); box-shadow: inset 0 1px 2px var(--cw-shadow); }
+#atlas-conversation-workspace .cw-inspector-tabs { display: grid; grid-template-columns: 1fr 1.1fr 1.1fr; gap: 3px; padding: 3px; border-radius: 9px; background: var(--cw-tabs); box-shadow: inset 0 1px 2px var(--cw-shadow); }
 #atlas-conversation-workspace .cw-inspector-tab { padding: 4px 3px; min-height: 27px; text-align: center; font-size: 11px; color: var(--cw-muted); border-radius: 7px; white-space: nowrap; }
 #atlas-conversation-workspace .cw-inspector-tab[aria-selected=&quot;true&quot;] { background: var(--cw-card); color: var(--cw-text); box-shadow: inset 0 1px 0 var(--cw-sheen),0 2px 5px var(--cw-shadow); }
 #atlas-conversation-workspace .cw-inspector-pane { padding-top: 12px; min-height: 182px; }
@@ -2176,7 +2236,7 @@ html&gt;body{padding:0}&lt;/style&gt;
 }
 &lt;/style&gt;
 
-&lt;div id=&quot;atlas-conversation-workspace&quot; data-graph=&quot;open&quot; aria-label=&quot;星图工作台 · 液体玻璃对话工作区与节点检查器&quot;&gt;
+&lt;div id=&quot;atlas-conversation-workspace&quot; data-palette=&quot;apple&quot; data-graph=&quot;open&quot; aria-label=&quot;星图工作台 · Apple 银白&quot;&gt;
   &lt;nav class=&quot;cw-sidebar&quot; aria-label=&quot;研究对话导航&quot;&gt;
     &lt;div class=&quot;cw-brand&quot;&gt;&lt;span class=&quot;cw-brand-icon&quot;&gt;&lt;i data-lucide=&quot;asterisk&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&lt;/span&gt;&lt;span class=&quot;cw-brand-name&quot;&gt;Deep Research&lt;/span&gt;&lt;/div&gt;
     &lt;button type=&quot;button&quot; class=&quot;cw-new-chat cursor-interaction&quot; data-action=&quot;new&quot;&gt;&lt;i data-lucide=&quot;square-pen&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;新研究&lt;/button&gt;

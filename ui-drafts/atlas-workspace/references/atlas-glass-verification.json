@@ -8,52 +8,52 @@
       {
         "class": "cw-sidebar",
         "filter": "blur(28px) saturate(1.65)",
-        "background": "rgba(255, 255, 255, 0.5)"
+        "background": "rgba(255, 255, 255, 0.59)"
       },
       {
         "class": "cw-composer",
         "filter": "blur(28px) saturate(1.65)",
-        "background": "rgba(255, 255, 255, 0.737)"
+        "background": "rgba(255, 255, 255, 0.87)"
       },
       {
         "class": "cw-node cursor-interaction",
         "filter": "blur(28px) saturate(1.65)",
-        "background": "rgba(255, 255, 255, 0.69)"
+        "background": "rgba(255, 255, 255, 0.78)"
       },
       {
         "class": "cw-node cursor-interaction",
         "filter": "blur(28px) saturate(1.65)",
-        "background": "rgba(255, 255, 255, 0.69)"
+        "background": "rgba(255, 255, 255, 0.78)"
       },
       {
         "class": "cw-node cw-supervisor cursor-interaction",
         "filter": "blur(28px) saturate(1.65)",
-        "background": "rgba(255, 255, 255, 0.69)"
+        "background": "rgba(255, 255, 255, 0.78)"
       },
       {
         "class": "cw-node cw-fork cursor-interaction",
         "filter": "blur(28px) saturate(1.65)",
-        "background": "rgba(255, 255, 255, 0.69)"
+        "background": "rgba(255, 255, 255, 0.78)"
       },
       {
         "class": "cw-node cw-fork cursor-interaction",
         "filter": "blur(28px) saturate(1.65)",
-        "background": "rgba(220, 229, 240, 0.77)"
+        "background": "rgba(220, 235, 251, 0.81)"
       },
       {
         "class": "cw-node cw-fork cursor-interaction",
         "filter": "blur(28px) saturate(1.65)",
-        "background": "rgba(255, 255, 255, 0.69)"
+        "background": "rgba(255, 255, 255, 0.78)"
       },
       {
         "class": "cw-node cw-report cursor-interaction",
         "filter": "blur(28px) saturate(1.65)",
-        "background": "rgba(255, 255, 255, 0.69)"
+        "background": "rgba(255, 255, 255, 0.78)"
       },
       {
         "class": "cw-inspector",
         "filter": "blur(28px) saturate(1.65)",
-        "background": "rgba(255, 255, 255, 0.737)"
+        "background": "rgba(255, 255, 255, 0.87)"
       }
     ],
     "pickers": [
