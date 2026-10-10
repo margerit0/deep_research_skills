@@ -72,6 +72,19 @@ def _role_or_global(role_upper: str, suffix: str) -> Optional[str]:
 
 _agent_rate_limiter: Optional[InMemoryRateLimiter] = None
 _agent_rate_limiter_lock = threading.Lock()
+_model_snapshots: dict[str, dict] = {}
+MODEL_ROLES = ("SCOPING", "SUPERVISOR", "RESEARCHER", "SUMMARIZATION", "COMPRESSION", "FINAL_REPORT")
+
+
+def public_model_config() -> dict:
+    """Return only configuration of constructed models, never credentials or URLs."""
+    return {
+        "contract_version": 1,
+        "graph_id": "research_agent_full",
+        "model_selection": "server",
+        "skills_mode": "auto",
+        "models": [dict(_model_snapshots[role]) for role in MODEL_ROLES if role in _model_snapshots],
+    }
 
 
 def get_agent_rate_limiter() -> Optional[InMemoryRateLimiter]:
@@ -143,4 +156,11 @@ def get_chat_model(
     if rate_limiter is not None:
         kwargs["rate_limiter"] = rate_limiter
 
-    return init_chat_model(**kwargs)
+    model = init_chat_model(**kwargs)
+    _model_snapshots[role_upper] = {
+        "role": role_upper,
+        "model": model_name,
+        "provider": kwargs["model_provider"],
+        "max_tokens": effective_max_tokens,
+    }
+    return model

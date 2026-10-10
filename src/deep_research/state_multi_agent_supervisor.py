@@ -13,6 +13,7 @@ from langchain_core.messages import BaseMessage
 from langchain_core.tools import tool
 from langgraph.graph.message import add_messages
 from pydantic import BaseModel, Field
+from deep_research.workflow_contract import ResearchError, ResearchSource
 
 class SupervisorState(TypedDict):
     """
@@ -32,6 +33,9 @@ class SupervisorState(TypedDict):
     research_iterations: int = 0
     # 在子智能体研究过程中收集的、未经处理的原始研究笔记
     raw_notes: Annotated[list[str], operator.add] = []
+    supervisor_status: str
+    research_errors: list[ResearchError]
+    sources: list[ResearchSource]
 
 @tool
 class ConductResearch(BaseModel):

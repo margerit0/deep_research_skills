@@ -6,18 +6,20 @@
 """
 
 import operator
-from typing_extensions import Optional, Annotated, List, Sequence
+from typing_extensions import Optional, Annotated, List, Sequence, NotRequired
 
 from langchain_core.messages import BaseMessage
 from langgraph.graph import MessagesState
 from langgraph.graph.message import add_messages
 from pydantic import BaseModel, Field
+from deep_research.workflow_contract import ResearchError, ResearchPhase, ResearchSource, ResearchStatus
 
 # ===== 状态定义 (STATE DEFINITIONS) =====
 
 class AgentInputState(MessagesState):
-    """全局智能体的输入状态 —— 仅包含来自用户输入的对话消息。"""
-    pass
+    """User messages plus optional Atlas research/turn identifiers."""
+    research_id: NotRequired[str]
+    turn_id: NotRequired[str]
 
 class AgentState(MessagesState):
     """
@@ -38,6 +40,18 @@ class AgentState(MessagesState):
     notes: Annotated[list[str], operator.add] = []
     # 最终生成并经过排版的完整研究报告
     final_report: str
+    research_id: str
+    turn_id: str
+    active_research_id: str
+    active_turn_id: str
+    report_research_id: str
+    research_status: ResearchStatus
+    research_phase: ResearchPhase
+    research_iterations: int
+    supervisor_status: str
+    research_errors: list[ResearchError]
+    sources: list[ResearchSource]
+    effective_config: dict
 
 # ===== 结构化输出模式 (STRUCTURED OUTPUT SCHEMAS) =====
 

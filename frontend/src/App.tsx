@@ -11,7 +11,7 @@ import './demo.css'
 
 export default function App() {
   const controller = useWorkspace()
-  const { state, thread, dispatch, storageError, demo } = controller
+  const { state, thread, dispatch, storageError, demo, isLive } = controller
   const [mobileOpen, setMobileOpen] = useState(false)
   const root = useRef<HTMLDivElement>(null)
   useEffect(() => {
@@ -87,9 +87,20 @@ export default function App() {
           </button>
           <div className="cw-header-title">
             <h1>{thread.title}</h1>
-            <div className="cw-header-caption">星图工作台</div>
+            <div className="cw-header-caption">
+              星图工作台{isLive ? ' · 真实研究' : ' · 演示数据'}
+            </div>
           </div>
           <span className="cw-spacer" />
+          {!demo.active && !isLive && (
+            <button
+              type="button"
+              className="cw-demo-start"
+              onClick={() => dispatch({ type: 'new', source: 'live' })}
+            >
+              真实研究
+            </button>
+          )}
           {!demo.active && (
             <button id="demo-start" type="button" className="cw-demo-start" onClick={demo.start}>
               <Icon name="play" />

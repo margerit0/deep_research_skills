@@ -37,6 +37,7 @@ from deep_research.utils import (
     tavily_search,
     think_tool,
 )
+from deep_research.workflow_contract import extract_search_sources, merge_sources, message_text
 
 # ===== 配置 (CONFIGURATION) =====
 
@@ -142,6 +143,11 @@ def compress_research(state: ResearcherState) -> dict:
     落明确失败标记而不是伪装成完整报告。
     """
     researcher_messages = state.get("researcher_messages", [])
+    sources = merge_sources(*[
+        extract_search_sources(message_text(m.content))
+        for m in researcher_messages
+        if isinstance(m, ToolMessage) and m.name == "tavily_search"
+    ])
 
     # 始终保留原始记录, 无论本次研究成功与否.
     raw_notes = [
@@ -156,6 +162,7 @@ def compress_research(state: ResearcherState) -> dict:
         return {
             "compressed_research": _RESEARCH_FAILED_MARKER,
             "raw_notes": ["\n".join(raw_notes)],
+            "sources": sources,
         }
 
     system_message = compress_research_system_prompt.format(date=get_today_str())
@@ -165,7 +172,7 @@ def compress_research(state: ResearcherState) -> dict:
         + [HumanMessage(content=compress_research_human_message)]
     )
     response = compress_model.invoke(messages)
-    compressed = str(response.content).strip()
+    compressed = message_text(response.content)
 
     # 防御 2: compress 模型偶发返回空 → 用明确标记代替空字符串.
     if not compressed:
@@ -174,6 +181,7 @@ def compress_research(state: ResearcherState) -> dict:
     return {
         "compressed_research": compressed,
         "raw_notes": ["\n".join(raw_notes)],
+        "sources": sources,
     }
 
 

@@ -4,9 +4,16 @@ import type { ModelId, SkillId } from '../data/schema'
 import type { WorkspaceController } from '../state/useWorkspace'
 import { Icon } from './Icon'
 import { Picker } from './Picker'
+import { BackendControls } from './BackendControls'
 
 export function Composer({ controller }: { controller: WorkspaceController }) {
-  const { state, thread, dispatch, demo } = controller
+  const { state, thread, dispatch, demo, isLive, live, storageError } = controller
+  const lastLive = thread.live?.researches.at(-1)
+  const liveBusy =
+    isLive &&
+    (lastLive?.status === 'running' || (lastLive && live.sync[thread.id]?.state !== 'ready'))
+  const canSend =
+    !demo.active && (!isLive || (!!live.connection.config && !liveBusy && !storageError))
   const [localOpen, setLocalOpen] = useState<'model' | 'skill' | null>(null)
   const open = demo.active ? demo.menu : localOpen
   const setOpen = (value: 'model' | 'skill' | null) =>
@@ -28,7 +35,7 @@ export function Composer({ controller }: { controller: WorkspaceController }) {
     }
   }, [open, demo.active, demo.playing])
   function send() {
-    if (composing.current || demo.active) return
+    if (composing.current || !canSend) return
     setOpen(null)
     dispatch({ type: 'send' })
     form.current?.querySelector('textarea')?.focus()
@@ -43,9 +50,15 @@ export function Composer({ controller }: { controller: WorkspaceController }) {
         <span>
           {demo.active
             ? '正在体验演示 · 退出后可输入问题'
-            : thread.runs.length
-              ? '可以继续补充研究要求'
-              : '模型与 Skills 用于本次研究'}
+            : isLive
+              ? lastLive?.status === 'awaiting_input'
+                ? '回答澄清问题，继续本轮研究'
+                : lastLive?.status === 'running'
+                  ? '研究进行中，可先保存补充草稿'
+                  : '使用后端模型与自动 Skills'
+              : thread.runs.length
+                ? '可以继续补充研究要求'
+                : '模型与 Skills 用于本次研究'}
         </span>
       </div>
       <form
@@ -57,7 +70,7 @@ export function Composer({ controller }: { controller: WorkspaceController }) {
           send()
         }}
       >
-        {state.config.skill !== 'auto' && (
+        {!isLive && state.config.skill !== 'auto' && (
           <div className="cw-skill-hint">
             <Icon name="layers" />
             <span className="cw-skill-hint-text">
@@ -90,7 +103,15 @@ export function Composer({ controller }: { controller: WorkspaceController }) {
                 )
               : thread.draft
           }
-          placeholder={thread.runs.length ? '补充研究要求，或追问一个问题…' : '你想研究什么？'}
+          placeholder={
+            isLive
+              ? lastLive?.status === 'awaiting_input'
+                ? '回答研究助手的澄清问题…'
+                : '你想研究什么？'
+              : thread.runs.length
+                ? '补充研究要求，或追问一个问题…'
+                : '你想研究什么？'
+          }
           aria-describedby="cw-composer-help"
           onChange={(e) => dispatch({ type: 'draft', text: e.target.value })}
           onCompositionStart={() => {
@@ -113,32 +134,42 @@ export function Composer({ controller }: { controller: WorkspaceController }) {
           }}
         />
         <div className="cw-composer-toolbar">
-          <Picker
-            name="model"
-            label={modelName(state.config.model)}
-            value={state.config.model}
-            options={models}
-            open={open === 'model'}
-            autoFocus={!demo.active || demo.manualMenu}
-            onOpen={(yes) => setOpen(yes ? 'model' : null)}
-            onChange={(id) => dispatch({ type: 'config', config: { model: id as ModelId } })}
-          />
-          <Picker
-            name="skill"
-            label={state.config.skill === 'auto' ? 'Skills' : `Skills · ${skill.label}`}
-            value={state.config.skill}
-            options={skills}
-            open={open === 'skill'}
-            autoFocus={!demo.active || demo.manualMenu}
-            onOpen={(yes) => setOpen(yes ? 'skill' : null)}
-            onChange={(id) => dispatch({ type: 'config', config: { skill: id as SkillId } })}
-          />
+          {isLive ? (
+            <BackendControls
+              config={live.connection.config}
+              open={open === 'model'}
+              onOpen={(yes) => setOpen(yes ? 'model' : null)}
+            />
+          ) : (
+            <>
+              <Picker
+                name="model"
+                label={modelName(state.config.model)}
+                value={state.config.model}
+                options={models}
+                open={open === 'model'}
+                autoFocus={!demo.active || demo.manualMenu}
+                onOpen={(yes) => setOpen(yes ? 'model' : null)}
+                onChange={(id) => dispatch({ type: 'config', config: { model: id as ModelId } })}
+              />
+              <Picker
+                name="skill"
+                label={state.config.skill === 'auto' ? 'Skills' : `Skills · ${skill.label}`}
+                value={state.config.skill}
+                options={skills}
+                open={open === 'skill'}
+                autoFocus={!demo.active || demo.manualMenu}
+                onOpen={(yes) => setOpen(yes ? 'skill' : null)}
+                onChange={(id) => dispatch({ type: 'config', config: { skill: id as SkillId } })}
+              />
+            </>
+          )}
           <span className="cw-spacer" />
           <button
             type="submit"
             className="cw-send"
             aria-label="发送消息"
-            disabled={demo.active || !thread.draft.trim()}
+            disabled={!canSend || !thread.draft.trim()}
           >
             <Icon name="up" />
           </button>
@@ -146,7 +177,15 @@ export function Composer({ controller }: { controller: WorkspaceController }) {
       </form>
       <div className="cw-composer-hint" id="cw-composer-help">
         <span>Enter 发送 · Shift + Enter 换行</span>
-        <span>本地模拟 · 未连接后端</span>
+        <span>
+          {isLive
+            ? live.connection.loading
+              ? '连接后端中…'
+              : live.connection.config
+                ? '真实研究 · 后端执行'
+                : '后端未连接'
+            : '本地模拟 · 未连接后端'}
+        </span>
       </div>
     </div>
   )

@@ -1,5 +1,10 @@
 import { test, expect } from '@playwright/test'
 import type { Page } from '@playwright/test'
+import { fakeLangGraph } from './langgraph-fixture'
+
+test.beforeEach(async ({ page }) => {
+  await fakeLangGraph(page)
+})
 
 const player = (page: Page) => page.getByRole('region', { name: '全流程演示控制' })
 const saved = (page: Page) =>
@@ -108,6 +113,7 @@ test('exit, reload and navigation preserve original drafts, snapshots and prefer
   page,
 }) => {
   await page.goto('/')
+  await page.getByRole('button', { name: 'AI 搜索的下一站', exact: true }).click()
   await page.getByRole('textbox').fill('保留这份未发送的草稿')
   await page.getByRole('button', { name: '外观：跟随系统' }).click()
   const before = await saved(page)

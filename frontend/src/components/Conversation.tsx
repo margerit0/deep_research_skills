@@ -5,8 +5,17 @@ import { Icon } from './Icon'
 import { StatusMark } from './StatusMark'
 import { Composer } from './Composer'
 import { demoReply, demoReport } from '../data/demo'
+import { LiveConversation } from './LiveConversation'
 
 export function Conversation({ controller }: { controller: WorkspaceController }) {
+  return controller.isLive ? (
+    <LiveConversation controller={controller} />
+  ) : (
+    <MockConversation controller={controller} />
+  )
+}
+
+function MockConversation({ controller }: { controller: WorkspaceController }) {
   const { thread, inspectNode, demo } = controller
   const end = useRef<HTMLDivElement>(null)
   const lastCount = useRef(thread.runs.length)

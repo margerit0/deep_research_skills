@@ -20,7 +20,16 @@ export function Inspector({
   run?: Run
   onClose: () => void
 }) {
-  const { state, dispatch } = controller
+  const { state, dispatch, isLive, liveRun } = controller
+  const role = (
+    {
+      clarify: 'SCOPING',
+      brief: 'SCOPING',
+      supervisor: 'SUPERVISOR',
+      report: 'FINAL_REPORT',
+    } as Record<string, string>
+  )[node.id]
+  const actualModel = liveRun?.config.models.find((model) => model.role === role)?.model ?? '待执行'
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([])
   const pending = node.status === 'pending'
   return (
@@ -104,8 +113,17 @@ export function Inspector({
         <dl className="cw-detail-stats">
           <div>
             <dt>执行模型</dt>
-            <dd title={run ? modelName(run.config.model) : '待执行'} data-testid="run-model">
-              {pending || !run ? '待执行' : modelName(run.config.model)}
+            <dd
+              title={isLive ? actualModel : run ? modelName(run.config.model) : '待执行'}
+              data-testid="run-model"
+            >
+              {isLive
+                ? pending
+                  ? '待执行'
+                  : actualModel
+                : pending || !run
+                  ? '待执行'
+                  : modelName(run.config.model)}
             </dd>
           </div>
           <div>
@@ -190,7 +208,9 @@ export function Inspector({
             ))}
           </ol>
         ) : (
-          <div className="cw-inspector-empty">等待该节点开始执行。</div>
+          <div className="cw-inspector-empty">
+            {isLive ? '暂无该阶段的状态回读记录。' : '等待该节点开始执行。'}
+          </div>
         )}
       </div>
     </section>

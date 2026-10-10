@@ -40,6 +40,8 @@ export const statusText: Record<NodeStatus, string> = {
   waiting: '待补充',
   running: '执行中',
   completed: '已完成',
+  failed: '失败',
+  partial: '部分完成',
 }
 export const stageText = {
   clarify: '确认范围',

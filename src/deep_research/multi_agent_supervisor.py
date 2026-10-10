@@ -11,6 +11,7 @@
 """
 
 import asyncio
+import logging
 
 from typing_extensions import Literal
 
@@ -33,6 +34,9 @@ from deep_research.state_multi_agent_supervisor import (
     ResearchComplete
 )
 from deep_research.utils import get_today_str, think_tool
+from deep_research.workflow_contract import is_research_note, merge_sources, message_text, research_error, log_node_failure
+
+logger = logging.getLogger(__name__)
 
 def get_notes_from_tool_calls(messages: list[BaseMessage]) -> list[str]:
     """从监督者消息历史中的 ToolMessage 对象里提取研究笔记。
@@ -48,7 +52,24 @@ def get_notes_from_tool_calls(messages: list[BaseMessage]) -> list[str]:
     Returns:
         从 ToolMessage 对象中提取出的研究笔记字符串列表
     """
-    return [tool_msg.content for tool_msg in filter_messages(messages, include_types="tool")]
+    return [
+        message_text(m.content)
+        for m in filter_messages(messages, include_types="tool")
+        if m.name == "ConductResearch" and is_research_note(m.content)
+    ]
+
+
+def _finish(state, messages, errors):
+    """Keep successful work, but never turn an empty/failed investigation into success."""
+    notes = get_notes_from_tool_calls(messages)
+    status = "failed" if not notes else "partial" if errors else "completed"
+    if not notes and not errors:
+        errors = [research_error("no_research", "未获得有效的研究笔记。", "supervisor_subgraph")]
+    return Command(goto=END, update={
+        "notes": notes,
+        "supervisor_status": status,
+        "research_errors": errors,
+    })
 
 # ===== 配置 (CONFIGURATION) =====
 
@@ -67,7 +88,7 @@ max_concurrent_researchers = 3
 
 # ===== 监督者节点 (SUPERVISOR NODES) =====
 
-async def supervisor(state: SupervisorState) -> Command[Literal["supervisor_tools"]]:
+async def supervisor(state: SupervisorState) -> Command[Literal["supervisor_tools", "__end__"]]:
     """统筹协调研究活动。
 
     分析研究简报 (Research brief) 与当前进展，以决定：
@@ -92,7 +113,14 @@ async def supervisor(state: SupervisorState) -> Command[Literal["supervisor_tool
     messages = [SystemMessage(content=system_message)] + supervisor_messages
 
     # 对下一步研究行动做出决策
-    response = await supervisor_model_with_tools.ainvoke(messages)
+    try:
+        response = await supervisor_model_with_tools.ainvoke(messages)
+    except Exception as exc:
+        log_node_failure(logger, "supervisor", exc)
+        errors = [*state.get("research_errors", []), research_error(
+            "supervisor_failed", "研究协调器调用失败，已保留此前取得的研究结果。", "supervisor_subgraph"
+        )]
+        return _finish(state, supervisor_messages, errors)
 
     return Command(
         goto="supervisor_tools",
@@ -103,125 +131,69 @@ async def supervisor(state: SupervisorState) -> Command[Literal["supervisor_tool
     )
 
 async def supervisor_tools(state: SupervisorState) -> Command[Literal["supervisor", "__end__"]]:
-    """执行监督者的决策——要么开展研究，要么结束流程。
-
-    负责处理：
-    - 执行 think_tool 调用以进行策略性反思
-    - 针对不同主题启动并行研究智能体
-    - 汇总研究结果
-    - 判定研究何时完成
-
-    Args:
-        state: 当前监督者状态，包含消息记录与迭代计数
-
-    Returns:
-        用于继续监督、结束流程或处理错误的 Command
-    """
+    """Run delegations independently and preserve both successful notes and failures."""
     supervisor_messages = state.get("supervisor_messages", [])
-    research_iterations = state.get("research_iterations", 0)
     most_recent_message = supervisor_messages[-1]
+    calls = most_recent_message.tool_calls
+    errors = list(state.get("research_errors", []))
+    completed = any(call["name"] == "ResearchComplete" for call in calls)
+    exceeded = state.get("research_iterations", 0) >= max_researcher_iterations
+    if completed or not calls or exceeded:
+        if exceeded and not completed:
+            errors.append(research_error(
+                "iteration_limit", "研究达到协调轮次上限，覆盖范围可能不完整。", "supervisor_subgraph"
+            ))
+        return _finish(state, supervisor_messages, errors)
 
-    # 为单一返回点 (single return) 模式初始化变量
     tool_messages = []
     all_raw_notes = []
-    next_step = "supervisor"  # 默认的下一步
-    should_end = False
+    sources = state.get("sources", [])
+    try:
+        unknown = [call for call in calls if call["name"] not in {"think_tool", "ConductResearch"}]
+        if unknown:
+            raise ValueError("Unsupported supervisor tool")
+        for call in calls:
+            if call["name"] == "think_tool":
+                tool_messages.append(ToolMessage(
+                    content=think_tool.invoke(call["args"]), name="think_tool", tool_call_id=call["id"]
+                ))
 
-    # 首先检查退出条件
-    exceeded_iterations = research_iterations >= max_researcher_iterations
-    no_tool_calls = not most_recent_message.tool_calls
-    research_complete = any(
-        tool_call["name"] == "ResearchComplete" 
-        for tool_call in most_recent_message.tool_calls
-    )
+        research_calls = [call for call in calls if call["name"] == "ConductResearch"]
 
-    if exceeded_iterations or no_tool_calls or research_complete:
-        should_end = True
-        next_step = END
+        async def investigate(call):
+            topic = call["args"]["research_topic"]
+            return await researcher_agent.ainvoke({
+                "researcher_messages": [HumanMessage(content=topic)], "research_topic": topic
+            })
 
-    else:
-        # 在决定下一步之前，先把全部工具调用执行完
-        try:
-            # 将 think_tool 调用与 ConductResearch 调用区分开
-            think_tool_calls = [
-                tool_call for tool_call in most_recent_message.tool_calls 
-                if tool_call["name"] == "think_tool"
-            ]
+        # return_exceptions retains successful siblings when one researcher fails.
+        results = await asyncio.gather(*[investigate(call) for call in research_calls], return_exceptions=True)
+        for call, result in zip(research_calls, results):
+            content = message_text(result.get("compressed_research")) if isinstance(result, dict) else ""
+            if isinstance(result, dict):
+                all_raw_notes.extend(result.get("raw_notes", []))
+                sources = merge_sources(sources, result.get("sources", []))
+            if not is_research_note(content):
+                if isinstance(result, Exception):
+                    log_node_failure(logger, "researcher", result)
+                errors.append(research_error(
+                    "researcher_failed", "一个研究任务未获得有效结果，研究覆盖可能不完整。", "supervisor_subgraph"
+                ))
+                content = "## 研究未完成\n该任务未返回有效的研究笔记。"
+            tool_messages.append(ToolMessage(content=content, name="ConductResearch", tool_call_id=call["id"]))
+    except Exception as exc:
+        log_node_failure(logger, "supervisor_tools", exc)
+        errors.append(research_error("supervisor_tools_failed", "研究工具执行失败。", "supervisor_subgraph"))
+        result = _finish(state, [*supervisor_messages, *tool_messages], errors)
+        result.update.update({"supervisor_messages": tool_messages, "raw_notes": all_raw_notes, "sources": sources})
+        return result
 
-            conduct_research_calls = [
-                tool_call for tool_call in most_recent_message.tool_calls 
-                if tool_call["name"] == "ConductResearch"
-            ]
-
-            # 处理 think_tool 调用（同步执行）
-            for tool_call in think_tool_calls:
-                observation = think_tool.invoke(tool_call["args"])
-                tool_messages.append(
-                    ToolMessage(
-                        content=observation,
-                        name=tool_call["name"],
-                        tool_call_id=tool_call["id"]
-                    )
-                )
-
-            # 处理 ConductResearch 调用（异步执行）
-            if conduct_research_calls:
-                # 启动并行研究智能体
-                coros = [
-                    researcher_agent.ainvoke({
-                        "researcher_messages": [
-                            HumanMessage(content=tool_call["args"]["research_topic"])
-                        ],
-                        "research_topic": tool_call["args"]["research_topic"]
-                    }) 
-                    for tool_call in conduct_research_calls
-                ]
-
-                # 等待所有研究完成
-                tool_results = await asyncio.gather(*coros)
-
-                # 将研究结果格式化为工具消息 (ToolMessage)
-                # 每个子智能体在 result["compressed_research"] 中返回压缩后的研究发现
-                # 我们把这些压缩研究写入 ToolMessage 的 content，使得监督者
-                # 之后可以通过 get_notes_from_tool_calls() 取回这些发现
-                research_tool_messages = [
-                    ToolMessage(
-                        content=result.get("compressed_research", "Error synthesizing research report"),
-                        name=tool_call["name"],
-                        tool_call_id=tool_call["id"]
-                    ) for result, tool_call in zip(tool_results, conduct_research_calls)
-                ]
-
-                tool_messages.extend(research_tool_messages)
-
-                # 汇总所有研究产生的原始笔记
-                all_raw_notes = [
-                    "\n".join(result.get("raw_notes", [])) 
-                    for result in tool_results
-                ]
-
-        except Exception as e:
-            print(f"Error in supervisor tools: {e}")
-            should_end = True
-            next_step = END
-
-    # 单一返回点，附带相应的状态更新
-    if should_end:
-        return Command(
-            goto=next_step,
-            update={
-                "notes": get_notes_from_tool_calls(supervisor_messages),
-                "research_brief": state.get("research_brief", "")
-            }
-        )
-    else:
-        return Command(
-            goto=next_step,
-            update={
-                "supervisor_messages": tool_messages,
-                "raw_notes": all_raw_notes
-            }
-        )
+    return Command(goto="supervisor", update={
+        "supervisor_messages": tool_messages,
+        "raw_notes": all_raw_notes,
+        "sources": sources,
+        "research_errors": errors,
+    })
 
 # ===== 图构建 (GRAPH CONSTRUCTION) =====
 

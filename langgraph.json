@@ -8,6 +8,9 @@
     },
     "python_version": "3.11",
     "env": ".env",
+    "http": {
+      "app": "./src/deep_research/atlas_api.py:app"
+    },
     "dependencies": [
       "."
     ]

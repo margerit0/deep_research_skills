@@ -1,0 +1,14 @@
+{
+  "graphs": {
+    "research_agent_full": "./tests/atlas_fixture_graph.py:agent"
+  },
+  "http": {
+    "app": "./src/deep_research/atlas_api.py:app"
+  },
+  "env": {
+    "LANGGRAPH_DISABLE_FILE_PERSISTENCE": "true",
+    "LANGSMITH_TRACING": "false"
+  },
+  "dependencies": ["."],
+  "python_version": "3.11"
+}

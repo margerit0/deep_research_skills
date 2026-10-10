@@ -1,8 +1,12 @@
-import { useEffect, useReducer, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { createRun, currentNode, getNodes, initialWorkspace } from '../data/mock'
 import { useDemo } from './useDemo'
 import { workspaceSchema } from '../data/schema'
 import type { Config, InspectorTab, Thread, Workspace } from '../data/schema'
+import { apiUrl } from '../api/langgraph'
+import { currentLiveNode, getLiveNodes } from '../data/live'
+import { useLiveResearch } from './useLiveResearch'
+import type { LiveUpdate } from './useLiveResearch'
 
 export const STORAGE_KEY = 'atlas-workspace:v1'
 type Action =
@@ -10,33 +14,58 @@ type Action =
   | { type: 'theme'; theme: Workspace['theme'] }
   | { type: 'draft'; text: string }
   | { type: 'send' }
-  | { type: 'new' }
+  | { type: 'new'; source?: 'mock' | 'live' }
   | { type: 'switch'; id: string }
   | { type: 'graph'; open: boolean }
   | { type: 'inspect'; node: string; runId?: string }
   | { type: 'inspector'; open: boolean }
   | { type: 'tab'; tab: InspectorTab }
   | { type: 'advance' }
+  | LiveUpdate
+
+function emptyThread(source: 'mock' | 'live'): Thread {
+  const id = crypto.randomUUID()
+  return {
+    id,
+    source,
+    title: '新研究',
+    draft: '',
+    runs: [],
+    selectedRunId: null,
+    ...(source === 'live' ? { live: { threadId: id, serverUrl: apiUrl, researches: [] } } : {}),
+  }
+}
+
+function newWorkspace(): Workspace {
+  const base = initialWorkspace()
+  const thread = emptyThread('live')
+  return {
+    ...base,
+    threads: [thread, ...base.threads],
+    activeThreadId: thread.id,
+    selectedNode: 'clarify',
+  }
+}
 
 function restore(): Workspace {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
-    if (!raw) return initialWorkspace()
+    if (!raw) return newWorkspace()
     const result = workspaceSchema.safeParse(JSON.parse(raw))
     if (result.success) {
       const saved = result.data
       if (!saved.threads.some((t) => t.id === saved.activeThreadId))
         saved.activeThreadId = saved.threads[0].id
       saved.threads.forEach((t) => {
-        if (!t.runs.some((r) => r.id === t.selectedRunId))
-          t.selectedRunId = t.runs.at(-1)?.id ?? null
+        const runs = t.source === 'live' ? (t.live?.researches ?? []) : t.runs
+        if (!runs.some((r) => r.id === t.selectedRunId)) t.selectedRunId = runs.at(-1)?.id ?? null
       })
       return saved
     }
   } catch {
     /* Unavailable or stale storage must never prevent the app from opening. */
   }
-  return initialWorkspace()
+  return newWorkspace()
 }
 
 function reducer(state: Workspace, action: Action): Workspace {
@@ -65,14 +94,15 @@ function reducer(state: Workspace, action: Action): Workspace {
         { selectedNode: action.node, graphOpen: true, inspectorOpen: true },
       )
     case 'new': {
-      const empty = state.threads.find((t) => t.runs.length === 0 && !t.draft)
-      const next: Thread = empty ?? {
-        id: crypto.randomUUID(),
-        title: '新研究',
-        draft: '',
-        runs: [],
-        selectedRunId: null,
-      }
+      const source = action.source ?? thread.source ?? 'mock'
+      const empty = state.threads.find(
+        (t) =>
+          (t.source ?? 'mock') === source &&
+          t.runs.length === 0 &&
+          !t.live?.researches.length &&
+          !t.draft,
+      )
+      const next = empty ?? emptyThread(source)
       return {
         ...state,
         activeThreadId: next.id,
@@ -86,11 +116,15 @@ function reducer(state: Workspace, action: Action): Workspace {
         ? {
             ...state,
             activeThreadId: next.id,
-            selectedNode: currentNode(next.runs.find((r) => r.id === next.selectedRunId)),
+            selectedNode:
+              next.source === 'live'
+                ? currentLiveNode(next.live?.researches.find((r) => r.id === next.selectedRunId))
+                : currentNode(next.runs.find((r) => r.id === next.selectedRunId)),
           }
         : state
     }
     case 'send': {
+      if (thread.source === 'live') return state
       const prompt = thread.draft.trim()
       if (!prompt) return state
       const run = createRun(prompt, state.config)
@@ -115,14 +149,63 @@ function reducer(state: Workspace, action: Action): Workspace {
         { selectedNode: currentNode(next) },
       )
     }
+    case 'live': {
+      const target = state.threads.find((t) => t.id === action.threadId)
+      if (!target?.live || target.source !== 'live') return state
+      const existing = target.live.researches.find((r) => r.id === action.research.id)
+      if (!action.submission && existing?.turns.at(-1)?.id !== action.research.turns.at(-1)?.id)
+        return state
+      return update(
+        {
+          ...target,
+          title: !target.live.researches.length
+            ? action.research.prompt.slice(0, 28)
+            : target.title,
+          draft: action.clearDraft === target.draft ? '' : target.draft,
+          selectedRunId: action.submission ? action.research.id : target.selectedRunId,
+          live: {
+            ...target.live,
+            researches: existing
+              ? target.live.researches.map((r) =>
+                  r.id === action.research.id ? action.research : r,
+                )
+              : [...target.live.researches, action.research],
+          },
+        },
+        action.submission && state.activeThreadId === target.id ? { selectedNode: 'clarify' } : {},
+      )
+    }
   }
 }
 
 export function useWorkspace() {
-  const [savedState, savedDispatch] = useReducer(reducer, undefined, restore)
+  const [savedState, setSavedState] = useState(restore)
+  const savedRef = useRef(savedState)
+  const [storageError, setStorageError] = useState(false)
+  const savedDispatch = (action: Action, durable = false): boolean => {
+    const next = reducer(savedRef.current, action)
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(next))
+      setStorageError(false)
+    } catch {
+      setStorageError(true)
+      if (durable) return false
+    }
+    savedRef.current = next
+    setSavedState(next)
+    return true
+  }
+  const live = useLiveResearch(savedState, savedDispatch)
   const demo = useDemo(savedState)
   const state = demo.state ?? savedState
   const dispatch = (action: Action) => {
+    if (!demo.active && action.type === 'send') {
+      const active = savedRef.current.threads.find((t) => t.id === savedRef.current.activeThreadId)!
+      if (active.source === 'live') {
+        void live.send(active)
+        return
+      }
+    }
     if (!demo.active) return savedDispatch(action)
     if (action.type === 'new' || (action.type === 'switch' && action.id !== 'tour')) {
       demo.exit()
@@ -130,7 +213,6 @@ export function useWorkspace() {
     } else if (action.type === 'advance') demo.seek(demo.index + 1)
     else demo.interact(reducer(state, action))
   }
-  const [storageError, setStorageError] = useState(false)
   useEffect(() => {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(savedState))
@@ -145,6 +227,10 @@ export function useWorkspace() {
   }, [state.theme])
   const thread = state.threads.find((t) => t.id === state.activeThreadId)!
   const run = thread.runs.find((r) => r.id === thread.selectedRunId)
+  const isLive = !demo.active && thread.source === 'live'
+  const liveRun = isLive
+    ? thread.live?.researches.find((r) => r.id === thread.selectedRunId)
+    : undefined
   const inspectNode = (node: string, runId?: string) => {
     dispatch({ type: 'inspect', node, runId })
     // On narrow screens the graph follows the conversation; bring the requested
@@ -160,7 +246,19 @@ export function useWorkspace() {
       })
     }
   }
-  const nodes = demo.active ? demo.nodes : getNodes(run)
-  return { state, dispatch, thread, run, nodes, storageError, inspectNode, demo }
+  const nodes = demo.active ? demo.nodes : isLive ? getLiveNodes(liveRun) : getNodes(run)
+  return {
+    state,
+    dispatch,
+    thread,
+    run,
+    nodes,
+    storageError,
+    inspectNode,
+    demo,
+    live,
+    liveRun,
+    isLive,
+  }
 }
 export type WorkspaceController = ReturnType<typeof useWorkspace>

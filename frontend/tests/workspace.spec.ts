@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test'
 import type { Page } from '@playwright/test'
+import { fakeLangGraph } from './langgraph-fixture'
 
 const input = (page: Page) => page.getByRole('textbox', { name: '研究问题或补充要求' })
 const inspector = (page: Page) => page.getByRole('region', { name: '节点检查器', exact: true })
@@ -12,7 +13,9 @@ async function saved(page: Page) {
 }
 
 test.beforeEach(async ({ page }) => {
+  await fakeLangGraph(page)
   await page.goto('/')
+  await page.getByRole('button', { name: 'AI 搜索的下一站', exact: true }).click()
 })
 
 test('menus: icons, solid surface, keyboard selection, exclusivity, Escape and outside click', async ({
@@ -51,7 +54,7 @@ test('send, IME, immutable run snapshots, drafts and reload across multiple thre
   await pick(page, '模型', 'DeepSeek V3.2')
   await pick(page, 'Skills', '学术研究')
   await expect(page.getByTestId('run-model')).toHaveText('Qwen3.5')
-  await page.getByRole('button', { name: '新研究', exact: true }).click()
+  await page.locator('nav[aria-label="研究对话导航"] .cw-new-chat').click()
   await input(page).fill('中文输入')
   await input(page).dispatchEvent('compositionstart')
   await input(page).press('Enter')
@@ -150,7 +153,7 @@ test('all nodes and tabs, pending outputs, focus, progression, graph collapse an
 test('custom research uses dynamic workers and its own question; text is rendered safely', async ({
   page,
 }) => {
-  await page.getByRole('button', { name: '新研究', exact: true }).click()
+  await page.locator('nav[aria-label="研究对话导航"] .cw-new-chat').click()
   await input(page).fill('<img src=x onerror=alert(1)> 太阳能电池')
   await input(page).press('Enter')
   await expect(page.locator('.cw-fork')).toHaveCount(2)
@@ -169,7 +172,8 @@ test('invalid saved data recovers, inaccessible storage remains usable, theme pe
     localStorage.setItem('atlas-workspace:v1', '{"version":1,"threads":[]}'),
   )
   await page.reload()
-  await expect(page.locator('h1')).toHaveText('AI 搜索的下一站')
+  await expect(page.locator('h1')).toHaveText('新研究')
+  await page.getByRole('button', { name: 'AI 搜索的下一站', exact: true }).click()
   await page.getByRole('button', { name: '外观：跟随系统' }).click()
   await page.getByRole('button', { name: '外观：浅色' }).click()
   await expect(page.locator('html')).toHaveCSS('color-scheme', 'dark')
@@ -195,10 +199,16 @@ test('mobile history drawer and touch targets', async ({ browser }) => {
     reducedMotion: 'reduce',
   })
   const page = await context.newPage()
+  await fakeLangGraph(page)
   await page.goto('/')
   await page.getByRole('button', { name: '打开最近对话' }).click()
   await expect(page.getByRole('dialog')).toBeVisible()
-  await page.getByRole('dialog').getByRole('button', { name: '新研究', exact: true }).click()
+  await page
+    .getByRole('dialog')
+    .getByRole('button', { name: 'AI 搜索的下一站', exact: true })
+    .click()
+  await page.getByRole('button', { name: '打开最近对话' }).click()
+  await page.getByRole('dialog').locator('.cw-new-chat').click()
   await expect(page.getByRole('dialog')).not.toBeVisible()
   await input(page).fill('手机研究')
   await page.getByRole('button', { name: '发送消息' }).click()

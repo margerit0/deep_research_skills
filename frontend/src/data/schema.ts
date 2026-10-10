@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { liveThreadSchema } from './liveSchema'
 
 export const modelSchema = z.enum(['qwen', 'deepseek', 'gpt4o'])
 export const skillSchema = z.enum([
@@ -25,13 +26,19 @@ const runSchema = z.object({
   kind: z.enum(['example', 'custom']),
   researchers: z.array(researcherSchema).min(1),
 })
-const threadSchema = z.object({
-  id: z.string(),
-  title: z.string(),
-  draft: z.string(),
-  runs: z.array(runSchema),
-  selectedRunId: z.string().nullable(),
-})
+const threadSchema = z
+  .object({
+    id: z.string(),
+    title: z.string(),
+    draft: z.string(),
+    runs: z.array(runSchema),
+    selectedRunId: z.string().nullable(),
+    source: z.enum(['mock', 'live']).optional(),
+    live: liveThreadSchema.optional(),
+  })
+  .refine((thread) => thread.source !== 'live' || !!thread.live, {
+    message: 'A live thread must include its server mapping.',
+  })
 export const workspaceSchema = z.object({
   version: z.literal(1),
   threads: z.array(threadSchema).min(1),
@@ -51,7 +58,7 @@ export type Researcher = z.infer<typeof researcherSchema>
 export type Thread = z.infer<typeof threadSchema>
 export type Workspace = z.infer<typeof workspaceSchema>
 export type InspectorTab = Workspace['inspectorTab']
-export type NodeStatus = 'pending' | 'waiting' | 'running' | 'completed'
+export type NodeStatus = 'pending' | 'waiting' | 'running' | 'completed' | 'failed' | 'partial'
 export interface NodeDetail {
   id: string
   title: string

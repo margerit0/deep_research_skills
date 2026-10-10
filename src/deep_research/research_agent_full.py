@@ -1,79 +1,273 @@
+"""Full graph with a checkpointed lifecycle for research and clarification.
 
-"""
-完整多智能体研究系统 (Full Multi-Agent Research System)
-
-本模块整合了研究系统的所有组件：
-- 用户澄清与范围界定
-- 研究简报 (Research brief) 生成
-- 多智能体研究协调
-- 最终报告生成
-
-该系统统筹从用户初始输入到最终报告交付的完整研究工作流。
+A LangGraph run ending is not proof that research completed. Consumers check
+research_status and the active/report research identifiers before showing a report.
 """
 
-from langchain_core.messages import HumanMessage
-from langgraph.graph import StateGraph, START, END
+import logging
+from uuid import uuid4
 
-from deep_research.utils import get_today_str
-from deep_research.prompts import final_report_generation_prompt
-from deep_research.state_scope import AgentState, AgentInputState
-from deep_research.research_agent_scope import clarify_with_user, write_research_brief
+from langchain_core.messages import AIMessage, HumanMessage
+from langgraph.graph import END, START, StateGraph
+from langgraph.types import Command, Overwrite
+
+from deep_research.model_config import get_chat_model, public_model_config
 from deep_research.multi_agent_supervisor import supervisor_agent
+from deep_research.prompts import final_report_generation_prompt
+from deep_research.research_agent_scope import (
+    clarify_with_user as scope_clarify,
+    write_research_brief as scope_brief,
+)
+from deep_research.state_scope import AgentInputState, AgentState
+from deep_research.utils import get_today_str
+from deep_research.workflow_contract import (
+    is_research_note,
+    log_node_failure,
+    message_text,
+    research_error,
+)
 
-# ===== 配置 (Config) =====
-
-from deep_research.model_config import get_chat_model
-# 最终报告是全流程里最大的单次 LLM 调用 (32k max_tokens + 汇总所有研究发现),
-# 长 context 下最易撞网关瞬时 5xx/超时 (如 Cloudflare 524). 与 research_agent_skills
-# 里的 compress_model 一致, 加 .with_retry 让短暂抖动自愈, 避免一次超时白跑整条流水线.
+logger = logging.getLogger(__name__)
 writer_model = get_chat_model("FINAL_REPORT", max_tokens=32000).with_retry(
     stop_after_attempt=3,
     wait_exponential_jitter=True,
 )
 
-# ===== 最终报告生成 (FINAL REPORT GENERATION) =====
 
-from deep_research.state_scope import AgentState
-
-async def final_report_generation(state: AgentState):
-    """
-    最终报告生成节点。
-
-    将所有研究发现综合成一份全面的最终报告
-    """
-
-    notes = state.get("notes", [])
-
-    findings = "\n".join(notes)
-
-    final_report_prompt = final_report_generation_prompt.format(
-        research_brief=state.get("research_brief", ""),
-        findings=findings,
-        date=get_today_str()
-    )
-
-    final_report = await writer_model.ainvoke([HumanMessage(content=final_report_prompt)])
-
+def _failure(state, node, code, text):
     return {
-        "final_report": final_report.content, 
-        "messages": ["Here is the final report: " + final_report.content],
+        "research_status": "failed",
+        "final_report": "",
+        "report_research_id": "",
+        "research_errors": [
+            *state.get("research_errors", []),
+            research_error(code, text, node),
+        ],
     }
 
-# ===== 图构建 (GRAPH CONSTRUCTION) =====
-# 构建整体工作流
-deep_researcher_builder = StateGraph(AgentState, input_schema=AgentInputState)
 
-# 添加工作流节点
+def prepare_research(state: AgentState) -> Command:
+    """Start a clean batch or continue exactly the pending clarification."""
+    humans = [m for m in state.get("messages", []) if isinstance(m, HumanMessage)]
+    if not humans or not message_text(humans[-1].content):
+        return Command(
+            goto=END,
+            update=_failure(
+                state, "clarify_with_user", "empty_input", "请输入研究问题。"
+            ),
+        )
+    turn_id = state.get("turn_id") or humans[-1].id or str(uuid4())
+    research_id = state.get("research_id") or (
+        state.get("active_research_id")
+        if state.get("research_status") == "awaiting_input"
+        else str(uuid4())
+    )
+    # Defense in depth for an intentionally retried, already completed HTTP input.
+    # The browser never automatically POSTs an ambiguous submission a second time.
+    if turn_id == state.get("active_turn_id") and state.get("research_status") in {
+        "awaiting_input",
+        "succeeded",
+        "failed",
+        "partial",
+    }:
+        return Command(goto=END)
+    same_research = research_id == state.get("active_research_id")
+    if same_research and state.get("research_status") != "awaiting_input":
+        raise ValueError(
+            "Only a pending clarification can continue the same research_id."
+        )
+    if state.get("turn_id") and humans[-1].id != turn_id:
+        raise ValueError("The human message id must match turn_id.")
+    update = {
+        "active_research_id": research_id,
+        "active_turn_id": turn_id,
+        "research_status": "running",
+        "research_phase": "clarify",
+        "effective_config": public_model_config(),
+        "research_brief": "",
+        "final_report": "",
+        "report_research_id": "",
+        "notes": Overwrite([]),
+        "raw_notes": Overwrite([]),
+        "supervisor_messages": Overwrite([]),
+        "research_iterations": 0,
+        "supervisor_status": "",
+        "research_errors": [],
+        "sources": [],
+    }
+    if not same_research:
+        # Prior studies remain in frontend history, not in the next scoping prompt.
+        update["messages"] = Overwrite([humans[-1]])
+    return Command(goto="clarify_with_user", update=update)
+
+
+def clarify_with_user(state: AgentState) -> Command:
+    """Keep the shared structured-output/Qwen fallback and mark END as waiting."""
+    try:
+        result = scope_clarify(state)
+        waiting = result.goto == END
+        if not result.update["messages"] or not message_text(
+            result.update["messages"][0].content
+        ):
+            raise ValueError("Empty scoping response")
+        return Command(
+            goto=result.goto,
+            update={
+                **result.update,
+                "research_status": "awaiting_input" if waiting else "running",
+                "research_phase": "clarify" if waiting else "brief",
+            },
+        )
+    except Exception as exc:
+        log_node_failure(logger, "clarify_with_user", exc)
+        return Command(
+            goto=END,
+            update=_failure(
+                state,
+                "clarify_with_user",
+                "clarification_failed",
+                "需求澄清失败，请检查后端模型服务后发起新研究。",
+            ),
+        )
+
+
+def write_research_brief(state: AgentState) -> Command:
+    """Checkpoint the real brief before entering the research subgraph."""
+    try:
+        result = scope_brief(state)
+        if not result["research_brief"].strip():
+            raise ValueError("Empty research brief")
+        return Command(
+            goto="supervisor_subgraph", update={**result, "research_phase": "research"}
+        )
+    except Exception as exc:
+        log_node_failure(logger, "write_research_brief", exc)
+        return Command(
+            goto=END,
+            update=_failure(
+                state,
+                "write_research_brief",
+                "brief_failed",
+                "研究简报生成失败，请检查后端模型服务后发起新研究。",
+            ),
+        )
+
+
+async def supervisor_subgraph(state: AgentState) -> Command:
+    """Gate writing on actual findings, keeping partial successes visible."""
+    try:
+        result = await supervisor_agent.ainvoke(
+            {
+                "supervisor_messages": state["supervisor_messages"],
+                "research_brief": state["research_brief"],
+                "notes": [],
+                "raw_notes": [],
+                "sources": [],
+                "research_errors": [],
+                "research_iterations": 0,
+                "supervisor_status": "",
+            }
+        )
+    except Exception as exc:
+        log_node_failure(logger, "supervisor_subgraph", exc)
+        return Command(
+            goto=END,
+            update=_failure(
+                state,
+                "supervisor_subgraph",
+                "research_failed",
+                "研究流程异常结束，未生成报告。",
+            ),
+        )
+    notes = [note for note in result.get("notes", []) if is_research_note(note)]
+    update = {
+        "notes": Overwrite(notes),
+        "raw_notes": Overwrite(result.get("raw_notes", [])),
+        "supervisor_messages": Overwrite(result.get("supervisor_messages", [])),
+        "research_iterations": result.get("research_iterations", 0),
+        "sources": result.get("sources", []),
+        "research_errors": result.get("research_errors", []),
+        "supervisor_status": result.get("supervisor_status", "failed"),
+    }
+    if not notes:
+        return Command(
+            goto=END,
+            update={
+                **update,
+                **_failure(
+                    {**state, "research_errors": update["research_errors"]},
+                    "supervisor_subgraph",
+                    "no_findings",
+                    "未获得有效研究结果，无法生成有依据的报告。",
+                ),
+            },
+        )
+    update["research_phase"] = "writing"
+    return Command(goto="final_report_generation", update=update)
+
+
+async def final_report_generation(state: AgentState):
+    """Write from valid notes; an empty/failed writer leaves a partial result."""
+    notes = [note for note in state.get("notes", []) if is_research_note(note)]
+    if not notes:
+        return _failure(
+            state,
+            "final_report_generation",
+            "no_findings",
+            "没有可用于撰写报告的有效研究结果。",
+        )
+    errors = list(state.get("research_errors", []))
+    if not state.get("sources"):
+        errors.append(
+            research_error(
+                "missing_sources",
+                "未取得可回读的检索来源，报告的来源覆盖不完整。",
+                "final_report_generation",
+            )
+        )
+    try:
+        prompt = final_report_generation_prompt.format(
+            research_brief=state.get("research_brief", ""),
+            findings="\n".join(notes),
+            date=get_today_str(),
+        )
+        response = await writer_model.ainvoke([HumanMessage(content=prompt)])
+        report = message_text(response.content)
+        if not is_research_note(report):
+            raise ValueError("Empty or failed final report")
+    except Exception as exc:
+        log_node_failure(logger, "final_report_generation", exc)
+        return {
+            "research_status": "partial",
+            "final_report": "",
+            "report_research_id": "",
+            "research_errors": [
+                *errors,
+                research_error(
+                    "report_failed",
+                    "最终报告生成失败；已保留研究笔记和来源。",
+                    "final_report_generation",
+                ),
+            ],
+        }
+    return {
+        "final_report": report,
+        "report_research_id": state.get("active_research_id", ""),
+        "research_status": "partial"
+        if errors or state.get("supervisor_status") != "completed"
+        else "succeeded",
+        "research_phase": "complete",
+        "research_errors": errors,
+        "messages": [AIMessage(content=report, name="final_report")],
+    }
+
+
+deep_researcher_builder = StateGraph(AgentState, input_schema=AgentInputState)
+deep_researcher_builder.add_node("prepare_research", prepare_research)
 deep_researcher_builder.add_node("clarify_with_user", clarify_with_user)
 deep_researcher_builder.add_node("write_research_brief", write_research_brief)
-deep_researcher_builder.add_node("supervisor_subgraph", supervisor_agent)
+deep_researcher_builder.add_node("supervisor_subgraph", supervisor_subgraph)
 deep_researcher_builder.add_node("final_report_generation", final_report_generation)
-
-# 添加工作流的边
-deep_researcher_builder.add_edge(START, "clarify_with_user")
-deep_researcher_builder.add_edge("write_research_brief", "supervisor_subgraph")
-deep_researcher_builder.add_edge("supervisor_subgraph", "final_report_generation")
+deep_researcher_builder.add_edge(START, "prepare_research")
 deep_researcher_builder.add_edge("final_report_generation", END)
-
-# 编译完整工作流
 agent = deep_researcher_builder.compile()

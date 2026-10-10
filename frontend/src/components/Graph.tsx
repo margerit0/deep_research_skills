@@ -6,6 +6,7 @@ import type { WorkspaceController } from '../state/useWorkspace'
 import { Icon } from './Icon'
 import { Inspector } from './Inspector'
 import { StatusMark } from './StatusMark'
+import { currentLiveNode, livePhaseText, liveStatusText } from '../data/live'
 
 interface Wire {
   d: string
@@ -14,7 +15,8 @@ interface Wire {
   flowing?: boolean
 }
 export function Graph({ controller }: { controller: WorkspaceController }) {
-  const { state, dispatch, run, inspectNode, nodes, demo } = controller
+  const { state, dispatch, run, inspectNode, nodes, demo, isLive, liveRun, live, thread } =
+    controller
   const flow = useRef<HTMLDivElement>(null)
   const panel = useRef<HTMLElement>(null)
   const [wires, setWires] = useState<Wire[]>([])
@@ -124,11 +126,15 @@ export function Graph({ controller }: { controller: WorkspaceController }) {
         <span>运行图谱</span>
         <span className="cw-spacer" />
         <span className="cw-label cw-status" role="status">
-          {demo.active && demo.scene.id === 'brief'
-            ? '生成简报'
-            : run
-              ? stageText[run.stage]
-              : '未开始'}
+          {isLive
+            ? liveRun
+              ? liveStatusText[liveRun.status]
+              : '未开始'
+            : demo.active && demo.scene.id === 'brief'
+              ? '生成简报'
+              : run
+                ? stageText[run.stage]
+                : '未开始'}
         </span>
         <button
           type="button"
@@ -144,13 +150,17 @@ export function Graph({ controller }: { controller: WorkspaceController }) {
       </div>
       <div className="cw-graph-subheader">
         <span>
-          {demo.active && run?.stage === 'research'
-            ? '协作研究 · 并行演示'
-            : run
-              ? phaseText[run.stage]
-              : '等待提交研究问题'}
+          {isLive
+            ? liveRun
+              ? livePhaseText[liveRun.phase]
+              : '等待提交研究问题'
+            : demo.active && run?.stage === 'research'
+              ? '协作研究 · 并行演示'
+              : run
+                ? phaseText[run.stage]
+                : '等待提交研究问题'}
         </span>
-        <span>演示数据</span>
+        <span>{isLive ? '真实数据' : '演示数据'}</span>
       </div>
       <div ref={flow} className="cw-flow">
         <svg className="cw-wires" aria-hidden="true">
@@ -193,7 +203,9 @@ export function Graph({ controller }: { controller: WorkspaceController }) {
         </svg>
         <div className="cw-top-nodes">{nodes.slice(0, 2).map((n) => nodeButton(n))}</div>
         <div className="cw-cluster">
-          <span className="cw-cluster-tag">并行研究 · 子流程</span>
+          <span className="cw-cluster-tag">
+            {isLive ? '协作研究 · 子流程' : '并行研究 · 子流程'}
+          </span>
           {nodeButton(nodes[2], 'cw-supervisor')}
           {researchers.length ? (
             <>
@@ -208,7 +220,9 @@ export function Graph({ controller }: { controller: WorkspaceController }) {
               </div>
             </>
           ) : (
-            <div className="cw-await-workers">任务开始后展示研究员</div>
+            <div className="cw-await-workers">
+              {isLive ? '研究任务由后端协调' : '任务开始后展示研究员'}
+            </div>
           )}
         </div>
         {nodeButton(nodes.at(-1)!, 'cw-report')}
@@ -217,22 +231,41 @@ export function Graph({ controller }: { controller: WorkspaceController }) {
         <button
           type="button"
           className="cw-quiet"
-          onClick={() => inspectNode(demo.active ? demo.currentNode : currentNode(run))}
+          onClick={() =>
+            inspectNode(
+              isLive ? currentLiveNode(liveRun) : demo.active ? demo.currentNode : currentNode(run),
+            )
+          }
         >
           <Icon name="locate" />
           定位当前
         </button>
-        <button
-          type="button"
-          className="cw-quiet"
-          disabled={!run}
-          onClick={() =>
-            demo.active && run?.stage === 'complete' ? demo.replay() : dispatch({ type: 'advance' })
-          }
-        >
-          <Icon name={run?.stage === 'complete' ? 'reset' : 'step'} />
-          {run?.stage === 'complete' ? '重新演示' : '演示下一步'}
-        </button>
+        {isLive ? (
+          <button
+            type="button"
+            className="cw-quiet"
+            onClick={() => {
+              void live.refresh(thread.id)
+            }}
+          >
+            <Icon name="reset" />
+            刷新状态
+          </button>
+        ) : (
+          <button
+            type="button"
+            className="cw-quiet"
+            disabled={!run}
+            onClick={() =>
+              demo.active && run?.stage === 'complete'
+                ? demo.replay()
+                : dispatch({ type: 'advance' })
+            }
+          >
+            <Icon name={run?.stage === 'complete' ? 'reset' : 'step'} />
+            {run?.stage === 'complete' ? '重新演示' : '演示下一步'}
+          </button>
+        )}
       </div>
       {state.inspectorOpen ? (
         <Inspector controller={controller} node={selected} run={run} onClose={closeInspector} />
