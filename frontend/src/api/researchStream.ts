@@ -1,5 +1,6 @@
 import { researchEventSchema } from '../data/liveSchema'
 import type { LiveThread, ResearchEvent } from '../data/liveSchema'
+import { ApiError } from './errors'
 
 interface StreamOptions {
   signal: AbortSignal
@@ -30,8 +31,7 @@ export async function streamResearchEvents(
   } finally {
     clearTimeout(timeout)
   }
-  if (!response.ok || !response.body)
-    throw new Error(`Research event stream HTTP ${response.status}`)
+  if (!response.ok || !response.body) throw new ApiError(response.status)
   options.onOpen()
   await readResearchEvents(response.body, options)
 }

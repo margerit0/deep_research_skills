@@ -8,6 +8,7 @@ import { currentLiveNode, getLiveNodes } from '../data/live'
 import { useLiveResearch } from './useLiveResearch'
 import type { LiveUpdate } from './useLiveResearch'
 import { mergeResearchEvents } from '../data/researchEvents'
+import { recoveryScope, savedRecovery } from '../data/eventRecovery'
 
 export const STORAGE_KEY = 'atlas-workspace:v1'
 type Action =
@@ -163,13 +164,37 @@ function reducer(state: Workspace, action: Action): Workspace {
       )
         return state
       const events = mergeResearchEvents(existing, action.events)
-      if (events.length === existing.events.length) return state
+      let recovery = savedRecovery(target.live, existing)
+      if (action.cursor !== undefined || action.replay) {
+        recovery = { ...(recovery ?? recoveryScope(target.live, existing)) }
+        if (action.cursor !== undefined) recovery.cursor = action.cursor
+        if (action.replay) {
+          recovery.sequence =
+            !action.replay.reset && action.replay.journalId === recovery.journalId
+              ? Math.max(recovery.sequence, action.replay.sequence)
+              : action.replay.sequence
+          recovery.journalId = action.replay.journalId
+          recovery.gap ||= action.replay.gap
+          recovery.sealed = action.replay.sealed
+          recovery.unconfirmedBefore = Math.max(
+            recovery.unconfirmedBefore,
+            action.replay.unconfirmedBefore,
+          )
+        }
+      }
+      if (
+        events.length === existing.events.length &&
+        JSON.stringify(recovery) === JSON.stringify(existing.eventRecovery)
+      )
+        return state
       return update({
         ...target,
         live: {
           ...target.live,
           researches: target.live.researches.map((research) =>
-            research.id === existing.id ? { ...research, events } : research,
+            research.id === existing.id
+              ? { ...research, events, eventRecovery: recovery }
+              : research,
           ),
         },
       })
@@ -198,6 +223,7 @@ function reducer(state: Workspace, action: Action): Workspace {
                         events: action.submission
                           ? action.research.events
                           : mergeResearchEvents(action.research, r.events),
+                        eventRecovery: action.submission ? undefined : r.eventRecovery,
                       }
                     : r,
                 )
@@ -216,6 +242,7 @@ export function useWorkspace() {
   const [storageError, setStorageError] = useState(false)
   const savedDispatch = (action: Action, durable = false): boolean => {
     const next = reducer(savedRef.current, action)
+    if (next === savedRef.current) return true
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(next))
       setStorageError(false)

@@ -61,7 +61,9 @@ export function getResearcherNodes(run?: LiveResearch): NodeDetail[] {
     const failed = last.kind === 'failed' || last.kind.endsWith('_failed')
     const completed = last.kind === 'completed'
     const stillResearching =
-      run.status === 'running' && !['writing', 'complete'].includes(run.phase)
+      run.status === 'running' &&
+      !['writing', 'complete'].includes(run.phase) &&
+      last.sequence > (run.eventRecovery?.unconfirmedBefore ?? 0)
     const status: NodeStatus = completed
       ? 'completed'
       : failed

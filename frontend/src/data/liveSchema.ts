@@ -6,6 +6,7 @@ export const backendConfigSchema = z.object({
   model_selection: z.literal('server'),
   skills_mode: z.literal('auto'),
   research_events_version: z.literal(1).optional(),
+  research_event_replay_version: z.literal(1).optional(),
   models: z
     .array(
       z.object({
@@ -59,6 +60,42 @@ export const researchEventSchema = z.object({
   output: z.string().max(8050).optional(),
 })
 export type ResearchEvent = z.infer<typeof researchEventSchema>
+export const eventPageSchema = z.object({
+  version: z.literal(1),
+  thread_id: z.string(),
+  run_id: z.string(),
+  research_id: z.string(),
+  turn_id: z.string(),
+  status: z.enum(['ready', 'missing', 'expired']),
+  journal_id: z.uuid().nullable(),
+  events: z.array(researchEventSchema).max(100),
+  next_sequence: z.number().int().nonnegative(),
+  last_sequence: z.number().int().nonnegative(),
+  has_more: z.boolean(),
+  sealed: z.boolean(),
+  gap: z.boolean(),
+  reset: z.boolean(),
+  unconfirmed_before_sequence: z.number().int().nonnegative().default(0),
+})
+export type EventPage = z.infer<typeof eventPageSchema>
+export const eventRecoverySchema = z.object({
+  serverUrl: z.string(),
+  threadId: z.string(),
+  researchId: z.string(),
+  turnId: z.string(),
+  runId: z.string(),
+  cursor: z
+    .string()
+    .max(256)
+    .regex(/^(?:-1|\d+-\d+)$/)
+    .optional(),
+  journalId: z.uuid().optional(),
+  sequence: z.number().int().nonnegative().default(0),
+  gap: z.boolean().default(false),
+  sealed: z.boolean().default(false),
+  unconfirmedBefore: z.number().int().nonnegative().default(0),
+})
+export type EventRecovery = z.infer<typeof eventRecoverySchema>
 export const messageSchema = z.object({
   id: z.string(),
   type: z.enum(['human', 'ai']),
@@ -87,6 +124,8 @@ export const liveResearchSchema = z.object({
   sources: z.array(sourceSchema),
   errors: z.array(errorSchema),
   events: z.array(researchEventSchema).default([]),
+  // A damaged recovery position must not discard the user's conversation.
+  eventRecovery: eventRecoverySchema.optional().catch(undefined),
   observations: z.array(
     z.object({ at: z.string(), phase: researchPhaseSchema, status: researchStatusSchema }),
   ),

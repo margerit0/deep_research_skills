@@ -28,6 +28,14 @@ test('native LangGraph API: clarification, answer, report, sources and reload', 
   expect(fixtureModels, 'The selected test mode must match the server before creating a run.').toBe(
     process.env.ATLAS_API_FIXTURE === '1',
   )
+  if (process.env.ATLAS_API_FIXTURE === '1') {
+    const fixture = await page.request.get('/api/atlas-fixture/identity')
+    expect(fixture.ok(), 'Start the isolated tests/atlas_fixture_server.py launcher.').toBe(true)
+    const identity = await fixture.json()
+    expect(identity.file_persistence_disabled).toBe(true)
+    expect(identity.event_journal_enabled).toBe(false)
+    expect(configured.research_event_replay_version).toBeUndefined()
+  }
   const input = page.getByRole('textbox', { name: '研究问题或补充要求' })
   const status = page.getByTestId('live-status').last()
   await input.fill('请帮我做一项对比研究。')

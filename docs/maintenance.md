@@ -34,7 +34,7 @@ from deep_research.research_agent_full import agent
 
 ## 星图工作台真实模式
 
-独立前端已接入 `research_agent_full`，启动方式见 [frontend/README.md](../frontend/README.md)，接口定义见 [backend-contract.md](../frontend/docs/backend-contract.md)。`langgraph.json` 的自定义 HTTP app 仅提供 `/atlas/config`，返回进程实际构造的六个模型角色和自动 Skills 能力；不包含密钥或提供商 URL。会话和运行仍使用 LangGraph 原生 API。
+独立前端已接入 `research_agent_full`，启动方式见 [frontend/README.md](../frontend/README.md)，接口定义见 [backend-contract.md](../frontend/docs/backend-contract.md)。`langgraph.json` 的自定义 HTTP app 提供只读 `/atlas/config` 和 `/atlas/threads/{thread_id}/runs/{run_id}/events`。配置只返回实际构造的六个模型角色及能力，回放只返回安全研究员事件；不包含密钥或提供商 URL。会话和运行仍使用 LangGraph 原生 API。
 
 前端默认用 Vite 的 `/api` 转发访问 2024 端口。它不读取根目录后端 `.env`，也不把本地模拟模型菜单的选择传给后端。调整后端模型、凭据或 Skills 文件后要重启服务，让导入时快照生效。`--allow-blocking` 与现有同步研究工具保持兼容；不要借此认为整个图是同步运行的。
 
@@ -42,11 +42,15 @@ from deep_research.research_agent_full import agent
 
 一次 LangGraph run 的 `success` 只表示图执行正常返回；澄清等待、研究失败、部分完成都可能正常返回。前端必须依据 `research_status` 及 `active_research_id` / `active_turn_id` / `report_research_id` 判断结果。后端已在新研究入口重置累积字段；不要从客户端仅用 `notes=[]` 假定能够清空带加法 reducer 的状态。
 
-回归分三层：`pytest` 的图和模型替身、`frontend/tests/live.spec.ts` 的 HTTP 替身、`tests/atlas-langgraph.json` 的原生 API 服务配合模型 / 搜索替身。最后一层的测试服务不加载生产 `.env`，并禁用文件持久化。真实模型联调必须显式启用 `ATLAS_LIVE=1`，同时检查业务状态、正文、来源及 run 数量。完整步骤与本次结果见 [前端验收记录](../frontend/docs/verification.md)。
+回归分三层：`pytest` 的图和模型替身、前端的 HTTP / SSE 替身、原生 API 服务配合模型 / 搜索替身。普通 API 替身由 `tests/atlas_fixture_server.py` 读取 `tests/atlas-langgraph.json` 启动，不加载生产 `.env`；它在导入前设置环境，并向同版本的原生 `run_server` 明确传入 `disable_persistence=True`，工作目录固定在 `.local/atlas-api-fixture/case-*`。恢复验收另用 `frontend/tests/recovery-api.spec.ts`，在 `.local/atlas-recovery-api/case-*` 建立专属配置和持久化目录，在工具内部停止并重启自己的后端。真实模型联调必须显式启用 `ATLAS_LIVE=1`，同时检查业务状态、正文、来源及 run 数量。步骤和结果见 [前端验收记录](../frontend/docs/verification.md)。
 
-研究员进度通过原生 `custom` SSE 发送。`research_events_version: 1` 是后端能力标识，更新代码后要重启服务。`research_events.py` 在父研究节点建立独立的事件记录器，分别捕获委派、研究模型、工具、压缩和任务终态；研究子流程返回后，安全事件列表写入父图检查点。它不收集原始模型推理或工具正文，也不会因事件观察者断线使研究失败。
+研究员进度通过原生 `custom` SSE 发送。`research_events_version: 1` 和可选 `research_event_replay_version: 1` 分别表示实时事件与持久日志回放，更新代码后要重启服务。`research_events.py` 在父研究节点建立独立记录器，捕获委派、研究模型、工具、压缩和任务终态；安全事件在发送前同步提交 SQLite，子流程返回后仍写入父图检查点。不收集原始模型推理或工具正文，观察者或存储故障不会让研究失败。
 
-排查进度时分别检查事件流和业务状态：事件流关闭不表示研究完成，仍需读取 run 和 checkpoint。浏览器会恢复可用缓冲并按 UUID 去重；服务进程中途退出导致的未落盘事件丢失，尚不属于完整恢复保证。`frontend/tests/live-events.spec.ts` 覆盖并行任务、追加委派、旧事件隔离、SSE 分片和窄屏布局；原生 API 测试还核对缓冲事件与检查点一致、刷新后服务端仍只有两次 run。
+默认日志为 `.langgraph_api/atlas-events.sqlite3`；后端 `ATLAS_EVENT_DB` 可改路径，`ATLAS_EVENT_RETENTION_DAYS` 默认 30，合法范围 1–3650。不要清除日志目录后期待补回旧事件。保留期按最后写入计算，过期正文在开始捕获或回读时清理，过期标记再保留一个保留期。普通非持久化测试未显式配置路径时不启用日志；独立图和评估没有原生 thread / run 身份时也不写事件库。
+
+排查时分别核对事件流、事件日志和业务状态。SSE 关闭或日志 `sealed` 都不表示研究成功；已提交的日志在进程停止后仍可分页读取，最终结果仍核对 run 和 checkpoint。后端可能保留旧 `running` 状态但没有续跑，旧捕获过程的非终态任务会标为“完成状态未确认”。浏览器将事件和恢复位置一起保存，存储失败不推进位置；重连、聚焦与网络恢复只读，不增加 run。
+
+本轮完成单进程本地服务的观察与记录恢复，未承诺幂等受理或任意节点的执行恢复。`test_event_journal.py` 覆盖写入、退出、并发初始化、迁移和过期；`live-recovery.spec.ts` 覆盖分页、位置重置、存储失败、终态缺失和窄屏提示；原生恢复验收核对停机前事件全部补回且 run 数仍为两次。
 
 2026-10-10 用户确认当前网关问题由供应商后续修复，要求跳过连接排障并继续事件图谱开发。保持指定模型、地址、本地密钥与 `NO_PROXY=*`，未关闭 TLS 校验。供应商恢复前，替身验收不能代表完整真实研究已通过。
 

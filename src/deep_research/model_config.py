@@ -52,6 +52,8 @@ from langchain.chat_models import init_chat_model
 from langchain_core.language_models import BaseChatModel
 from langchain_core.rate_limiters import InMemoryRateLimiter
 
+from deep_research.event_journal import journal_path
+
 
 def _required_env(name: str) -> str:
     value = os.getenv(name)
@@ -84,6 +86,7 @@ def public_model_config() -> dict:
         "model_selection": "server",
         "skills_mode": "auto",
         "research_events_version": 1,
+        **({"research_event_replay_version": 1} if journal_path() is not None else {}),
         "models": [dict(_model_snapshots[role]) for role in MODEL_ROLES if role in _model_snapshots],
     }
 

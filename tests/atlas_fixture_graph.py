@@ -1,7 +1,8 @@
 """Opt-in native API fixture: real graphs, deterministic model/search substitutes.
 
-Run only with tests/atlas-langgraph.json. No production .env is loaded and no
-model or search request is made by this graph.
+Use tests/atlas_fixture_server.py with tests/atlas-langgraph.json, or the isolated
+recovery fixture. No production .env is loaded and no model or search request is
+made by this graph.
 """
 
 import os

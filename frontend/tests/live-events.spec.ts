@@ -166,7 +166,7 @@ test('replayed and out-of-order events deduplicate across refresh; old research 
     await fake.publish([delegated, searching])
     await expect(node(page, taskA)).toHaveAttribute('data-status', 'running')
     await expect.poll(() => savedEvents(page)).toEqual([delegated, searching])
-    expect(fake.requests.slice(0, 2).map((request) => request.cursor)).toEqual(['-1', '-1'])
+    expect(fake.requests.slice(0, 2).map((request) => request.cursor)).toEqual(['-1', '6-0'])
     fake.succeed()
     fake.change({
       research_events: [delegated, searching, event(run, 3, 'completed', { output: '本轮笔记' })],

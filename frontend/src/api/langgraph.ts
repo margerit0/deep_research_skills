@@ -1,16 +1,10 @@
 import { z } from 'zod'
 import { backendConfigSchema, graphValuesSchema } from '../data/liveSchema'
 import type { LiveResearch, LiveThread, LiveTurn } from '../data/liveSchema'
+import { ApiError } from './errors'
+export { ApiError } from './errors'
 
 export const apiUrl = (import.meta.env.VITE_LANGGRAPH_API_URL || '/api').replace(/\/$/, '')
-
-export class ApiError extends Error {
-  status: number
-  constructor(status: number) {
-    super(`LangGraph HTTP ${status}`)
-    this.status = status
-  }
-}
 
 async function request(base: string, path: string, init?: RequestInit): Promise<unknown> {
   const response = await fetch(`${base}${path}`, {

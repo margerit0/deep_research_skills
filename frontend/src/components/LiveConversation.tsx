@@ -116,6 +116,19 @@ export function LiveConversation({ controller }: { controller: WorkspaceControll
                     <Icon name="external" />
                   </button>
                 </div>
+                {(run.eventRecovery?.gap ||
+                  (live.replayStates[thread.id] &&
+                    live.replayStates[thread.id].runId === run.turns.at(-1)?.runId &&
+                    live.replayStates[thread.id]?.state !== 'ready')) && (
+                  <p className="cw-sync-note" role="status" data-testid="event-recovery-note">
+                    {run.eventRecovery?.unconfirmedBefore
+                      ? '部分进度记录无法确认，此前任务是否继续尚未确认；已保留可读取的任务与结果。'
+                      : run.eventRecovery?.gap ||
+                          live.replayStates[thread.id]?.state === 'incomplete'
+                        ? '部分进度记录无法确认，已保留可读取的任务与结果。研究状态以服务端回读为准。'
+                        : '进度记录暂时无法回读，正在重试；已显示的任务与结果会保留。'}
+                  </p>
+                )}
                 {run.brief && (
                   <button
                     type="button"

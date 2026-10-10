@@ -4,6 +4,9 @@ import type { BackendConfig, LiveResearch, ResearchEvent } from '../data/liveSch
 import type { Thread, Workspace } from '../data/schema'
 import { applySnapshot } from '../data/live'
 import { streamResearchEvents } from '../api/researchStream'
+import { readEventPage } from '../api/eventReplay'
+import { retryDelay, savedRecovery } from '../data/eventRecovery'
+import { getResearcherNodes, mergeResearchEvents } from '../data/researchEvents'
 
 export type LiveUpdate =
   | {
@@ -20,6 +23,15 @@ export type LiveUpdate =
       turnId: string
       runId: string
       events: ResearchEvent[]
+      cursor?: string
+      replay?: {
+        journalId?: string
+        sequence: number
+        gap: boolean
+        sealed: boolean
+        reset?: boolean
+        unconfirmedBefore: number
+      }
     }
 type Sync = { state: 'loading' | 'ready' | 'error'; message?: string }
 type Connection = { config?: BackendConfig; loading: boolean; error?: string }
@@ -28,8 +40,11 @@ type EventStream = {
   runId: string
   cursor: string
   retryAt: number
+  failures: number
   controller?: AbortController
 }
+type ReplayState = { runId: string; state: 'ready' | 'retrying' | 'incomplete' }
+type Retry = { failures: number; at: number }
 
 export function useLiveResearch(
   workspace: Workspace,
@@ -46,6 +61,106 @@ export function useLiveResearch(
   const mounted = useRef(true)
   const streams = useRef(new Map<string, EventStream>())
   const [eventConnections, setEventConnections] = useState<Record<string, EventConnection>>({})
+  const [replayStates, setReplayStates] = useState<Record<string, ReplayState>>({})
+  const replays = useRef(new Map<string, AbortController>())
+  const replayRetries = useRef(new Map<string, Retry>())
+  const syncRetries = useRef(new Map<string, Retry>())
+
+  function updateReplayState(id: string, value: ReplayState) {
+    if (mounted.current)
+      setReplayStates((previous) =>
+        previous[id]?.runId === value.runId && previous[id]?.state === value.state
+          ? previous
+          : { ...previous, [id]: value },
+      )
+  }
+
+  async function recoverEvents(thread: Thread, research: LiveResearch, force: boolean) {
+    const live = thread.live!
+    const turn = research.turns.at(-1)!
+    if (
+      !mounted.current ||
+      !turn.runId ||
+      research.config.research_event_replay_version !== 1 ||
+      (!research.events.length && !['research', 'writing', 'complete'].includes(research.phase))
+    )
+      return
+    if (replays.current.has(thread.id)) return
+    const retry = replayRetries.current.get(turn.runId)
+    if (!force && retry && retry.at > Date.now()) return
+    const controller = new AbortController()
+    replays.current.set(thread.id, controller)
+    const saved = savedRecovery(live, research)
+    let after = saved?.sequence ?? 0
+    let journalId = saved?.journalId
+    try {
+      // Bound work per tick; later pages continue from the durably saved position.
+      for (let index = 0; index < 4; index++) {
+        const page = await readEventPage(live, research, after, journalId, controller.signal)
+        if (!mounted.current || controller.signal.aborted) return
+        const latest = current.current.threads
+          .find((t) => t.id === thread.id)
+          ?.live?.researches.at(-1)
+        if (latest?.id !== research.id || latest.turns.at(-1)?.runId !== turn.runId) return
+        const terminal = research.status !== 'running' || latest.status !== 'running'
+        if (page.status === 'missing' && !terminal && !saved?.journalId) {
+          // The research checkpoint can arrive just before the recorder starts.
+          // Allow the first miss, but never hide a persistently missing journal.
+          const failures = (retry?.failures ?? 0) + 1
+          replayRetries.current.set(turn.runId, { failures, at: Date.now() + retryDelay(failures) })
+          if (failures > 1) updateReplayState(thread.id, { runId: turn.runId, state: 'retrying' })
+          return
+        }
+        const unfinished =
+          terminal &&
+          !page.has_more &&
+          getResearcherNodes({
+            ...research,
+            events: mergeResearchEvents(latest, page.events),
+          }).some((node) => node.status === 'partial')
+        const gap = page.gap || page.reset || (terminal && !page.sealed) || unfinished
+        const action: LiveUpdate = {
+          type: 'live-events',
+          threadId: thread.id,
+          researchId: research.id,
+          turnId: turn.id,
+          runId: turn.runId,
+          events: page.events,
+          replay: {
+            journalId: page.journal_id ?? journalId,
+            sequence: page.status === 'ready' ? page.next_sequence : after,
+            gap,
+            sealed: page.sealed,
+            reset: page.reset,
+            unconfirmedBefore: page.unconfirmed_before_sequence,
+          },
+        }
+        if (!commitRef.current(action, true)) {
+          // Keep usable progress in memory without advancing a durable cursor.
+          commitRef.current({
+            ...action,
+            replay: { ...action.replay!, sequence: after, journalId, reset: false },
+          })
+          throw new Error('Event recovery could not be saved')
+        }
+        after = page.next_sequence
+        journalId = page.journal_id ?? undefined
+        updateReplayState(thread.id, { runId: turn.runId, state: gap ? 'incomplete' : 'ready' })
+        if (!page.has_more) {
+          replayRetries.current.delete(turn.runId)
+          return
+        }
+      }
+      replayRetries.current.set(turn.runId, { failures: 0, at: Date.now() + 2000 })
+    } catch {
+      if (controller.signal.aborted || !mounted.current) return
+      const failures = (retry?.failures ?? 0) + 1
+      replayRetries.current.set(turn.runId, { failures, at: Date.now() + retryDelay(failures) })
+      updateReplayState(thread.id, { runId: turn.runId, state: 'retrying' })
+    } finally {
+      if (replays.current.get(thread.id) === controller) replays.current.delete(thread.id)
+    }
+  }
 
   function updateEventConnection(id: string, value: EventConnection) {
     if (mounted.current)
@@ -77,8 +192,9 @@ export function useLiveResearch(
       const turn = research.turns.at(-1)!
       const stream = streams.current.get(thread.id) ?? {
         runId: turn.runId!,
-        cursor: '-1',
+        cursor: savedRecovery(thread.live!, research)?.cursor ?? '-1',
         retryAt: 0,
+        failures: 0,
       }
       streams.current.set(thread.id, stream)
       if (stream.controller || stream.retryAt > Date.now()) continue
@@ -90,10 +206,26 @@ export function useLiveResearch(
         after: stream.cursor,
         onOpen: () => updateEventConnection(thread.id, 'live'),
         onCursor: (id) => {
-          stream.cursor = id
+          if (!mounted.current || controller.signal.aborted) return
+          if (
+            commitRef.current(
+              {
+                type: 'live-events',
+                threadId: thread.id,
+                researchId: research.id,
+                turnId: turn.id,
+                runId: turn.runId!,
+                events: [],
+                cursor: id,
+              },
+              true,
+            )
+          )
+            stream.cursor = id
         },
         onEvent: (event) => {
           if (!mounted.current || controller.signal.aborted) return
+          stream.failures = 0
           commitRef.current({
             type: 'live-events',
             threadId: thread.id,
@@ -107,15 +239,33 @@ export function useLiveResearch(
         .then(() => {
           if (!controller.signal.aborted) updateEventConnection(thread.id, 'ended')
         })
-        .catch(() => {
+        .catch((error) => {
+          if (error instanceof api.ApiError && [400, 404, 410, 422].includes(error.status)) {
+            // A stale native buffer cursor is independent of journal sequence.
+            stream.cursor = '-1'
+            if (!controller.signal.aborted)
+              commitRef.current(
+                {
+                  type: 'live-events',
+                  threadId: thread.id,
+                  researchId: research.id,
+                  turnId: turn.id,
+                  runId: turn.runId!,
+                  events: [],
+                  cursor: '-1',
+                },
+                true,
+              )
+          }
           if (!controller.signal.aborted) updateEventConnection(thread.id, 'retrying')
         })
         .finally(() => {
           if (streams.current.get(thread.id) !== stream || controller.signal.aborted) return
           stream.controller = undefined
-          stream.retryAt = Date.now() + 5000
+          stream.failures++
+          stream.retryAt = Date.now() + retryDelay(stream.failures)
           // A stream's end is not a business result. Always reread run + checkpoint.
-          void refresh(thread.id)
+          void refresh(thread.id, false)
         })
     }
   }
@@ -138,9 +288,11 @@ export function useLiveResearch(
     if (mounted.current) setSync((previous) => ({ ...previous, [id]: value }))
   }
 
-  async function refresh(threadId: string) {
+  async function refresh(threadId: string, force = true) {
     if (!mounted.current) return
     if (syncing.current.has(threadId) || sending.current.has(threadId)) return
+    const retry = syncRetries.current.get(threadId)
+    if (!force && retry && retry.at > Date.now()) return
     const thread = current.current.threads.find((t) => t.id === threadId)
     const research = thread?.live?.researches.at(-1)
     if (!thread?.live || !research) {
@@ -152,6 +304,8 @@ export function useLiveResearch(
     try {
       const serverRun = await api.findRun(thread.live, research)
       if (!serverRun) {
+        const failures = (retry?.failures ?? 0) + 1
+        syncRetries.current.set(threadId, { failures, at: Date.now() + retryDelay(failures) })
         updateSync(threadId, {
           state: 'error',
           message: '提交结果尚未确认。未找到对应运行，不会自动重复提交；可重新读取状态或新建研究。',
@@ -167,7 +321,11 @@ export function useLiveResearch(
       const next = applySnapshot(latest, serverRun, snapshot.values)
       commitRef.current({ type: 'live', threadId, research: next })
       updateSync(threadId, { state: 'ready' })
+      syncRetries.current.delete(threadId)
+      await recoverEvents(thread, next, force)
     } catch (error) {
+      const failures = (retry?.failures ?? 0) + 1
+      syncRetries.current.set(threadId, { failures, at: Date.now() + retryDelay(failures) })
       updateSync(threadId, {
         state: 'error',
         message:
@@ -175,6 +333,8 @@ export function useLiveResearch(
             ? '服务端找不到此会话或运行。保留本地记录；不会自动重建或重发。'
             : '暂时无法回读研究状态。已保留本地内容，将继续尝试连接；不会重复提交。',
       })
+      // Progress can survive even when native dev run metadata was not flushed.
+      await recoverEvents(thread, research, force)
     } finally {
       syncing.current.delete(threadId)
     }
@@ -308,6 +468,8 @@ export function useLiveResearch(
       mounted.current = false
       for (const stream of streams.current.values()) stream.controller?.abort()
       streams.current.clear()
+      for (const controller of replays.current.values()) controller.abort()
+      replays.current.clear()
     }
   }, [])
   useEffect(() => {
@@ -320,14 +482,24 @@ export function useLiveResearch(
     const tick = () => {
       for (const thread of current.current.threads) {
         const last = thread.live?.researches.at(-1)
-        if (last?.status === 'running') void refresh(thread.id)
+        const runId = last?.turns.at(-1)?.runId
+        if (last?.status === 'running' || (runId && replayRetries.current.has(runId)))
+          void refresh(thread.id, false)
       }
       syncStreams()
     }
     const focus = () => {
       for (const stream of streams.current.values()) stream.retryAt = 0
+      for (const retry of syncRetries.current.values()) retry.at = 0
+      for (const retry of replayRetries.current.values()) retry.at = 0
       syncStreams()
-      void refresh(current.current.activeThreadId)
+      for (const thread of current.current.threads) {
+        if (
+          thread.id === current.current.activeThreadId ||
+          thread.live?.researches.at(-1)?.status === 'running'
+        )
+          void refresh(thread.id)
+      }
     }
     const interval = window.setInterval(tick, 2000)
     window.addEventListener('focus', focus)
@@ -339,5 +511,5 @@ export function useLiveResearch(
     }
   }, [])
 
-  return { connection, sync, send, refresh, connect, eventConnections }
+  return { connection, sync, send, refresh, connect, eventConnections, replayStates }
 }
