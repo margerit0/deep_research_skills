@@ -92,6 +92,7 @@ export function Inspector({
         ))}
       </div>
       <div
+        key={`${node.id}-${state.inspectorTab}-overview`}
         role="tabpanel"
         id="cw-pane-overview"
         aria-labelledby="cw-tab-overview"
@@ -136,6 +137,7 @@ export function Inspector({
         )}
       </div>
       <div
+        key={`${node.id}-${state.inspectorTab}-io`}
         role="tabpanel"
         id="cw-pane-io"
         aria-labelledby="cw-tab-io"
@@ -162,6 +164,7 @@ export function Inspector({
         </pre>
       </div>
       <div
+        key={`${node.id}-${state.inspectorTab}-events`}
         role="tabpanel"
         id="cw-pane-events"
         aria-labelledby="cw-tab-events"

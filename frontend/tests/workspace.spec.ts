@@ -259,7 +259,7 @@ for (const theme of ['light', 'dark'] as const) {
       })
       page.on('request', (request) => {
         if (
-          !request.url().startsWith('http://127.0.0.1:5173') &&
+          !request.url().startsWith(testInfo.project.use.baseURL!) &&
           !request.url().startsWith('data:')
         )
           errors.push(`Unexpected request: ${request.url()}`)

@@ -1,5 +1,6 @@
 import { useEffect, useReducer, useState } from 'react'
-import { createRun, currentNode, initialWorkspace } from '../data/mock'
+import { createRun, currentNode, getNodes, initialWorkspace } from '../data/mock'
+import { useDemo } from './useDemo'
 import { workspaceSchema } from '../data/schema'
 import type { Config, InspectorTab, Thread, Workspace } from '../data/schema'
 
@@ -118,16 +119,26 @@ function reducer(state: Workspace, action: Action): Workspace {
 }
 
 export function useWorkspace() {
-  const [state, dispatch] = useReducer(reducer, undefined, restore)
+  const [savedState, savedDispatch] = useReducer(reducer, undefined, restore)
+  const demo = useDemo(savedState)
+  const state = demo.state ?? savedState
+  const dispatch = (action: Action) => {
+    if (!demo.active) return savedDispatch(action)
+    if (action.type === 'new' || (action.type === 'switch' && action.id !== 'tour')) {
+      demo.exit()
+      savedDispatch(action)
+    } else if (action.type === 'advance') demo.seek(demo.index + 1)
+    else demo.interact(reducer(state, action))
+  }
   const [storageError, setStorageError] = useState(false)
   useEffect(() => {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state))
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(savedState))
       setStorageError(false)
     } catch {
       setStorageError(true)
     }
-  }, [state])
+  }, [savedState])
   useEffect(() => {
     document.documentElement.style.colorScheme =
       state.theme === 'system' ? 'light dark' : state.theme
@@ -149,6 +160,7 @@ export function useWorkspace() {
       })
     }
   }
-  return { state, dispatch, thread, run, storageError, inspectNode }
+  const nodes = demo.active ? demo.nodes : getNodes(run)
+  return { state, dispatch, thread, run, nodes, storageError, inspectNode, demo }
 }
 export type WorkspaceController = ReturnType<typeof useWorkspace>

@@ -1,0 +1,341 @@
+#atlas-conversation-workspace .cw-demo-start,
+#atlas-conversation-workspace .cw-demo-play {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 11px;
+  border-radius: 8px;
+  background: var(--cw-accent-soft);
+  color: var(--cw-accent-text);
+  font-size: 12px;
+  white-space: nowrap;
+}
+#atlas-conversation-workspace .cw-demo-start:hover,
+#atlas-conversation-workspace .cw-demo-play:hover {
+  box-shadow: 0 0 0 1px var(--cw-accent);
+}
+#atlas-conversation-workspace .cw-demo-player {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0 14px;
+  flex-shrink: 0;
+  margin: 0 0 12px;
+  padding: 13px 16px 10px;
+  border: 1px solid var(--cw-menu-border);
+  border-radius: 16px;
+  background: var(--cw-solid);
+  box-shadow:
+    inset 0 1px 0 var(--cw-sheen),
+    0 4px 16px var(--cw-shadow);
+  animation: cw-arrive 0.32s ease-out both;
+  z-index: 40;
+}
+#atlas-conversation-workspace .cw-demo-caption {
+  display: grid;
+  gap: 3px;
+  font-size: 11px;
+  color: var(--cw-muted);
+}
+#atlas-conversation-workspace .cw-demo-caption strong {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--cw-text);
+}
+#atlas-conversation-workspace .cw-demo-kicker {
+  font-size: 10px;
+  color: var(--cw-accent-text);
+}
+#atlas-conversation-workspace .cw-demo-actions {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+#atlas-conversation-workspace .cw-demo-actions button {
+  min-height: 36px;
+}
+#atlas-conversation-workspace .cw-demo-speed {
+  font-variant-numeric: tabular-nums;
+  min-width: 38px;
+}
+#atlas-conversation-workspace .cw-demo-timeline {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(18, minmax(0, 1fr));
+  grid-column: 1 / -1;
+  gap: 4px;
+}
+#atlas-conversation-workspace .cw-demo-timeline button {
+  min-width: 0;
+  height: 23px;
+  padding: 8px 0;
+  border-radius: 3px;
+}
+#atlas-conversation-workspace .cw-demo-timeline button > span {
+  display: block;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--cw-line);
+  overflow: hidden;
+}
+#atlas-conversation-workspace .cw-demo-timeline i,
+#atlas-conversation-workspace .cw-worker-progress i {
+  display: block;
+  height: 100%;
+  background: var(--cw-accent);
+  transform-origin: left;
+}
+#atlas-conversation-workspace .cw-demo-timeline button:hover > span {
+  background: var(--cw-edge);
+}
+#atlas-conversation-workspace .cw-demo-footnote {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 10px;
+  color: var(--cw-faint);
+}
+#atlas-conversation-workspace .cw-demo-footnote > :last-child {
+  white-space: nowrap;
+}
+#atlas-conversation-workspace .cw-graph-slot {
+  min-width: 0;
+  min-height: 0;
+  border-radius: 23px;
+  overflow: clip;
+}
+#atlas-conversation-workspace .cw-graph-panel {
+  height: 100%;
+  animation: cw-panel-enter 0.4s ease-out both;
+}
+#atlas-conversation-workspace .cw-inspector,
+#atlas-conversation-workspace .cw-inspector-pane:not([hidden]),
+#atlas-conversation-workspace .cw-user-message,
+#atlas-conversation-workspace .cw-agent-message,
+#atlas-conversation-workspace .cw-brief,
+#atlas-conversation-workspace .cw-activity,
+#atlas-conversation-workspace .cw-report-message,
+#atlas-conversation-workspace .cw-event {
+  animation: cw-arrive 0.35s ease-out both;
+}
+#atlas-conversation-workspace .cw-agent-message {
+  animation-delay: 0.1s;
+}
+#atlas-conversation-workspace [data-status='running'] .cw-mini-state {
+  animation: cw-breathe 1.7s ease-in-out infinite;
+}
+#atlas-conversation-workspace [data-status='completed'] .cw-mini-state {
+  animation: cw-check-in 0.3s ease-out both;
+}
+#atlas-conversation-workspace .cw-wire-flash {
+  stroke-dasharray: 12 88;
+  animation: cw-wire-travel 1.8s linear both;
+}
+#atlas-conversation-workspace .cw-wire-flash.is-flowing {
+  animation-iteration-count: infinite;
+}
+#atlas-conversation-workspace .cw-activity-row {
+  position: relative;
+  flex-wrap: wrap;
+}
+#atlas-conversation-workspace .cw-worker-progress {
+  width: calc(100% - 23px);
+  height: 2px;
+  margin-left: 23px;
+  margin-top: -3px;
+  background: var(--cw-line);
+  overflow: hidden;
+  border-radius: 2px;
+}
+#atlas-conversation-workspace [data-status='completed'] .cw-worker-progress i {
+  background: var(--cw-good);
+}
+#atlas-conversation-workspace .cw-demo-report {
+  white-space: pre-wrap;
+  line-height: 1.9;
+}
+#atlas-conversation-workspace [data-streaming='true']::after {
+  content: '';
+  display: inline-block;
+  width: 5px;
+  height: 13px;
+  margin-left: 4px;
+  vertical-align: -2px;
+  border-radius: 2px;
+  background: var(--cw-accent);
+  animation: cw-caret 0.8s steps(2, end) infinite;
+}
+#atlas-conversation-workspace[data-demo] .cw-composer::after {
+  animation: cw-glass-tour 5s ease-in-out infinite alternate;
+}
+#atlas-conversation-workspace[data-demo='paused'] .cw-wire-flash,
+#atlas-conversation-workspace[data-demo='paused'] .cw-mini-state,
+#atlas-conversation-workspace[data-demo='paused'] *::after {
+  animation-play-state: paused !important;
+}
+#atlas-conversation-workspace[data-demo] .cw-report-message[data-writing='false'] {
+  border-color: var(--cw-good);
+}
+@keyframes cw-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(7px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes cw-panel-enter {
+  from {
+    opacity: 0;
+    transform: translateX(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@keyframes cw-breathe {
+  50% {
+    opacity: 0.5;
+    box-shadow: 0 0 0 4px var(--cw-accent-soft);
+  }
+}
+@keyframes cw-check-in {
+  from {
+    transform: scale(0.6);
+  }
+  65% {
+    transform: scale(1.15);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+@keyframes cw-wire-travel {
+  from {
+    stroke-dashoffset: 12;
+  }
+  to {
+    stroke-dashoffset: -88;
+  }
+}
+@keyframes cw-caret {
+  50% {
+    opacity: 0;
+  }
+}
+@keyframes cw-glass-tour {
+  from {
+    background-position: -120px 0;
+  }
+  to {
+    background-position: 180px 0;
+  }
+}
+@media (min-width: 661px) {
+  #atlas-conversation-workspace .cw-workarea {
+    transition:
+      grid-template-columns 0.4s ease,
+      gap 0.4s ease;
+  }
+  #atlas-conversation-workspace[data-graph='closed'] .cw-workarea {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0px);
+    gap: 0;
+  }
+  #atlas-conversation-workspace .cw-graph-slot {
+    overflow: hidden;
+  }
+}
+@media (max-width: 1100px) {
+  #atlas-conversation-workspace .cw-demo-player {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 5px;
+  }
+  #atlas-conversation-workspace .cw-demo-actions {
+    justify-content: flex-end;
+  }
+}
+@media (max-width: 660px) {
+  #atlas-conversation-workspace .cw-demo-start {
+    grid-column: 3 / 5;
+    grid-row: 2;
+    justify-self: end;
+    font-size: 11px;
+  }
+  #atlas-conversation-workspace .cw-graph-toggle {
+    grid-column: 2;
+  }
+  #atlas-conversation-workspace .cw-demo-player {
+    position: sticky;
+    top: 8px;
+    padding: 10px;
+  }
+  #atlas-conversation-workspace .cw-demo-caption > span:last-child {
+    display: none;
+  }
+  #atlas-conversation-workspace .cw-demo-actions {
+    justify-content: space-between;
+    gap: 0;
+  }
+  #atlas-conversation-workspace .cw-demo-timeline {
+    grid-template-columns: repeat(9, minmax(0, 1fr));
+    gap: 0 5px;
+  }
+  #atlas-conversation-workspace .cw-demo-footnote {
+    font-size: 9px;
+  }
+  #atlas-conversation-workspace[data-demo] .cw-workarea {
+    padding-bottom: 24px;
+  }
+  #atlas-conversation-workspace[data-demo] .cw-composer-wrap,
+  #atlas-conversation-workspace[data-demo] .cw-message-pair,
+  #atlas-conversation-workspace[data-demo] .cw-flow,
+  #atlas-conversation-workspace[data-demo] .cw-inspector,
+  #atlas-conversation-workspace[data-demo] .cw-report-message {
+    scroll-margin-top: 215px;
+  }
+  #atlas-conversation-workspace[data-graph='closed'] .cw-graph-slot {
+    display: none;
+  }
+}
+@media (pointer: coarse) {
+  #atlas-conversation-workspace .cw-demo-start,
+  #atlas-conversation-workspace .cw-demo-actions button {
+    min-width: 44px;
+    min-height: 44px;
+  }
+  #atlas-conversation-workspace .cw-demo-timeline {
+    display: flex;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+  }
+  #atlas-conversation-workspace .cw-demo-timeline button {
+    flex: 0 0 44px;
+    height: 44px;
+  }
+  #atlas-conversation-workspace[data-demo] .cw-composer-wrap,
+  #atlas-conversation-workspace[data-demo] .cw-message-pair,
+  #atlas-conversation-workspace[data-demo] .cw-flow,
+  #atlas-conversation-workspace[data-demo] .cw-inspector,
+  #atlas-conversation-workspace[data-demo] .cw-report-message {
+    scroll-margin-top: 360px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  #atlas-conversation-workspace *,
+  #atlas-conversation-workspace *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+@media (prefers-reduced-transparency: reduce) {
+  #atlas-conversation-workspace[data-demo] .cw-composer::after {
+    animation: none;
+  }
+}

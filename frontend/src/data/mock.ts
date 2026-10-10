@@ -154,7 +154,7 @@ interface FixtureDetail {
   events: string[][]
 }
 
-export function getNodes(run?: Run): NodeDetail[] {
+export function getNodes(run?: Run, statuses?: Record<string, NodeStatus>): NodeDetail[] {
   const workers = run?.researchers ?? []
   const titles = workers.map((w) => w.title).join(' / ')
   return ['clarify', 'brief', 'supervisor', ...workers.map((w) => w.id), 'report'].map((id) => {
@@ -163,7 +163,7 @@ export function getNodes(run?: Run): NodeDetail[] {
     const key = id in example.nodes ? (id as keyof typeof example.nodes) : 'b'
     const base = example.nodes[key]
     const info: FixtureDetail = example.inspection[key]
-    const status = nodeStatus(id, run)
+    const status = statuses?.[id] ?? nodeStatus(id, run)
     const done = status === 'completed'
     const pending = status === 'pending'
     const isExample = run?.kind === 'example'

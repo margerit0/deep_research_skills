@@ -1,6 +1,6 @@
 import { useLayoutEffect, useRef, useState } from 'react'
 import type { CSSProperties } from 'react'
-import { currentNode, getNodes, phaseText, stageText } from '../data/mock'
+import { currentNode, phaseText, stageText } from '../data/mock'
 import type { NodeDetail } from '../data/schema'
 import type { WorkspaceController } from '../state/useWorkspace'
 import { Icon } from './Icon'
@@ -11,16 +11,21 @@ interface Wire {
   d: string
   active?: boolean
   loop?: boolean
+  flowing?: boolean
 }
 export function Graph({ controller }: { controller: WorkspaceController }) {
-  const { state, dispatch, run, inspectNode } = controller
+  const { state, dispatch, run, inspectNode, nodes, demo } = controller
   const flow = useRef<HTMLDivElement>(null)
   const panel = useRef<HTMLElement>(null)
   const [wires, setWires] = useState<Wire[]>([])
-  const nodes = getNodes(run)
   const selected = nodes.find((n) => n.id === state.selectedNode) ?? nodes[0]
   const researchers = nodes.filter((n) => n.researcher)
   const researcherIds = researchers.map((n) => n.id).join(',')
+  const runningIds = nodes
+    .filter((n) => n.status === 'running')
+    .map((n) => n.id)
+    .join(',')
+  const returning = demo.active && demo.scene.id === 'converge'
   useLayoutEffect(() => {
     const container = flow.current!
     function draw() {
@@ -45,6 +50,7 @@ export function Graph({ controller }: { controller: WorkspaceController }) {
             ? `M${a.x + a.w + 1} ${a.y + a.h / 2} H${b.x - 4}`
             : `M${x1} ${y1} C${x1} ${middle} ${x2} ${middle} ${x2} ${y2}`,
           active: to === selected.id,
+          flowing: runningIds.split(',').includes(to) || (returning && to === 'join'),
         })
       }
       connect('clarify', 'brief', true)
@@ -61,6 +67,7 @@ export function Graph({ controller }: { controller: WorkspaceController }) {
         next.push({
           d: `M${j.x} ${j.y + j.h / 2} H${first.x - 6} V${s.y + s.h / 2} H${s.x - 4}`,
           loop: true,
+          flowing: returning,
         })
       } else connect('supervisor', 'report')
       setWires(next)
@@ -69,7 +76,7 @@ export function Graph({ controller }: { controller: WorkspaceController }) {
     const observer = new ResizeObserver(draw)
     observer.observe(container)
     return () => observer.disconnect()
-  }, [researcherIds, selected.id, run?.stage])
+  }, [researcherIds, selected.id, run?.stage, runningIds, returning])
   const closeInspector = () => {
     dispatch({ type: 'inspector', open: false })
     panel.current
@@ -95,7 +102,7 @@ export function Graph({ controller }: { controller: WorkspaceController }) {
             <span className="cw-node-tag">
               研究员 {String(researchers.findIndex((n) => n.id === node.id) + 1).padStart(2, '0')}
             </span>
-            <StatusMark status={node.status} />
+            <StatusMark key={node.status} status={node.status} />
           </span>
           <span className="cw-node-name">{node.shortTitle}</span>
         </>
@@ -104,7 +111,7 @@ export function Graph({ controller }: { controller: WorkspaceController }) {
           {['supervisor', 'report'].includes(node.id) && <Icon name={node.icon} />}
           <span className="cw-node-name">{node.title}</span>
           <span className="cw-spacer" />
-          <StatusMark status={node.status} />
+          <StatusMark key={node.status} status={node.status} />
         </span>
       )}
       <span className="cw-node-state">{node.caption}</span>
@@ -117,7 +124,11 @@ export function Graph({ controller }: { controller: WorkspaceController }) {
         <span>运行图谱</span>
         <span className="cw-spacer" />
         <span className="cw-label cw-status" role="status">
-          {run ? stageText[run.stage] : '未开始'}
+          {demo.active && demo.scene.id === 'brief'
+            ? '生成简报'
+            : run
+              ? stageText[run.stage]
+              : '未开始'}
         </span>
         <button
           type="button"
@@ -132,7 +143,13 @@ export function Graph({ controller }: { controller: WorkspaceController }) {
         </button>
       </div>
       <div className="cw-graph-subheader">
-        <span>{run ? phaseText[run.stage] : '等待提交研究问题'}</span>
+        <span>
+          {demo.active && run?.stage === 'research'
+            ? '协作研究 · 并行演示'
+            : run
+              ? phaseText[run.stage]
+              : '等待提交研究问题'}
+        </span>
         <span>演示数据</span>
       </div>
       <div ref={flow} className="cw-flow">
@@ -163,6 +180,16 @@ export function Graph({ controller }: { controller: WorkspaceController }) {
               markerEnd={`url(#cw-arrow-${wire.active ? 'active' : 'base'})`}
             />
           ))}
+          {wires
+            .filter((wire) => wire.flowing || wire.active)
+            .map((wire, i) => (
+              <path
+                key={`${selected.id}-${run?.stage}-${i}`}
+                className={`cw-wire-flash${wire.flowing ? ' is-flowing' : ''}`}
+                d={wire.d}
+                pathLength="100"
+              />
+            ))}
         </svg>
         <div className="cw-top-nodes">{nodes.slice(0, 2).map((n) => nodeButton(n))}</div>
         <div className="cw-cluster">
@@ -187,7 +214,11 @@ export function Graph({ controller }: { controller: WorkspaceController }) {
         {nodeButton(nodes.at(-1)!, 'cw-report')}
       </div>
       <div className="cw-graph-controls">
-        <button type="button" className="cw-quiet" onClick={() => inspectNode(currentNode(run))}>
+        <button
+          type="button"
+          className="cw-quiet"
+          onClick={() => inspectNode(demo.active ? demo.currentNode : currentNode(run))}
+        >
           <Icon name="locate" />
           定位当前
         </button>
@@ -195,7 +226,9 @@ export function Graph({ controller }: { controller: WorkspaceController }) {
           type="button"
           className="cw-quiet"
           disabled={!run}
-          onClick={() => dispatch({ type: 'advance' })}
+          onClick={() =>
+            demo.active && run?.stage === 'complete' ? demo.replay() : dispatch({ type: 'advance' })
+          }
         >
           <Icon name={run?.stage === 'complete' ? 'reset' : 'step'} />
           {run?.stage === 'complete' ? '重新演示' : '演示下一步'}

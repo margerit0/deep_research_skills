@@ -4,12 +4,14 @@ import { Sidebar } from './components/Sidebar'
 import { Conversation } from './components/Conversation'
 import { Graph } from './components/Graph'
 import { Icon } from './components/Icon'
+import { DemoPlayer } from './components/DemoPlayer'
 import './apple.css'
 import './app.css'
+import './demo.css'
 
 export default function App() {
   const controller = useWorkspace()
-  const { state, thread, dispatch, storageError } = controller
+  const { state, thread, dispatch, storageError, demo } = controller
   const [mobileOpen, setMobileOpen] = useState(false)
   const root = useRef<HTMLDivElement>(null)
   useEffect(() => {
@@ -60,6 +62,8 @@ export default function App() {
       id="atlas-conversation-workspace"
       data-palette="apple"
       data-graph={state.graphOpen ? 'open' : 'closed'}
+      data-demo={demo.active ? (demo.playing ? 'playing' : 'paused') : undefined}
+      data-demo-target={demo.active ? demo.scene.target : undefined}
       aria-label="星图工作台 · Apple 银白"
     >
       <Sidebar
@@ -74,7 +78,10 @@ export default function App() {
             className="cw-brand-icon cw-mobile-brand"
             aria-label="打开最近对话"
             aria-haspopup="dialog"
-            onClick={() => setMobileOpen(true)}
+            onClick={() => {
+              demo.pause()
+              setMobileOpen(true)
+            }}
           >
             <Icon name="asterisk" />
           </button>
@@ -83,7 +90,12 @@ export default function App() {
             <div className="cw-header-caption">星图工作台</div>
           </div>
           <span className="cw-spacer" />
-          <span className="cw-label">本地演示</span>
+          {!demo.active && (
+            <button id="demo-start" type="button" className="cw-demo-start" onClick={demo.start}>
+              <Icon name="play" />
+              全流程演示
+            </button>
+          )}
           <button
             type="button"
             className="cw-icon-button cw-theme"
@@ -119,6 +131,7 @@ export default function App() {
             <Icon name="edit" />
           </button>
         </header>
+        {demo.active && <DemoPlayer controller={controller} />}
         {storageError && (
           <p className="cw-storage-alert" role="status">
             浏览器暂时无法保存本地会话；当前内容可继续使用，但刷新后可能丢失。
@@ -126,7 +139,9 @@ export default function App() {
         )}
         <div className="cw-workarea">
           <Conversation key={thread.id} controller={controller} />
-          {state.graphOpen && <Graph controller={controller} />}
+          <div className="cw-graph-slot">
+            {state.graphOpen && <Graph controller={controller} />}
+          </div>
         </div>
       </main>
     </div>

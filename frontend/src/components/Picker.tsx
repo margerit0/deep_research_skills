@@ -13,11 +13,21 @@ interface Props {
   value: string
   options: readonly Option[]
   open: boolean
+  autoFocus?: boolean
   onOpen: (open: boolean) => void
   onChange: (id: string) => void
 }
 
-export function Picker({ name, label, value, options, open, onOpen, onChange }: Props) {
+export function Picker({
+  name,
+  label,
+  value,
+  options,
+  open,
+  autoFocus = true,
+  onOpen,
+  onChange,
+}: Props) {
   const trigger = useRef<HTMLButtonElement>(null)
   const menu = useRef<HTMLDivElement>(null)
   const edge = useRef<'first' | 'last' | 'selected'>('selected')
@@ -38,13 +48,14 @@ export function Picker({ name, label, value, options, open, onOpen, onChange }: 
     position()
     const items = menu.current!.querySelectorAll<HTMLButtonElement>('[role="menuitemradio"]')
     const selected = options.findIndex((o) => o.id === value)
-    items[
-      edge.current === 'first' ? 0 : edge.current === 'last' ? items.length - 1 : selected
-    ]?.focus({ preventScroll: true })
+    if (autoFocus)
+      items[
+        edge.current === 'first' ? 0 : edge.current === 'last' ? items.length - 1 : selected
+      ]?.focus({ preventScroll: true })
     const observer = new ResizeObserver(position)
     observer.observe(trigger.current!.closest('.cw-composer')!)
     return () => observer.disconnect()
-  }, [open, options, value])
+  }, [open, options, value, autoFocus])
   const close = () => {
     onOpen(false)
     trigger.current?.focus({ preventScroll: true })

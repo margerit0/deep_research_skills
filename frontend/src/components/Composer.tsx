@@ -1,18 +1,22 @@
 import { useEffect, useRef, useState } from 'react'
-import { models, modelName, skills, skillInfo } from '../data/mock'
+import { initialWorkspace, models, modelName, skills, skillInfo } from '../data/mock'
 import type { ModelId, SkillId } from '../data/schema'
 import type { WorkspaceController } from '../state/useWorkspace'
 import { Icon } from './Icon'
 import { Picker } from './Picker'
 
 export function Composer({ controller }: { controller: WorkspaceController }) {
-  const { state, thread, dispatch } = controller
-  const [open, setOpen] = useState<'model' | 'skill' | null>(null)
+  const { state, thread, dispatch, demo } = controller
+  const [localOpen, setLocalOpen] = useState<'model' | 'skill' | null>(null)
+  const open = demo.active ? demo.menu : localOpen
+  const setOpen = (value: 'model' | 'skill' | null) =>
+    demo.active ? demo.setMenu(value) : setLocalOpen(value)
+  const demoPrompt = initialWorkspace().threads[0].runs[0].prompt
   const form = useRef<HTMLFormElement>(null)
   const composing = useRef(false)
   const skill = skillInfo(state.config.skill)
   useEffect(() => {
-    if (!open) return
+    if (!open || (demo.active && demo.playing)) return
     const dismiss = (event: Event) => {
       if (!(event.target instanceof Element) || !event.target.closest('.cw-picker')) setOpen(null)
     }
@@ -22,9 +26,9 @@ export function Composer({ controller }: { controller: WorkspaceController }) {
       document.removeEventListener('pointerdown', dismiss)
       document.removeEventListener('focusin', dismiss)
     }
-  }, [open])
+  }, [open, demo.active, demo.playing])
   function send() {
-    if (composing.current) return
+    if (composing.current || demo.active) return
     setOpen(null)
     dispatch({ type: 'send' })
     form.current?.querySelector('textarea')?.focus()
@@ -36,7 +40,13 @@ export function Composer({ controller }: { controller: WorkspaceController }) {
           <Icon name="compass" />
           深度研究
         </span>
-        <span>{thread.runs.length ? '可以继续补充研究要求' : '模型与 Skills 用于本次研究'}</span>
+        <span>
+          {demo.active
+            ? '正在体验演示 · 退出后可输入问题'
+            : thread.runs.length
+              ? '可以继续补充研究要求'
+              : '模型与 Skills 用于本次研究'}
+        </span>
       </div>
       <form
         ref={form}
@@ -71,7 +81,15 @@ export function Composer({ controller }: { controller: WorkspaceController }) {
           name="message"
           rows={3}
           maxLength={2000}
-          value={thread.draft}
+          readOnly={demo.active}
+          value={
+            demo.active && demo.scene.id === 'prompt'
+              ? demoPrompt.slice(
+                  0,
+                  Math.ceil((demo.reducedMotion ? 1 : demo.progress) * demoPrompt.length),
+                )
+              : thread.draft
+          }
           placeholder={thread.runs.length ? '补充研究要求，或追问一个问题…' : '你想研究什么？'}
           aria-describedby="cw-composer-help"
           onChange={(e) => dispatch({ type: 'draft', text: e.target.value })}
@@ -101,6 +119,7 @@ export function Composer({ controller }: { controller: WorkspaceController }) {
             value={state.config.model}
             options={models}
             open={open === 'model'}
+            autoFocus={!demo.active || demo.manualMenu}
             onOpen={(yes) => setOpen(yes ? 'model' : null)}
             onChange={(id) => dispatch({ type: 'config', config: { model: id as ModelId } })}
           />
@@ -110,6 +129,7 @@ export function Composer({ controller }: { controller: WorkspaceController }) {
             value={state.config.skill}
             options={skills}
             open={open === 'skill'}
+            autoFocus={!demo.active || demo.manualMenu}
             onOpen={(yes) => setOpen(yes ? 'skill' : null)}
             onChange={(id) => dispatch({ type: 'config', config: { skill: id as SkillId } })}
           />
@@ -118,7 +138,7 @@ export function Composer({ controller }: { controller: WorkspaceController }) {
             type="submit"
             className="cw-send"
             aria-label="发送消息"
-            disabled={!thread.draft.trim()}
+            disabled={demo.active || !thread.draft.trim()}
           >
             <Icon name="up" />
           </button>

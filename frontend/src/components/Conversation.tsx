@@ -4,20 +4,28 @@ import type { WorkspaceController } from '../state/useWorkspace'
 import { Icon } from './Icon'
 import { StatusMark } from './StatusMark'
 import { Composer } from './Composer'
+import { demoReply, demoReport } from '../data/demo'
 
 export function Conversation({ controller }: { controller: WorkspaceController }) {
-  const { thread, inspectNode } = controller
+  const { thread, inspectNode, demo } = controller
   const end = useRef<HTMLDivElement>(null)
   const lastCount = useRef(thread.runs.length)
   useEffect(() => {
     if (thread.runs.length > lastCount.current) end.current?.scrollIntoView({ block: 'nearest' })
     lastCount.current = thread.runs.length
   }, [thread.runs.length])
+  const streamProgress = demo.reducedMotion ? 1 : Math.min(1, demo.progress * 1.2)
+  useEffect(() => {
+    if (demo.active && demo.scene.id === 'writing') {
+      const messages = end.current?.parentElement
+      if (messages) messages.scrollTop = messages.scrollHeight
+    }
+  }, [demo.active, demo.scene.id, demo.progress])
   return (
     <section className="cw-conversation" aria-label="研究对话">
       <div className="cw-messages">
         <div className="cw-date">
-          {thread.id === 'example' ? '示例对话' : '本地对话'}
+          {demo.active ? '全流程演示' : thread.id === 'example' ? '示例对话' : '本地对话'}
           <span>·</span>
           <span>模拟数据</span>
         </div>
@@ -58,69 +66,114 @@ export function Conversation({ controller }: { controller: WorkspaceController }
               </span>
               <div className="cw-agent-content">
                 <div className="cw-agent-name">Deep Research</div>
-                <p className="cw-agent-text">
-                  {run.kind === 'example'
-                    ? '我会从三个方向并行研究，再把证据整理成一份有来源的对比报告。'
-                    : `已记录你的研究要求。本次使用${modelName(run.config.model)}与「${skillInfo(run.config.skill).label}」。请补充范围，或在图谱中推进本地演示。`}
-                </p>
-                <button
-                  type="button"
-                  className="cw-brief cw-row"
-                  onClick={() => inspectNode('brief', run.id)}
+                <p
+                  className="cw-agent-text"
+                  data-streaming={demo.active && demo.scene.id === 'reply' && streamProgress < 1}
                 >
-                  <span className="cw-brief-icon">
-                    <Icon name="file-text" />
-                  </span>
-                  <span>
-                    <span className="cw-small cw-strong">研究简报</span>
-                    <span className="cw-brief-foot">
-                      {run.stage === 'clarify'
-                        ? '等待确认研究范围 · 查看预期输入'
-                        : '研究范围已确认 · 查看简报'}
-                    </span>
-                  </span>
-                  <span className="cw-spacer" />
-                  <Icon name="next" />
-                </button>
-                <div className="cw-activity">
-                  <div className="cw-activity-title">
-                    <Icon name="branch" />
-                    <span>{activityText[run.stage]}</span>
-                    <span className="cw-spacer" />
-                    <span className="cw-tiny cw-muted cw-mono">{elapsed[run.stage]}</span>
-                  </div>
-                  <div className="cw-activity-rows">
-                    {getNodes(run)
-                      .filter((n) => n.researcher)
-                      .map((node) => (
-                        <div key={node.id} className="cw-activity-row" data-status={node.status}>
-                          <StatusMark status={node.status} />
-                          <span>{node.title}</span>
-                          <span className="cw-activity-state">{node.caption}</span>
-                        </div>
-                      ))}
-                  </div>
+                  {demo.active
+                    ? demoReply.slice(
+                        0,
+                        demo.scene.id === 'reply'
+                          ? Math.ceil(streamProgress * demoReply.length)
+                          : undefined,
+                      )
+                    : run.kind === 'example'
+                      ? '我会从三个方向并行研究，再把证据整理成一份有来源的对比报告。'
+                      : `已记录你的研究要求。本次使用${modelName(run.config.model)}与「${skillInfo(run.config.skill).label}」。请补充范围，或在图谱中推进本地演示。`}
+                </p>
+                {(!demo.active || demo.index >= 6) && (
                   <button
                     type="button"
-                    className="cw-open-graph"
-                    onClick={() => inspectNode(currentNode(run), run.id)}
+                    className="cw-brief cw-row"
+                    onClick={() => inspectNode('brief', run.id)}
                   >
-                    查看当前步骤
-                    <Icon name="external" />
+                    <span className="cw-brief-icon">
+                      <Icon name="file-text" />
+                    </span>
+                    <span>
+                      <span className="cw-small cw-strong">研究简报</span>
+                      <span className="cw-brief-foot">
+                        {demo.active && demo.scene.id === 'brief'
+                          ? '范围已确认 · 正在生成简报'
+                          : run.stage === 'clarify'
+                            ? '等待确认研究范围 · 查看预期输入'
+                            : '研究范围已确认 · 查看简报'}
+                      </span>
+                    </span>
+                    <span className="cw-spacer" />
+                    <Icon name="next" />
                   </button>
-                </div>
-                {run.stage === 'complete' && (
-                  <div className="cw-report-message">
+                )}
+                {(!demo.active || demo.index >= 7) && (
+                  <div className="cw-activity">
+                    <div className="cw-activity-title">
+                      <Icon name="branch" />
+                      <span>{activityText[run.stage]}</span>
+                      <span className="cw-spacer" />
+                      <span className="cw-tiny cw-muted cw-mono">
+                        {demo.active ? `${Math.floor(demo.elapsed / 1000)} s` : elapsed[run.stage]}
+                      </span>
+                    </div>
+                    <div className="cw-activity-rows">
+                      {(demo.active ? controller.nodes : getNodes(run))
+                        .filter((n) => n.researcher)
+                        .map((node) => (
+                          <div key={node.id} className="cw-activity-row" data-status={node.status}>
+                            <StatusMark status={node.status} />
+                            <span>{node.title}</span>
+                            <span className="cw-activity-state">{node.caption}</span>
+                            {demo.active && (
+                              <span className="cw-worker-progress" aria-hidden="true">
+                                <i
+                                  style={{
+                                    transform: `scaleX(${node.status === 'completed' ? 1 : Math.min(0.9, 0.1 + (demo.index - 7 + demo.progress) * 0.16)})`,
+                                  }}
+                                />
+                              </span>
+                            )}
+                          </div>
+                        ))}
+                    </div>
+                    <button
+                      type="button"
+                      className="cw-open-graph"
+                      onClick={() =>
+                        inspectNode(demo.active ? demo.currentNode : currentNode(run), run.id)
+                      }
+                    >
+                      查看当前步骤
+                      <Icon name="external" />
+                    </button>
+                  </div>
+                )}
+                {(run.stage === 'complete' || (demo.active && run.stage === 'writing')) && (
+                  <div className="cw-report-message" data-writing={run.stage === 'writing'}>
                     <div className="cw-row">
                       <Icon name="file-check-2" />
-                      <span className="cw-strong">演示报告已生成</span>
+                      <span className="cw-strong">
+                        {run.stage === 'writing' ? '正在撰写演示报告' : '演示报告已生成'}
+                      </span>
                     </div>
                     <p className="cw-muted">研究主题：{run.prompt}</p>
-                    <ul>
-                      {run.researchers.map((w) => (
-                        <li key={w.id}>{w.title}：模拟笔记已汇总。</li>
-                      ))}
-                    </ul>
+                    {demo.active ? (
+                      <p
+                        className="cw-demo-report"
+                        data-streaming={run.stage === 'writing' && streamProgress < 1}
+                      >
+                        {demoReport.slice(
+                          0,
+                          run.stage === 'writing'
+                            ? Math.ceil(streamProgress * demoReport.length)
+                            : undefined,
+                        )}
+                      </p>
+                    ) : (
+                      <ul>
+                        {run.researchers.map((w) => (
+                          <li key={w.id}>{w.title}：模拟笔记已汇总。</li>
+                        ))}
+                      </ul>
+                    )}
                     <p className="cw-muted">
                       这是本地报告占位内容。尚未检索真实来源，也未生成真实研究结论。
                     </p>
