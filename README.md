@@ -4,7 +4,34 @@
 
 整个系统围绕一个核心理念——**Skills 渐进式披露（progressive disclosure）**：研究员不把全部领域知识硬塞进 system prompt，而是先看到一份精简的方法论索引，真正动手前再用工具按需加载对应的研究方法论。这样既省上下文，又能让不同类型的问题（学术、新闻、人物、产品）走各自最合适的检索套路。
 
-「星图工作台」React + TypeScript 前端位于 [`frontend/`](frontend/README.md)，已实现 Apple 银白界面、运行图谱与本地交互。当前使用模拟数据，尚未接入后端。在该目录执行 `npm ci`、`npm run dev` 即可独立启动。
+配套的 **「星图工作台」** 位于 [`frontend/`](frontend/README.md)，使用 React + TypeScript + Vite，已接入 LangGraph 后端。可以在同一界面完成提问、澄清、查看研究进度与阅读报告，也可以通过内置演示浏览完整流程。
+
+## 🖥️ 前端预览
+
+Apple 银白 / 石墨双主题，左侧管理会话，中间展示研究对话，右侧运行图谱展示阶段与并行研究员。点击节点可查看输入输出、检索与 Skills 加载记录。
+
+![星图工作台：研究对话、并行研究图谱与节点检查器](docs/images/frontend-workspace.png)
+
+*工作台总览使用内置示例对话（模拟数据），展示并行研究与节点检查器。*
+
+真实研究支持按角色选择本轮模型、设置允许加载的 Skills；发送后固定配置，澄清、重试和受支持的检查点恢复沿用本轮选择。浏览器只读取公开配置，API key 保留在后端。
+
+<details>
+<summary>查看模型与 Skills 配置截图</summary>
+
+**按角色配置模型**：分别设置范围与简报、研究协调、研究员、网页摘要、笔记压缩和最终报告所用模型，候选项来自后端配置目录。
+
+![星图工作台真实模式：按角色配置本轮研究模型](docs/images/frontend-models.png)
+
+**选择研究方法论**：自动模式允许按需加载全部 Skills，也可以手选允许集合；实际加载情况显示在研究员执行记录中。
+
+![星图工作台真实模式：手选允许加载的 Skills](docs/images/frontend-skills.png)
+
+*配置截图来自本地运行的前后端服务，展示发送研究请求前的选择界面。*
+
+</details>
+
+启动方式见下方[快速开始](#-快速开始)，完整交互、代理配置与运行边界见 [前端说明](frontend/README.md)。
 
 ---
 
@@ -171,7 +198,8 @@ deep_research_skills/
 ├── examples/                          # 端到端示例报告 + 决策轨迹 runner（run_example.py）
 ├── scripts/                           # LangSmith 评估脚本（scoping / research_agent / supervisor）
 ├── tests/                             # 单元测试
-├── docs/                              # 评估说明等文档
+├── frontend/                          # 星图工作台：React + TypeScript + Vite
+├── docs/                              # 评估、维护说明与前端截图
 ├── pyproject.toml                     # 项目配置 / 依赖
 └── langgraph.json                     # LangGraph 图注册
 ```
@@ -184,6 +212,7 @@ deep_research_skills/
 
 - Python 3.11+（< 3.14）
 - [uv](https://docs.astral.sh/uv/) 包管理器
+- Node.js 22.12+ 与 npm（运行星图工作台前端时需要）
 
 ```bash
 curl -LsSf https://astral.sh/uv/install.sh | sh
@@ -234,13 +263,25 @@ FINAL_REPORT_MODEL=gpt-4o
 
 ### 运行
 
-启动 LangGraph 本地 API 服务后，自建 React 界面可以通过服务调用研究图：
+在项目根目录启动 LangGraph 本地 API 服务（默认端口 `2024`）：
 
 ```bash
-uv run --locked --extra dev langgraph dev --no-browser
+uv run --locked --extra dev langgraph dev --no-browser --allow-blocking
 ```
 
 Windows PowerShell 若出现控制台 GBK 编码错误，先执行 `$env:PYTHONUTF8 = "1"` 再启动服务。
+
+然后在另一个终端启动星图工作台：
+
+```bash
+cd frontend
+npm ci
+npm run dev
+```
+
+打开 [http://127.0.0.1:5173](http://127.0.0.1:5173)，在真实会话中输入研究问题。Vite 默认把 `/api` 请求转发到 `http://127.0.0.1:2024`；后端地址调整方式见 [前端说明](frontend/README.md)。模型和搜索凭据只需配置在项目根目录的 `.env` 中。
+
+只浏览界面时，可以独立启动前端并点击 **全流程演示**，查看澄清、并行检索与报告生成的模拟流程；演示不会调用模型或搜索服务。
 
 或在代码中直接调用端到端图（图内含并行 async 节点，用 `ainvoke`）：
 
