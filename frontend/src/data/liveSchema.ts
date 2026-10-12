@@ -1,5 +1,28 @@
 import { z } from 'zod'
 
+export const selectionSchema = z.object({
+  version: z.literal(1),
+  models: z.record(z.string(), z.string()),
+  skills: z.object({ mode: z.enum(['auto', 'manual']), allowed: z.array(z.string()) }),
+})
+export type RunSelection = z.infer<typeof selectionSchema>
+export function sameSelection(a: RunSelection, b?: RunSelection) {
+  return (
+    !!b &&
+    a.version === b.version &&
+    a.skills.mode === b.skills.mode &&
+    JSON.stringify([...a.skills.allowed].sort()) === JSON.stringify([...b.skills.allowed].sort()) &&
+    Object.keys(a.models).length === Object.keys(b.models).length &&
+    Object.entries(a.models).every(([role, id]) => b.models[role] === id)
+  )
+}
+const modelOptionSchema = z.object({
+  id: z.string(),
+  model: z.string(),
+  provider: z.string(),
+  max_tokens: z.number().nullable(),
+})
+
 export const backendConfigSchema = z.object({
   contract_version: z.literal(1),
   graph_id: z.literal('research_agent_full'),
@@ -8,6 +31,18 @@ export const backendConfigSchema = z.object({
   research_events_version: z.literal(1).optional(),
   research_event_replay_version: z.literal(1).optional(),
   submission_recovery_version: z.literal(1).optional(),
+  configuration_version: z.literal(1).optional(),
+  selection: selectionSchema.optional(),
+  skill_revisions: z.record(z.string(), z.string()).optional(),
+  catalog: z
+    .object({
+      models: z.array(modelOptionSchema),
+      defaults: z.record(z.string(), z.string()),
+      skills: z.array(
+        z.object({ name: z.string(), description: z.string(), when_to_use: z.string().optional() }),
+      ),
+    })
+    .optional(),
   models: z
     .array(
       z.object({
@@ -15,6 +50,7 @@ export const backendConfigSchema = z.object({
         model: z.string(),
         provider: z.string(),
         max_tokens: z.number().nullable(),
+        config_id: z.string().optional(),
       }),
     )
     .min(1),
@@ -111,6 +147,7 @@ export const serverRunSchema = z.object({
 })
 export const submissionReceiptSchema = z.object({
   version: z.literal(1),
+  configuration: backendConfigSchema.optional(),
   thread_id: z.string(),
   research_id: z.string(),
   turn_id: z.string(),
@@ -144,6 +181,7 @@ export const turnSchema = z.object({
   runId: z.string().optional(),
   eventRunId: z.string().optional(),
   submissionVersion: z.literal(1).optional(),
+  selection: selectionSchema.optional(),
   expectedTurnId: z.string().nullable().optional(),
   recoveryRequest: z
     .object({
@@ -181,6 +219,7 @@ export const liveThreadSchema = z.object({
   threadId: z.string(),
   serverUrl: z.string(),
   researches: z.array(liveResearchSchema),
+  selection: selectionSchema.optional(),
 })
 export type BackendConfig = z.infer<typeof backendConfigSchema>
 export type LiveResearch = z.infer<typeof liveResearchSchema>

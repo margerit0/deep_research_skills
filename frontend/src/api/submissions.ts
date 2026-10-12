@@ -1,4 +1,4 @@
-import { submissionReceiptSchema } from '../data/liveSchema'
+import { submissionReceiptSchema, sameSelection } from '../data/liveSchema'
 import type { LiveResearch, LiveThread, SubmissionReceipt } from '../data/liveSchema'
 import { ApiError } from './errors'
 
@@ -44,6 +44,7 @@ export function validateReceipt(
   const turn = research.turns.at(-1)!
   if (
     receipt.thread_id !== thread.threadId ||
+    (turn.selection && !sameSelection(turn.selection, receipt.configuration?.selection)) ||
     receipt.research_id !== research.id ||
     receipt.turn_id !== turn.id ||
     receipt.attempts.at(-1)?.run_id !== receipt.run_id ||
@@ -66,6 +67,7 @@ export const submitResearch = (thread: LiveThread, research: LiveResearch) => {
     research_id: research.id,
     text: turn.text,
     expected_turn_id: turn.expectedTurnId ?? null,
+    ...(turn.selection ? { selection: turn.selection } : {}),
   })
 }
 export const resumeResearch = (thread: LiveThread, research: LiveResearch) => {

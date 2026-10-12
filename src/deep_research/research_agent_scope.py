@@ -11,6 +11,7 @@ from langgraph.graph import END, START, StateGraph
 from langgraph.types import Command
 
 from deep_research.model_config import get_chat_model
+from deep_research.run_configuration import selected_model
 from deep_research.prompts import (
     clarify_with_user_instructions,
     transform_messages_into_research_topic_prompt,
@@ -45,7 +46,7 @@ def clarify_with_user(
 ) -> Command[Literal["write_research_brief", "__end__"]]:
     """询问模型是否需要用户提供更多澄清信息。"""
     response = invoke_with_structured_output_fallback(
-        model,
+        selected_model("SCOPING", model),
         ClarifyWithUser,
         clarify_with_user_instructions.format(
             messages=get_buffer_string(messages=_get_message_history(state)),
@@ -74,7 +75,7 @@ def clarify_with_user(
 def write_research_brief(state: AgentState):
     """将对话历史转换为供下游使用的研究简报 (Research brief)。"""
     response = invoke_with_structured_output_fallback(
-        model,
+        selected_model("SCOPING", model),
         ResearchQuestion,
         transform_messages_into_research_topic_prompt.format(
             messages=get_buffer_string(_get_message_history(state)),

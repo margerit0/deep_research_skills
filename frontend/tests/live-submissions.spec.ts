@@ -48,6 +48,8 @@ async function managedBackend(page: Page) {
     }
     return {
       version: 1,
+      configuration:
+        entry.snapshot?.effective_config ?? fake.states.get(entry.thread)?.effective_config,
       thread_id: entry.thread,
       research_id: entry.research,
       turn_id: control.wrongIdentity ? 'another-turn' : entry.turn,
@@ -154,7 +156,19 @@ async function managedBackend(page: Page) {
             active_turn_id: turn,
             research_status: 'running',
             research_phase: 'clarify',
-            effective_config: structuredClone(fake.config),
+            effective_config: body.selection
+              ? {
+                  ...structuredClone(fake.config),
+                  selection: body.selection,
+                  models: Object.entries(body.selection.models as Record<string, string>).map(
+                    ([role, id]) => ({
+                      role,
+                      config_id: id,
+                      ...fake.config.catalog!.models.find((model) => model.id === id)!,
+                    }),
+                  ),
+                }
+              : structuredClone(fake.config),
             notes: [],
             sources: [],
             research_errors: [],
@@ -213,6 +227,145 @@ async function prepared(page: Page) {
   await refresh(page)
   await expect(note(page)).toContainText('已完成的检索不会重跑')
   return fake
+}
+
+async function configurable(page: Page) {
+  const fake = await managedBackend(page)
+  fake.config.configuration_version = 1
+  fake.config.catalog = {
+    defaults: Object.fromEntries(fake.config.models.map((model) => [model.role, 'model-a'])),
+    models: ['a', 'b'].map((id) => ({
+      id: `model-${id}`,
+      model: `fixture-${id}`,
+      provider: 'openai',
+      max_tokens: 32000,
+    })),
+    skills: ['academic-research', 'product-comparison'].map((name) => ({
+      name,
+      description: `方法论 ${name}`,
+    })),
+  }
+  return fake
+}
+
+async function choose(page: Page) {
+  await page.getByRole('button', { name: '查看后端模型' }).click()
+  await page.getByRole('combobox', { name: '研究员模型', exact: true }).selectOption('model-b')
+  await page.getByRole('combobox', { name: '最终报告模型' }).selectOption('model-b')
+  await page.getByRole('combobox', { name: '最终报告模型' }).press('Escape')
+  await expect(page.getByRole('button', { name: '查看后端模型' })).toBeFocused()
+  await page.getByRole('button', { name: '配置 Skills 允许集合' }).click()
+  await page.getByRole('checkbox', { name: '自动 · 全部可用' }).uncheck()
+  await page.getByRole('checkbox', { name: 'academic-research' }).check()
+  await page.getByRole('checkbox', { name: 'academic-research' }).press('Escape')
+}
+
+test('configuration browser: immutable selection survives lost submission, reload and retry', async ({
+  page,
+}) => {
+  const fake = await configurable(page)
+  fake.control.dropSubmit = true
+  await page.goto('/')
+  await choose(page)
+  await page.reload()
+  await page.getByRole('textbox', { name: '研究问题或补充要求' }).fill('配置测试问题')
+  await page.getByRole('button', { name: '发送消息' }).click()
+  await expect(page.getByRole('button', { name: '重试同一提交' })).toBeVisible()
+  const original = (await research(page)).turns[0].selection!
+  expect(original.models.RESEARCHER).toBe('model-b')
+  expect(original.skills).toEqual({ mode: 'manual', allowed: ['academic-research'] })
+  fake.config.catalog!.defaults.RESEARCHER = 'model-a'
+  fake.control.dropSubmit = false
+  await page.reload()
+  await page.getByRole('button', { name: '重试同一提交' }).click()
+  await expect.poll(() => fake.runs.length).toBe(1)
+  expect(fake.posts[0]).toEqual(fake.posts[1])
+  expect((await research(page)).turns[0].selection).toEqual(original)
+})
+
+test('configuration browser: clarification locks selection and history survives a new study', async ({
+  page,
+}) => {
+  const fake = await configurable(page)
+  await page.goto('/')
+  await choose(page)
+  await page.getByRole('textbox', { name: '研究问题或补充要求' }).fill('首问')
+  await page.getByRole('button', { name: '发送消息' }).click()
+  await expect.poll(() => fake.runs.length).toBe(1)
+  fake.change({ research_status: 'awaiting_input' }, 'success')
+  await refresh(page)
+  await expect(status(page)).toHaveAttribute('data-status', 'awaiting_input')
+  const selected = (await research(page)).config.selection
+  await page.getByRole('button', { name: '查看后端模型' }).click()
+  await expect(page.getByRole('combobox', { name: '研究员模型', exact: true })).toBeDisabled()
+  await page.getByRole('button', { name: '查看后端模型' }).click()
+  fake.config.catalog!.defaults.RESEARCHER = 'model-a'
+  await page.getByRole('textbox', { name: '研究问题或补充要求' }).fill('明确的范围')
+  await page.getByRole('button', { name: '发送消息' }).click()
+  await expect.poll(() => fake.runs.length).toBe(2)
+  expect((await research(page)).turns[1].selection).toEqual(selected)
+  fake.succeed()
+  await refresh(page)
+  await expect(status(page)).toHaveAttribute('data-status', 'succeeded')
+  await page.getByRole('button', { name: '查看后端模型' }).click()
+  await page.getByRole('combobox', { name: '研究员模型', exact: true }).selectOption('model-a')
+  await page.getByRole('combobox', { name: '研究员模型', exact: true }).press('Escape')
+  await page.getByRole('textbox', { name: '研究问题或补充要求' }).fill('下一轮研究')
+  await page.getByRole('button', { name: '发送消息' }).click()
+  await expect.poll(() => fake.runs.length).toBe(3)
+  const history = (await cached(page)).researches
+  expect(history[0].config.selection).toEqual(selected)
+  expect(history[1].config.selection?.models.RESEARCHER).toBe('model-a')
+  await page.reload()
+  expect((await cached(page)).researches[0].config.selection).toEqual(selected)
+})
+
+test('configuration browser: stale directory rejects new selection before a POST', async ({
+  page,
+}) => {
+  const fake = await configurable(page)
+  await page.goto('/')
+  await choose(page)
+  fake.config.catalog!.models = fake.config.catalog!.models.filter(
+    (model) => model.id !== 'model-b',
+  )
+  await page.getByRole('textbox', { name: '研究问题或补充要求' }).fill('保留草稿')
+  await page.getByRole('button', { name: '发送消息' }).click()
+  await expect(page.getByText('所选配置已不在后端目录中，请重新选择后发送。')).toBeVisible()
+  expect(fake.posts).toHaveLength(0)
+  await expect(page.getByRole('textbox', { name: '研究问题或补充要求' })).toHaveValue('保留草稿')
+})
+
+for (const width of [1440, 390, 320]) {
+  test(`configuration browser: model and Skills menus fit ${width}px`, async ({ page }, info) => {
+    await configurable(page)
+    await page.setViewportSize({ width, height: 962 })
+    await page.emulateMedia({ reducedMotion: 'reduce' })
+    if (width === 390) await page.emulateMedia({ colorScheme: 'dark' })
+    await page.goto('/')
+    await page.getByRole('button', { name: '查看后端模型' }).click()
+    await expect(page.getByRole('combobox')).toHaveCount(6)
+    const model = await page.getByRole('region', { name: '后端实际配置' }).boundingBox()
+    expect(model!.x).toBeGreaterThanOrEqual(0)
+    expect(model!.x + model!.width).toBeLessThanOrEqual(width)
+    await page.screenshot({
+      path: info.outputPath(`configuration-models-${width}.png`),
+      fullPage: true,
+    })
+    await page.getByRole('button', { name: '配置 Skills 允许集合' }).click()
+    await expect(page.getByRole('region', { name: '后端实际配置' })).toHaveCount(0)
+    await page.getByRole('checkbox', { name: '自动 · 全部可用' }).uncheck()
+    const skills = await page.getByRole('region', { name: 'Skills 允许集合' }).boundingBox()
+    expect(skills!.x).toBeGreaterThanOrEqual(0)
+    expect(skills!.x + skills!.width).toBeLessThanOrEqual(width)
+    await page.screenshot({
+      path: info.outputPath(`configuration-skills-${width}.png`),
+      fullPage: true,
+    })
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(
+      width,
+    )
+  })
 }
 
 test('managed submission reconciles a lost response through its durable receipt', async ({

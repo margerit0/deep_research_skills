@@ -19,6 +19,7 @@ from langchain_core.messages import (
 from langgraph.graph import END, START, StateGraph
 
 from deep_research.model_config import get_chat_model, get_agent_rate_limiter
+from deep_research.run_configuration import selected_model
 from deep_research.research_events import emit_research_event
 from deep_research.prompts import (
     compress_research_human_message,
@@ -100,7 +101,7 @@ def llm_call(state: ResearcherState):
     """决定下一步动作：搜索、思考、加载 skill 或结束研究。"""
     emit_research_event("model_started")
     try:
-        response = model_with_tools.invoke(
+        response = selected_model("RESEARCHER", model_with_tools, tools=tools).invoke(
             [
                 SystemMessage(
                     content=research_agent_prompt_with_skills.format(
@@ -135,8 +136,9 @@ def tool_node(state: ResearcherState):
             raise
         observations.append(observation)
         emit_research_event(
-            "tool_finished",
+            "tool_failed" if name == "load_skill" and message_text(observation).startswith("错误：") else "tool_finished",
             tool=name,
+            query=query if name == "load_skill" else None,
             sources=extract_search_sources(message_text(observation))
             if name == "tavily_search"
             else None,
@@ -192,7 +194,7 @@ def compress_research(state: ResearcherState) -> dict:
     )
     emit_research_event("compression_started")
     try:
-        response = compress_model.invoke(messages)
+        response = selected_model("COMPRESSION", compress_model, retry=True).invoke(messages)
     except Exception:
         emit_research_event("compression_failed")
         raise

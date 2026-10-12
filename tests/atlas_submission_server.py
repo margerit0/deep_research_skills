@@ -30,6 +30,12 @@ def main():
             "directory must be a case directory under .local/atlas-submission-api"
         )
     directory.mkdir(parents=True, exist_ok=True)
+    if (directory / "configuration-fixture").exists():
+        os.environ["ATLAS_CONFIG_FIXTURE"] = "1"
+        revision_file = directory / "configuration-revision"
+        os.environ["ATLAS_CONFIG_FIXTURE_REVISION"] = (
+            revision_file.read_text().strip() if revision_file.exists() else "v1"
+        )
     environment = {
         "LANGGRAPH_DISABLE_FILE_PERSISTENCE": "false",
         "LANGSMITH_TRACING": "false",

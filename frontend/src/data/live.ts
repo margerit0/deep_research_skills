@@ -1,4 +1,5 @@
 import type { GraphValues, LiveResearch } from './liveSchema'
+import { sameSelection } from './liveSchema'
 import type { NodeDetail, NodeStatus } from './schema'
 import type { ServerRun } from '../api/langgraph'
 import { eventTimeline, getResearcherNodes, mergeResearchEvents } from './researchEvents'
@@ -63,7 +64,10 @@ export function applySnapshot(
   values: GraphValues,
 ): LiveResearch {
   const turn = run.turns.at(-1)!
-  const matches = values.active_research_id === run.id && values.active_turn_id === turn.id
+  const matches =
+    values.active_research_id === run.id &&
+    values.active_turn_id === turn.id &&
+    (!turn.selection || sameSelection(turn.selection, values.effective_config?.selection))
   const apiFailed = ['error', 'timeout', 'interrupted'].includes(server.status)
   const apiRunning = ['pending', 'running'].includes(server.status)
   const next = {

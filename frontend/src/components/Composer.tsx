@@ -57,7 +57,7 @@ export function Composer({ controller }: { controller: WorkspaceController }) {
                 ? '回答澄清问题，继续本轮研究'
                 : lastLive?.status === 'running'
                   ? '研究进行中，可先保存补充草稿'
-                  : '使用后端模型与自动 Skills'
+                  : '选择本次研究的模型与 Skills'
               : thread.runs.length
                 ? '可以继续补充研究要求'
                 : '模型与 Skills 用于本次研究'}
@@ -138,7 +138,20 @@ export function Composer({ controller }: { controller: WorkspaceController }) {
         <div className="cw-composer-toolbar">
           {isLive ? (
             <BackendControls
-              config={live.connection.config}
+              config={
+                lastLive && (liveBusy || lastLive.status === 'awaiting_input')
+                  ? { ...lastLive.config, catalog: live.connection.config?.catalog }
+                  : live.connection.config
+              }
+              selection={
+                lastLive && (liveBusy || lastLive.status === 'awaiting_input')
+                  ? lastLive.config.selection
+                  : thread.live?.selection
+              }
+              locked={!!liveBusy || lastLive?.status === 'awaiting_input'}
+              skillOpen={open === 'skill'}
+              onSkillOpen={(yes) => setOpen(yes ? 'skill' : null)}
+              onChange={(selection) => dispatch({ type: 'live-config', selection })}
               open={open === 'model'}
               onOpen={(yes) => setOpen(yes ? 'model' : null)}
             />

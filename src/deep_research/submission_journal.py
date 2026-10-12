@@ -139,6 +139,9 @@ class SubmissionJournal:
                     db.commit()
             with db:
                 db.execute("BEGIN IMMEDIATE")
+                db.execute(
+                    "CREATE TABLE IF NOT EXISTS submission_configurations (thread_id TEXT NOT NULL, turn_id TEXT NOT NULL, snapshot TEXT NOT NULL, PRIMARY KEY(thread_id, turn_id), FOREIGN KEY(thread_id, turn_id) REFERENCES submissions(thread_id, turn_id))"
+                )
                 yield db
         finally:
             db.close()
@@ -153,6 +156,13 @@ class SubmissionJournal:
                 return None
             result = dict(row)
             result["payload"] = json.loads(result["payload"])
+            configuration = db.execute(
+                "SELECT snapshot FROM submission_configurations WHERE thread_id=? AND turn_id=?",
+                (thread_id, turn_id),
+            ).fetchone()
+            result["configuration"] = (
+                json.loads(configuration[0]) if configuration else None
+            )
             result["attempts"] = [
                 dict(item)
                 for item in db.execute(
@@ -170,7 +180,7 @@ class SubmissionJournal:
             ).fetchone()
         return self.get(thread_id, row[0]) if row else None
 
-    def reserve(self, thread_id, turn_id, payload):
+    def reserve(self, thread_id, turn_id, payload, configuration=None):
         encoded = json.dumps(payload, sort_keys=True, ensure_ascii=False)
         with self.connection() as db:
             prior = db.execute(
@@ -196,6 +206,15 @@ class SubmissionJournal:
                     "INSERT INTO attempts (thread_id, turn_id, attempt_id, run_id, kind, created) VALUES (?, ?, ?, ?, 'submit', ?)",
                     (thread_id, turn_id, turn_id, str(uuid4()), time.time()),
                 )
+                if configuration is not None:
+                    db.execute(
+                        "INSERT INTO submission_configurations VALUES (?, ?, ?)",
+                        (
+                            thread_id,
+                            turn_id,
+                            json.dumps(configuration, ensure_ascii=False),
+                        ),
+                    )
         return self.get(thread_id, turn_id)
 
     def reserve_recovery(self, record, attempt_id, parent_run_id, checkpoint_id, node):
@@ -266,6 +285,16 @@ class SubmissionJournal:
                     or state.get("active_turn_id") != row["turn_id"]
                 ):
                     raise SubmissionConflict("recovery_checkpoint_changed")
+            saved = db.execute(
+                "SELECT snapshot FROM submission_configurations WHERE thread_id=? AND turn_id=?",
+                (thread_id, row["turn_id"]),
+            ).fetchone()
+            if (
+                saved
+                and node != "prepare_research"
+                and json.loads(saved[0]) != state.get("effective_config")
+            ):
+                raise SubmissionConflict("configuration_snapshot_mismatch")
             db.execute(
                 "UPDATE attempts SET owner_id=?, last_node=?, state_hash=?, dispatched=1 WHERE run_id=?",
                 (INSTANCE_ID, node, state_digest(state), run_id),
@@ -292,3 +321,21 @@ def guard_execution(state, node):
     # The claim commits first; a crash before this barrier cannot allow a second
     # process to execute the same attempt. No provider calls occur before both.
     flush_native(checkpoints=True)
+
+
+def accepted_configuration():
+    """Use the server's durable snapshot rather than client-supplied model data."""
+    from langgraph.config import get_config
+
+    try:
+        config = get_config()
+    except RuntimeError:
+        return None
+    metadata = config.get("metadata", {})
+    if metadata.get("atlas_submission_version") != 1:
+        return None
+    journal = get_submission_journal()
+    record = journal.get(
+        str(config["configurable"]["thread_id"]), metadata["atlas_turn_id"]
+    )
+    return record.get("configuration")

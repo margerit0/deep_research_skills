@@ -21,6 +21,13 @@ from deep_research.submission_journal import (
     state_digest,
 )
 from deep_research.workflow_contract import is_research_note
+from deep_research.run_configuration import (
+    ConfigurationError,
+    Selection,
+    normalize_selection,
+    resolve_selection,
+    validate_snapshot,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -30,6 +37,7 @@ class Submission(BaseModel):
     research_id: str = Field(min_length=1, max_length=128)
     text: str = Field(min_length=1, max_length=50000)
     expected_turn_id: str | None = Field(max_length=128)
+    selection: Selection | None = None
 
 
 class Recovery(BaseModel):
@@ -109,7 +117,14 @@ def recovery_boundary(record, snapshot):
     if effective := values.get("effective_config"):
         from deep_research.model_config import public_model_config
 
-        if effective.get("models") != public_model_config()["models"]:
+        if record.get("configuration") is not None:
+            if effective != record["configuration"]:
+                return {"allowed": False, "reason": "configuration_changed"}
+            try:
+                validate_snapshot(effective)
+            except (ConfigurationError, KeyError, ValueError):
+                return {"allowed": False, "reason": "configuration_changed"}
+        elif effective.get("models") != public_model_config()["models"]:
             return {"allowed": False, "reason": "configuration_changed"}
     if node == "final_report_generation" and not any(
         is_research_note(note) for note in values.get("notes", [])
@@ -147,6 +162,11 @@ async def receipt(conn, record):
             for item in record["attempts"]
         ],
         "status": "accepted",
+        **(
+            {"configuration": record["configuration"]}
+            if record.get("configuration")
+            else {}
+        ),
         "reason": "accepted",
         "retry_allowed": False,
         "recovery": {"allowed": False, "reason": "execution_active"},
@@ -239,6 +259,8 @@ async def dispatch(conn, journal, record, headers):
     attempt = record["attempts"][-1]
     if attempt["owner_id"] is not None or attempt["rejected"]:
         return
+    if record.get("configuration"):
+        validate_snapshot(record["configuration"])
     run = native_run(conn, record["thread_id"], attempt["run_id"])
     if run is not None and (
         run["metadata"].get("atlas_turn_id") != record["turn_id"]
@@ -267,6 +289,9 @@ async def dispatch(conn, journal, record, headers):
         )
         if parent["owner_id"] in (None, INSTANCE_ID):
             raise SubmissionConflict("recovery_not_available")
+        boundary = recovery_boundary({**record, "attempts": [parent]}, snapshot)
+        if not boundary["allowed"]:
+            raise SubmissionConflict("recovery_checkpoint_changed")
         await native_modules()[2].set_status(
             conn, UUID(attempt["parent_run_id"]), "interrupted"
         )
@@ -351,6 +376,10 @@ async def handle(request, operation):
         body = None
         if operation == "submit":
             body = Submission.model_validate(await request.json()).model_dump()
+            if body["selection"] is None:
+                del body["selection"]
+            else:
+                body["selection"] = normalize_selection(body["selection"])
             if not body["text"].strip():
                 return response({"reason": "invalid_submission"}, 400)
         elif operation == "recover":
@@ -417,7 +446,41 @@ async def handle(request, operation):
                     # The native thread must survive even if we exit after intent
                     # commit but before native run creation has completed.
                     flush_native()
-                    record = journal.reserve(thread_id, turn_id, body)
+                    previous = snapshot.values.get("effective_config")
+                    continuing = body["research_id"] == snapshot.values.get(
+                        "active_research_id"
+                    )
+                    if (
+                        continuing
+                        and previous
+                        and previous.get("configuration_version") == 1
+                    ):
+                        if (
+                            body.get("selection", previous["selection"])
+                            != previous["selection"]
+                        ):
+                            raise SubmissionConflict(
+                                "clarification_configuration_conflict"
+                            )
+                        validate_snapshot(previous)
+                        configuration = previous
+                    elif continuing:
+                        # Legacy clarification keeps its existing contract. It
+                        # cannot be silently upgraded into a selectable run.
+                        if body.get("selection"):
+                            raise SubmissionConflict("legacy_configuration_locked")
+                        if previous:
+                            from deep_research.model_config import public_model_config
+
+                            if (
+                                previous.get("models")
+                                != public_model_config(include_catalog=False)["models"]
+                            ):
+                                raise SubmissionConflict("configuration_changed")
+                        configuration = None
+                    else:
+                        configuration = resolve_selection(body.get("selection"))
+                    record = journal.reserve(thread_id, turn_id, body, configuration)
                 # Reposting the original turn always reconciles the latest attempt;
                 # it never restarts the initial input after a recovery was accepted.
                 await dispatch(conn, journal, record, request.headers)
@@ -468,7 +531,7 @@ async def handle(request, operation):
             return response(await receipt(conn, journal.get(thread_id, turn_id)))
     except SubmissionConflict as exc:
         return response({"reason": str(exc)}, 409)
-    except (ValidationError, JSONDecodeError):
+    except (ValidationError, JSONDecodeError, ConfigurationError):
         return response({"reason": "invalid_submission"}, 400)
     except HTTPException as exc:
         if (

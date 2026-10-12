@@ -21,6 +21,8 @@ from deep_research.research_agent_scope import (
 )
 from deep_research.state_scope import AgentInputState, AgentState
 from deep_research.submission_journal import guard_execution
+from deep_research.submission_journal import accepted_configuration
+from deep_research.run_configuration import configured_node, selected_model
 from deep_research.utils import get_today_str
 from deep_research.workflow_contract import (
     is_research_note,
@@ -86,7 +88,7 @@ def prepare_research(state: AgentState) -> Command:
         "active_turn_id": turn_id,
         "research_status": "running",
         "research_phase": "clarify",
-        "effective_config": public_model_config(),
+        "effective_config": accepted_configuration() or (state.get("effective_config") if same_research else None) or public_model_config(include_catalog=False),
         "research_brief": "",
         "final_report": "",
         "report_research_id": "",
@@ -105,6 +107,7 @@ def prepare_research(state: AgentState) -> Command:
     return Command(goto="clarify_with_user", update=update)
 
 
+@configured_node
 def clarify_with_user(state: AgentState) -> Command:
     """Keep the shared structured-output/Qwen fallback and mark END as waiting."""
     guard_execution(state, "clarify_with_user")
@@ -136,6 +139,7 @@ def clarify_with_user(state: AgentState) -> Command:
         )
 
 
+@configured_node
 def write_research_brief(state: AgentState) -> Command:
     """Checkpoint the real brief before entering the research subgraph."""
     guard_execution(state, "write_research_brief")
@@ -159,6 +163,7 @@ def write_research_brief(state: AgentState) -> Command:
         )
 
 
+@configured_node
 async def supervisor_subgraph(state: AgentState) -> Command:
     """Gate writing on actual findings, keeping partial successes visible."""
     guard_execution(state, "supervisor_subgraph")
@@ -220,6 +225,7 @@ async def supervisor_subgraph(state: AgentState) -> Command:
     return Command(goto="final_report_generation", update=update)
 
 
+@configured_node
 async def final_report_generation(state: AgentState):
     """Write from valid notes; an empty/failed writer leaves a partial result."""
     guard_execution(state, "final_report_generation")
@@ -246,7 +252,7 @@ async def final_report_generation(state: AgentState):
             findings="\n".join(notes),
             date=get_today_str(),
         )
-        response = await writer_model.ainvoke([HumanMessage(content=prompt)])
+        response = await selected_model("FINAL_REPORT", writer_model, retry=True).ainvoke([HumanMessage(content=prompt)])
         report = message_text(response.content)
         if not is_research_note(report):
             raise ValueError("Empty or failed final report")

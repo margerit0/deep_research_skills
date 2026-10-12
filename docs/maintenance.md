@@ -34,6 +34,14 @@ from deep_research.research_agent_full import agent
 
 ## 星图工作台真实模式
 
+2026-10-11 的计划 2 已支持按次模型 / Skills。前端从现有六角色配置的去重目录选择各角色模型，发送后锁定一轮研究；澄清、提交重试、恢复和历史都沿用受理快照。`run_configuration.py` 通过执行作用域和模型缓存隔离请求，网页摘要线程复制上下文，共享限流器及 Qwen `/no_think` 路径保留。旧独立图、评估和不支持选择的后端继续使用默认调用。
+
+新配置归档默认是受理库同目录的 `atlas-configs.sqlite3`，可用 `ATLAS_CONFIG_DB` 改路径，必须与受理、事件和原生检查点一起备份。归档包含原网关、模型参数、凭据环境变量名和 Skills 正文修订，不含密钥值；前端只看到公开快照与修订 ID。重启后默认模型 / Skills 内容变化不覆盖历史。旧修订的网关仍需可访问，密钥仍从本地 `.env` 加载；不要删除归档后期待恢复旧研究。
+
+Skills 自动模式固定当时全部可用正文；手选是允许自动加载的集合，空集合禁止全部。系统提示词目录和 `load_skill` 均按快照过滤，界面单独显示实际成功加载记录。完整定义见接口文档的“按次配置扩展”。
+
+本日按用户要求复测供应商：最小调用与结构化澄清曾成功，真实浏览器研究却在研究员 / 协调器处连接失败；沙箱外复测又出现证书校验失败。完整真实研究仍未通过，保持 `NO_PROXY=*`、原模型 / 网关和 TLS 校验。具体证据见最新验收记录。
+
 独立前端已接入 `research_agent_full`，启动方式见 [frontend/README.md](../frontend/README.md)，接口定义见 [backend-contract.md](../frontend/docs/backend-contract.md)。自定义 HTTP app 提供配置、事件回放，以及 1B 的 `/atlas/threads/{thread_id}/submissions/{turn_id}` 受理 / 对账和 `/recoveries/{attempt_id}` 恢复入口。配置只返回实际构造的六个模型角色及能力，事件与回执不包含密钥、提供商 URL 或原始异常。运行、检查点及 SSE 仍由 LangGraph 管理。
 
 前端默认用 Vite 的 `/api` 转发访问 2024 端口。它不读取根目录后端 `.env`，也不把本地模拟模型菜单的选择传给后端。调整后端模型、凭据或 Skills 文件后要重启服务，让导入时快照生效。`--allow-blocking` 与现有同步研究工具保持兼容；不要借此认为整个图是同步运行的。

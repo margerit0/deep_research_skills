@@ -7,12 +7,14 @@ import { apiUrl } from '../api/langgraph'
 import { currentLiveNode, getLiveNodes } from '../data/live'
 import { useLiveResearch } from './useLiveResearch'
 import type { LiveUpdate } from './useLiveResearch'
+import type { RunSelection } from '../data/liveSchema'
 import { mergeResearchEvents } from '../data/researchEvents'
 import { recoveryScope, savedRecovery } from '../data/eventRecovery'
 import { applyReceipt } from '../data/executionRecovery'
 
 export const STORAGE_KEY = 'atlas-workspace:v1'
 type Action =
+  | { type: 'live-config'; selection: RunSelection }
   | { type: 'config'; config: Partial<Config> }
   | { type: 'theme'; theme: Workspace['theme'] }
   | { type: 'draft'; text: string }
@@ -79,6 +81,14 @@ function reducer(state: Workspace, action: Action): Workspace {
     threads: state.threads.map((t) => (t.id === next.id ? next : t)),
   })
   switch (action.type) {
+    case 'live-config':
+      if (
+        !thread.live ||
+        thread.live.researches.at(-1)?.status === 'running' ||
+        thread.live.researches.at(-1)?.status === 'awaiting_input'
+      )
+        return state
+      return update({ ...thread, live: { ...thread.live, selection: action.selection } })
     case 'config':
       return { ...state, config: { ...state.config, ...action.config } }
     case 'theme':

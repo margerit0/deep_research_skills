@@ -1,6 +1,12 @@
 import { lazy, Suspense, useEffect, useRef } from 'react'
 import type { WorkspaceController } from '../state/useWorkspace'
-import { currentLiveNode, livePhaseText, liveStatusText, safeHttpUrl } from '../data/live'
+import {
+  currentLiveNode,
+  livePhaseText,
+  liveStatusText,
+  safeHttpUrl,
+  roleLabels,
+} from '../data/live'
 import { executionMessage } from '../data/executionRecovery'
 import { Composer } from './Composer'
 import { Icon } from './Icon'
@@ -89,13 +95,47 @@ export function LiveConversation({ controller }: { controller: WorkspaceControll
         )}
         {researches.map((run) => (
           <article className="cw-message-pair" key={run.id} data-run-id={run.id} data-source="live">
+            {run.config.selection && (
+              <details className="cw-config-history">
+                <summary>本轮配置</summary>
+                {run.config.models.map((item) => (
+                  <p key={item.role}>
+                    {roleLabels[item.role] ?? item.role}：{item.model} · {item.provider}
+                    {item.max_tokens ? ` · ${item.max_tokens} tokens` : ''}
+                  </p>
+                ))}
+                <p>
+                  Skills 允许集合：
+                  {run.config.selection.skills.mode === 'auto'
+                    ? '自动'
+                    : run.config.selection.skills.allowed.join('、') || '无'}
+                </p>
+                <p>
+                  实际已加载：
+                  {[
+                    ...new Set(
+                      run.events
+                        .filter(
+                          (event) =>
+                            event.tool === 'load_skill' &&
+                            event.kind === 'tool_finished' &&
+                            event.query,
+                        )
+                        .map((event) => event.query),
+                    ),
+                  ].join('、') || '暂无成功加载记录'}
+                </p>
+              </details>
+            )}
             {run.messages.map((message) =>
               message.type === 'human' ? (
                 <div className="cw-user-message" key={message.id}>
                   <div className="cw-user-bubble">{message.content}</div>
                   <div className="cw-message-meta">
-                    {run.config.models.find((model) => model.role === 'RESEARCHER')?.model} · 自动
-                    Skills
+                    {run.config.models.find((model) => model.role === 'RESEARCHER')?.model} ·{' '}
+                    {run.config.selection?.skills.mode === 'manual'
+                      ? `允许 ${run.config.selection.skills.allowed.length} 项 Skills`
+                      : '自动 Skills'}
                   </div>
                 </div>
               ) : (

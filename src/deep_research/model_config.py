@@ -78,10 +78,11 @@ _model_snapshots: dict[str, dict] = {}
 MODEL_ROLES = ("SCOPING", "SUPERVISOR", "RESEARCHER", "SUMMARIZATION", "COMPRESSION", "FINAL_REPORT")
 
 
-def public_model_config() -> dict:
+def public_model_config(*, include_catalog=True) -> dict:
     """Return only configuration of constructed models, never credentials or URLs."""
     from deep_research.atlas_runtime import submissions_enabled
 
+    from deep_research.run_configuration import catalog
     return {
         "contract_version": 1,
         "graph_id": "research_agent_full",
@@ -91,6 +92,7 @@ def public_model_config() -> dict:
         **({"research_event_replay_version": 1} if journal_path() is not None else {}),
         **({"submission_recovery_version": 1} if submissions_enabled() else {}),
         "models": [dict(_model_snapshots[role]) for role in MODEL_ROLES if role in _model_snapshots],
+        **({"configuration_version": 1, "catalog": catalog()} if include_catalog else {}),
     }
 
 
@@ -170,4 +172,7 @@ def get_chat_model(
         "provider": kwargs["model_provider"],
         "max_tokens": effective_max_tokens,
     }
+    if role_upper in MODEL_ROLES:
+        from deep_research.run_configuration import register_model
+        register_model(role_upper, _model_snapshots[role_upper], base_url)
     return model

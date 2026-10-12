@@ -1,0 +1,349 @@
+{
+  "date": "2026-10-11",
+  "modelAndSearchSubstitutes": true,
+  "cases": {
+    "submission-api-1B-native-a-00373-not-be-restarted-by-retries": {
+      "directory": ".local/atlas-submission-api/case-dqyKOC",
+      "instances": ["ad9ed15f-32c5-454f-a1e1-1669fa4bfd15", "4ce46d45-278a-41af-8603-1cd796a7265e"],
+      "calls": {
+        "brief": 1,
+        "clarify": 1,
+        "native-created": 1,
+        "researcher": 1,
+        "search": 1,
+        "supervisor": 1
+      },
+      "observedRuns": {
+        "6f3d950e-403b-4efc-8ae7-3579753c75b3": [
+          {
+            "run_id": "2186ea07-c367-4b2f-8154-3ddefad5598b",
+            "status": "running"
+          }
+        ]
+      },
+      "modelAndSearchSubstitutes": true
+    },
+    "submission-api-1B-native-l-0f14a-no-extra-runs-or-tool-calls": {
+      "directory": ".local/atlas-submission-api/case-F3FTHa",
+      "instances": ["0309b29b-f5a6-41ad-8aae-17dd24ddedd8", "e24bf3d6-6b73-435d-8d91-e96dfdf2facc"],
+      "calls": {
+        "brief": 2,
+        "clarify": 2,
+        "compression": 2,
+        "native-created": 2,
+        "researcher": 4,
+        "search": 2,
+        "supervisor": 4,
+        "writer": 2
+      },
+      "observedRuns": {
+        "82e5e664-1211-4dae-998a-d6d7ff7480f4": [
+          {
+            "run_id": "4f689f58-03e0-4e8e-9098-30b97c9d4ee8",
+            "status": "success"
+          },
+          {
+            "run_id": "4a8cfd7f-331e-45e4-91e8-14b17e3bc215",
+            "status": "success"
+          }
+        ]
+      },
+      "modelAndSearchSubstitutes": true
+    },
+    "submission-api-1B-native-p-7333f-on-key-before-any-execution": {
+      "directory": ".local/atlas-submission-api/case-Ylud86",
+      "instances": ["3870499e-1da7-4f52-93ed-3c2100f008a4", "6c73ef11-ab9f-4aa6-9abb-105b69d61ecd"],
+      "calls": {
+        "brief": 1,
+        "clarify": 1,
+        "compression": 1,
+        "native-created": 2,
+        "researcher": 2,
+        "search": 1,
+        "supervisor": 2,
+        "writer": 1
+      },
+      "observedRuns": {
+        "65ba24bc-0a12-4ec1-a875-73fa666cb646": [
+          {
+            "run_id": "62dd8f50-f64b-44ca-9719-b43e9c148394",
+            "status": "success"
+          }
+        ]
+      },
+      "modelAndSearchSubstitutes": true
+    },
+    "submission-api-1B-native-p-975fa-on-key-before-any-execution": {
+      "directory": ".local/atlas-submission-api/case-E5BoB8",
+      "instances": ["d7e6f383-4d0a-481a-9b6d-d8fe18bc01e1", "566f4a1e-d59f-4907-90af-184c8690e6c5"],
+      "calls": {
+        "brief": 1,
+        "clarify": 1,
+        "compression": 1,
+        "native-created": 1,
+        "researcher": 2,
+        "search": 1,
+        "supervisor": 2,
+        "writer": 1
+      },
+      "observedRuns": {
+        "2fd51390-3927-40db-8783-8caeb018c6f8": [
+          {
+            "run_id": "793b7f26-ff91-474b-ab45-0531159dba50",
+            "status": "success"
+          }
+        ]
+      },
+      "modelAndSearchSubstitutes": true
+    },
+    "submission-api-1B-native-r-0b753-t-with-measured-call-counts": {
+      "directory": ".local/atlas-submission-api/case-K5gsu7",
+      "instances": ["4192d894-3190-46c4-824f-a215d2a13557", "324a26af-5f6e-46c2-9b41-f4643e4012d0"],
+      "calls": {
+        "brief": 1,
+        "clarify": 1,
+        "compression": 1,
+        "native-created": 2,
+        "researcher": 2,
+        "search": 1,
+        "supervisor": 2,
+        "writer": 2
+      },
+      "observedRuns": {
+        "e0a8dc7b-9290-4fb3-be5f-51ba1c93375d": [
+          {
+            "run_id": "46328717-3dc1-4d49-9942-a3c82940720d",
+            "status": "success"
+          },
+          {
+            "run_id": "156ba94d-7ab8-4251-9f31-32b96cc7f977",
+            "status": "interrupted"
+          }
+        ]
+      },
+      "modelAndSearchSubstitutes": true
+    },
+    "submission-api-1B-native-r-36711-t-with-measured-call-counts": {
+      "directory": ".local/atlas-submission-api/case-YFJzQp",
+      "instances": ["e5051f80-569c-4c43-8208-4199c98f29cb", "08705c88-e470-4f10-8ba8-96c04fe86d65"],
+      "calls": {
+        "brief": 2,
+        "clarify": 1,
+        "compression": 1,
+        "native-created": 2,
+        "researcher": 2,
+        "search": 1,
+        "supervisor": 2,
+        "writer": 1
+      },
+      "observedRuns": {
+        "8dade9c8-3fd8-4117-9a14-168abc63d6ad": [
+          {
+            "run_id": "91f8e316-b4bb-4850-890d-6c62077ebc5f",
+            "status": "success"
+          },
+          {
+            "run_id": "cc466eea-ade3-49be-a6c1-1a2cf2fd634c",
+            "status": "interrupted"
+          }
+        ]
+      },
+      "modelAndSearchSubstitutes": true
+    },
+    "submission-api-1B-native-r-e1eff-t-with-measured-call-counts": {
+      "directory": ".local/atlas-submission-api/case-rg4ARV",
+      "instances": ["16a61fad-b18a-4295-ae18-03dba8ef8796", "8440ba30-890e-47d7-ad6c-75dfad0a11b0"],
+      "calls": {
+        "brief": 1,
+        "clarify": 2,
+        "compression": 1,
+        "native-created": 2,
+        "researcher": 2,
+        "search": 1,
+        "supervisor": 2,
+        "writer": 1
+      },
+      "observedRuns": {
+        "437ae8e5-41d4-4d64-83dc-497bf9348fc6": [
+          {
+            "run_id": "bb2ff10e-f8d2-4af8-a543-7840318b8dc0",
+            "status": "success"
+          },
+          {
+            "run_id": "12a366bb-319b-4351-b7f4-7825ef609acf",
+            "status": "interrupted"
+          }
+        ]
+      },
+      "modelAndSearchSubstitutes": true
+    },
+    "submission-api-1B-native-r-eb8be-it-with-the-same-attempt-ID": {
+      "directory": ".local/atlas-submission-api/case-uEhuDj",
+      "instances": [
+        "6fa60d08-e765-4c30-a3c5-3d86dcc650fe",
+        "15aa99a3-e84f-484f-ab12-75ae62b0b458",
+        "2fbd18f8-8a21-4835-b94f-8d6fe9a66e10"
+      ],
+      "calls": {
+        "brief": 1,
+        "clarify": 1,
+        "compression": 1,
+        "native-created": 3,
+        "researcher": 2,
+        "search": 1,
+        "supervisor": 2,
+        "writer": 2
+      },
+      "observedRuns": {
+        "e79bc78c-9514-4ec2-bed0-324a7a0281fc": [
+          {
+            "run_id": "6c72e158-056b-41f9-8db8-effd639bebcf",
+            "status": "success"
+          },
+          {
+            "run_id": "0c3f9c17-dc1a-4e43-b805-b34fc52dc376",
+            "status": "interrupted"
+          }
+        ]
+      },
+      "modelAndSearchSubstitutes": true
+    },
+    "submission-api-configurati-50b4f-ation-after-defaults-change": {
+      "directory": ".local/atlas-submission-api/case-P8QeuJ",
+      "instances": ["ec1cedd2-6571-4785-8837-c9d915cdf764", "241f3cb3-5acc-4a71-8d45-be070244f2dd"],
+      "calls": {
+        "brief": 1,
+        "clarify": 2,
+        "compression": 1,
+        "config:COMPRESSION:fixture/v1/summarization": 1,
+        "config:FINAL_REPORT:fixture/v1/summarization": 1,
+        "config:RESEARCHER:fixture/v1/summarization": 3,
+        "config:SCOPING:fixture/v1/summarization": 3,
+        "config:SUMMARIZATION:fixture/v1/summarization": 1,
+        "config:SUPERVISOR:fixture/v1/summarization": 2,
+        "native-created": 2,
+        "researcher": 2,
+        "search": 1,
+        "supervisor": 2,
+        "writer": 1
+      },
+      "observedRuns": {
+        "049de758-0993-4e8f-9d4d-6d098cb73952": [
+          {
+            "run_id": "c0afd723-1cbf-4039-aa4b-66b5b4ae56ae",
+            "status": "success"
+          },
+          {
+            "run_id": "6d70bc9b-8c91-47d3-94d4-07d62b92f479",
+            "status": "success"
+          }
+        ]
+      },
+      "modelAndSearchSubstitutes": true
+    },
+    "submission-api-configurati-53620-on-across-restart-and-retry": {
+      "directory": ".local/atlas-submission-api/case-Yq01Rg",
+      "instances": ["e11ee733-0d24-4457-bc52-9120ef4d34ed", "6e6c2ece-3acd-47a1-a881-6d566ec99012"],
+      "calls": {
+        "brief": 1,
+        "clarify": 1,
+        "compression": 1,
+        "config:COMPRESSION:fixture/v1/summarization": 1,
+        "config:FINAL_REPORT:fixture/v1/summarization": 2,
+        "config:RESEARCHER:fixture/v1/summarization": 3,
+        "config:SCOPING:fixture/v1/summarization": 2,
+        "config:SUMMARIZATION:fixture/v1/summarization": 1,
+        "config:SUPERVISOR:fixture/v1/summarization": 2,
+        "native-created": 2,
+        "researcher": 2,
+        "search": 1,
+        "supervisor": 2,
+        "writer": 2
+      },
+      "observedRuns": {
+        "a1488d2a-5244-489a-8959-c17028756746": [
+          {
+            "run_id": "9c725d26-7a69-4c23-9f0f-f7d1253495d8",
+            "status": "success"
+          },
+          {
+            "run_id": "be85b63a-af73-459a-8790-54c3c9d78179",
+            "status": "interrupted"
+          }
+        ]
+      },
+      "modelAndSearchSubstitutes": true
+    },
+    "submission-api-configurati-6a07e--and-restrict-actual-Skills": {
+      "directory": ".local/atlas-submission-api/case-j3LQ4s",
+      "instances": ["fce58e68-f08c-405f-9e07-dc96a21b6918"],
+      "calls": {
+        "brief": 2,
+        "clarify": 2,
+        "compression": 2,
+        "config:COMPRESSION:fixture/v1/researcher": 1,
+        "config:COMPRESSION:fixture/v1/summarization": 1,
+        "config:FINAL_REPORT:fixture/v1/researcher": 1,
+        "config:FINAL_REPORT:fixture/v1/summarization": 1,
+        "config:RESEARCHER:fixture/v1/researcher": 3,
+        "config:RESEARCHER:fixture/v1/summarization": 3,
+        "config:SCOPING:fixture/v1/researcher": 2,
+        "config:SCOPING:fixture/v1/summarization": 2,
+        "config:SUMMARIZATION:fixture/v1/researcher": 1,
+        "config:SUMMARIZATION:fixture/v1/summarization": 1,
+        "config:SUPERVISOR:fixture/v1/researcher": 2,
+        "config:SUPERVISOR:fixture/v1/summarization": 2,
+        "native-created": 2,
+        "researcher": 4,
+        "search": 2,
+        "supervisor": 4,
+        "writer": 2
+      },
+      "observedRuns": {
+        "a83c5793-9878-4eba-8809-6a787d9599dc": [
+          {
+            "run_id": "080e3f2e-1d9d-4ed5-ba2e-10328c2ce6d4",
+            "status": "success"
+          }
+        ],
+        "e9b322d2-bac6-409a-827e-5eeedde27160": [
+          {
+            "run_id": "d31385dc-dfa4-4646-b06c-2ec6f56593b1",
+            "status": "success"
+          }
+        ],
+        "92e57c44-6933-4a3a-8e24-f1a989e72547": []
+      },
+      "modelAndSearchSubstitutes": true
+    },
+    "submission-api-configurati-c3705-on-across-restart-and-retry": {
+      "directory": ".local/atlas-submission-api/case-0zt1WE",
+      "instances": ["4d2e6369-345d-44bc-ba61-adcdb9743987", "e84963c4-1c36-42bb-b844-b208bd49b8e2"],
+      "calls": {
+        "brief": 1,
+        "clarify": 1,
+        "compression": 1,
+        "config:COMPRESSION:fixture/v1/summarization": 1,
+        "config:FINAL_REPORT:fixture/v1/summarization": 1,
+        "config:RESEARCHER:fixture/v1/summarization": 3,
+        "config:SCOPING:fixture/v1/summarization": 2,
+        "config:SUMMARIZATION:fixture/v1/summarization": 1,
+        "config:SUPERVISOR:fixture/v1/summarization": 2,
+        "native-created": 1,
+        "researcher": 2,
+        "search": 1,
+        "supervisor": 2,
+        "writer": 1
+      },
+      "observedRuns": {
+        "a57a5b0b-be85-41f6-8d9e-f4a352110776": [
+          {
+            "run_id": "5fff22a6-7ce1-43e0-a47e-fd9e3bc0b0d8",
+            "status": "success"
+          }
+        ]
+      },
+      "modelAndSearchSubstitutes": true
+    }
+  }
+}

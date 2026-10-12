@@ -17,7 +17,10 @@ for role in (
     "COMPRESSION",
     "FINAL_REPORT",
 ):
-    os.environ[f"{role}_MODEL"] = "fixture/model"
+    os.environ[f"{role}_MODEL"] = (
+        f"fixture/{os.environ.get('ATLAS_CONFIG_FIXTURE_REVISION', 'v1')}/{role.lower()}"
+        if os.getenv("ATLAS_CONFIG_FIXTURE") == "1" else "fixture/model"
+    )
     os.environ[f"{role}_PROVIDER"] = "openai"
     os.environ[f"{role}_API_KEY"] = "fixture-not-a-real-key"
 os.environ["LLM_API_KEY"] = "fixture-not-a-real-key"

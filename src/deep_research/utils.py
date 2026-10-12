@@ -8,6 +8,7 @@
 import os
 import sys
 import time
+from contextvars import copy_context
 
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
@@ -16,12 +17,17 @@ from typing_extensions import Annotated, List, Literal
 
 import requests
 from langchain_core.messages import HumanMessage
-from langchain_core.runnables import RunnableConfig
 from langchain_core.tools import tool, InjectedToolArg
 from tavily import TavilyClient
 from tavily.errors import TimeoutError as TavilyTimeoutError
 
 from deep_research.model_config import get_chat_model, get_agent_rate_limiter
+from deep_research.run_configuration import selected_model
+from deep_research.structured_output_fallback import (
+    invoke_with_structured_output_fallback,
+    model_connection,
+    should_disable_thinking_for_json_fallback,
+)
 from deep_research.state_research import Summary
 from deep_research.prompts import summarize_webpage_prompt
 
@@ -149,17 +155,14 @@ def summarize_webpage_content(webpage_content: str) -> str:
         # `Missing required parameter: 'text.format.name'` (确定性 400),
         # 导致每次摘要都失败并回落到原文截断。改走 Chat Completions 的
         # tool-calling 路径后稳定成功 (2026-06-13 实测三 method 仅此可用)。
-        structured_model = summarization_model.with_structured_output(
-            Summary, method="function_calling"
-        )
-
-        # 生成摘要
-        summary = structured_model.invoke([
-            HumanMessage(content=summarize_webpage_prompt.format(
-                webpage_content=webpage_content, 
-                date=get_today_str()
-            ))
-        ])
+        selected = selected_model("SUMMARIZATION", summarization_model)
+        prompt = summarize_webpage_prompt.format(webpage_content=webpage_content, date=get_today_str())
+        base_url, api_key = model_connection(selected)
+        if should_disable_thinking_for_json_fallback(selected, base_url=base_url):
+            summary = invoke_with_structured_output_fallback(selected, Summary, prompt, base_url=base_url, api_key=api_key)
+        else:
+            structured_model = selected.with_structured_output(Summary, method="function_calling")
+            summary = structured_model.invoke([HumanMessage(content=prompt)])
 
         # 以清晰的结构格式化摘要
         formatted_summary = (
@@ -217,7 +220,8 @@ def process_search_results(unique_results: dict) -> dict:
     # tavily_search 从 ~3*N s 压到 ~N s. 上限 5 防止 max_results 配大时
     # 失控. summarization_model / httpx.Client 均线程安全.
     with ThreadPoolExecutor(max_workers=min(len(items), 5)) as ex:
-        processed = list(ex.map(_process_one, items))
+        futures = [ex.submit(copy_context().run, _process_one, item) for item in items]
+        processed = [future.result() for future in futures]
 
     return dict(processed)
 

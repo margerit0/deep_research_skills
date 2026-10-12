@@ -136,5 +136,9 @@ if not getattr(fixture, "_atlas_submission_instrumented", False):
     fixture.researcher.compress_model = SimpleNamespace(invoke=compress)
     fixture.full.writer_model = SimpleNamespace(ainvoke=write)
     submission_api.create_native = create_native
+    if os.getenv("ATLAS_CONFIG_FIXTURE") == "1":
+        from tests.atlas_configuration_fixture import install
+
+        install(fixture, count, structured, plan, research, search, compress, write)
 agent = fixture.agent
 app = Starlette(routes=[*atlas_app.routes, Route("/atlas-fixture/identity", identity)])

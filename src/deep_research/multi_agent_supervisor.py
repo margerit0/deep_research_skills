@@ -26,6 +26,7 @@ from langgraph.graph import StateGraph, START, END
 from langgraph.types import Command
 
 from deep_research.model_config import get_chat_model
+from deep_research.run_configuration import selected_model
 from deep_research.prompts import lead_researcher_prompt
 from deep_research.research_events import emit_research_event, researcher_task
 from deep_research.research_agent_skills import researcher_agent_skills as researcher_agent
@@ -74,9 +75,9 @@ def _finish(state, messages, errors):
 
 # ===== 配置 (CONFIGURATION) =====
 
-supervisor_tools = [ConductResearch, ResearchComplete, think_tool]
+supervisor_tool_definitions = [ConductResearch, ResearchComplete, think_tool]
 supervisor_model = get_chat_model("SUPERVISOR")
-supervisor_model_with_tools = supervisor_model.bind_tools(supervisor_tools)
+supervisor_model_with_tools = supervisor_model.bind_tools(supervisor_tool_definitions)
 
 # 系统常量
 # 单个研究员智能体的最大工具调用迭代次数
@@ -115,7 +116,7 @@ async def supervisor(state: SupervisorState) -> Command[Literal["supervisor_tool
 
     # 对下一步研究行动做出决策
     try:
-        response = await supervisor_model_with_tools.ainvoke(messages)
+        response = await selected_model("SUPERVISOR", supervisor_model_with_tools, tools=supervisor_tool_definitions).ainvoke(messages)
     except Exception as exc:
         log_node_failure(logger, "supervisor", exc)
         errors = [*state.get("research_errors", []), research_error(

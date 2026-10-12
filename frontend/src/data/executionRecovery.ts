@@ -17,6 +17,7 @@ export function applyReceipt(
           : receipt.run.status,
   }
   let next = server && values ? applySnapshot(research, server, values) : { ...research }
+  if (receipt.configuration) next.config = receipt.configuration
   if (interrupted) {
     // Native checkpoints may be older than evidence already confirmed locally.
     // Preserve that evidence without claiming that execution or a report finished.

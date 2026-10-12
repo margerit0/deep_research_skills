@@ -1,0 +1,98 @@
+{
+  "date": "2026-10-11",
+  "modelAndSearchSubstitutes": false,
+  "threadId": "71904ea8-d662-4dfd-9fad-46254ab3f324",
+  "researchId": "37983ef7-aa6b-4a22-99fc-c2af1152b5d3",
+  "runs": [
+    {
+      "run_id": "bd0334e4-6bde-4694-a9ae-ea0aec05d659",
+      "status": "success"
+    },
+    {
+      "run_id": "225d122b-2bbe-4d09-b15c-41496722d968",
+      "status": "success"
+    }
+  ],
+  "serverRunCount": 2,
+  "status": "failed",
+  "reportLength": 0,
+  "sourceCount": 0,
+  "eventCount": 4,
+  "errors": [
+    {
+      "code": "researcher_failed",
+      "message": "一个研究任务未获得有效结果，研究覆盖可能不完整。",
+      "node": "supervisor_subgraph"
+    },
+    {
+      "code": "supervisor_failed",
+      "message": "研究协调器调用失败，已保留此前取得的研究结果。",
+      "node": "supervisor_subgraph"
+    },
+    {
+      "code": "no_findings",
+      "message": "未获得有效研究结果，无法生成有依据的报告。",
+      "node": "supervisor_subgraph"
+    }
+  ],
+  "models": [
+    {
+      "role": "SUMMARIZATION",
+      "config_id": "cc1d35e644df9364f473e423eba6f3e4b489030d9383d443b8c4d8224d3a8f9b",
+      "model": "z-ai/glm-5.3",
+      "provider": "openai",
+      "max_tokens": null
+    },
+    {
+      "role": "RESEARCHER",
+      "config_id": "cc1d35e644df9364f473e423eba6f3e4b489030d9383d443b8c4d8224d3a8f9b",
+      "model": "z-ai/glm-5.3",
+      "provider": "openai",
+      "max_tokens": null
+    },
+    {
+      "role": "COMPRESSION",
+      "config_id": "132177a917efc7f751634782bf7ccafa9bf7fe15c8c569bce4cbb351b63a8b60",
+      "model": "z-ai/glm-5.3",
+      "provider": "openai",
+      "max_tokens": 32000
+    },
+    {
+      "role": "SUPERVISOR",
+      "config_id": "cc1d35e644df9364f473e423eba6f3e4b489030d9383d443b8c4d8224d3a8f9b",
+      "model": "z-ai/glm-5.3",
+      "provider": "openai",
+      "max_tokens": null
+    },
+    {
+      "role": "SCOPING",
+      "config_id": "cc1d35e644df9364f473e423eba6f3e4b489030d9383d443b8c4d8224d3a8f9b",
+      "model": "z-ai/glm-5.3",
+      "provider": "openai",
+      "max_tokens": null
+    },
+    {
+      "role": "FINAL_REPORT",
+      "config_id": "132177a917efc7f751634782bf7ccafa9bf7fe15c8c569bce4cbb351b63a8b60",
+      "model": "z-ai/glm-5.3",
+      "provider": "openai",
+      "max_tokens": 32000
+    }
+  ],
+  "minimalRequest": {
+    "succeededOnce": true,
+    "seconds": 8.27
+  },
+  "structuredScopingProbe": {
+    "succeededOnce": true,
+    "cumulativeSeconds": 92.95
+  },
+  "unsandboxedRetest": {
+    "succeeded": false,
+    "exception": "APIConnectionError",
+    "cause": "SSLCertVerificationError",
+    "certificateVerificationFailed": true
+  },
+  "noProxy": "*",
+  "tlsVerification": true
+}

@@ -5,12 +5,30 @@ import os
 from typing import Any, Sequence, TypeVar, cast
 
 import json_repair
+from httpx import URL
 from langchain_core.messages import BaseMessage, HumanMessage
 from openai import OpenAI
 from pydantic import BaseModel
 
 
 StructuredResponseT = TypeVar("StructuredResponseT", bound=BaseModel)
+
+
+def model_connection(model, base_url=None, api_key=None):
+    """Respect the selected model's transport, including role-specific gateways."""
+    if base_url is None:
+        value = getattr(model, "openai_api_base", None)
+        if not value:
+            client_url = getattr(getattr(model, "root_client", None), "base_url", None)
+            if isinstance(client_url, (str, URL)):
+                value = str(client_url)
+        base_url = value if isinstance(value, str) and value else os.getenv("LLM_BASE_URL")
+    if api_key is None:
+        value = getattr(model, "openai_api_key", None)
+        if hasattr(value, "get_secret_value"):
+            value = value.get_secret_value()
+        api_key = value if isinstance(value, str) and value else os.getenv("LLM_API_KEY")
+    return base_url, api_key
 
 
 def extract_message_text(message: BaseMessage) -> str:
@@ -174,7 +192,7 @@ def invoke_with_raw_http_json_fallback(
     model_name: str | None = None,
 ) -> StructuredResponseT:
     """调用 OpenAI 兼容的 chat completions 端点并解析纯 JSON 文本。"""
-    resolved_base_url = os.getenv("LLM_BASE_URL") if base_url is None else base_url
+    resolved_base_url, api_key = model_connection(model, base_url, api_key)
     if not resolved_base_url:
         raise ValueError("LLM_BASE_URL must be set for raw HTTP fallback.")
 
@@ -269,7 +287,7 @@ def invoke_with_structured_output_fallback(
     model_name: str | None = None,
 ) -> StructuredResponseT:
     """优先使用原生结构化输出，不可用时则从文本中解析 JSON。"""
-    resolved_base_url = os.getenv("LLM_BASE_URL") if base_url is None else base_url
+    resolved_base_url, api_key = model_connection(model, base_url, api_key)
     disable_thinking = should_disable_thinking_for_json_fallback(
         model,
         base_url=resolved_base_url,

@@ -320,3 +320,46 @@ button {
     background: var(--cw-solid);
   }
 }
+.cw-config-role {
+  display: grid;
+  gap: 5px;
+  margin: 8px 0;
+  font-size: 11px;
+}
+.cw-config-role select {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  border: 1px solid var(--cw-line);
+  border-radius: 7px;
+  padding: 4px;
+  font: inherit;
+  color: inherit;
+  background: var(--cw-card);
+}
+.cw-config-check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  font-size: 11px;
+  overflow-wrap: anywhere;
+}
+.cw-config-check input {
+  flex: 0 0 auto;
+}
+.cw-config-history {
+  color: var(--cw-muted);
+  font-size: 11px;
+  margin: 12px 0;
+  overflow-wrap: anywhere;
+}
+.cw-config-history summary {
+  cursor: pointer;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+}
+.cw-config-history p {
+  margin: 5px 0;
+}

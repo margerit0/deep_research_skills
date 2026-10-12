@@ -5,7 +5,12 @@ import type { ChildProcess } from 'node:child_process'
 import { mkdir, mkdtemp, readFile, writeFile } from 'node:fs/promises'
 import { createServer } from 'node:net'
 import { join, resolve } from 'node:path'
-import type { LiveThread, SubmissionReceipt } from '../src/data/liveSchema'
+import type {
+  BackendConfig,
+  LiveThread,
+  RunSelection,
+  SubmissionReceipt,
+} from '../src/data/liveSchema'
 
 test.describe.configure({ mode: 'default' })
 test.beforeEach(() => {
@@ -16,7 +21,7 @@ test.beforeEach(() => {
   test.setTimeout(180000)
 })
 
-async function fixture(request: APIRequestContext, info: TestInfo) {
+async function fixture(request: APIRequestContext, info: TestInfo, configuration = false) {
   const root = resolve('..')
   const port = Number(process.env.ATLAS_SUBMISSION_PORT ?? 2027)
   const base = `http://127.0.0.1:${port}`
@@ -24,6 +29,7 @@ async function fixture(request: APIRequestContext, info: TestInfo) {
   const parent = join(root, '.local', 'atlas-submission-api')
   await mkdir(parent, { recursive: true })
   const directory = await mkdtemp(join(parent, 'case-'))
+  if (configuration) await writeFile(join(directory, 'configuration-fixture'), '1')
   let child: ChildProcess | undefined
   let logs = ''
   let instance = ''
@@ -192,6 +198,7 @@ async function fixture(request: APIRequestContext, info: TestInfo) {
     runs,
     completed,
     finish,
+    changeDefaults: () => writeFile(join(directory, 'configuration-revision'), 'v2'),
   }
 }
 
@@ -201,6 +208,159 @@ const cache = (page: Page): Promise<LiveThread> =>
     return workspace.threads.find((item: { id: string }) => item.id === workspace.activeThreadId)
       .live
   })
+
+async function configure(
+  f: Awaited<ReturnType<typeof fixture>>,
+  index: number,
+  allowed: string[],
+): Promise<RunSelection> {
+  const config = (await (await f.get('/atlas/config')).json()) as BackendConfig
+  return {
+    version: 1,
+    models: Object.fromEntries(
+      Object.keys(config.catalog!.defaults).map((role) => [role, config.catalog!.models[index].id]),
+    ),
+    skills: { mode: 'manual', allowed },
+  }
+}
+
+test('configuration native: concurrent studies execute all six selected roles and restrict actual Skills', async ({
+  request,
+}, info) => {
+  const f = await fixture(request, info, true)
+  try {
+    const a = await f.newSubmission(),
+      b = await f.newSubmission()
+    const selections = [
+      await configure(f, 0, ['academic-research']),
+      await configure(f, 1, ['product-comparison']),
+    ]
+    const bodies = [a, b].map((s, index) => ({ ...s.body, selection: selections[index] }))
+    const replies = await Promise.all([f.post(a.path, bodies[0]), f.post(b.path, bodies[1])])
+    replies.forEach((reply) => expect(reply.ok()).toBe(true))
+    const results = await Promise.all([f.completed(a.path), f.completed(b.path)])
+    const calls = await f.counts()
+    for (const [index, s] of [a, b].entries()) {
+      expect(await f.runs(s.thread)).toHaveLength(1)
+      const snapshot = (await (await f.get(`/threads/${s.thread}/state`)).json()).values
+      expect(snapshot.research_status).toBe('succeeded')
+      expect(snapshot.effective_config.selection).toEqual(selections[index])
+      expect(results[index].configuration).toEqual(snapshot.effective_config)
+      const loaded = snapshot.research_events
+        .filter(
+          (event: { tool: string; kind: string }) =>
+            event.tool === 'load_skill' && event.kind === 'tool_finished',
+        )
+        .map((event: { query: string }) => event.query)
+      expect(loaded).toEqual(selections[index].skills.allowed)
+      for (const model of results[index].configuration!.models)
+        expect(calls[`config:${model.role}:${model.model}`]).toBeGreaterThan(0)
+      expect(
+        (await f.post(s.path, { ...bodies[index], selection: selections[1 - index] })).status(),
+      ).toBe(409)
+    }
+    expect(calls.search).toBe(2)
+    expect(calls.writer).toBe(2)
+    const invalid = await f.newSubmission()
+    expect(
+      (
+        await f.post(invalid.path, {
+          ...invalid.body,
+          selection: { ...selections[0], models: { ...selections[0].models, SCOPING: 'unknown' } },
+        })
+      ).status(),
+    ).toBe(400)
+    expect(await f.runs(invalid.thread)).toHaveLength(0)
+    expect(await f.counts()).toEqual(calls)
+  } finally {
+    await f.finish()
+  }
+})
+
+test('configuration native: clarification inherits archived configuration after defaults change', async ({
+  request,
+}, info) => {
+  const f = await fixture(request, info, true)
+  try {
+    const s = await f.newSubmission()
+    const selection = await configure(f, 0, [])
+    const body = { ...s.body, text: '请帮我比较产品。', selection }
+    expect((await f.post(s.path, body)).ok()).toBe(true)
+    const first = await f.completed(s.path)
+    await f.stop()
+    await f.changeDefaults()
+    await f.start()
+    expect((await (await f.get(s.path)).json()).configuration).toEqual(first.configuration)
+    const path = `/atlas/threads/${s.thread}/submissions/${crypto.randomUUID()}`
+    const answer = { ...s.body, expected_turn_id: s.turn, selection }
+    expect((await f.post(path, { ...answer, selection: await configure(f, 0, []) })).status()).toBe(
+      409,
+    )
+    expect((await f.post(path, answer)).ok()).toBe(true)
+    expect((await f.completed(path)).configuration).toEqual(first.configuration)
+    expect((await f.post(s.path, body)).ok()).toBe(true)
+    expect(await f.runs(s.thread)).toHaveLength(2)
+    const calls = await f.counts()
+    expect(calls.search).toBe(1)
+    expect(calls.writer).toBe(1)
+    expect(calls.clarify).toBe(2)
+    expect(
+      Object.keys(calls)
+        .filter((key) => key.startsWith('config:'))
+        .every((key) => key.includes('/v1/')),
+    ).toBe(true)
+  } finally {
+    await f.finish()
+  }
+})
+
+for (const point of ['before-create', 'writer']) {
+  test(`configuration native: ${point} interruption keeps original configuration across restart and retry`, async ({
+    request,
+  }, info) => {
+    const f = await fixture(request, info, true)
+    try {
+      const s = await f.newSubmission()
+      const body = { ...s.body, selection: await configure(f, 0, ['academic-research']) }
+      await f.pause(point)
+      const pending = f.post(s.path, body).catch(() => undefined)
+      await f.entered(point)
+      await f.stop()
+      await pending
+      await f.release(point)
+      await f.changeDefaults()
+      await f.start()
+      const interrupted = (await (await f.get(s.path)).json()) as SubmissionReceipt
+      expect(interrupted.configuration?.selection).toEqual(body.selection)
+      if (point === 'writer') {
+        expect(interrupted.recovery.allowed).toBe(true)
+        const path = `${s.path}/recoveries/${crypto.randomUUID()}`
+        const recovery = {
+          research_id: s.body.research_id,
+          parent_run_id: interrupted.run_id,
+          checkpoint_id: interrupted.recovery.checkpoint_id,
+        }
+        expect((await f.post(path, recovery)).ok()).toBe(true)
+      } else expect((await f.post(s.path, body)).ok()).toBe(true)
+      const completed = await f.completed(s.path)
+      expect(completed.configuration).toEqual(interrupted.configuration)
+      const calls = await f.counts()
+      expect(calls.search).toBe(1)
+      expect(calls.compression).toBe(1)
+      expect(calls.writer).toBe(point === 'writer' ? 2 : 1)
+      expect(await f.runs(s.thread)).toHaveLength(point === 'writer' ? 2 : 1)
+      expect(
+        Object.keys(calls)
+          .filter((key) => key.startsWith('config:'))
+          .every((key) => key.includes('/v1/')),
+      ).toBe(true)
+      expect((await f.post(s.path, body)).ok()).toBe(true)
+      expect(await f.counts()).toEqual(calls)
+    } finally {
+      await f.finish()
+    }
+  })
+}
 async function send(page: Page) {
   await page.goto('/')
   await page
@@ -237,6 +397,7 @@ test('1B native: lost response, completed duplicates and competing tabs create n
       research_id: research.id,
       text: turn.text,
       expected_turn_id: turn.expectedTurnId,
+      ...(turn.selection ? { selection: turn.selection } : {}),
     }
     const before = await f.counts()
     // Completed acknowledgement is durable without a background-flush delay.
@@ -334,7 +495,12 @@ for (const point of ['clarify', 'brief', 'writer']) {
         thread: string
         turn: string
         path: string
-        body: { research_id: string; text: string; expected_turn_id: null }
+        body: {
+          research_id: string
+          text: string
+          expected_turn_id: null
+          selection?: RunSelection
+        }
       }
       if (point === 'writer') {
         expect(
@@ -351,7 +517,12 @@ for (const point of ['clarify', 'brief', 'writer']) {
           thread: live.threadId,
           turn: turn.id,
           path: `/atlas/threads/${live.threadId}/submissions/${turn.id}`,
-          body: { research_id: research.id, text: turn.text, expected_turn_id: null },
+          body: {
+            research_id: research.id,
+            text: turn.text,
+            expected_turn_id: null,
+            ...(turn.selection ? { selection: turn.selection } : {}),
+          },
         }
       } else {
         s = await f.newSubmission()

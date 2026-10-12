@@ -407,16 +407,58 @@ export function useLiveResearch(
         })
       return
     }
+    const continuing = last?.status === 'awaiting_input'
+    const selection = continuing
+      ? last.config.selection
+      : config.configuration_version === 1 &&
+          config.submission_recovery_version === 1 &&
+          config.catalog
+        ? (live.selection ?? {
+            version: 1 as const,
+            models: config.catalog.defaults,
+            skills: { mode: 'auto' as const, allowed: [] },
+          })
+        : undefined
+    const directory = config.catalog
+    if (
+      selection &&
+      !continuing &&
+      (!directory ||
+        Object.values(selection.models).some(
+          (id) => !directory.models.some((model) => model.id === id),
+        ) ||
+        selection.skills.allowed.some(
+          (name) => !directory.skills.some((skill) => skill.name === name),
+        ))
+    ) {
+      sending.current.delete(thread.id)
+      updateSync(thread.id, {
+        state: 'error',
+        message: '所选配置已不在后端目录中，请重新选择后发送。',
+      })
+      return
+    }
     const turn = {
       id: crypto.randomUUID(),
       text: prompt,
       submittedAt: new Date().toISOString(),
       transport: 'sending' as const,
+      ...(selection ? { selection: structuredClone(selection) } : {}),
       ...(config.submission_recovery_version === 1
         ? { submissionVersion: 1 as const, expectedTurnId: last?.turns.at(-1)?.id ?? null }
         : {}),
     }
-    const continuing = last?.status === 'awaiting_input'
+    if (continuing) config = last.config
+    else if (selection && config.catalog)
+      config = {
+        ...config,
+        selection,
+        models: Object.entries(selection.models).map(([role, id]) => ({
+          role,
+          config_id: id,
+          ...config!.catalog!.models.find((model) => model.id === id)!,
+        })),
+      }
     const research: LiveResearch = {
       id: continuing ? last.id : crypto.randomUUID(),
       prompt: continuing ? last.prompt : prompt,

@@ -20,6 +20,41 @@
 
 ## HTTP 请求
 
+### 按次配置扩展 · 2026-10-11
+
+`GET /atlas/config` 新增可选 `configuration_version: 1` 和 `catalog`。目录中的 `models` 是现有六个后端角色定义去重后的 `{id, model, provider, max_tokens}`；`defaults` 将六个角色映射到 ID；`skills` 只含名称与描述。ID 对应不可变修订，浏览器不能指定模型名、网关地址或凭据。只有同时支持 `submission_recovery_version: 1` 的后端才在前端开放按次选择。
+
+原受理 JSON 新增可选 `selection`：
+
+```json
+{
+  "version": 1,
+  "models": {
+    "SCOPING": "<目录 ID>",
+    "SUPERVISOR": "<目录 ID>",
+    "RESEARCHER": "<目录 ID>",
+    "SUMMARIZATION": "<目录 ID>",
+    "COMPRESSION": "<目录 ID>",
+    "FINAL_REPORT": "<目录 ID>"
+  },
+  "skills": { "mode": "manual", "allowed": ["academic-research"] }
+}
+```
+
+自动模式为 `{"mode":"auto","allowed":[]}`；手选空集合表示禁止所有 Skills。六个角色必须齐全，未知 ID、未知 skill、重复 skill、未知版本和额外字段明确拒绝。新研究只能选当前目录；同研究的澄清沿用原选择，可使用已归档但不再是默认值的 ID。省略选择的新受理固定当时默认配置；已有旧受理内容和摘要不迁移重写。
+
+选择保存到浏览器 `LiveTurn.selection` 和服务端不可变 payload。受理事务同时写入 `submission_configurations` 的公开快照；回执 `configuration` 与检查点 `effective_config` 使用同一份快照，包含选择、实际六个模型及 Skills 修订。重试先比较原 payload，不因当前目录变化改写内容。浏览器也校验回执和检查点的选择与原提交一致。
+
+服务端配置归档默认为受理库同目录的 `atlas-configs.sqlite3`，可设 `ATLAS_CONFIG_DB`。归档保存模型名、提供商、原网关、token 上限、凭据环境变量引用和 Skills 正文；不保存凭据值，不向前端返回网关或正文。旧修订不自动清除。备份时一并保留配置归档、受理库、原生检查点与事件库。缺失或不兼容的修订不猜测成当前默认值；凭据仍从后端本地环境读取。
+
+实际调用通过每个父节点的 ContextVar 作用域传给协调器、研究员和工具，网页摘要线程显式复制上下文。模型按角色 / 修订缓存，绑定工具和重试包装均独立；执行时不修改全局环境或全局模型。原共享限流器继续用于研究员、网页摘要与压缩；scoping 和 Qwen 网页摘要使用共享 JSON fallback / `/no_think`，其他网页摘要保留 `function_calling`。独立图与评估默认调用保持兼容。
+
+恢复摘要原本就覆盖 `effective_config`，现在节点进入时还校验它与受理快照相等。恢复同时验证原检查点和归档修订，受理后再次退出也重新核对；始终 `input: null`。三个安全节点的白名单及当前模型调用可能重复的边界不变。
+
+手选只限制“允许自动加载的集合”：提示词索引与 `load_skill` 正文都受限制，拒绝项产生失败事件，不计作成功加载。历史配置详情分别展示允许集合与事件中的实际成功加载列表；自动模式同样固定当时可用 Skills 的正文修订。
+
+计划 2 的四项原生验收已加入原 `submission-api.spec.ts`，使用同一组启动命令，额外覆盖并发六角色 / Skills、澄清与默认值变化、创建前退出与写作恢复。每项均核对实际 run、持久调用计数和配置。旧客户端省略 `selection` 的测试继续保留；新客户端的重复请求需包含原 `LiveTurn.selection`。
+
 本地默认访问前端 `/api`，由 Vite 转发到 `http://127.0.0.1:2024`。以下为转发后的 API 路径。
 
 | 方法与路径                                                                                    | 用途                                                |
@@ -292,4 +327,4 @@ npm test -- tests/submission-api.spec.ts --workers=1 --output test-results/submi
 
 当前 CLI 0.4.26 / API 0.8.7 会覆盖 `LANGGRAPH_DISABLE_FILE_PERSISTENCE`，其配置校验又会过滤顶层 `disable_persistence`。因此旧命令仅在 `env` 中设为 true，不能证明已关闭持久化。普通替身使用上述专用启动器，提前设置环境并直接传入原生服务参数；恢复用例明确启用持久化、提前注入环境且使用独立目录。不要用正常开发数据目录进行强制停止验收。
 
-真实模型联调使用正常后端与前端，清除 `ATLAS_API_FIXTURE`，显式设置 `$env:ATLAS_LIVE = '1'` 和 `$env:NO_PROXY = '*'` 再运行 `tests/live-api.spec.ts`。此模式调用模型和 Tavily，产生真实费用；测试要求完成澄清、补充回答、报告与来源，并在刷新后仍只有两次运行提交。供应商问题按用户要求暂缓，当前未执行完整真实联调；不能将替身结果记为真实联调成功。
+真实模型联调使用正常后端与前端，清除 `ATLAS_API_FIXTURE`，显式设置 `$env:ATLAS_LIVE = '1'` 和 `$env:NO_PROXY = '*'` 再运行 `tests/live-api.spec.ts`。此模式调用模型和 Tavily，产生真实费用；测试要求完成澄清、补充回答、报告与来源，并在刷新后仍只有两次运行提交。2026-10-11 已执行完整用例，澄清后在研究员 / 协调器处连接失败，沙箱外另复现证书失败；真实闭环尚未通过，不能将替身结果记为真实成功。

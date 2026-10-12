@@ -108,10 +108,13 @@ SKILLS_METADATA, SKILLS_BODY = _scan_skills(_DEFAULT_SKILLS_DIR)
 
 def format_skills_index() -> str:
     """将 SKILLS_METADATA 格式化为项目符号列表，用于注入系统提示词 (system prompt)。"""
-    if not SKILLS_METADATA:
+    from deep_research.run_configuration import active_skills
+    selected = active_skills()
+    metadata = SKILLS_METADATA if selected is None else [item["metadata"] for item in selected.values()]
+    if not metadata:
         return "(当前没有可用 skill)"
     return "\n".join(
-        f"- **{m['name']}**: {m['description']}" for m in SKILLS_METADATA
+        f"- **{m['name']}**: {m['description']}" for m in metadata
     )
 
 
@@ -125,10 +128,13 @@ def load_skill(skill_name: str) -> str:
     Returns:
         skill 的 markdown 正文；若 name 未找到则返回错误说明 + 可用 skill 清单。
     """
-    if skill_name not in SKILLS_BODY:
-        available = ", ".join(sorted(SKILLS_BODY)) or "(无)"
+    from deep_research.run_configuration import active_skills
+    selected = active_skills()
+    bodies = SKILLS_BODY if selected is None else {name: item["body"] for name, item in selected.items()}
+    if skill_name not in bodies:
+        available = ", ".join(sorted(bodies)) or "(无)"
         return (
             f"错误：skill '{skill_name}' 不存在。"
             f"可用 skill：{available}。请从中选择并重试。"
         )
-    return SKILLS_BODY[skill_name]
+    return bodies[skill_name]
