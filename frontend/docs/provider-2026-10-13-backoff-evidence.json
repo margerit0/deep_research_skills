@@ -1,0 +1,731 @@
+{
+  "date": "2026-10-13",
+  "userTimezone": "Asia/Shanghai",
+  "timestamps": "UTC (ISO 8601)",
+  "baseCommit": "2fc6299",
+  "branch": "chore/public-edits",
+  "priorUncommittedWorkPreserved": true,
+  "modelAndSearchSubstitutes": false,
+  "noProxy": "*",
+  "tlsVerification": true,
+  "endpointSha256": "33ce0d29b63b6403eedeb59bc0a8f6d5c252a6bd6b620ea712ee76f3fc0f8443",
+  "agentRpm": "30",
+  "fixtureModulesLoaded": [],
+  "fixtureEnvironmentNames": [],
+  "observationBudgets": {
+    "clarificationSeconds": 600,
+    "secondRunSeconds": 1140,
+    "testTotalSeconds": 1800,
+    "testRetries": 0,
+    "backendWatchdogSeconds": 1950,
+    "backendRetryPolicyChanged": true
+  },
+  "browser": {
+    "atlasLive": "1",
+    "atlasApiFixture": null,
+    "testStatus": "failed",
+    "backendPort": 2032,
+    "frontendPort": 5183,
+    "threadId": "76e40c20-3085-4178-9e4c-132e392a30c5",
+    "researchId": "e41967ef-b283-4398-a803-f596e75691ff",
+    "turns": [
+      {
+        "turnId": "06c800fb-95cb-4235-b193-f8d22500975e",
+        "runId": "391c1b61-c3e0-4a4e-a898-798a21c9c890"
+      },
+      {
+        "turnId": "0ecee1a5-4407-4b54-bdba-c742af2c4907",
+        "runId": "6dd9bfeb-4887-469d-ba08-412bda8cd14e"
+      }
+    ],
+    "runs": [
+      {
+        "runId": "6dd9bfeb-4887-469d-ba08-412bda8cd14e",
+        "status": "success"
+      },
+      {
+        "runId": "391c1b61-c3e0-4a4e-a898-798a21c9c890",
+        "status": "success"
+      }
+    ],
+    "serverRunCount": 2,
+    "submissionPostCount": 2,
+    "runsBeforeReload": 2,
+    "runsAfterReload": 2,
+    "businessStatus": "failed",
+    "phase": "brief",
+    "reportLength": 0,
+    "reportSha256": null,
+    "sourceCount": 0,
+    "eventCount": 0,
+    "briefLength": 0,
+    "errors": [
+      {
+        "code": "brief_failed",
+        "message": "研究简报生成失败，请检查后端模型服务后发起新研究。",
+        "node": "write_research_brief"
+      }
+    ],
+    "configuration": {
+      "contract_version": 1,
+      "graph_id": "research_agent_full",
+      "model_selection": "server",
+      "skills_mode": "auto",
+      "research_events_version": 1,
+      "research_event_replay_version": 1,
+      "submission_recovery_version": 1,
+      "models": [
+        {
+          "role": "SUMMARIZATION",
+          "config_id": "cc1d35e644df9364f473e423eba6f3e4b489030d9383d443b8c4d8224d3a8f9b",
+          "model": "z-ai/glm-5.3",
+          "provider": "openai",
+          "max_tokens": null
+        },
+        {
+          "role": "RESEARCHER",
+          "config_id": "cc1d35e644df9364f473e423eba6f3e4b489030d9383d443b8c4d8224d3a8f9b",
+          "model": "z-ai/glm-5.3",
+          "provider": "openai",
+          "max_tokens": null
+        },
+        {
+          "role": "COMPRESSION",
+          "config_id": "132177a917efc7f751634782bf7ccafa9bf7fe15c8c569bce4cbb351b63a8b60",
+          "model": "z-ai/glm-5.3",
+          "provider": "openai",
+          "max_tokens": 32000
+        },
+        {
+          "role": "SUPERVISOR",
+          "config_id": "cc1d35e644df9364f473e423eba6f3e4b489030d9383d443b8c4d8224d3a8f9b",
+          "model": "z-ai/glm-5.3",
+          "provider": "openai",
+          "max_tokens": null
+        },
+        {
+          "role": "SCOPING",
+          "config_id": "cc1d35e644df9364f473e423eba6f3e4b489030d9383d443b8c4d8224d3a8f9b",
+          "model": "z-ai/glm-5.3",
+          "provider": "openai",
+          "max_tokens": null
+        },
+        {
+          "role": "FINAL_REPORT",
+          "config_id": "132177a917efc7f751634782bf7ccafa9bf7fe15c8c569bce4cbb351b63a8b60",
+          "model": "z-ai/glm-5.3",
+          "provider": "openai",
+          "max_tokens": 32000
+        }
+      ],
+      "configuration_version": 1,
+      "selection": {
+        "version": 1,
+        "models": {
+          "SUMMARIZATION": "cc1d35e644df9364f473e423eba6f3e4b489030d9383d443b8c4d8224d3a8f9b",
+          "RESEARCHER": "cc1d35e644df9364f473e423eba6f3e4b489030d9383d443b8c4d8224d3a8f9b",
+          "COMPRESSION": "132177a917efc7f751634782bf7ccafa9bf7fe15c8c569bce4cbb351b63a8b60",
+          "SUPERVISOR": "cc1d35e644df9364f473e423eba6f3e4b489030d9383d443b8c4d8224d3a8f9b",
+          "SCOPING": "cc1d35e644df9364f473e423eba6f3e4b489030d9383d443b8c4d8224d3a8f9b",
+          "FINAL_REPORT": "132177a917efc7f751634782bf7ccafa9bf7fe15c8c569bce4cbb351b63a8b60"
+        },
+        "skills": {
+          "mode": "auto",
+          "allowed": []
+        }
+      },
+      "skill_revisions": {
+        "academic-research": "2fb1ec459ae2f12f3d008425365045a5f420ae931c73f04aa75e00153ccc157e",
+        "news-timeline": "faa1f1b3507dffa192fca5fba749f2c8b55444c3a97c43f80acf19376d35afd0",
+        "people-research": "4a2986c532cf1fb8107f3a907e4fe3b3a37422aa43207731a90850dc2bed2549",
+        "product-comparison": "30fef831acc46e8255b3db2f77d4003086f9ce3f74752c595a100b44bab081b3"
+      }
+    },
+    "receipts": [
+      {
+        "status": "completed",
+        "turn_id": "06c800fb-95cb-4235-b193-f8d22500975e",
+        "run_id": "391c1b61-c3e0-4a4e-a898-798a21c9c890",
+        "checkpoint_id": "1f1c6b6d-99ce-6cac-8002-f7b596193479"
+      },
+      {
+        "status": "completed",
+        "turn_id": "0ecee1a5-4407-4b54-bdba-c742af2c4907",
+        "run_id": "6dd9bfeb-4887-469d-ba08-412bda8cd14e",
+        "checkpoint_id": "1f1c6b7f-fb10-6c1b-8007-209e2855b8be"
+      }
+    ],
+    "checkpointChecks": {
+      "firstTurnAwaitingInput": true,
+      "allReceiptsCompleted": true,
+      "allReceiptConfigurationsMatch": true,
+      "allCheckpointConfigurationsMatch": true,
+      "allSubmittedSelectionsMatch": true,
+      "finalCheckpointMatchesBusinessState": true,
+      "reportOwnership": "not_executed",
+      "reportMatchesBrowser": "not_executed",
+      "reportMatchesFixedCheckpoint": "not_executed",
+      "sourcesMatchBrowser": true,
+      "sourcesReturnedByActualSearchEvents": "not_executed",
+      "reloadAddedRun": false
+    },
+    "nativeCompletions": [
+      {
+        "runId": "391c1b61-c3e0-4a4e-a898-798a21c9c890",
+        "executionSeconds": 107.572,
+        "status": "success"
+      },
+      {
+        "runId": "6dd9bfeb-4887-469d-ba08-412bda8cd14e",
+        "executionSeconds": 491.866,
+        "status": "success"
+      }
+    ],
+    "observerError": null
+  },
+  "retryPolicy": {
+    "scope": "isolated_test_process",
+    "maxRetries": 4,
+    "delaySeconds": [3, 6, 12, 24],
+    "actualScopingClientMaxRetries": 4,
+    "actualAsyncScopingClientMaxRetries": 4,
+    "longerRetryAfterUpTo60SecondsRespected": true
+  },
+  "retrySchedules": [
+    {
+      "kind": "retry_scheduled",
+      "retryNumber": 1,
+      "delaySeconds": 3,
+      "at": "2026-10-13T03:31:56.115272+00:00"
+    },
+    {
+      "kind": "retry_scheduled",
+      "retryNumber": 2,
+      "delaySeconds": 6,
+      "at": "2026-10-13T03:33:00.239087+00:00"
+    },
+    {
+      "kind": "retry_scheduled",
+      "retryNumber": 1,
+      "delaySeconds": 3,
+      "at": "2026-10-13T03:33:43.084360+00:00"
+    },
+    {
+      "kind": "retry_scheduled",
+      "retryNumber": 1,
+      "delaySeconds": 3,
+      "at": "2026-10-13T03:34:25.239641+00:00"
+    },
+    {
+      "kind": "retry_scheduled",
+      "retryNumber": 2,
+      "delaySeconds": 6,
+      "at": "2026-10-13T03:34:34.470006+00:00"
+    },
+    {
+      "kind": "retry_scheduled",
+      "retryNumber": 3,
+      "delaySeconds": 12,
+      "at": "2026-10-13T03:34:51.378621+00:00"
+    },
+    {
+      "kind": "retry_scheduled",
+      "retryNumber": 4,
+      "delaySeconds": 24,
+      "at": "2026-10-13T03:35:17.285440+00:00"
+    },
+    {
+      "kind": "retry_scheduled",
+      "retryNumber": 1,
+      "delaySeconds": 3,
+      "at": "2026-10-13T03:36:57.554236+00:00"
+    },
+    {
+      "kind": "retry_scheduled",
+      "retryNumber": 2,
+      "delaySeconds": 6,
+      "at": "2026-10-13T03:37:29.040855+00:00"
+    },
+    {
+      "kind": "retry_scheduled",
+      "retryNumber": 3,
+      "delaySeconds": 12,
+      "at": "2026-10-13T03:37:44.809465+00:00"
+    },
+    {
+      "kind": "retry_scheduled",
+      "retryNumber": 4,
+      "delaySeconds": 24,
+      "at": "2026-10-13T03:38:29.048540+00:00"
+    },
+    {
+      "kind": "retry_scheduled",
+      "retryNumber": 1,
+      "delaySeconds": 3,
+      "at": "2026-10-13T03:39:28.582303+00:00"
+    },
+    {
+      "kind": "retry_scheduled",
+      "retryNumber": 2,
+      "delaySeconds": 6,
+      "at": "2026-10-13T03:39:49.237714+00:00"
+    },
+    {
+      "kind": "retry_scheduled",
+      "retryNumber": 3,
+      "delaySeconds": 12,
+      "at": "2026-10-13T03:40:13.199263+00:00"
+    },
+    {
+      "kind": "retry_scheduled",
+      "retryNumber": 4,
+      "delaySeconds": 24,
+      "at": "2026-10-13T03:40:57.987982+00:00"
+    }
+  ],
+  "policySelfCheck": {
+    "passed": true,
+    "usesMockTransport": true,
+    "separateFromRealBrowserProcess": true,
+    "checks": [
+      "sync 3/6/12/24 delays",
+      "persistent 504 stops at five attempts",
+      "401 not retried",
+      "async connection retry",
+      "longer Retry-After respected"
+    ]
+  },
+  "artifactLimitations": [
+    "Full Playwright trace disabled for this round after previous ZIP teardown failure; complete observer JSON, API snapshots and screenshots retained."
+  ],
+  "modelHttpAttempts": [
+    {
+      "id": "0cda6a5a-a758-4d24-b9fe-143565ac32b6",
+      "node": "clarify_with_user",
+      "model": "z-ai/glm-5.3",
+      "threadId": "76e40c20-3085-4178-9e4c-132e392a30c5",
+      "runId": "391c1b61-c3e0-4a4e-a898-798a21c9c890",
+      "responseFormat": "json_schema",
+      "sdkRetryCount": "0",
+      "stream": false,
+      "tools": [],
+      "startedAt": "2026-10-13T03:31:39.007361+00:00",
+      "endedAt": "2026-10-13T03:31:56.114798+00:00",
+      "seconds": 17.107,
+      "httpStatus": null,
+      "outcome": "failed",
+      "toolCalls": [],
+      "exceptionTypes": ["RemoteProtocolError"],
+      "causeMessage": "Server disconnected without sending a response."
+    },
+    {
+      "id": "73e966df-4f73-4d11-b074-fa57b008e7cb",
+      "node": "clarify_with_user",
+      "model": "z-ai/glm-5.3",
+      "threadId": "76e40c20-3085-4178-9e4c-132e392a30c5",
+      "runId": "391c1b61-c3e0-4a4e-a898-798a21c9c890",
+      "responseFormat": "json_schema",
+      "sdkRetryCount": "1",
+      "stream": false,
+      "tools": [],
+      "startedAt": "2026-10-13T03:31:59.124180+00:00",
+      "endedAt": "2026-10-13T03:33:00.238403+00:00",
+      "seconds": 61.114,
+      "httpStatus": null,
+      "outcome": "failed",
+      "toolCalls": [],
+      "exceptionTypes": ["RemoteProtocolError"],
+      "causeMessage": "Server disconnected without sending a response."
+    },
+    {
+      "id": "933c1268-9475-4aff-befb-b0520c8da7cc",
+      "node": "clarify_with_user",
+      "model": "z-ai/glm-5.3",
+      "threadId": "76e40c20-3085-4178-9e4c-132e392a30c5",
+      "runId": "391c1b61-c3e0-4a4e-a898-798a21c9c890",
+      "responseFormat": "json_schema",
+      "sdkRetryCount": "2",
+      "stream": false,
+      "tools": [],
+      "startedAt": "2026-10-13T03:33:06.240912+00:00",
+      "endedAt": "2026-10-13T03:33:26.223310+00:00",
+      "seconds": 19.982,
+      "httpStatus": 200,
+      "outcome": "response",
+      "toolCalls": []
+    },
+    {
+      "id": "f149cc95-ba70-4915-85de-3c6070e5f70b",
+      "node": "clarify_with_user",
+      "model": "z-ai/glm-5.3",
+      "threadId": "76e40c20-3085-4178-9e4c-132e392a30c5",
+      "runId": "6dd9bfeb-4887-469d-ba08-412bda8cd14e",
+      "responseFormat": "json_schema",
+      "sdkRetryCount": "0",
+      "stream": false,
+      "tools": [],
+      "startedAt": "2026-10-13T03:33:27.881788+00:00",
+      "endedAt": "2026-10-13T03:33:43.083655+00:00",
+      "seconds": 15.201,
+      "httpStatus": null,
+      "outcome": "failed",
+      "toolCalls": [],
+      "exceptionTypes": ["RemoteProtocolError"],
+      "causeMessage": "Server disconnected without sending a response."
+    },
+    {
+      "id": "03e312a9-3192-4436-aeb1-8a955c04ef40",
+      "node": "clarify_with_user",
+      "model": "z-ai/glm-5.3",
+      "threadId": "76e40c20-3085-4178-9e4c-132e392a30c5",
+      "runId": "6dd9bfeb-4887-469d-ba08-412bda8cd14e",
+      "responseFormat": "json_schema",
+      "sdkRetryCount": "1",
+      "stream": false,
+      "tools": [],
+      "startedAt": "2026-10-13T03:33:46.086505+00:00",
+      "endedAt": "2026-10-13T03:33:55.817133+00:00",
+      "seconds": 9.729,
+      "httpStatus": 200,
+      "outcome": "response",
+      "toolCalls": []
+    },
+    {
+      "id": "cbc9da54-a916-4250-9718-ba866461ddbb",
+      "node": "write_research_brief",
+      "model": "z-ai/glm-5.3",
+      "threadId": "76e40c20-3085-4178-9e4c-132e392a30c5",
+      "runId": "6dd9bfeb-4887-469d-ba08-412bda8cd14e",
+      "responseFormat": "json_schema",
+      "sdkRetryCount": "0",
+      "stream": false,
+      "tools": [],
+      "startedAt": "2026-10-13T03:33:55.902706+00:00",
+      "endedAt": "2026-10-13T03:34:25.238687+00:00",
+      "seconds": 29.335,
+      "httpStatus": null,
+      "outcome": "failed",
+      "toolCalls": [],
+      "exceptionTypes": ["RemoteProtocolError"],
+      "causeMessage": "Server disconnected without sending a response."
+    },
+    {
+      "id": "41939a4f-b94e-4747-8d92-57d0021bbf28",
+      "node": "write_research_brief",
+      "model": "z-ai/glm-5.3",
+      "threadId": "76e40c20-3085-4178-9e4c-132e392a30c5",
+      "runId": "6dd9bfeb-4887-469d-ba08-412bda8cd14e",
+      "responseFormat": "json_schema",
+      "sdkRetryCount": "1",
+      "stream": false,
+      "tools": [],
+      "startedAt": "2026-10-13T03:34:28.242390+00:00",
+      "endedAt": "2026-10-13T03:34:34.469448+00:00",
+      "seconds": 6.226,
+      "httpStatus": null,
+      "outcome": "failed",
+      "toolCalls": [],
+      "exceptionTypes": ["RemoteProtocolError"],
+      "causeMessage": "Server disconnected without sending a response."
+    },
+    {
+      "id": "4e853ed9-41e8-478c-a9c5-83ca58943dcd",
+      "node": "write_research_brief",
+      "model": "z-ai/glm-5.3",
+      "threadId": "76e40c20-3085-4178-9e4c-132e392a30c5",
+      "runId": "6dd9bfeb-4887-469d-ba08-412bda8cd14e",
+      "responseFormat": "json_schema",
+      "sdkRetryCount": "2",
+      "stream": false,
+      "tools": [],
+      "startedAt": "2026-10-13T03:34:40.471508+00:00",
+      "endedAt": "2026-10-13T03:34:51.378150+00:00",
+      "seconds": 10.906,
+      "httpStatus": null,
+      "outcome": "failed",
+      "toolCalls": [],
+      "exceptionTypes": ["RemoteProtocolError"],
+      "causeMessage": "Server disconnected without sending a response."
+    },
+    {
+      "id": "1a1b06c3-c57a-4635-92bc-ba1813747658",
+      "node": "write_research_brief",
+      "model": "z-ai/glm-5.3",
+      "threadId": "76e40c20-3085-4178-9e4c-132e392a30c5",
+      "runId": "6dd9bfeb-4887-469d-ba08-412bda8cd14e",
+      "responseFormat": "json_schema",
+      "sdkRetryCount": "3",
+      "stream": false,
+      "tools": [],
+      "startedAt": "2026-10-13T03:35:03.380291+00:00",
+      "endedAt": "2026-10-13T03:35:17.284589+00:00",
+      "seconds": 13.904,
+      "httpStatus": null,
+      "outcome": "failed",
+      "toolCalls": [],
+      "exceptionTypes": ["RemoteProtocolError"],
+      "causeMessage": "Server disconnected without sending a response."
+    },
+    {
+      "id": "b6e3e9f3-d608-4071-b4fa-c62b93a2501b",
+      "node": "write_research_brief",
+      "model": "z-ai/glm-5.3",
+      "threadId": "76e40c20-3085-4178-9e4c-132e392a30c5",
+      "runId": "6dd9bfeb-4887-469d-ba08-412bda8cd14e",
+      "responseFormat": "json_schema",
+      "sdkRetryCount": "4",
+      "stream": false,
+      "tools": [],
+      "startedAt": "2026-10-13T03:35:41.287422+00:00",
+      "endedAt": "2026-10-13T03:35:55.615632+00:00",
+      "seconds": 14.327,
+      "httpStatus": null,
+      "outcome": "failed",
+      "toolCalls": [],
+      "exceptionTypes": ["RemoteProtocolError"],
+      "causeMessage": "Server disconnected without sending a response."
+    },
+    {
+      "id": "df907b0f-5ce8-4ab6-8e58-e0558709f212",
+      "node": "write_research_brief",
+      "model": "z-ai/glm-5.3",
+      "threadId": "76e40c20-3085-4178-9e4c-132e392a30c5",
+      "runId": "6dd9bfeb-4887-469d-ba08-412bda8cd14e",
+      "responseFormat": null,
+      "sdkRetryCount": "0",
+      "stream": false,
+      "tools": [],
+      "startedAt": "2026-10-13T03:35:55.818285+00:00",
+      "endedAt": "2026-10-13T03:36:57.553468+00:00",
+      "seconds": 61.734,
+      "httpStatus": null,
+      "outcome": "failed",
+      "toolCalls": [],
+      "exceptionTypes": ["RemoteProtocolError", "APIConnectionError"],
+      "causeMessage": "Server disconnected without sending a response."
+    },
+    {
+      "id": "2e754e31-4727-4da2-975c-029a995b3122",
+      "node": "write_research_brief",
+      "model": "z-ai/glm-5.3",
+      "threadId": "76e40c20-3085-4178-9e4c-132e392a30c5",
+      "runId": "6dd9bfeb-4887-469d-ba08-412bda8cd14e",
+      "responseFormat": null,
+      "sdkRetryCount": "1",
+      "stream": false,
+      "tools": [],
+      "startedAt": "2026-10-13T03:37:00.556589+00:00",
+      "endedAt": "2026-10-13T03:37:29.040387+00:00",
+      "seconds": 28.483,
+      "httpStatus": null,
+      "outcome": "failed",
+      "toolCalls": [],
+      "exceptionTypes": ["RemoteProtocolError", "APIConnectionError"],
+      "causeMessage": "Server disconnected without sending a response."
+    },
+    {
+      "id": "5d5522ce-7abc-40ae-84c5-74c1981d5070",
+      "node": "write_research_brief",
+      "model": "z-ai/glm-5.3",
+      "threadId": "76e40c20-3085-4178-9e4c-132e392a30c5",
+      "runId": "6dd9bfeb-4887-469d-ba08-412bda8cd14e",
+      "responseFormat": null,
+      "sdkRetryCount": "2",
+      "stream": false,
+      "tools": [],
+      "startedAt": "2026-10-13T03:37:35.042732+00:00",
+      "endedAt": "2026-10-13T03:37:44.809017+00:00",
+      "seconds": 9.766,
+      "httpStatus": null,
+      "outcome": "failed",
+      "toolCalls": [],
+      "exceptionTypes": ["RemoteProtocolError", "APIConnectionError"],
+      "causeMessage": "Server disconnected without sending a response."
+    },
+    {
+      "id": "ba371c8d-beae-4d02-9423-0657370141a1",
+      "node": "write_research_brief",
+      "model": "z-ai/glm-5.3",
+      "threadId": "76e40c20-3085-4178-9e4c-132e392a30c5",
+      "runId": "6dd9bfeb-4887-469d-ba08-412bda8cd14e",
+      "responseFormat": null,
+      "sdkRetryCount": "3",
+      "stream": false,
+      "tools": [],
+      "startedAt": "2026-10-13T03:37:56.810798+00:00",
+      "endedAt": "2026-10-13T03:38:29.047849+00:00",
+      "seconds": 32.236,
+      "httpStatus": null,
+      "outcome": "failed",
+      "toolCalls": [],
+      "exceptionTypes": ["RemoteProtocolError", "APIConnectionError"],
+      "causeMessage": "Server disconnected without sending a response."
+    },
+    {
+      "id": "dc402874-b4f7-4982-adb2-bd4dcc4cc633",
+      "node": "write_research_brief",
+      "model": "z-ai/glm-5.3",
+      "threadId": "76e40c20-3085-4178-9e4c-132e392a30c5",
+      "runId": "6dd9bfeb-4887-469d-ba08-412bda8cd14e",
+      "responseFormat": null,
+      "sdkRetryCount": "4",
+      "stream": false,
+      "tools": [],
+      "startedAt": "2026-10-13T03:38:53.050995+00:00",
+      "endedAt": "2026-10-13T03:39:10.641289+00:00",
+      "seconds": 17.589,
+      "httpStatus": null,
+      "outcome": "failed",
+      "toolCalls": [],
+      "exceptionTypes": ["RemoteProtocolError", "APIConnectionError"],
+      "causeMessage": "Server disconnected without sending a response."
+    },
+    {
+      "id": "633fd909-8390-4513-80c8-fd502cf5b1a6",
+      "node": "write_research_brief",
+      "model": "z-ai/glm-5.3",
+      "threadId": "76e40c20-3085-4178-9e4c-132e392a30c5",
+      "runId": "6dd9bfeb-4887-469d-ba08-412bda8cd14e",
+      "responseFormat": "json_object",
+      "sdkRetryCount": "0",
+      "stream": false,
+      "tools": [],
+      "startedAt": "2026-10-13T03:39:11.000789+00:00",
+      "endedAt": "2026-10-13T03:39:28.581867+00:00",
+      "seconds": 17.58,
+      "httpStatus": null,
+      "outcome": "failed",
+      "toolCalls": [],
+      "exceptionTypes": ["RemoteProtocolError", "APIConnectionError"],
+      "causeMessage": "Server disconnected without sending a response."
+    },
+    {
+      "id": "5d01334b-9e35-46a2-9450-cae021341d84",
+      "node": "write_research_brief",
+      "model": "z-ai/glm-5.3",
+      "threadId": "76e40c20-3085-4178-9e4c-132e392a30c5",
+      "runId": "6dd9bfeb-4887-469d-ba08-412bda8cd14e",
+      "responseFormat": "json_object",
+      "sdkRetryCount": "1",
+      "stream": false,
+      "tools": [],
+      "startedAt": "2026-10-13T03:39:31.584180+00:00",
+      "endedAt": "2026-10-13T03:39:49.237287+00:00",
+      "seconds": 17.652,
+      "httpStatus": null,
+      "outcome": "failed",
+      "toolCalls": [],
+      "exceptionTypes": ["RemoteProtocolError", "APIConnectionError"],
+      "causeMessage": "Server disconnected without sending a response."
+    },
+    {
+      "id": "cc61e046-4316-4ab4-b5ec-f1a2ef5490a5",
+      "node": "write_research_brief",
+      "model": "z-ai/glm-5.3",
+      "threadId": "76e40c20-3085-4178-9e4c-132e392a30c5",
+      "runId": "6dd9bfeb-4887-469d-ba08-412bda8cd14e",
+      "responseFormat": "json_object",
+      "sdkRetryCount": "2",
+      "stream": false,
+      "tools": [],
+      "startedAt": "2026-10-13T03:39:55.239354+00:00",
+      "endedAt": "2026-10-13T03:40:13.198481+00:00",
+      "seconds": 17.958,
+      "httpStatus": null,
+      "outcome": "failed",
+      "toolCalls": [],
+      "exceptionTypes": ["RemoteProtocolError", "APIConnectionError"],
+      "causeMessage": "Server disconnected without sending a response."
+    },
+    {
+      "id": "f00f8453-6ae9-4e12-884e-34a751f6b30b",
+      "node": "write_research_brief",
+      "model": "z-ai/glm-5.3",
+      "threadId": "76e40c20-3085-4178-9e4c-132e392a30c5",
+      "runId": "6dd9bfeb-4887-469d-ba08-412bda8cd14e",
+      "responseFormat": "json_object",
+      "sdkRetryCount": "3",
+      "stream": false,
+      "tools": [],
+      "startedAt": "2026-10-13T03:40:25.201309+00:00",
+      "endedAt": "2026-10-13T03:40:57.987508+00:00",
+      "seconds": 32.785,
+      "httpStatus": null,
+      "outcome": "failed",
+      "toolCalls": [],
+      "exceptionTypes": ["RemoteProtocolError", "APIConnectionError"],
+      "causeMessage": "Server disconnected without sending a response."
+    },
+    {
+      "id": "5618ce08-cc6f-4b76-a61a-b96238c60163",
+      "node": "write_research_brief",
+      "model": "z-ai/glm-5.3",
+      "threadId": "76e40c20-3085-4178-9e4c-132e392a30c5",
+      "runId": "6dd9bfeb-4887-469d-ba08-412bda8cd14e",
+      "responseFormat": "json_object",
+      "sdkRetryCount": "4",
+      "stream": false,
+      "tools": [],
+      "startedAt": "2026-10-13T03:41:21.989120+00:00",
+      "endedAt": "2026-10-13T03:41:39.621415+00:00",
+      "seconds": 17.631,
+      "httpStatus": null,
+      "outcome": "failed",
+      "toolCalls": [],
+      "exceptionTypes": ["RemoteProtocolError", "APIConnectionError"],
+      "causeMessage": "Server disconnected without sending a response."
+    }
+  ],
+  "modelHttpSummary": {
+    "count": 20,
+    "byNode": {
+      "clarify_with_user": 5,
+      "write_research_brief": 15
+    },
+    "httpStatuses": {
+      "200": 2
+    },
+    "transportFailures": 18,
+    "sdkRetryAttempts": 15
+  },
+  "actualTools": {
+    "started": {},
+    "finished": {},
+    "failed": {},
+    "loadedSkills": []
+  },
+  "sources": [],
+  "citationReview": "not_executed",
+  "cleanup": {
+    "ports": {
+      "2032": "unavailable",
+      "5183": "unavailable"
+    },
+    "existingServicesStopped": false,
+    "existingHistoryUsed": false,
+    "watchdogTriggered": false
+  },
+  "localEvidence": {
+    ".local/provider-retest-20261013-backoff/browser/model-http.jsonl": {
+      "sha256": "cc729c08e50f24c301ded33907849fffaa7177796878082f4f2717dd44de6f6c"
+    },
+    ".local/provider-retest-20261013-backoff/browser/api-snapshot.json": {
+      "sha256": "d12ffa62f197ce3f8a8156ec9cc3a3d5cc2b12773ca961eeb85fb5127b6ff232"
+    },
+    ".local/provider-retest-20261013-backoff/backend.log": {
+      "sha256": "8be2501118179e225dfe857c3b36f8e638cb86b12b0acde4b5b6e0405ec367a6"
+    },
+    "frontend/test-results/provider-20261013-backoff-output/observed-native-LangGraph--d424c-r-report-sources-and-reload/observed-evidence.json": {
+      "sha256": "9729639c21e59de282a4084ca7a5171867b28f593f3e61d7392b7045a701baba"
+    },
+    "frontend/test-results/provider-20261013-backoff-output/observed-native-LangGraph--d424c-r-report-sources-and-reload/observed-final.png": {
+      "sha256": "cd45bcbcf272ddb587683ba0e75c824d5f2e28744f23d6a204fe38ab6674fb47"
+    },
+    ".local/provider_real_server_backoff_20261013.py": {
+      "sha256": "7b45345d20fddd3c3a8da09e55b92521bc2c702ffbb98bb11db37e0e4133c1a0"
+    },
+    ".local/provider_retry_policy_20261013.py": {
+      "sha256": "a5c1a158f2c4e957276e77003341737457e81c9488f9c309c9b1b4b7da7f689f"
+    }
+  }
+}

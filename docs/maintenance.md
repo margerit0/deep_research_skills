@@ -40,7 +40,9 @@ from deep_research.research_agent_full import agent
 
 Skills 自动模式固定当时全部可用正文；手选是允许自动加载的集合，空集合禁止全部。系统提示词目录和 `load_skill` 均按快照过滤，界面单独显示实际成功加载记录。完整定义见接口文档的“按次配置扩展”。
 
-本日按用户要求复测供应商：最小调用与结构化澄清曾成功，真实浏览器研究却在研究员 / 协调器处连接失败；沙箱外复测又出现证书校验失败。完整真实研究仍未通过，保持 `NO_PROXY=*`、原模型 / 网关和 TLS 校验。具体证据见最新验收记录。
+2026-10-13 的后续真实复测已将澄清观察放宽到 600 秒，并试验每种模型请求最多 5 次、3 / 6 / 12 / 24 秒退避。GLM 两轮均确认 `failed/brief`。按用户要求，同网关 / 同密钥的隔离进程将六角色换为 `moonshotai/kimi-k3`，取得 231 字简报、30 条研究事件、1 份笔记及 8 条来源；1950 秒后端保护期限到达时仍为 `running/writing`、报告为空，不能记作完整交付或业务失败。连接提前关闭及 TLS EOF 与证书校验失败分别记录。上述模型切换和退避仅用于隔离实验，生产 `.env`、TLS、`NO_PROXY=*`、共享 limiter 与结构化 fallback 保持原配置。详见 [最新验收记录](../frontend/docs/verification.md)。
+
+2026-10-14 完成 GLM / Kimi 离线实录回放与证据包整理。回放不创建执行、不修改本地会话，不等同于在线报告流式；下载包包含安全对话、检查点、笔记、来源、研究事件、HTTP 尝试、退避及逐文件校验清单。临时浏览器材料的缺失和 API / 浏览器快照差异单独记录，不能仅凭回放画面推断真实完整验收通过。使用方法与数据边界见 [真实记录回放](../frontend/docs/recorded-runs.md)。
 
 独立前端已接入 `research_agent_full`，启动方式见 [frontend/README.md](../frontend/README.md)，接口定义见 [backend-contract.md](../frontend/docs/backend-contract.md)。自定义 HTTP app 提供配置、事件回放，以及 1B 的 `/atlas/threads/{thread_id}/submissions/{turn_id}` 受理 / 对账和 `/recoveries/{attempt_id}` 恢复入口。配置只返回实际构造的六个模型角色及能力，事件与回执不包含密钥、提供商 URL 或原始异常。运行、检查点及 SSE 仍由 LangGraph 管理。
 

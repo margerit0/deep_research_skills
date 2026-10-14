@@ -1,0 +1,440 @@
+{
+  "date": "2026-10-13",
+  "userTimezone": "Asia/Shanghai",
+  "timestamps": "UTC (ISO 8601)",
+  "baseCommit": "2fc6299",
+  "branch": "chore/public-edits",
+  "priorUncommittedWorkPreserved": true,
+  "modelAndSearchSubstitutes": false,
+  "noProxy": "*",
+  "tlsVerification": true,
+  "endpointSha256": "33ce0d29b63b6403eedeb59bc0a8f6d5c252a6bd6b620ea712ee76f3fc0f8443",
+  "agentRpm": "30",
+  "fixtureModulesLoaded": [],
+  "fixtureEnvironmentNames": [],
+  "observationBudgets": {
+    "clarificationSeconds": 600,
+    "secondRunSeconds": 1140,
+    "testTotalSeconds": 1800,
+    "testRetries": 0,
+    "backendWatchdogSeconds": 1950,
+    "backendRetryPolicyChanged": false
+  },
+  "browser": {
+    "atlasLive": "1",
+    "atlasApiFixture": null,
+    "testStatus": "failed",
+    "backendPort": 2031,
+    "frontendPort": 5182,
+    "threadId": "0f94cebd-1c99-4f06-a746-3fc7eee48571",
+    "researchId": "d44a934d-f171-4fc8-bd25-2445febdca8b",
+    "turns": [
+      {
+        "turnId": "0b1985fd-b76d-43af-835b-e17a6a6d0b2d",
+        "runId": "5c35378e-fada-4849-9647-da9c8cf3704b"
+      },
+      {
+        "turnId": "f7a912d6-b4b0-4019-a6d4-a83296242c5c",
+        "runId": "9a4d95e9-ade6-4f8e-aa6b-53327fdb4267"
+      }
+    ],
+    "runs": [
+      {
+        "runId": "9a4d95e9-ade6-4f8e-aa6b-53327fdb4267",
+        "status": "success"
+      },
+      {
+        "runId": "5c35378e-fada-4849-9647-da9c8cf3704b",
+        "status": "success"
+      }
+    ],
+    "serverRunCount": 2,
+    "submissionPostCount": 2,
+    "runsBeforeReload": 2,
+    "runsAfterReload": 2,
+    "businessStatus": "failed",
+    "phase": "brief",
+    "reportLength": 0,
+    "reportSha256": null,
+    "sourceCount": 0,
+    "eventCount": 0,
+    "briefLength": 0,
+    "errors": [
+      {
+        "code": "brief_failed",
+        "message": "研究简报生成失败，请检查后端模型服务后发起新研究。",
+        "node": "write_research_brief"
+      }
+    ],
+    "configuration": {
+      "contract_version": 1,
+      "graph_id": "research_agent_full",
+      "model_selection": "server",
+      "skills_mode": "auto",
+      "research_events_version": 1,
+      "research_event_replay_version": 1,
+      "submission_recovery_version": 1,
+      "models": [
+        {
+          "role": "SUMMARIZATION",
+          "config_id": "cc1d35e644df9364f473e423eba6f3e4b489030d9383d443b8c4d8224d3a8f9b",
+          "model": "z-ai/glm-5.3",
+          "provider": "openai",
+          "max_tokens": null
+        },
+        {
+          "role": "RESEARCHER",
+          "config_id": "cc1d35e644df9364f473e423eba6f3e4b489030d9383d443b8c4d8224d3a8f9b",
+          "model": "z-ai/glm-5.3",
+          "provider": "openai",
+          "max_tokens": null
+        },
+        {
+          "role": "COMPRESSION",
+          "config_id": "132177a917efc7f751634782bf7ccafa9bf7fe15c8c569bce4cbb351b63a8b60",
+          "model": "z-ai/glm-5.3",
+          "provider": "openai",
+          "max_tokens": 32000
+        },
+        {
+          "role": "SUPERVISOR",
+          "config_id": "cc1d35e644df9364f473e423eba6f3e4b489030d9383d443b8c4d8224d3a8f9b",
+          "model": "z-ai/glm-5.3",
+          "provider": "openai",
+          "max_tokens": null
+        },
+        {
+          "role": "SCOPING",
+          "config_id": "cc1d35e644df9364f473e423eba6f3e4b489030d9383d443b8c4d8224d3a8f9b",
+          "model": "z-ai/glm-5.3",
+          "provider": "openai",
+          "max_tokens": null
+        },
+        {
+          "role": "FINAL_REPORT",
+          "config_id": "132177a917efc7f751634782bf7ccafa9bf7fe15c8c569bce4cbb351b63a8b60",
+          "model": "z-ai/glm-5.3",
+          "provider": "openai",
+          "max_tokens": 32000
+        }
+      ],
+      "configuration_version": 1,
+      "selection": {
+        "version": 1,
+        "models": {
+          "SUMMARIZATION": "cc1d35e644df9364f473e423eba6f3e4b489030d9383d443b8c4d8224d3a8f9b",
+          "RESEARCHER": "cc1d35e644df9364f473e423eba6f3e4b489030d9383d443b8c4d8224d3a8f9b",
+          "COMPRESSION": "132177a917efc7f751634782bf7ccafa9bf7fe15c8c569bce4cbb351b63a8b60",
+          "SUPERVISOR": "cc1d35e644df9364f473e423eba6f3e4b489030d9383d443b8c4d8224d3a8f9b",
+          "SCOPING": "cc1d35e644df9364f473e423eba6f3e4b489030d9383d443b8c4d8224d3a8f9b",
+          "FINAL_REPORT": "132177a917efc7f751634782bf7ccafa9bf7fe15c8c569bce4cbb351b63a8b60"
+        },
+        "skills": {
+          "mode": "auto",
+          "allowed": []
+        }
+      },
+      "skill_revisions": {
+        "academic-research": "2fb1ec459ae2f12f3d008425365045a5f420ae931c73f04aa75e00153ccc157e",
+        "news-timeline": "faa1f1b3507dffa192fca5fba749f2c8b55444c3a97c43f80acf19376d35afd0",
+        "people-research": "4a2986c532cf1fb8107f3a907e4fe3b3a37422aa43207731a90850dc2bed2549",
+        "product-comparison": "30fef831acc46e8255b3db2f77d4003086f9ce3f74752c595a100b44bab081b3"
+      }
+    },
+    "receipts": [
+      {
+        "status": "completed",
+        "turn_id": "0b1985fd-b76d-43af-835b-e17a6a6d0b2d",
+        "run_id": "5c35378e-fada-4849-9647-da9c8cf3704b",
+        "checkpoint_id": "1f1c6b41-3816-6a51-8002-eb3312a7fbef"
+      },
+      {
+        "status": "completed",
+        "turn_id": "f7a912d6-b4b0-4019-a6d4-a83296242c5c",
+        "run_id": "9a4d95e9-ade6-4f8e-aa6b-53327fdb4267",
+        "checkpoint_id": "1f1c6b4f-1bd1-6997-8007-066ecc643f38"
+      }
+    ],
+    "checkpointChecks": {
+      "firstTurnAwaitingInput": true,
+      "allReceiptsCompleted": true,
+      "allReceiptConfigurationsMatch": true,
+      "allCheckpointConfigurationsMatch": true,
+      "allSubmittedSelectionsMatch": true,
+      "finalCheckpointMatchesBusinessState": true,
+      "reportOwnership": "not_executed",
+      "reportMatchesBrowser": "not_executed",
+      "reportMatchesFixedCheckpoint": "not_executed",
+      "sourcesMatchBrowser": true,
+      "sourcesReturnedByActualSearchEvents": "not_executed",
+      "reloadAddedRun": false
+    },
+    "nativeCompletions": [
+      {
+        "runId": "5c35378e-fada-4849-9647-da9c8cf3704b",
+        "executionSeconds": 184.646,
+        "status": "success"
+      },
+      {
+        "runId": "9a4d95e9-ade6-4f8e-aa6b-53327fdb4267",
+        "executionSeconds": 371.32,
+        "status": "success"
+      }
+    ],
+    "observerError": null
+  },
+  "modelHttpAttempts": [
+    {
+      "id": "cc9ef477-1164-47f4-a637-f67f2b68bd92",
+      "node": "clarify_with_user",
+      "model": "z-ai/glm-5.3",
+      "threadId": "0f94cebd-1c99-4f06-a746-3fc7eee48571",
+      "runId": "5c35378e-fada-4849-9647-da9c8cf3704b",
+      "responseFormat": "json_schema",
+      "sdkRetryCount": "0",
+      "stream": false,
+      "tools": [],
+      "startedAt": "2026-10-13T03:10:30.531085+00:00",
+      "endedAt": "2026-10-13T03:11:32.342720+00:00",
+      "seconds": 61.81,
+      "httpStatus": 504,
+      "outcome": "response",
+      "toolCalls": []
+    },
+    {
+      "id": "4a682836-e7e7-4f3f-8b55-fdabcc89784e",
+      "node": "clarify_with_user",
+      "model": "z-ai/glm-5.3",
+      "threadId": "0f94cebd-1c99-4f06-a746-3fc7eee48571",
+      "runId": "5c35378e-fada-4849-9647-da9c8cf3704b",
+      "responseFormat": "json_schema",
+      "sdkRetryCount": "1",
+      "stream": false,
+      "tools": [],
+      "startedAt": "2026-10-13T03:11:32.738818+00:00",
+      "endedAt": "2026-10-13T03:12:35.601303+00:00",
+      "seconds": 62.854,
+      "httpStatus": 504,
+      "outcome": "response",
+      "toolCalls": []
+    },
+    {
+      "id": "234fa65a-5b5a-42e1-ae9a-d693191f773a",
+      "node": "clarify_with_user",
+      "model": "z-ai/glm-5.3",
+      "threadId": "0f94cebd-1c99-4f06-a746-3fc7eee48571",
+      "runId": "5c35378e-fada-4849-9647-da9c8cf3704b",
+      "responseFormat": "json_schema",
+      "sdkRetryCount": "2",
+      "stream": false,
+      "tools": [],
+      "startedAt": "2026-10-13T03:12:36.548888+00:00",
+      "endedAt": "2026-10-13T03:13:34.868175+00:00",
+      "seconds": 58.319,
+      "httpStatus": 200,
+      "outcome": "response",
+      "toolCalls": []
+    },
+    {
+      "id": "ce0fd92f-6972-49e9-8663-49e30f50b40f",
+      "node": "clarify_with_user",
+      "model": "z-ai/glm-5.3",
+      "threadId": "0f94cebd-1c99-4f06-a746-3fc7eee48571",
+      "runId": "9a4d95e9-ade6-4f8e-aa6b-53327fdb4267",
+      "responseFormat": "json_schema",
+      "sdkRetryCount": "0",
+      "stream": false,
+      "tools": [],
+      "startedAt": "2026-10-13T03:13:36.513001+00:00",
+      "endedAt": "2026-10-13T03:14:22.002648+00:00",
+      "seconds": 45.489,
+      "httpStatus": 200,
+      "outcome": "response",
+      "toolCalls": []
+    },
+    {
+      "id": "dc4c956d-d451-4039-a31e-951d542f1c38",
+      "node": "write_research_brief",
+      "model": "z-ai/glm-5.3",
+      "threadId": "0f94cebd-1c99-4f06-a746-3fc7eee48571",
+      "runId": "9a4d95e9-ade6-4f8e-aa6b-53327fdb4267",
+      "responseFormat": "json_schema",
+      "sdkRetryCount": "0",
+      "stream": false,
+      "tools": [],
+      "startedAt": "2026-10-13T03:14:22.072972+00:00",
+      "endedAt": "2026-10-13T03:15:27.744739+00:00",
+      "seconds": 65.671,
+      "httpStatus": 504,
+      "outcome": "response",
+      "toolCalls": []
+    },
+    {
+      "id": "c3f754bf-909b-4797-9a71-03af52d3b256",
+      "node": "write_research_brief",
+      "model": "z-ai/glm-5.3",
+      "threadId": "0f94cebd-1c99-4f06-a746-3fc7eee48571",
+      "runId": "9a4d95e9-ade6-4f8e-aa6b-53327fdb4267",
+      "responseFormat": "json_schema",
+      "sdkRetryCount": "1",
+      "stream": false,
+      "tools": [],
+      "startedAt": "2026-10-13T03:15:28.212542+00:00",
+      "endedAt": "2026-10-13T03:16:42.071260+00:00",
+      "seconds": 73.858,
+      "httpStatus": 504,
+      "outcome": "response",
+      "toolCalls": []
+    },
+    {
+      "id": "9b5a3ab1-b8a1-4603-86bb-39f53a241bb6",
+      "node": "write_research_brief",
+      "model": "z-ai/glm-5.3",
+      "threadId": "0f94cebd-1c99-4f06-a746-3fc7eee48571",
+      "runId": "9a4d95e9-ade6-4f8e-aa6b-53327fdb4267",
+      "responseFormat": "json_schema",
+      "sdkRetryCount": "2",
+      "stream": false,
+      "tools": [],
+      "startedAt": "2026-10-13T03:16:42.889233+00:00",
+      "endedAt": "2026-10-13T03:17:48.067783+00:00",
+      "seconds": 65.163,
+      "httpStatus": 504,
+      "outcome": "response",
+      "toolCalls": []
+    },
+    {
+      "id": "38412034-11d1-4849-a15c-c12782ee7191",
+      "node": "write_research_brief",
+      "model": "z-ai/glm-5.3",
+      "threadId": "0f94cebd-1c99-4f06-a746-3fc7eee48571",
+      "runId": "9a4d95e9-ade6-4f8e-aa6b-53327fdb4267",
+      "responseFormat": null,
+      "sdkRetryCount": "0",
+      "stream": false,
+      "tools": [],
+      "startedAt": "2026-10-13T03:17:48.668459+00:00",
+      "endedAt": "2026-10-13T03:18:05.096703+00:00",
+      "seconds": 16.416,
+      "httpStatus": null,
+      "outcome": "failed",
+      "toolCalls": [],
+      "exceptionTypes": ["RemoteProtocolError", "InternalServerError", "HTTPStatusError"],
+      "causeMessage": "Server error '504 Gateway Timeout' for url '[redacted]/chat/completions'\nFor more information check: [endpoint]"
+    },
+    {
+      "id": "fba763d9-8aa0-4e13-9aba-e87a65564f39",
+      "node": "write_research_brief",
+      "model": "z-ai/glm-5.3",
+      "threadId": "0f94cebd-1c99-4f06-a746-3fc7eee48571",
+      "runId": "9a4d95e9-ade6-4f8e-aa6b-53327fdb4267",
+      "responseFormat": null,
+      "sdkRetryCount": "1",
+      "stream": false,
+      "tools": [],
+      "startedAt": "2026-10-13T03:18:05.552888+00:00",
+      "endedAt": "2026-10-13T03:19:08.541437+00:00",
+      "seconds": 62.973,
+      "httpStatus": null,
+      "outcome": "failed",
+      "toolCalls": [],
+      "exceptionTypes": ["RemoteProtocolError", "InternalServerError", "HTTPStatusError"],
+      "causeMessage": "Server error '504 Gateway Timeout' for url '[redacted]/chat/completions'\nFor more information check: [endpoint]"
+    },
+    {
+      "id": "e56450e1-00d2-4b09-96bc-9cdb5242b4bd",
+      "node": "write_research_brief",
+      "model": "z-ai/glm-5.3",
+      "threadId": "0f94cebd-1c99-4f06-a746-3fc7eee48571",
+      "runId": "9a4d95e9-ade6-4f8e-aa6b-53327fdb4267",
+      "responseFormat": null,
+      "sdkRetryCount": "2",
+      "stream": false,
+      "tools": [],
+      "startedAt": "2026-10-13T03:19:09.522551+00:00",
+      "endedAt": "2026-10-13T03:19:26.382907+00:00",
+      "seconds": 16.855,
+      "httpStatus": null,
+      "outcome": "failed",
+      "toolCalls": [],
+      "exceptionTypes": ["RemoteProtocolError", "InternalServerError", "HTTPStatusError"],
+      "causeMessage": "Server error '504 Gateway Timeout' for url '[redacted]/chat/completions'\nFor more information check: [endpoint]"
+    },
+    {
+      "id": "8b298b8c-065a-41ce-b9c9-84c1939a7902",
+      "node": "write_research_brief",
+      "model": "z-ai/glm-5.3",
+      "threadId": "0f94cebd-1c99-4f06-a746-3fc7eee48571",
+      "runId": "9a4d95e9-ade6-4f8e-aa6b-53327fdb4267",
+      "responseFormat": "json_object",
+      "sdkRetryCount": "0",
+      "stream": false,
+      "tools": [],
+      "startedAt": "2026-10-13T03:19:30.447990+00:00",
+      "endedAt": "2026-10-13T03:19:47.670692+00:00",
+      "seconds": 17.216,
+      "httpStatus": null,
+      "outcome": "failed",
+      "toolCalls": [],
+      "exceptionTypes": [
+        "RemoteProtocolError",
+        "APIConnectionError",
+        "InternalServerError",
+        "HTTPStatusError"
+      ],
+      "causeMessage": "Server error '504 Gateway Timeout' for url '[redacted]/chat/completions'\nFor more information check: [endpoint]"
+    }
+  ],
+  "modelHttpSummary": {
+    "count": 11,
+    "byNode": {
+      "clarify_with_user": 4,
+      "write_research_brief": 7
+    },
+    "httpStatuses": {
+      "504": 5,
+      "200": 2
+    },
+    "transportFailures": 4,
+    "sdkRetryAttempts": 6
+  },
+  "actualTools": {
+    "started": {},
+    "finished": {},
+    "failed": {},
+    "loadedSkills": []
+  },
+  "sources": [],
+  "citationReview": "not_executed",
+  "cleanup": {
+    "ports": {
+      "2031": "free_after_cleanup",
+      "5182": "unavailable"
+    },
+    "existingServicesStopped": false,
+    "existingHistoryUsed": false,
+    "watchdogTriggered": true,
+    "manualBackendStop": "rejected by user",
+    "backendStopWasNotRetried": true
+  },
+  "artifactLimitations": [
+    "Playwright context teardown exceeded 60 seconds and ZIP finalization failed; no usable trace.zip was produced. Observed JSON, API snapshots, fixed checkpoints and screenshots were saved."
+  ],
+  "localEvidence": {
+    ".local/provider-retest-20261013-600s/browser/model-http.jsonl": {
+      "sha256": "23029aa871070ba6b439bd2be13e9bf4c0dfb086c631a7d511747cfb0bd3f9e1"
+    },
+    ".local/provider-retest-20261013-600s/browser/api-snapshot.json": {
+      "sha256": "d38b4cfe16c7b7176cdf2562aae8ce293626441d32a0d09e8399b254fed1f14b"
+    },
+    ".local/provider-retest-20261013-600s/backend.log": {
+      "sha256": "a38f705068b9e53d79be9c8e70a51f60039a038ccf0ac8045788923fd738dddf"
+    },
+    "frontend/test-results/provider-20261013-600s-output/observed-native-LangGraph--d424c-r-report-sources-and-reload/observed-evidence.json": {
+      "sha256": "84f0da69d80101bce8ad7b6be6c460f799e9555b0c1da17c3df147d4bc5e1627"
+    },
+    ".local/provider_real_server_600s_20261013.py": {
+      "sha256": "b1876486b22ab02dc4d02ba15b016529d986b864c6ed17c03adba32a7a3556b7"
+    }
+  }
+}

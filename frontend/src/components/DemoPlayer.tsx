@@ -1,5 +1,4 @@
 import { useEffect, useRef } from 'react'
-import { demoDuration, demoScenes } from '../data/demo'
 import type { WorkspaceController } from '../state/useWorkspace'
 import { Icon } from './Icon'
 
@@ -23,7 +22,17 @@ export function DemoPlayer({ controller }: { controller: WorkspaceController }) 
         graph: '.cw-flow',
         report: '.cw-report-message',
       }[demo.scene.target]
-      const element = document.querySelector(selector)
+      const recordedSelectors: Record<string, string> = {
+        'record-question': '[data-recording] .cw-user-message',
+        'record-clarification': '[data-recording] .cw-agent-message',
+        'record-answer': '[data-recording] .cw-user-message',
+        'record-brief': '[data-testid="recorded-brief"]',
+        'record-research': '.cw-flow',
+        'record-result': '[data-testid="recorded-status"]',
+      }
+      const element = demo.recording
+        ? Array.from(document.querySelectorAll(recordedSelectors[demo.scene.id] ?? selector)).at(-1)
+        : document.querySelector(selector)
       const behavior = demo.reducedMotion ? 'instant' : 'smooth'
       if (element && matchMedia('(max-width:660px)').matches && demo.scene.target !== 'composer') {
         const playerHeight = document
@@ -48,15 +57,31 @@ export function DemoPlayer({ controller }: { controller: WorkspaceController }) 
         })
     }, 180)
     return () => clearTimeout(timer)
-  }, [demo.index, demo.scene.target, demo.reducedMotion])
+  }, [demo.index, demo.scene.id, demo.scene.target, demo.reducedMotion, demo.recording?.id])
   return (
     <section className="cw-demo-player" aria-label="全流程演示控制" data-scene={demo.scene.id}>
+      <label className="cw-demo-source">
+        数据来源
+        <select
+          aria-label="演示数据来源"
+          value={demo.recording?.id ?? 'simulated'}
+          onChange={(event) => demo.chooseRecording(event.target.value)}
+        >
+          <option value="simulated">完整模拟流程</option>
+          {demo.recordings.map((item) => (
+            <option key={item.id} value={item.id}>
+              {item.label}
+            </option>
+          ))}
+        </select>
+      </label>
       <div className="cw-demo-caption" aria-live="polite" aria-atomic="true">
         <span className="cw-demo-kicker">
-          全流程演示 · {demo.done ? '已结束' : demo.playing ? '播放中' : '已暂停'}
+          {demo.recording ? '真实记录回放' : '全流程演示'} ·{' '}
+          {demo.done ? '已结束' : demo.playing ? '播放中' : '已暂停'}
         </span>
         <strong>
-          {String(demo.index + 1).padStart(2, '0')} / {demoScenes.length} · {demo.scene.title}
+          {String(demo.index + 1).padStart(2, '0')} / {demo.scenes.length} · {demo.scene.title}
         </strong>
         <span>{demo.scene.detail}</span>
       </div>
@@ -84,7 +109,7 @@ export function DemoPlayer({ controller }: { controller: WorkspaceController }) 
           type="button"
           className="cw-quiet"
           aria-label="下一幕"
-          disabled={demo.index === demoScenes.length - 1}
+          disabled={demo.index === demo.scenes.length - 1}
           onClick={() => demo.seek(demo.index + 1)}
         >
           <Icon name="step" />
@@ -118,8 +143,13 @@ export function DemoPlayer({ controller }: { controller: WorkspaceController }) 
           退出
         </button>
       </div>
-      <div ref={timeline} className="cw-demo-timeline" aria-label="演示章节">
-        {demoScenes.map((scene, index) => (
+      <div
+        ref={timeline}
+        className="cw-demo-timeline"
+        aria-label="演示章节"
+        style={{ gridTemplateColumns: `repeat(${demo.scenes.length}, minmax(0, 1fr))` }}
+      >
+        {demo.scenes.map((scene, index) => (
           <button
             type="button"
             key={scene.id}
@@ -140,11 +170,15 @@ export function DemoPlayer({ controller }: { controller: WorkspaceController }) 
       </div>
       <div className="cw-demo-footnote">
         <span>
-          {demo.reducedMotion ? '已遵循减少动态效果偏好 · ' : ''}独立模拟 · 退出恢复原会话 ·
-          点击节点或菜单会暂停
+          {demo.recordingLoadError ? '真实记录暂时不可用 · ' : ''}
+          {demo.reducedMotion ? '已遵循减少动态效果偏好 · ' : ''}
+          {demo.recording
+            ? '真实记录 · 时间已压缩 · 不重新执行'
+            : '独立模拟 · 点击节点或菜单会暂停'}{' '}
+          · 退出恢复原会话
         </span>
         <span className="cw-mono">
-          {time(demo.elapsed)} / {time(demoDuration)}
+          {time(demo.elapsed)} / {time(demo.duration)}
         </span>
       </div>
     </section>

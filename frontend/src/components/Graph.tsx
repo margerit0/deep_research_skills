@@ -18,6 +18,9 @@ interface Wire {
 export function Graph({ controller }: { controller: WorkspaceController }) {
   const { state, dispatch, run, inspectNode, nodes, demo, isLive, liveRun, live, thread } =
     controller
+  const actualMode = isLive || Boolean(demo.recording)
+  const recordedInterruption =
+    Boolean(demo.recording?.observationEnded) && demo.scene.id === 'record-result'
   const flow = useRef<HTMLDivElement>(null)
   const panel = useRef<HTMLElement>(null)
   const [wires, setWires] = useState<Wire[]>([])
@@ -97,7 +100,7 @@ export function Graph({ controller }: { controller: WorkspaceController }) {
       aria-pressed={node.id === selected.id}
       aria-expanded={node.id === selected.id && state.inspectorOpen}
       aria-controls="cw-inspector"
-      title={isLive && node.researcher ? node.input : undefined}
+      title={actualMode && node.researcher ? node.input : undefined}
       onClick={() => inspectNode(node.id)}
     >
       {node.researcher ? (
@@ -122,16 +125,24 @@ export function Graph({ controller }: { controller: WorkspaceController }) {
     </button>
   )
   return (
-    <aside ref={panel} id="cw-graph-panel" className="cw-graph-panel" aria-label="运行图谱">
+    <aside
+      ref={panel}
+      id="cw-graph-panel"
+      className="cw-graph-panel"
+      aria-label="运行图谱"
+      data-recording-ended={recordedInterruption || undefined}
+    >
       <div className="cw-graph-header">
         <Icon name="workflow" />
         <span>运行图谱</span>
         <span className="cw-spacer" />
         <span className="cw-label cw-status" role="status">
-          {isLive
-            ? liveRun
-              ? liveStatusText[liveRun.status]
-              : '未开始'
+          {actualMode
+            ? recordedInterruption
+              ? '记录中断'
+              : liveRun
+                ? liveStatusText[liveRun.status]
+                : '未开始'
             : demo.active && demo.scene.id === 'brief'
               ? '生成简报'
               : run
@@ -152,10 +163,12 @@ export function Graph({ controller }: { controller: WorkspaceController }) {
       </div>
       <div className="cw-graph-subheader">
         <span>
-          {isLive
-            ? liveRun
-              ? livePhaseText[liveRun.phase]
-              : '等待提交研究问题'
+          {actualMode
+            ? recordedInterruption
+              ? '报告写作时中断 · 终态未确认'
+              : liveRun
+                ? livePhaseText[liveRun.phase]
+                : '等待提交研究问题'
             : demo.active && run?.stage === 'research'
               ? '协作研究 · 并行演示'
               : run
@@ -169,16 +182,18 @@ export function Graph({ controller }: { controller: WorkspaceController }) {
               : undefined
           }
         >
-          {isLive
-            ? liveRun?.status === 'running' && liveRun.config.research_events_version === 1
-              ? {
-                  connecting: '连接事件流',
-                  live: '实时事件',
-                  retrying: '事件重连中',
-                  ended: '真实数据',
-                }[live.eventConnections[thread.id] ?? 'connecting']
-              : '真实数据'
-            : '演示数据'}
+          {demo.recording
+            ? '真实记录'
+            : isLive
+              ? liveRun?.status === 'running' && liveRun.config.research_events_version === 1
+                ? {
+                    connecting: '连接事件流',
+                    live: '实时事件',
+                    retrying: '事件重连中',
+                    ended: '真实数据',
+                  }[live.eventConnections[thread.id] ?? 'connecting']
+                : '真实数据'
+              : '演示数据'}
         </span>
       </div>
       <div ref={flow} className="cw-flow">
@@ -223,7 +238,7 @@ export function Graph({ controller }: { controller: WorkspaceController }) {
         <div className="cw-top-nodes">{nodes.slice(0, 2).map((n) => nodeButton(n))}</div>
         <div className="cw-cluster">
           <span className="cw-cluster-tag">
-            {isLive ? '协作研究 · 子流程' : '并行研究 · 子流程'}
+            {actualMode ? '协作研究 · 子流程' : '并行研究 · 子流程'}
           </span>
           {nodeButton(nodes[2], 'cw-supervisor')}
           {researchers.length ? (
@@ -240,7 +255,11 @@ export function Graph({ controller }: { controller: WorkspaceController }) {
             </>
           ) : (
             <div className="cw-await-workers">
-              {isLive ? '收到实际委派后展示研究员' : '任务开始后展示研究员'}
+              {demo.recording
+                ? '当前章节没有实际委派记录'
+                : isLive
+                  ? '收到实际委派后展示研究员'
+                  : '任务开始后展示研究员'}
             </div>
           )}
         </div>
@@ -273,6 +292,17 @@ export function Graph({ controller }: { controller: WorkspaceController }) {
           >
             <Icon name="reset" />
             刷新状态
+          </button>
+        ) : demo.recording ? (
+          <button
+            type="button"
+            className="cw-quiet"
+            onClick={() =>
+              demo.index === demo.scenes.length - 1 ? demo.replay() : demo.seek(demo.index + 1)
+            }
+          >
+            <Icon name={demo.index === demo.scenes.length - 1 ? 'reset' : 'step'} />
+            {demo.index === demo.scenes.length - 1 ? '从头回放' : '回放下一幕'}
           </button>
         ) : (
           <button

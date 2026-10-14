@@ -10,7 +10,11 @@ test('native LangGraph API: clarification, answer, report, sources and reload', 
     process.env.ATLAS_LIVE !== '1' && process.env.ATLAS_API_FIXTURE !== '1',
     'Opt in with ATLAS_LIVE=1 (real models) or ATLAS_API_FIXTURE=1 (fixture server).',
   )
-  test.setTimeout(900000)
+  const realProvider = process.env.ATLAS_LIVE === '1' && process.env.ATLAS_API_FIXTURE !== '1'
+  const observationStartedAt = Date.now()
+  // Observe existing finite provider retries without resubmitting the research.
+  // Real runs have a 30-minute total budget, including both submissions and readback.
+  test.setTimeout(realProvider ? 1800000 : 900000)
   let posts = 0
   let streamConnections = 0
   page.on('request', (request) => {
@@ -46,7 +50,7 @@ test('native LangGraph API: clarification, answer, report, sources and reload', 
   await expect(page.getByRole('button', { name: '发送消息' })).toBeEnabled({ timeout: 20000 })
   await page.getByRole('button', { name: '发送消息' }).click()
   await expect(status).toHaveAttribute('data-status', /^(awaiting_input|failed)$/, {
-    timeout: 180000,
+    timeout: realProvider ? 600000 : 180000,
   })
   await expect(status).toHaveAttribute('data-status', 'awaiting_input')
   await page.screenshot({ path: testInfo.outputPath('live-clarification.png'), fullPage: true })
@@ -60,7 +64,9 @@ test('native LangGraph API: clarification, answer, report, sources and reload', 
   await expect.poll(() => posts).toBe(2)
   await page.reload()
   await expect(status).toHaveAttribute('data-status', /^(succeeded|partial|failed)$/, {
-    timeout: 660000,
+    timeout: realProvider
+      ? Math.max(1000, 1800000 - (Date.now() - observationStartedAt) - 30000)
+      : 660000,
   })
   const saved = await page.evaluate(() => {
     const workspace = JSON.parse(localStorage.getItem('atlas-workspace:v1')!)

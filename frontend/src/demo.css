@@ -38,6 +38,51 @@
   font-size: 11px;
   color: var(--cw-muted);
 }
+#atlas-conversation-workspace .cw-demo-source {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  color: var(--cw-muted);
+  font-size: 11px;
+}
+#atlas-conversation-workspace .cw-demo-source select {
+  min-width: 0;
+  max-width: 100%;
+  min-height: 36px;
+  padding: 6px 8px;
+  border: 1px solid var(--cw-menu-border);
+  border-radius: 8px;
+  background: var(--cw-solid);
+  color: var(--cw-text);
+  font: inherit;
+}
+@media (max-width: 660px) {
+  #atlas-conversation-workspace[data-demo] .cw-demo-player {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+  #atlas-conversation-workspace .cw-demo-source {
+    grid-column: 2;
+    grid-row: 1;
+    max-width: 138px;
+    margin-bottom: 0;
+    gap: 0;
+    font-size: 0;
+  }
+  #atlas-conversation-workspace .cw-demo-source select {
+    min-height: 44px;
+    font-size: 11px;
+    width: 100%;
+  }
+  #atlas-conversation-workspace .cw-demo-caption {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  #atlas-conversation-workspace .cw-demo-actions {
+    grid-column: 1 / -1;
+  }
+}
 #atlas-conversation-workspace .cw-demo-caption strong {
   font-size: 13px;
   font-weight: 500;
@@ -174,6 +219,10 @@
 #atlas-conversation-workspace[data-demo='paused'] .cw-mini-state,
 #atlas-conversation-workspace[data-demo='paused'] *::after {
   animation-play-state: paused !important;
+}
+#atlas-conversation-workspace .cw-graph-panel[data-recording-ended] .cw-wire-flash,
+#atlas-conversation-workspace .cw-graph-panel[data-recording-ended] .cw-mini-state {
+  animation: none !important;
 }
 #atlas-conversation-workspace[data-demo] .cw-report-message[data-writing='false'] {
   border-color: var(--cw-good);

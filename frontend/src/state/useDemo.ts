@@ -1,12 +1,13 @@
 import { useEffect, useMemo, useState } from 'react'
+import { demoNodes, demoPosition, demoScenes, demoStart, demoWorkspace } from '../data/demo'
 import {
-  demoDuration,
-  demoNodes,
-  demoPosition,
-  demoScenes,
-  demoStart,
-  demoWorkspace,
-} from '../data/demo'
+  loadRecordings,
+  type Recording,
+  recordingScenes,
+  recordingFrame,
+  recordingWorkspace,
+  recordingNodes,
+} from '../data/recordings'
 import type { Workspace } from '../data/schema'
 
 interface Session {
@@ -17,10 +18,23 @@ interface Session {
   speed: number
   override?: Workspace
   menu?: 'model' | 'skill' | null
+  recordingId?: string
 }
 
 export function useDemo(base: Workspace) {
   const [session, setSession] = useState<Session | null>(null)
+  const [recordings, setRecordings] = useState<Recording[]>([])
+  const [recordingLoadError, setRecordingLoadError] = useState(false)
+  useEffect(() => {
+    if (session && !recordings.length && !recordingLoadError) {
+      void loadRecordings()
+        .then(setRecordings)
+        .catch(() => setRecordingLoadError(true))
+    }
+  }, [Boolean(session), recordings.length, recordingLoadError])
+  const recording = recordings.find((item) => item.id === session?.recordingId)
+  const scenes = useMemo(() => (recording ? recordingScenes(recording) : demoScenes), [recording])
+  const duration = scenes.reduce((sum, scene) => sum + scene.duration, 0)
   const [reducedMotion, setReducedMotion] = useState(
     () => matchMedia('(prefers-reduced-motion: reduce)').matches,
   )
@@ -41,19 +55,20 @@ export function useDemo(base: Workspace) {
       previous = now
       setSession((current) => {
         if (!current?.playing) return current
-        const elapsed = Math.min(demoDuration, current.elapsed + delta * current.speed)
-        const changed = demoPosition(elapsed).index !== demoPosition(current.elapsed).index
+        const elapsed = Math.min(duration, current.elapsed + delta * current.speed)
+        const changed =
+          demoPosition(elapsed, scenes).index !== demoPosition(current.elapsed, scenes).index
         return {
           ...current,
           elapsed,
-          playing: elapsed < demoDuration,
+          playing: elapsed < duration,
           override: changed ? undefined : current.override,
           menu: changed ? undefined : current.menu,
         }
       })
     }, 60)
     return () => clearInterval(timer)
-  }, [playing, speed])
+  }, [playing, speed, duration, scenes])
   useEffect(() => {
     const pauseWhenHidden = () => {
       if (document.hidden)
@@ -62,13 +77,22 @@ export function useDemo(base: Workspace) {
     document.addEventListener('visibilitychange', pauseWhenHidden)
     return () => document.removeEventListener('visibilitychange', pauseWhenHidden)
   }, [])
-  const index = session ? demoPosition(session.elapsed).index : 0
+  const position = demoPosition(session?.elapsed ?? 0, scenes)
+  const index = position.index
+  const recordedRun = useMemo(
+    () => (recording ? recordingFrame(recording, scenes[index].id) : undefined),
+    [recording, scenes, index],
+  )
   const scriptedState = useMemo(
-    () => (session ? demoWorkspace(session.base, index, session.alternateTheme) : null),
-    [session?.base, session?.alternateTheme, index],
+    () =>
+      session
+        ? recording && recordedRun
+          ? recordingWorkspace(session.base, recording, recordedRun, scenes[index].id)
+          : demoWorkspace(session.base, index, session.alternateTheme)
+        : null,
+    [session?.base, session?.alternateTheme, recording, recordedRun, index, scenes],
   )
   const state = session?.override ?? scriptedState
-  const position = demoPosition(session?.elapsed ?? 0)
   const run = state?.threads[0].runs[0]
   const start = () => {
     const dark =
@@ -84,6 +108,12 @@ export function useDemo(base: Workspace) {
   }
   return {
     state,
+    recording,
+    recordedRun,
+    recordings,
+    recordingLoadError,
+    scenes,
+    duration,
     currentNode: scriptedState?.selectedNode ?? 'clarify',
     active: Boolean(session),
     playing,
@@ -91,11 +121,15 @@ export function useDemo(base: Workspace) {
     reducedMotion,
     manualMenu: session?.menu !== undefined,
     elapsed: session?.elapsed ?? 0,
-    done: session?.elapsed === demoDuration,
+    done: session?.elapsed === duration,
     ...position,
-    nodes: demoNodes(run, index, position.progress),
-    menu:
-      session?.menu !== undefined
+    nodes:
+      recording && recordedRun
+        ? recordingNodes(recording, recordedRun, position.scene.id)
+        : demoNodes(run, index, position.progress),
+    menu: recording
+      ? null
+      : session?.menu !== undefined
         ? session.menu
         : index === 1
           ? ('model' as const)
@@ -107,9 +141,7 @@ export function useDemo(base: Workspace) {
     pause: () => setSession((current) => (current ? { ...current, playing: false } : null)),
     toggle: () =>
       setSession((current) =>
-        current
-          ? { ...current, playing: !current.playing && current.elapsed < demoDuration }
-          : null,
+        current ? { ...current, playing: !current.playing && current.elapsed < duration } : null,
       ),
     replay: () =>
       setSession((current) =>
@@ -124,7 +156,7 @@ export function useDemo(base: Workspace) {
         current
           ? {
               ...current,
-              elapsed: demoStart(Math.max(0, Math.min(demoScenes.length - 1, value))),
+              elapsed: demoStart(Math.max(0, Math.min(scenes.length - 1, value)), scenes),
               override: undefined,
               menu: undefined,
             }
@@ -134,5 +166,18 @@ export function useDemo(base: Workspace) {
       setSession((current) => (current ? { ...current, playing: false, override: next } : null)),
     setMenu: (menu: 'model' | 'skill' | null) =>
       setSession((current) => (current ? { ...current, playing: false, menu } : null)),
+    chooseRecording: (id: string) =>
+      setSession((current) =>
+        current
+          ? {
+              ...current,
+              recordingId: recordings.find((item) => item.id === id)?.id,
+              elapsed: 0,
+              playing: true,
+              override: undefined,
+              menu: undefined,
+            }
+          : null,
+      ),
   }
 }

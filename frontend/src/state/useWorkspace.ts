@@ -301,9 +301,9 @@ export function useWorkspace() {
   const thread = state.threads.find((t) => t.id === state.activeThreadId)!
   const run = thread.runs.find((r) => r.id === thread.selectedRunId)
   const isLive = !demo.active && thread.source === 'live'
-  const liveRun = isLive
-    ? thread.live?.researches.find((r) => r.id === thread.selectedRunId)
-    : undefined
+  const liveRun =
+    demo.recordedRun ??
+    (isLive ? thread.live?.researches.find((r) => r.id === thread.selectedRunId) : undefined)
   const inspectNode = (node: string, runId?: string) => {
     dispatch({ type: 'inspect', node, runId })
     // On narrow screens the graph follows the conversation; bring the requested

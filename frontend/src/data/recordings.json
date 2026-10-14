@@ -1,0 +1,2719 @@
+[
+  {
+    "id": "backoff",
+    "label": "GLM 5.3 · 真实记录",
+    "date": "2026-10-13",
+    "threadId": "76e40c20-3085-4178-9e4c-132e392a30c5",
+    "research": {
+      "id": "e41967ef-b283-4398-a803-f596e75691ff",
+      "prompt": "请帮我做一项对比研究。",
+      "createdAt": "2026-10-13T03:31:37.907Z",
+      "config": {
+        "contract_version": 1,
+        "graph_id": "research_agent_full",
+        "model_selection": "server",
+        "skills_mode": "auto",
+        "research_events_version": 1,
+        "research_event_replay_version": 1,
+        "submission_recovery_version": 1,
+        "configuration_version": 1,
+        "selection": {
+          "version": 1,
+          "models": {
+            "SUMMARIZATION": "cc1d35e644df9364f473e423eba6f3e4b489030d9383d443b8c4d8224d3a8f9b",
+            "RESEARCHER": "cc1d35e644df9364f473e423eba6f3e4b489030d9383d443b8c4d8224d3a8f9b",
+            "COMPRESSION": "132177a917efc7f751634782bf7ccafa9bf7fe15c8c569bce4cbb351b63a8b60",
+            "SUPERVISOR": "cc1d35e644df9364f473e423eba6f3e4b489030d9383d443b8c4d8224d3a8f9b",
+            "SCOPING": "cc1d35e644df9364f473e423eba6f3e4b489030d9383d443b8c4d8224d3a8f9b",
+            "FINAL_REPORT": "132177a917efc7f751634782bf7ccafa9bf7fe15c8c569bce4cbb351b63a8b60"
+          },
+          "skills": {
+            "mode": "auto",
+            "allowed": []
+          }
+        },
+        "skill_revisions": {
+          "academic-research": "2fb1ec459ae2f12f3d008425365045a5f420ae931c73f04aa75e00153ccc157e",
+          "news-timeline": "faa1f1b3507dffa192fca5fba749f2c8b55444c3a97c43f80acf19376d35afd0",
+          "people-research": "4a2986c532cf1fb8107f3a907e4fe3b3a37422aa43207731a90850dc2bed2549",
+          "product-comparison": "30fef831acc46e8255b3db2f77d4003086f9ce3f74752c595a100b44bab081b3"
+        },
+        "models": [
+          {
+            "role": "SUMMARIZATION",
+            "model": "z-ai/glm-5.3",
+            "provider": "openai",
+            "max_tokens": null,
+            "config_id": "cc1d35e644df9364f473e423eba6f3e4b489030d9383d443b8c4d8224d3a8f9b"
+          },
+          {
+            "role": "RESEARCHER",
+            "model": "z-ai/glm-5.3",
+            "provider": "openai",
+            "max_tokens": null,
+            "config_id": "cc1d35e644df9364f473e423eba6f3e4b489030d9383d443b8c4d8224d3a8f9b"
+          },
+          {
+            "role": "COMPRESSION",
+            "model": "z-ai/glm-5.3",
+            "provider": "openai",
+            "max_tokens": 32000,
+            "config_id": "132177a917efc7f751634782bf7ccafa9bf7fe15c8c569bce4cbb351b63a8b60"
+          },
+          {
+            "role": "SUPERVISOR",
+            "model": "z-ai/glm-5.3",
+            "provider": "openai",
+            "max_tokens": null,
+            "config_id": "cc1d35e644df9364f473e423eba6f3e4b489030d9383d443b8c4d8224d3a8f9b"
+          },
+          {
+            "role": "SCOPING",
+            "model": "z-ai/glm-5.3",
+            "provider": "openai",
+            "max_tokens": null,
+            "config_id": "cc1d35e644df9364f473e423eba6f3e4b489030d9383d443b8c4d8224d3a8f9b"
+          },
+          {
+            "role": "FINAL_REPORT",
+            "model": "z-ai/glm-5.3",
+            "provider": "openai",
+            "max_tokens": 32000,
+            "config_id": "132177a917efc7f751634782bf7ccafa9bf7fe15c8c569bce4cbb351b63a8b60"
+          }
+        ]
+      },
+      "turns": [
+        {
+          "id": "06c800fb-95cb-4235-b193-f8d22500975e",
+          "text": "请帮我做一项对比研究。",
+          "submittedAt": "2026-10-13T03:31:37.907Z",
+          "runId": "391c1b61-c3e0-4a4e-a898-798a21c9c890",
+          "eventRunId": "391c1b61-c3e0-4a4e-a898-798a21c9c890",
+          "submissionVersion": 1,
+          "selection": {
+            "version": 1,
+            "models": {
+              "SUMMARIZATION": "cc1d35e644df9364f473e423eba6f3e4b489030d9383d443b8c4d8224d3a8f9b",
+              "RESEARCHER": "cc1d35e644df9364f473e423eba6f3e4b489030d9383d443b8c4d8224d3a8f9b",
+              "COMPRESSION": "132177a917efc7f751634782bf7ccafa9bf7fe15c8c569bce4cbb351b63a8b60",
+              "SUPERVISOR": "cc1d35e644df9364f473e423eba6f3e4b489030d9383d443b8c4d8224d3a8f9b",
+              "SCOPING": "cc1d35e644df9364f473e423eba6f3e4b489030d9383d443b8c4d8224d3a8f9b",
+              "FINAL_REPORT": "132177a917efc7f751634782bf7ccafa9bf7fe15c8c569bce4cbb351b63a8b60"
+            },
+            "skills": {
+              "mode": "auto",
+              "allowed": []
+            }
+          },
+          "expectedTurnId": null,
+          "transport": "accepted"
+        },
+        {
+          "id": "0ecee1a5-4407-4b54-bdba-c742af2c4907",
+          "text": "比较 Python 3.13 实验性的 free-threaded CPython 与默认 GIL 构建，用于开发者判断是否试用。只比较 GIL 状态、C 扩展兼容性和适用限制三个维度。仅使用 Python 官方文档或 PEP 中的 2–3 个来源，中文报告控制在 500 字左右。范围已明确，无需继续澄清；不确定之处请明示。",
+          "submittedAt": "2026-10-13T03:33:26.927Z",
+          "submissionVersion": 1,
+          "selection": {
+            "version": 1,
+            "models": {
+              "SUMMARIZATION": "cc1d35e644df9364f473e423eba6f3e4b489030d9383d443b8c4d8224d3a8f9b",
+              "RESEARCHER": "cc1d35e644df9364f473e423eba6f3e4b489030d9383d443b8c4d8224d3a8f9b",
+              "COMPRESSION": "132177a917efc7f751634782bf7ccafa9bf7fe15c8c569bce4cbb351b63a8b60",
+              "SUPERVISOR": "cc1d35e644df9364f473e423eba6f3e4b489030d9383d443b8c4d8224d3a8f9b",
+              "SCOPING": "cc1d35e644df9364f473e423eba6f3e4b489030d9383d443b8c4d8224d3a8f9b",
+              "FINAL_REPORT": "132177a917efc7f751634782bf7ccafa9bf7fe15c8c569bce4cbb351b63a8b60"
+            },
+            "skills": {
+              "mode": "auto",
+              "allowed": []
+            }
+          },
+          "expectedTurnId": "06c800fb-95cb-4235-b193-f8d22500975e",
+          "transport": "accepted",
+          "runId": "6dd9bfeb-4887-469d-ba08-412bda8cd14e",
+          "eventRunId": "6dd9bfeb-4887-469d-ba08-412bda8cd14e"
+        }
+      ],
+      "status": "failed",
+      "phase": "brief",
+      "messages": [
+        {
+          "id": "06c800fb-95cb-4235-b193-f8d22500975e",
+          "type": "human",
+          "content": "请帮我做一项对比研究。"
+        },
+        {
+          "id": "21fd90e7-30bb-4909-8376-0f54095d08ce",
+          "type": "ai",
+          "content": "感谢您的请求。为了开展这项对比研究，请提供以下关键信息：\n\n1. **对比对象**：您希望对比哪些事物？（例如：产品、技术、公司、政策、理论等）\n2. **对比维度**：您关注哪些方面的比较？（例如：性能、成本、优劣势、适用场景等）\n3. **研究目的**：这项对比研究的用途是什么？（例如：决策参考、学术分析、报告撰写等）"
+        },
+        {
+          "id": "0ecee1a5-4407-4b54-bdba-c742af2c4907",
+          "type": "human",
+          "content": "比较 Python 3.13 实验性的 free-threaded CPython 与默认 GIL 构建，用于开发者判断是否试用。只比较 GIL 状态、C 扩展兼容性和适用限制三个维度。仅使用 Python 官方文档或 PEP 中的 2–3 个来源，中文报告控制在 500 字左右。范围已明确，无需继续澄清；不确定之处请明示。"
+        },
+        {
+          "id": "441ab034-8b4f-4c7f-945f-fcd0c456edb9",
+          "type": "ai",
+          "content": "信息已充分，可以开始研究。我理解您的需求是：对比 Python 3.13 实验性 free-threaded CPython（无 GIL 构建）与默认 GIL 构建，聚焦三个维度——GIL 状态、C 扩展兼容性、适用限制，目的是帮助开发者判断是否值得试用。报告将以中文撰写，控制在 500 字左右，仅引用 2–3 个 Python 官方文档或 PEP 来源（如 PEP 703 及官方文档中的 free-threading 相关章节）。研究中如有不确定之处，将在报告中明确标注。现在开始研究。"
+        }
+      ],
+      "brief": "",
+      "report": "",
+      "notes": [],
+      "sources": [],
+      "errors": [
+        {
+          "code": "brief_failed",
+          "message": "研究简报生成失败，请检查后端模型服务后发起新研究。",
+          "node": "write_research_brief"
+        }
+      ],
+      "events": [],
+      "observations": [
+        {
+          "at": "2026-10-13T03:31:38.206Z",
+          "phase": "clarify",
+          "status": "running"
+        },
+        {
+          "at": "2026-10-13T03:33:26.355Z",
+          "phase": "clarify",
+          "status": "awaiting_input"
+        },
+        {
+          "at": "2026-10-13T03:33:27.265Z",
+          "phase": "clarify",
+          "status": "running"
+        },
+        {
+          "at": "2026-10-13T03:33:57.238Z",
+          "phase": "brief",
+          "status": "running"
+        },
+        {
+          "at": "2026-10-13T03:41:39.751Z",
+          "phase": "brief",
+          "status": "failed"
+        }
+      ]
+    },
+    "runCount": 2,
+    "modelHttpAttempts": [
+      {
+        "id": "0cda6a5a-a758-4d24-b9fe-143565ac32b6",
+        "node": "clarify_with_user",
+        "model": "z-ai/glm-5.3",
+        "threadId": "76e40c20-3085-4178-9e4c-132e392a30c5",
+        "runId": "391c1b61-c3e0-4a4e-a898-798a21c9c890",
+        "responseFormat": "json_schema",
+        "sdkRetryCount": "0",
+        "stream": false,
+        "tools": [],
+        "startedAt": "2026-10-13T03:31:39.007361+00:00",
+        "endedAt": "2026-10-13T03:31:56.114798+00:00",
+        "seconds": 17.107,
+        "httpStatus": null,
+        "outcome": "failed",
+        "toolCalls": [],
+        "exceptionTypes": ["RemoteProtocolError"],
+        "causeMessage": "Server disconnected without sending a response."
+      },
+      {
+        "id": "73e966df-4f73-4d11-b074-fa57b008e7cb",
+        "node": "clarify_with_user",
+        "model": "z-ai/glm-5.3",
+        "threadId": "76e40c20-3085-4178-9e4c-132e392a30c5",
+        "runId": "391c1b61-c3e0-4a4e-a898-798a21c9c890",
+        "responseFormat": "json_schema",
+        "sdkRetryCount": "1",
+        "stream": false,
+        "tools": [],
+        "startedAt": "2026-10-13T03:31:59.124180+00:00",
+        "endedAt": "2026-10-13T03:33:00.238403+00:00",
+        "seconds": 61.114,
+        "httpStatus": null,
+        "outcome": "failed",
+        "toolCalls": [],
+        "exceptionTypes": ["RemoteProtocolError"],
+        "causeMessage": "Server disconnected without sending a response."
+      },
+      {
+        "id": "933c1268-9475-4aff-befb-b0520c8da7cc",
+        "node": "clarify_with_user",
+        "model": "z-ai/glm-5.3",
+        "threadId": "76e40c20-3085-4178-9e4c-132e392a30c5",
+        "runId": "391c1b61-c3e0-4a4e-a898-798a21c9c890",
+        "responseFormat": "json_schema",
+        "sdkRetryCount": "2",
+        "stream": false,
+        "tools": [],
+        "startedAt": "2026-10-13T03:33:06.240912+00:00",
+        "endedAt": "2026-10-13T03:33:26.223310+00:00",
+        "seconds": 19.982,
+        "httpStatus": 200,
+        "outcome": "response",
+        "toolCalls": []
+      },
+      {
+        "id": "f149cc95-ba70-4915-85de-3c6070e5f70b",
+        "node": "clarify_with_user",
+        "model": "z-ai/glm-5.3",
+        "threadId": "76e40c20-3085-4178-9e4c-132e392a30c5",
+        "runId": "6dd9bfeb-4887-469d-ba08-412bda8cd14e",
+        "responseFormat": "json_schema",
+        "sdkRetryCount": "0",
+        "stream": false,
+        "tools": [],
+        "startedAt": "2026-10-13T03:33:27.881788+00:00",
+        "endedAt": "2026-10-13T03:33:43.083655+00:00",
+        "seconds": 15.201,
+        "httpStatus": null,
+        "outcome": "failed",
+        "toolCalls": [],
+        "exceptionTypes": ["RemoteProtocolError"],
+        "causeMessage": "Server disconnected without sending a response."
+      },
+      {
+        "id": "03e312a9-3192-4436-aeb1-8a955c04ef40",
+        "node": "clarify_with_user",
+        "model": "z-ai/glm-5.3",
+        "threadId": "76e40c20-3085-4178-9e4c-132e392a30c5",
+        "runId": "6dd9bfeb-4887-469d-ba08-412bda8cd14e",
+        "responseFormat": "json_schema",
+        "sdkRetryCount": "1",
+        "stream": false,
+        "tools": [],
+        "startedAt": "2026-10-13T03:33:46.086505+00:00",
+        "endedAt": "2026-10-13T03:33:55.817133+00:00",
+        "seconds": 9.729,
+        "httpStatus": 200,
+        "outcome": "response",
+        "toolCalls": []
+      },
+      {
+        "id": "cbc9da54-a916-4250-9718-ba866461ddbb",
+        "node": "write_research_brief",
+        "model": "z-ai/glm-5.3",
+        "threadId": "76e40c20-3085-4178-9e4c-132e392a30c5",
+        "runId": "6dd9bfeb-4887-469d-ba08-412bda8cd14e",
+        "responseFormat": "json_schema",
+        "sdkRetryCount": "0",
+        "stream": false,
+        "tools": [],
+        "startedAt": "2026-10-13T03:33:55.902706+00:00",
+        "endedAt": "2026-10-13T03:34:25.238687+00:00",
+        "seconds": 29.335,
+        "httpStatus": null,
+        "outcome": "failed",
+        "toolCalls": [],
+        "exceptionTypes": ["RemoteProtocolError"],
+        "causeMessage": "Server disconnected without sending a response."
+      },
+      {
+        "id": "41939a4f-b94e-4747-8d92-57d0021bbf28",
+        "node": "write_research_brief",
+        "model": "z-ai/glm-5.3",
+        "threadId": "76e40c20-3085-4178-9e4c-132e392a30c5",
+        "runId": "6dd9bfeb-4887-469d-ba08-412bda8cd14e",
+        "responseFormat": "json_schema",
+        "sdkRetryCount": "1",
+        "stream": false,
+        "tools": [],
+        "startedAt": "2026-10-13T03:34:28.242390+00:00",
+        "endedAt": "2026-10-13T03:34:34.469448+00:00",
+        "seconds": 6.226,
+        "httpStatus": null,
+        "outcome": "failed",
+        "toolCalls": [],
+        "exceptionTypes": ["RemoteProtocolError"],
+        "causeMessage": "Server disconnected without sending a response."
+      },
+      {
+        "id": "4e853ed9-41e8-478c-a9c5-83ca58943dcd",
+        "node": "write_research_brief",
+        "model": "z-ai/glm-5.3",
+        "threadId": "76e40c20-3085-4178-9e4c-132e392a30c5",
+        "runId": "6dd9bfeb-4887-469d-ba08-412bda8cd14e",
+        "responseFormat": "json_schema",
+        "sdkRetryCount": "2",
+        "stream": false,
+        "tools": [],
+        "startedAt": "2026-10-13T03:34:40.471508+00:00",
+        "endedAt": "2026-10-13T03:34:51.378150+00:00",
+        "seconds": 10.906,
+        "httpStatus": null,
+        "outcome": "failed",
+        "toolCalls": [],
+        "exceptionTypes": ["RemoteProtocolError"],
+        "causeMessage": "Server disconnected without sending a response."
+      },
+      {
+        "id": "1a1b06c3-c57a-4635-92bc-ba1813747658",
+        "node": "write_research_brief",
+        "model": "z-ai/glm-5.3",
+        "threadId": "76e40c20-3085-4178-9e4c-132e392a30c5",
+        "runId": "6dd9bfeb-4887-469d-ba08-412bda8cd14e",
+        "responseFormat": "json_schema",
+        "sdkRetryCount": "3",
+        "stream": false,
+        "tools": [],
+        "startedAt": "2026-10-13T03:35:03.380291+00:00",
+        "endedAt": "2026-10-13T03:35:17.284589+00:00",
+        "seconds": 13.904,
+        "httpStatus": null,
+        "outcome": "failed",
+        "toolCalls": [],
+        "exceptionTypes": ["RemoteProtocolError"],
+        "causeMessage": "Server disconnected without sending a response."
+      },
+      {
+        "id": "b6e3e9f3-d608-4071-b4fa-c62b93a2501b",
+        "node": "write_research_brief",
+        "model": "z-ai/glm-5.3",
+        "threadId": "76e40c20-3085-4178-9e4c-132e392a30c5",
+        "runId": "6dd9bfeb-4887-469d-ba08-412bda8cd14e",
+        "responseFormat": "json_schema",
+        "sdkRetryCount": "4",
+        "stream": false,
+        "tools": [],
+        "startedAt": "2026-10-13T03:35:41.287422+00:00",
+        "endedAt": "2026-10-13T03:35:55.615632+00:00",
+        "seconds": 14.327,
+        "httpStatus": null,
+        "outcome": "failed",
+        "toolCalls": [],
+        "exceptionTypes": ["RemoteProtocolError"],
+        "causeMessage": "Server disconnected without sending a response."
+      },
+      {
+        "id": "df907b0f-5ce8-4ab6-8e58-e0558709f212",
+        "node": "write_research_brief",
+        "model": "z-ai/glm-5.3",
+        "threadId": "76e40c20-3085-4178-9e4c-132e392a30c5",
+        "runId": "6dd9bfeb-4887-469d-ba08-412bda8cd14e",
+        "responseFormat": null,
+        "sdkRetryCount": "0",
+        "stream": false,
+        "tools": [],
+        "startedAt": "2026-10-13T03:35:55.818285+00:00",
+        "endedAt": "2026-10-13T03:36:57.553468+00:00",
+        "seconds": 61.734,
+        "httpStatus": null,
+        "outcome": "failed",
+        "toolCalls": [],
+        "exceptionTypes": ["RemoteProtocolError", "APIConnectionError"],
+        "causeMessage": "Server disconnected without sending a response."
+      },
+      {
+        "id": "2e754e31-4727-4da2-975c-029a995b3122",
+        "node": "write_research_brief",
+        "model": "z-ai/glm-5.3",
+        "threadId": "76e40c20-3085-4178-9e4c-132e392a30c5",
+        "runId": "6dd9bfeb-4887-469d-ba08-412bda8cd14e",
+        "responseFormat": null,
+        "sdkRetryCount": "1",
+        "stream": false,
+        "tools": [],
+        "startedAt": "2026-10-13T03:37:00.556589+00:00",
+        "endedAt": "2026-10-13T03:37:29.040387+00:00",
+        "seconds": 28.483,
+        "httpStatus": null,
+        "outcome": "failed",
+        "toolCalls": [],
+        "exceptionTypes": ["RemoteProtocolError", "APIConnectionError"],
+        "causeMessage": "Server disconnected without sending a response."
+      },
+      {
+        "id": "5d5522ce-7abc-40ae-84c5-74c1981d5070",
+        "node": "write_research_brief",
+        "model": "z-ai/glm-5.3",
+        "threadId": "76e40c20-3085-4178-9e4c-132e392a30c5",
+        "runId": "6dd9bfeb-4887-469d-ba08-412bda8cd14e",
+        "responseFormat": null,
+        "sdkRetryCount": "2",
+        "stream": false,
+        "tools": [],
+        "startedAt": "2026-10-13T03:37:35.042732+00:00",
+        "endedAt": "2026-10-13T03:37:44.809017+00:00",
+        "seconds": 9.766,
+        "httpStatus": null,
+        "outcome": "failed",
+        "toolCalls": [],
+        "exceptionTypes": ["RemoteProtocolError", "APIConnectionError"],
+        "causeMessage": "Server disconnected without sending a response."
+      },
+      {
+        "id": "ba371c8d-beae-4d02-9423-0657370141a1",
+        "node": "write_research_brief",
+        "model": "z-ai/glm-5.3",
+        "threadId": "76e40c20-3085-4178-9e4c-132e392a30c5",
+        "runId": "6dd9bfeb-4887-469d-ba08-412bda8cd14e",
+        "responseFormat": null,
+        "sdkRetryCount": "3",
+        "stream": false,
+        "tools": [],
+        "startedAt": "2026-10-13T03:37:56.810798+00:00",
+        "endedAt": "2026-10-13T03:38:29.047849+00:00",
+        "seconds": 32.236,
+        "httpStatus": null,
+        "outcome": "failed",
+        "toolCalls": [],
+        "exceptionTypes": ["RemoteProtocolError", "APIConnectionError"],
+        "causeMessage": "Server disconnected without sending a response."
+      },
+      {
+        "id": "dc402874-b4f7-4982-adb2-bd4dcc4cc633",
+        "node": "write_research_brief",
+        "model": "z-ai/glm-5.3",
+        "threadId": "76e40c20-3085-4178-9e4c-132e392a30c5",
+        "runId": "6dd9bfeb-4887-469d-ba08-412bda8cd14e",
+        "responseFormat": null,
+        "sdkRetryCount": "4",
+        "stream": false,
+        "tools": [],
+        "startedAt": "2026-10-13T03:38:53.050995+00:00",
+        "endedAt": "2026-10-13T03:39:10.641289+00:00",
+        "seconds": 17.589,
+        "httpStatus": null,
+        "outcome": "failed",
+        "toolCalls": [],
+        "exceptionTypes": ["RemoteProtocolError", "APIConnectionError"],
+        "causeMessage": "Server disconnected without sending a response."
+      },
+      {
+        "id": "633fd909-8390-4513-80c8-fd502cf5b1a6",
+        "node": "write_research_brief",
+        "model": "z-ai/glm-5.3",
+        "threadId": "76e40c20-3085-4178-9e4c-132e392a30c5",
+        "runId": "6dd9bfeb-4887-469d-ba08-412bda8cd14e",
+        "responseFormat": "json_object",
+        "sdkRetryCount": "0",
+        "stream": false,
+        "tools": [],
+        "startedAt": "2026-10-13T03:39:11.000789+00:00",
+        "endedAt": "2026-10-13T03:39:28.581867+00:00",
+        "seconds": 17.58,
+        "httpStatus": null,
+        "outcome": "failed",
+        "toolCalls": [],
+        "exceptionTypes": ["RemoteProtocolError", "APIConnectionError"],
+        "causeMessage": "Server disconnected without sending a response."
+      },
+      {
+        "id": "5d01334b-9e35-46a2-9450-cae021341d84",
+        "node": "write_research_brief",
+        "model": "z-ai/glm-5.3",
+        "threadId": "76e40c20-3085-4178-9e4c-132e392a30c5",
+        "runId": "6dd9bfeb-4887-469d-ba08-412bda8cd14e",
+        "responseFormat": "json_object",
+        "sdkRetryCount": "1",
+        "stream": false,
+        "tools": [],
+        "startedAt": "2026-10-13T03:39:31.584180+00:00",
+        "endedAt": "2026-10-13T03:39:49.237287+00:00",
+        "seconds": 17.652,
+        "httpStatus": null,
+        "outcome": "failed",
+        "toolCalls": [],
+        "exceptionTypes": ["RemoteProtocolError", "APIConnectionError"],
+        "causeMessage": "Server disconnected without sending a response."
+      },
+      {
+        "id": "cc61e046-4316-4ab4-b5ec-f1a2ef5490a5",
+        "node": "write_research_brief",
+        "model": "z-ai/glm-5.3",
+        "threadId": "76e40c20-3085-4178-9e4c-132e392a30c5",
+        "runId": "6dd9bfeb-4887-469d-ba08-412bda8cd14e",
+        "responseFormat": "json_object",
+        "sdkRetryCount": "2",
+        "stream": false,
+        "tools": [],
+        "startedAt": "2026-10-13T03:39:55.239354+00:00",
+        "endedAt": "2026-10-13T03:40:13.198481+00:00",
+        "seconds": 17.958,
+        "httpStatus": null,
+        "outcome": "failed",
+        "toolCalls": [],
+        "exceptionTypes": ["RemoteProtocolError", "APIConnectionError"],
+        "causeMessage": "Server disconnected without sending a response."
+      },
+      {
+        "id": "f00f8453-6ae9-4e12-884e-34a751f6b30b",
+        "node": "write_research_brief",
+        "model": "z-ai/glm-5.3",
+        "threadId": "76e40c20-3085-4178-9e4c-132e392a30c5",
+        "runId": "6dd9bfeb-4887-469d-ba08-412bda8cd14e",
+        "responseFormat": "json_object",
+        "sdkRetryCount": "3",
+        "stream": false,
+        "tools": [],
+        "startedAt": "2026-10-13T03:40:25.201309+00:00",
+        "endedAt": "2026-10-13T03:40:57.987508+00:00",
+        "seconds": 32.785,
+        "httpStatus": null,
+        "outcome": "failed",
+        "toolCalls": [],
+        "exceptionTypes": ["RemoteProtocolError", "APIConnectionError"],
+        "causeMessage": "Server disconnected without sending a response."
+      },
+      {
+        "id": "5618ce08-cc6f-4b76-a61a-b96238c60163",
+        "node": "write_research_brief",
+        "model": "z-ai/glm-5.3",
+        "threadId": "76e40c20-3085-4178-9e4c-132e392a30c5",
+        "runId": "6dd9bfeb-4887-469d-ba08-412bda8cd14e",
+        "responseFormat": "json_object",
+        "sdkRetryCount": "4",
+        "stream": false,
+        "tools": [],
+        "startedAt": "2026-10-13T03:41:21.989120+00:00",
+        "endedAt": "2026-10-13T03:41:39.621415+00:00",
+        "seconds": 17.631,
+        "httpStatus": null,
+        "outcome": "failed",
+        "toolCalls": [],
+        "exceptionTypes": ["RemoteProtocolError", "APIConnectionError"],
+        "causeMessage": "Server disconnected without sending a response."
+      }
+    ],
+    "retrySchedules": [
+      {
+        "kind": "retry_scheduled",
+        "retryNumber": 1,
+        "delaySeconds": 3,
+        "at": "2026-10-13T03:31:56.115272+00:00"
+      },
+      {
+        "kind": "retry_scheduled",
+        "retryNumber": 2,
+        "delaySeconds": 6,
+        "at": "2026-10-13T03:33:00.239087+00:00"
+      },
+      {
+        "kind": "retry_scheduled",
+        "retryNumber": 1,
+        "delaySeconds": 3,
+        "at": "2026-10-13T03:33:43.084360+00:00"
+      },
+      {
+        "kind": "retry_scheduled",
+        "retryNumber": 1,
+        "delaySeconds": 3,
+        "at": "2026-10-13T03:34:25.239641+00:00"
+      },
+      {
+        "kind": "retry_scheduled",
+        "retryNumber": 2,
+        "delaySeconds": 6,
+        "at": "2026-10-13T03:34:34.470006+00:00"
+      },
+      {
+        "kind": "retry_scheduled",
+        "retryNumber": 3,
+        "delaySeconds": 12,
+        "at": "2026-10-13T03:34:51.378621+00:00"
+      },
+      {
+        "kind": "retry_scheduled",
+        "retryNumber": 4,
+        "delaySeconds": 24,
+        "at": "2026-10-13T03:35:17.285440+00:00"
+      },
+      {
+        "kind": "retry_scheduled",
+        "retryNumber": 1,
+        "delaySeconds": 3,
+        "at": "2026-10-13T03:36:57.554236+00:00"
+      },
+      {
+        "kind": "retry_scheduled",
+        "retryNumber": 2,
+        "delaySeconds": 6,
+        "at": "2026-10-13T03:37:29.040855+00:00"
+      },
+      {
+        "kind": "retry_scheduled",
+        "retryNumber": 3,
+        "delaySeconds": 12,
+        "at": "2026-10-13T03:37:44.809465+00:00"
+      },
+      {
+        "kind": "retry_scheduled",
+        "retryNumber": 4,
+        "delaySeconds": 24,
+        "at": "2026-10-13T03:38:29.048540+00:00"
+      },
+      {
+        "kind": "retry_scheduled",
+        "retryNumber": 1,
+        "delaySeconds": 3,
+        "at": "2026-10-13T03:39:28.582303+00:00"
+      },
+      {
+        "kind": "retry_scheduled",
+        "retryNumber": 2,
+        "delaySeconds": 6,
+        "at": "2026-10-13T03:39:49.237714+00:00"
+      },
+      {
+        "kind": "retry_scheduled",
+        "retryNumber": 3,
+        "delaySeconds": 12,
+        "at": "2026-10-13T03:40:13.199263+00:00"
+      },
+      {
+        "kind": "retry_scheduled",
+        "retryNumber": 4,
+        "delaySeconds": 24,
+        "at": "2026-10-13T03:40:57.987982+00:00"
+      }
+    ],
+    "nativeCompletions": [
+      {
+        "runId": "391c1b61-c3e0-4a4e-a898-798a21c9c890",
+        "executionSeconds": 107.572,
+        "status": "success"
+      },
+      {
+        "runId": "6dd9bfeb-4887-469d-ba08-412bda8cd14e",
+        "executionSeconds": 491.866,
+        "status": "success"
+      }
+    ],
+    "evidenceFile": "provider-2026-10-13-backoff-evidence.json"
+  },
+  {
+    "id": "kimi",
+    "label": "Kimi K3 · 真实记录",
+    "date": "2026-10-13",
+    "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+    "research": {
+      "id": "4e559f56-f300-40f6-a9af-10fd47d98ba2",
+      "prompt": "请帮我做一项对比研究。",
+      "createdAt": "2026-10-13T03:55:26.219Z",
+      "config": {
+        "contract_version": 1,
+        "graph_id": "research_agent_full",
+        "model_selection": "server",
+        "skills_mode": "auto",
+        "research_events_version": 1,
+        "research_event_replay_version": 1,
+        "submission_recovery_version": 1,
+        "configuration_version": 1,
+        "selection": {
+          "version": 1,
+          "models": {
+            "SUMMARIZATION": "ed2f440907d932b55a5541c77c37a4a809d9dffbc16b4b16e7fb6dd6a6da7f89",
+            "RESEARCHER": "ed2f440907d932b55a5541c77c37a4a809d9dffbc16b4b16e7fb6dd6a6da7f89",
+            "COMPRESSION": "1d1c4f0131801120fbc9e6d1186bfe5fc93cec2782af5956c0f7ecbd3cdc8958",
+            "SUPERVISOR": "ed2f440907d932b55a5541c77c37a4a809d9dffbc16b4b16e7fb6dd6a6da7f89",
+            "SCOPING": "ed2f440907d932b55a5541c77c37a4a809d9dffbc16b4b16e7fb6dd6a6da7f89",
+            "FINAL_REPORT": "1d1c4f0131801120fbc9e6d1186bfe5fc93cec2782af5956c0f7ecbd3cdc8958"
+          },
+          "skills": {
+            "mode": "auto",
+            "allowed": []
+          }
+        },
+        "skill_revisions": {
+          "academic-research": "2fb1ec459ae2f12f3d008425365045a5f420ae931c73f04aa75e00153ccc157e",
+          "news-timeline": "faa1f1b3507dffa192fca5fba749f2c8b55444c3a97c43f80acf19376d35afd0",
+          "people-research": "4a2986c532cf1fb8107f3a907e4fe3b3a37422aa43207731a90850dc2bed2549",
+          "product-comparison": "30fef831acc46e8255b3db2f77d4003086f9ce3f74752c595a100b44bab081b3"
+        },
+        "models": [
+          {
+            "role": "SUMMARIZATION",
+            "model": "moonshotai/kimi-k3",
+            "provider": "openai",
+            "max_tokens": null,
+            "config_id": "ed2f440907d932b55a5541c77c37a4a809d9dffbc16b4b16e7fb6dd6a6da7f89"
+          },
+          {
+            "role": "RESEARCHER",
+            "model": "moonshotai/kimi-k3",
+            "provider": "openai",
+            "max_tokens": null,
+            "config_id": "ed2f440907d932b55a5541c77c37a4a809d9dffbc16b4b16e7fb6dd6a6da7f89"
+          },
+          {
+            "role": "COMPRESSION",
+            "model": "moonshotai/kimi-k3",
+            "provider": "openai",
+            "max_tokens": 32000,
+            "config_id": "1d1c4f0131801120fbc9e6d1186bfe5fc93cec2782af5956c0f7ecbd3cdc8958"
+          },
+          {
+            "role": "SUPERVISOR",
+            "model": "moonshotai/kimi-k3",
+            "provider": "openai",
+            "max_tokens": null,
+            "config_id": "ed2f440907d932b55a5541c77c37a4a809d9dffbc16b4b16e7fb6dd6a6da7f89"
+          },
+          {
+            "role": "SCOPING",
+            "model": "moonshotai/kimi-k3",
+            "provider": "openai",
+            "max_tokens": null,
+            "config_id": "ed2f440907d932b55a5541c77c37a4a809d9dffbc16b4b16e7fb6dd6a6da7f89"
+          },
+          {
+            "role": "FINAL_REPORT",
+            "model": "moonshotai/kimi-k3",
+            "provider": "openai",
+            "max_tokens": 32000,
+            "config_id": "1d1c4f0131801120fbc9e6d1186bfe5fc93cec2782af5956c0f7ecbd3cdc8958"
+          }
+        ]
+      },
+      "turns": [
+        {
+          "id": "2ac5867b-8dc2-4a7c-a572-02d861940ddd",
+          "text": "请帮我做一项对比研究。",
+          "submittedAt": "2026-10-13T03:55:26.219Z",
+          "runId": "5fad6d46-5140-42fa-8a8d-5bb64daaff27",
+          "eventRunId": "5fad6d46-5140-42fa-8a8d-5bb64daaff27",
+          "submissionVersion": 1,
+          "selection": {
+            "version": 1,
+            "models": {
+              "SUMMARIZATION": "ed2f440907d932b55a5541c77c37a4a809d9dffbc16b4b16e7fb6dd6a6da7f89",
+              "RESEARCHER": "ed2f440907d932b55a5541c77c37a4a809d9dffbc16b4b16e7fb6dd6a6da7f89",
+              "COMPRESSION": "1d1c4f0131801120fbc9e6d1186bfe5fc93cec2782af5956c0f7ecbd3cdc8958",
+              "SUPERVISOR": "ed2f440907d932b55a5541c77c37a4a809d9dffbc16b4b16e7fb6dd6a6da7f89",
+              "SCOPING": "ed2f440907d932b55a5541c77c37a4a809d9dffbc16b4b16e7fb6dd6a6da7f89",
+              "FINAL_REPORT": "1d1c4f0131801120fbc9e6d1186bfe5fc93cec2782af5956c0f7ecbd3cdc8958"
+            },
+            "skills": {
+              "mode": "auto",
+              "allowed": []
+            }
+          },
+          "expectedTurnId": null,
+          "transport": "accepted"
+        },
+        {
+          "id": "16e0f93f-e8be-487a-96c4-3aef0b4cf9f9",
+          "text": "比较 Python 3.13 实验性的 free-threaded CPython 与默认 GIL 构建，用于开发者判断是否试用。只比较 GIL 状态、C 扩展兼容性和适用限制三个维度。仅使用 Python 官方文档或 PEP 中的 2–3 个来源，中文报告控制在 500 字左右。范围已明确，无需继续澄清；不确定之处请明示。",
+          "submittedAt": "2026-10-13T03:58:43.318Z",
+          "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+          "eventRunId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+          "submissionVersion": 1,
+          "selection": {
+            "version": 1,
+            "models": {
+              "SUMMARIZATION": "ed2f440907d932b55a5541c77c37a4a809d9dffbc16b4b16e7fb6dd6a6da7f89",
+              "RESEARCHER": "ed2f440907d932b55a5541c77c37a4a809d9dffbc16b4b16e7fb6dd6a6da7f89",
+              "COMPRESSION": "1d1c4f0131801120fbc9e6d1186bfe5fc93cec2782af5956c0f7ecbd3cdc8958",
+              "SUPERVISOR": "ed2f440907d932b55a5541c77c37a4a809d9dffbc16b4b16e7fb6dd6a6da7f89",
+              "SCOPING": "ed2f440907d932b55a5541c77c37a4a809d9dffbc16b4b16e7fb6dd6a6da7f89",
+              "FINAL_REPORT": "1d1c4f0131801120fbc9e6d1186bfe5fc93cec2782af5956c0f7ecbd3cdc8958"
+            },
+            "skills": {
+              "mode": "auto",
+              "allowed": []
+            }
+          },
+          "expectedTurnId": "2ac5867b-8dc2-4a7c-a572-02d861940ddd",
+          "transport": "accepted"
+        }
+      ],
+      "status": "running",
+      "phase": "writing",
+      "messages": [
+        {
+          "id": "2ac5867b-8dc2-4a7c-a572-02d861940ddd",
+          "type": "human",
+          "content": "请帮我做一项对比研究。"
+        },
+        {
+          "id": "e730264c-40fd-4203-8914-3029fed4289b",
+          "type": "ai",
+          "content": "请补充以下关键信息，以便开展对比研究：\n- 对比对象：希望比较哪些产品、技术、公司、方案或概念？\n- 对比维度：关注价格、性能、市场份额、优缺点、风险、适用场景，还是其他指标？\n- 范围约束：是否限定地区、行业、时间范围或目标用户？\n- 输出形式：需要表格、要点总结、深度报告，还是包含来源引用的研究结论？"
+        },
+        {
+          "id": "16e0f93f-e8be-487a-96c4-3aef0b4cf9f9",
+          "type": "human",
+          "content": "比较 Python 3.13 实验性的 free-threaded CPython 与默认 GIL 构建，用于开发者判断是否试用。只比较 GIL 状态、C 扩展兼容性和适用限制三个维度。仅使用 Python 官方文档或 PEP 中的 2–3 个来源，中文报告控制在 500 字左右。范围已明确，无需继续澄清；不确定之处请明示。"
+        },
+        {
+          "id": "dca9a8a3-9570-4735-bf55-b6a37ebefd6a",
+          "type": "ai",
+          "content": "已有足够信息继续。我将围绕 Python 3.13 实验性 free-threaded CPython 与默认 GIL 构建，仅比较 GIL 状态、C 扩展兼容性与适用限制三个维度，面向开发者试用判断；仅采用 Python 官方文档或 PEP 中的 2–3 个来源，输出约 500 字中文报告，并对不确定之处明示。现在开始研究。"
+        }
+      ],
+      "brief": "我需要一份面向开发者试用判断的对比研究：比较 Python 3.13 实验性 free-threaded CPython 与默认 GIL 构建，严格只覆盖三个维度：GIL 状态、C 扩展兼容性、适用限制。请仅使用 Python 官方文档或 PEP 中的 2–3 个来源作为依据，输出约 500 字中文报告；范围已明确，无需进一步澄清。对任何不确定、证据不足或官方表述含糊之处必须明确标注，不要推测；用户未明确指定的维度一律视为开放变量，不纳入比较，也不预设偏好。",
+      "report": "",
+      "notes": [
+        "# Python 3.13 自由线程（free-threaded）CPython 研究报告\n\n本报告严格依据三个官方来源（PEP 703、Python 3.13 What's New、Python 3.13 free-threading extensions how-to），按简报限定的三个维度逐项作答，不涉及性能、生态、迁移建议或生产采用。\n\n## A. GIL 状态\n\n- 自 Python 3.13 起，CPython 提供**实验性**支持，可在禁用全局解释器锁（GIL）的\"自由线程\"（free threading）配置下运行 [2][3]。\n- 启用方式为使用 `--disable-gil` 构建选项编译解释器，或安装标记为 free-threaded 的实验性构建；默认构建不受影响 [1][2]。\n- 自由线程构建支持在运行时通过环境变量 `PYTHON_GIL` 或命令行选项 `-X gil` 选择性地重新启用 GIL [2]。\n- PEP 703（作者 Sam Gross，赞助者 Łukasz Langa）状态为 Final，于 2023 年 1 月 9 日创建、2023 年 10 月 24 日被指导委员会接受，但附带明确条件：推广必须渐进、尽量减少破坏，并保留在必要时完全回滚的可能性（即该特性**可能变化**）[1]。\n- PEP 703 的长期目标是在 2028–2030 年实现单 ABI、运行时控制 GIL 且默认禁用，该目标属提案规划，**可能变化** [1]。\n\n## B. C 扩展兼容性\n\n- `--disable-gil` 构建与标准 CPython ABI **不兼容**，C 扩展必须针对自由线程构建专门重新编译 [1][3]。\n- 扩展模块必须显式声明支持无 GIL 运行，否则导入该扩展时会发出警告并在运行时启用 GIL [3]。\n- 声明方式分两种：使用多阶段初始化（`PyModuleDef_Init()`）的扩展应在模块定义中添加 `Py_mod_gil` 槽位；使用单阶段初始化（`PyModule_Create()`）的扩展应调用 `PyUnstable_Module_SetGIL()`，该函数仅在自由线程构建中定义，需用 `#ifdef Py_GIL_DISABLED` 保护以避免常规构建中的编译错误 [3]。\n- C API 暴露 `Py_GIL_DISABLED` 宏：自由线程构建中定义为 `1`，常规构建中未定义；在 Windows 上该宏不会自动定义，须在编译时显式指定 [3]。\n- 大部分 C API 是线程安全的，但存在例外：直接访问可能被并发修改的 Python C API 对象/结构体字段不是线程安全的；返回借用引用（borrowed references）的 C API 函数在容器对象被并发修改时可能不是线程安全的 [3]。\n- 依赖 GIL 保护全局状态的扩展需要添加显式锁；自定义内存分配器必须委托给底层分配器 [1]。\n- PEP 703 还引入 `PyList_FetchItem`、`PyDict_FetchItem` 等返回新引用的 API，用于替代不安全的借用引用 [1]。\n\n## C. 适用限制\n\n- 该模式为**实验性**，官方明确说明其\"存在一些预期的 bug 和显著的单线程性能损失\"（substantial single-threaded performance hit）[2]。\n- 指导委员会接受 PEP 703 时要求渐进推广、尽量减少破坏，并保留完全回滚的权利，表明该特性的未来形态**可能变化** [1]。\n- 自由线程构建在运行时通过 `PYTHON_GIL` 或 `-X gil` 重新启用 GIL 后是否仍应视为实验性：上述三个官方来源均未给出明确说明，**官方未明确**。\n- 关于自由线程模式适用的具体场景边界或禁用情形清单，官方文档未给出明确列举：**证据不足**。\n\n### Sources\n[1] PEP 703 – Making the Global Interpreter Lock Optional in CPython: https://peps.python.org/pep-0703\n[2] What's New In Python 3.13 — Free-threaded CPython: https://docs.python.org/3.13/whatsnew/3.13.html#free-threaded-cpython\n[3] C API Extension Support for Free Threading — Python 3.13 documentation: https://docs.python.org/3.13/howto/free-threading-extensions.html"
+      ],
+      "sources": [
+        {
+          "url": "https://peps.python.org/pep-0703",
+          "title": "PEP 703 – Making the Global Interpreter Lock Optional in CPython | peps.python.org"
+        },
+        {
+          "url": "https://docs.python.org/3.13/whatsnew/3.13.html#free-threaded-cpython",
+          "title": "What’s New In Python 3.13 — Python 3.13.16 documentation"
+        },
+        {
+          "url": "https://docs.python.org/3.13/whatsnew/3.13.html#changes-in-the-python-api",
+          "title": "What’s New In Python 3.13 — Python 3.13.16 documentation"
+        },
+        {
+          "url": "https://docs.python.org/3.13/whatsnew/3.13.html#id10",
+          "title": "What’s New In Python 3.13 — Python 3.13.16 documentation"
+        },
+        {
+          "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+          "title": "C API Extension Support for Free Threading — Python 3.13.16 documentation"
+        },
+        {
+          "url": "https://medium.com/@mitesh.singh.jat/gil-becomes-optional-in-python-3-13-a-game-changer-for-multithreading-4c5d28856803",
+          "title": "GIL Becomes Optional in Python 3.13: A Game-Changer for Multithreading! | by Mitesh Singh Jat | Medium"
+        },
+        {
+          "url": "https://github.com/python/cpython/issues/124287",
+          "title": "Request for Clarification on Experimental Status of Free-Threaded Builds with GIL in CPython 3.13 · Issue #124287 · python/cpython · GitHub"
+        },
+        {
+          "url": "https://codspeed.io/blog/state-of-python-3-13-performance-free-threading",
+          "title": "State of Python 3.13 Performance: Free-Threading | CodSpeed"
+        }
+      ],
+      "errors": [
+        {
+          "code": "researcher_failed",
+          "message": "一个研究任务未获得有效结果，研究覆盖可能不完整。",
+          "node": "supervisor_subgraph"
+        }
+      ],
+      "events": [
+        {
+          "version": 1,
+          "id": "9a175420-9641-4337-afbe-a233c810bf46",
+          "research_id": "4e559f56-f300-40f6-a9af-10fd47d98ba2",
+          "turn_id": "16e0f93f-e8be-487a-96c4-3aef0b4cf9f9",
+          "sequence": 1,
+          "at": "2026-10-13T04:05:56.828187+00:00",
+          "task_id": "bc681ffb-f8b2-5ccf-b974-369a40daa6f6",
+          "round": 2,
+          "kind": "delegated",
+          "elapsed_ms": 0,
+          "topic": "仅使用 Python 官方文档（docs.python.org）或 PEP（peps.python.org）中的 2–3 个来源，研究并整理 Python 3.13 实验性 free-threaded CPython 与默认 GIL 构建在以下且仅以下三个维度的可引用事实：1) GIL 状态；2) C 扩展兼容性；3) 适用限制。优先来源建议：PEP 703；Python 3.13 What’s New 中 free-threaded CPython 章节；官方 free-threading/C API 扩展支持说明（如 docs.python.org/3.13/howto/free-threading-extensions.html 或对应 C API 文档）。要求：逐条给出结论并附来源名称/URL；严格区分“官方明确说明”“实验性/可能变化”“官方未明确或表述含糊”；不得推测；不得纳入性能、生态成熟度、迁移成本、生产推荐等用户未指定维度；输出供撰写约500字中文报告使用的精炼要点。"
+        },
+        {
+          "version": 1,
+          "id": "5a7eed01-8dcf-45a0-a992-f1a7b7f63a8e",
+          "research_id": "4e559f56-f300-40f6-a9af-10fd47d98ba2",
+          "turn_id": "16e0f93f-e8be-487a-96c4-3aef0b4cf9f9",
+          "sequence": 2,
+          "at": "2026-10-13T04:05:56.842264+00:00",
+          "task_id": "bc681ffb-f8b2-5ccf-b974-369a40daa6f6",
+          "round": 2,
+          "kind": "model_started",
+          "elapsed_ms": 14
+        },
+        {
+          "version": 1,
+          "id": "13d28fff-f5c2-490a-9899-4bcbbfcd7260",
+          "research_id": "4e559f56-f300-40f6-a9af-10fd47d98ba2",
+          "turn_id": "16e0f93f-e8be-487a-96c4-3aef0b4cf9f9",
+          "sequence": 3,
+          "at": "2026-10-13T04:06:41.500477+00:00",
+          "task_id": "bc681ffb-f8b2-5ccf-b974-369a40daa6f6",
+          "round": 2,
+          "kind": "model_finished",
+          "elapsed_ms": 44672
+        },
+        {
+          "version": 1,
+          "id": "cc5fedea-85cb-4b8a-8ce8-577f01bc9086",
+          "research_id": "4e559f56-f300-40f6-a9af-10fd47d98ba2",
+          "turn_id": "16e0f93f-e8be-487a-96c4-3aef0b4cf9f9",
+          "sequence": 4,
+          "at": "2026-10-13T04:06:41.645990+00:00",
+          "task_id": "bc681ffb-f8b2-5ccf-b974-369a40daa6f6",
+          "round": 2,
+          "kind": "tool_started",
+          "elapsed_ms": 44818,
+          "tool": "tavily_search",
+          "query": "PEP 703 free-threaded CPython GIL optional experimental peps.python.org"
+        },
+        {
+          "version": 1,
+          "id": "01f95bb7-49f6-4178-a456-8cc75aa43a81",
+          "research_id": "4e559f56-f300-40f6-a9af-10fd47d98ba2",
+          "turn_id": "16e0f93f-e8be-487a-96c4-3aef0b4cf9f9",
+          "sequence": 5,
+          "at": "2026-10-13T04:10:54.358649+00:00",
+          "task_id": "bc681ffb-f8b2-5ccf-b974-369a40daa6f6",
+          "round": 2,
+          "kind": "tool_failed",
+          "elapsed_ms": 297531,
+          "tool": "tavily_search"
+        },
+        {
+          "version": 1,
+          "id": "d1edb385-2131-49a9-8b1e-d5446e6efd42",
+          "research_id": "4e559f56-f300-40f6-a9af-10fd47d98ba2",
+          "turn_id": "16e0f93f-e8be-487a-96c4-3aef0b4cf9f9",
+          "sequence": 6,
+          "at": "2026-10-13T04:10:54.877915+00:00",
+          "task_id": "bc681ffb-f8b2-5ccf-b974-369a40daa6f6",
+          "round": 2,
+          "kind": "failed",
+          "elapsed_ms": 298050
+        },
+        {
+          "version": 1,
+          "id": "38c9f87a-ab0b-4c92-bfd1-ed4b952f8c5f",
+          "research_id": "4e559f56-f300-40f6-a9af-10fd47d98ba2",
+          "turn_id": "16e0f93f-e8be-487a-96c4-3aef0b4cf9f9",
+          "sequence": 7,
+          "at": "2026-10-13T04:12:37.248448+00:00",
+          "task_id": "1a74f24e-1a17-5dfe-adcd-c41fafd9e865",
+          "round": 4,
+          "kind": "delegated",
+          "elapsed_ms": 0,
+          "topic": "请只查阅并引用以下官方来源中的 2–3 个：PEP 703（peps.python.org/pep-0703/）、Python 3.13 What’s New（docs.python.org/3.13/whatsnew/3.13.html）中 free-threaded CPython 部分、Python 3.13 官方 free-threading extensions how-to（docs.python.org/3.13/howto/free-threading-extensions.html）。输出中文要点，严格限定三维度：A GIL 状态；B C 扩展兼容性；C 适用限制。每条注明来源；明确标注“实验性/可能变化/官方未明确”。不要讨论性能、生态、迁移建议或生产采用。若某维度官方证据不足，直接写“证据不足”。"
+        },
+        {
+          "version": 1,
+          "id": "eb6d0401-3b0a-431b-bcc4-9f0d70cac323",
+          "research_id": "4e559f56-f300-40f6-a9af-10fd47d98ba2",
+          "turn_id": "16e0f93f-e8be-487a-96c4-3aef0b4cf9f9",
+          "sequence": 8,
+          "at": "2026-10-13T04:12:37.264230+00:00",
+          "task_id": "1a74f24e-1a17-5dfe-adcd-c41fafd9e865",
+          "round": 4,
+          "kind": "model_started",
+          "elapsed_ms": 16
+        },
+        {
+          "version": 1,
+          "id": "0fc475ae-50cc-4c5c-9bb5-7e119e0628ae",
+          "research_id": "4e559f56-f300-40f6-a9af-10fd47d98ba2",
+          "turn_id": "16e0f93f-e8be-487a-96c4-3aef0b4cf9f9",
+          "sequence": 9,
+          "at": "2026-10-13T04:13:02.834524+00:00",
+          "task_id": "1a74f24e-1a17-5dfe-adcd-c41fafd9e865",
+          "round": 4,
+          "kind": "model_finished",
+          "elapsed_ms": 25586
+        },
+        {
+          "version": 1,
+          "id": "f713d0e8-0e81-477d-9a59-5bc0f5696b7f",
+          "research_id": "4e559f56-f300-40f6-a9af-10fd47d98ba2",
+          "turn_id": "16e0f93f-e8be-487a-96c4-3aef0b4cf9f9",
+          "sequence": 10,
+          "at": "2026-10-13T04:13:02.858308+00:00",
+          "task_id": "1a74f24e-1a17-5dfe-adcd-c41fafd9e865",
+          "round": 4,
+          "kind": "tool_started",
+          "elapsed_ms": 25610,
+          "tool": "tavily_search",
+          "query": "site:peps.python.org/pep-0703 PEP 703 free-threaded CPython GIL experimental"
+        },
+        {
+          "version": 1,
+          "id": "15a1d737-8408-441b-8ec2-fe03eeb4d188",
+          "research_id": "4e559f56-f300-40f6-a9af-10fd47d98ba2",
+          "turn_id": "16e0f93f-e8be-487a-96c4-3aef0b4cf9f9",
+          "sequence": 11,
+          "at": "2026-10-13T04:15:13.143509+00:00",
+          "task_id": "1a74f24e-1a17-5dfe-adcd-c41fafd9e865",
+          "round": 4,
+          "kind": "tool_finished",
+          "elapsed_ms": 155895,
+          "tool": "tavily_search",
+          "source_count": 1,
+          "sources": [
+            {
+              "title": "PEP 703 – Making the Global Interpreter Lock Optional in CPython | peps.python.org",
+              "url": "https://peps.python.org/pep-0703"
+            }
+          ]
+        },
+        {
+          "version": 1,
+          "id": "8db1b512-81e2-4387-af08-f1d546b0505f",
+          "research_id": "4e559f56-f300-40f6-a9af-10fd47d98ba2",
+          "turn_id": "16e0f93f-e8be-487a-96c4-3aef0b4cf9f9",
+          "sequence": 12,
+          "at": "2026-10-13T04:15:13.156939+00:00",
+          "task_id": "1a74f24e-1a17-5dfe-adcd-c41fafd9e865",
+          "round": 4,
+          "kind": "tool_started",
+          "elapsed_ms": 155909,
+          "tool": "tavily_search",
+          "query": "site:docs.python.org/3.13/whatsnew/3.13.html free-threaded CPython experimental GIL"
+        },
+        {
+          "version": 1,
+          "id": "98d95618-1ff0-48a1-9428-0bb7870e6935",
+          "research_id": "4e559f56-f300-40f6-a9af-10fd47d98ba2",
+          "turn_id": "16e0f93f-e8be-487a-96c4-3aef0b4cf9f9",
+          "sequence": 13,
+          "at": "2026-10-13T04:19:32.390506+00:00",
+          "task_id": "1a74f24e-1a17-5dfe-adcd-c41fafd9e865",
+          "round": 4,
+          "kind": "tool_finished",
+          "elapsed_ms": 415142,
+          "tool": "tavily_search",
+          "source_count": 3,
+          "sources": [
+            {
+              "title": "What’s New In Python 3.13 — Python 3.13.16 documentation",
+              "url": "https://docs.python.org/3.13/whatsnew/3.13.html#free-threaded-cpython"
+            },
+            {
+              "title": "What’s New In Python 3.13 — Python 3.13.16 documentation",
+              "url": "https://docs.python.org/3.13/whatsnew/3.13.html#changes-in-the-python-api"
+            },
+            {
+              "title": "What’s New In Python 3.13 — Python 3.13.16 documentation",
+              "url": "https://docs.python.org/3.13/whatsnew/3.13.html#id10"
+            }
+          ]
+        },
+        {
+          "version": 1,
+          "id": "74fb8f5d-398c-4af9-ba71-154e0c51143f",
+          "research_id": "4e559f56-f300-40f6-a9af-10fd47d98ba2",
+          "turn_id": "16e0f93f-e8be-487a-96c4-3aef0b4cf9f9",
+          "sequence": 14,
+          "at": "2026-10-13T04:19:32.404047+00:00",
+          "task_id": "1a74f24e-1a17-5dfe-adcd-c41fafd9e865",
+          "round": 4,
+          "kind": "tool_started",
+          "elapsed_ms": 415156,
+          "tool": "tavily_search",
+          "query": "site:docs.python.org/3.13/howto/free-threading-extensions.html C extensions free-threading limitations"
+        },
+        {
+          "version": 1,
+          "id": "26c1cb97-7d26-4e1e-ad43-dd09dd4d0d04",
+          "research_id": "4e559f56-f300-40f6-a9af-10fd47d98ba2",
+          "turn_id": "16e0f93f-e8be-487a-96c4-3aef0b4cf9f9",
+          "sequence": 15,
+          "at": "2026-10-13T04:19:36.501974+00:00",
+          "task_id": "1a74f24e-1a17-5dfe-adcd-c41fafd9e865",
+          "round": 4,
+          "kind": "tool_finished",
+          "elapsed_ms": 419254,
+          "tool": "tavily_search",
+          "source_count": 1,
+          "sources": [
+            {
+              "title": "C API Extension Support for Free Threading — Python 3.13.16 documentation",
+              "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html"
+            }
+          ]
+        },
+        {
+          "version": 1,
+          "id": "7820bb90-22fc-4d51-8ea9-6b4d8b07f330",
+          "research_id": "4e559f56-f300-40f6-a9af-10fd47d98ba2",
+          "turn_id": "16e0f93f-e8be-487a-96c4-3aef0b4cf9f9",
+          "sequence": 16,
+          "at": "2026-10-13T04:19:36.527247+00:00",
+          "task_id": "1a74f24e-1a17-5dfe-adcd-c41fafd9e865",
+          "round": 4,
+          "kind": "model_started",
+          "elapsed_ms": 419279
+        },
+        {
+          "version": 1,
+          "id": "d90863a1-1f0b-4397-8214-f96100898074",
+          "research_id": "4e559f56-f300-40f6-a9af-10fd47d98ba2",
+          "turn_id": "16e0f93f-e8be-487a-96c4-3aef0b4cf9f9",
+          "sequence": 17,
+          "at": "2026-10-13T04:20:01.248080+00:00",
+          "task_id": "1a74f24e-1a17-5dfe-adcd-c41fafd9e865",
+          "round": 4,
+          "kind": "model_finished",
+          "elapsed_ms": 444000
+        },
+        {
+          "version": 1,
+          "id": "4ad9066f-ef5f-4c42-ab95-593fe32a4984",
+          "research_id": "4e559f56-f300-40f6-a9af-10fd47d98ba2",
+          "turn_id": "16e0f93f-e8be-487a-96c4-3aef0b4cf9f9",
+          "sequence": 18,
+          "at": "2026-10-13T04:20:01.274343+00:00",
+          "task_id": "1a74f24e-1a17-5dfe-adcd-c41fafd9e865",
+          "round": 4,
+          "kind": "tool_started",
+          "elapsed_ms": 444026,
+          "tool": "think_tool"
+        },
+        {
+          "version": 1,
+          "id": "41f9375c-24c4-4fd5-a0aa-1eea8a84b898",
+          "research_id": "4e559f56-f300-40f6-a9af-10fd47d98ba2",
+          "turn_id": "16e0f93f-e8be-487a-96c4-3aef0b4cf9f9",
+          "sequence": 19,
+          "at": "2026-10-13T04:20:01.290639+00:00",
+          "task_id": "1a74f24e-1a17-5dfe-adcd-c41fafd9e865",
+          "round": 4,
+          "kind": "tool_finished",
+          "elapsed_ms": 444042,
+          "tool": "think_tool"
+        },
+        {
+          "version": 1,
+          "id": "b12365df-184c-474f-8a70-2d847dcb7516",
+          "research_id": "4e559f56-f300-40f6-a9af-10fd47d98ba2",
+          "turn_id": "16e0f93f-e8be-487a-96c4-3aef0b4cf9f9",
+          "sequence": 20,
+          "at": "2026-10-13T04:20:01.304729+00:00",
+          "task_id": "1a74f24e-1a17-5dfe-adcd-c41fafd9e865",
+          "round": 4,
+          "kind": "tool_started",
+          "elapsed_ms": 444056,
+          "tool": "tavily_search",
+          "query": "\"What's New in Python 3.13\" free-threaded CPython experimental --disable-gil PYTHON_GIL environment variable"
+        },
+        {
+          "version": 1,
+          "id": "1519dc13-6b78-401e-8bd1-907a06da0147",
+          "research_id": "4e559f56-f300-40f6-a9af-10fd47d98ba2",
+          "turn_id": "16e0f93f-e8be-487a-96c4-3aef0b4cf9f9",
+          "sequence": 21,
+          "at": "2026-10-13T04:21:01.842979+00:00",
+          "task_id": "1a74f24e-1a17-5dfe-adcd-c41fafd9e865",
+          "round": 4,
+          "kind": "tool_finished",
+          "elapsed_ms": 504595,
+          "tool": "tavily_search",
+          "source_count": 3,
+          "sources": [
+            {
+              "title": "GIL Becomes Optional in Python 3.13: A Game-Changer for Multithreading! | by Mitesh Singh Jat | Medium",
+              "url": "https://medium.com/@mitesh.singh.jat/gil-becomes-optional-in-python-3-13-a-game-changer-for-multithreading-4c5d28856803"
+            },
+            {
+              "title": "Request for Clarification on Experimental Status of Free-Threaded Builds with GIL in CPython 3.13 · Issue #124287 · python/cpython · GitHub",
+              "url": "https://github.com/python/cpython/issues/124287"
+            },
+            {
+              "title": "State of Python 3.13 Performance: Free-Threading | CodSpeed",
+              "url": "https://codspeed.io/blog/state-of-python-3-13-performance-free-threading"
+            }
+          ]
+        },
+        {
+          "version": 1,
+          "id": "d6e9e9cc-e2e2-48c1-823e-1d678a523bcb",
+          "research_id": "4e559f56-f300-40f6-a9af-10fd47d98ba2",
+          "turn_id": "16e0f93f-e8be-487a-96c4-3aef0b4cf9f9",
+          "sequence": 22,
+          "at": "2026-10-13T04:21:01.859605+00:00",
+          "task_id": "1a74f24e-1a17-5dfe-adcd-c41fafd9e865",
+          "round": 4,
+          "kind": "model_started",
+          "elapsed_ms": 504611
+        },
+        {
+          "version": 1,
+          "id": "24c12d98-7615-4d58-9e46-cce855afd95d",
+          "research_id": "4e559f56-f300-40f6-a9af-10fd47d98ba2",
+          "turn_id": "16e0f93f-e8be-487a-96c4-3aef0b4cf9f9",
+          "sequence": 23,
+          "at": "2026-10-13T04:21:26.779236+00:00",
+          "task_id": "1a74f24e-1a17-5dfe-adcd-c41fafd9e865",
+          "round": 4,
+          "kind": "model_finished",
+          "elapsed_ms": 529531
+        },
+        {
+          "version": 1,
+          "id": "9457c3b6-d527-4c89-8290-b7975a69bbaf",
+          "research_id": "4e559f56-f300-40f6-a9af-10fd47d98ba2",
+          "turn_id": "16e0f93f-e8be-487a-96c4-3aef0b4cf9f9",
+          "sequence": 24,
+          "at": "2026-10-13T04:21:26.812364+00:00",
+          "task_id": "1a74f24e-1a17-5dfe-adcd-c41fafd9e865",
+          "round": 4,
+          "kind": "tool_started",
+          "elapsed_ms": 529564,
+          "tool": "think_tool"
+        },
+        {
+          "version": 1,
+          "id": "28838f4d-147b-482b-8aac-061debb9b78b",
+          "research_id": "4e559f56-f300-40f6-a9af-10fd47d98ba2",
+          "turn_id": "16e0f93f-e8be-487a-96c4-3aef0b4cf9f9",
+          "sequence": 25,
+          "at": "2026-10-13T04:21:26.830444+00:00",
+          "task_id": "1a74f24e-1a17-5dfe-adcd-c41fafd9e865",
+          "round": 4,
+          "kind": "tool_finished",
+          "elapsed_ms": 529582,
+          "tool": "think_tool"
+        },
+        {
+          "version": 1,
+          "id": "6a8b8113-3200-4d3c-8dbd-2254a76bad65",
+          "research_id": "4e559f56-f300-40f6-a9af-10fd47d98ba2",
+          "turn_id": "16e0f93f-e8be-487a-96c4-3aef0b4cf9f9",
+          "sequence": 26,
+          "at": "2026-10-13T04:21:26.844197+00:00",
+          "task_id": "1a74f24e-1a17-5dfe-adcd-c41fafd9e865",
+          "round": 4,
+          "kind": "model_started",
+          "elapsed_ms": 529596
+        },
+        {
+          "version": 1,
+          "id": "d8748583-79f4-495a-9e19-8c929db2b151",
+          "research_id": "4e559f56-f300-40f6-a9af-10fd47d98ba2",
+          "turn_id": "16e0f93f-e8be-487a-96c4-3aef0b4cf9f9",
+          "sequence": 27,
+          "at": "2026-10-13T04:22:42.401916+00:00",
+          "task_id": "1a74f24e-1a17-5dfe-adcd-c41fafd9e865",
+          "round": 4,
+          "kind": "model_finished",
+          "elapsed_ms": 605153
+        },
+        {
+          "version": 1,
+          "id": "24800e92-bd54-4f43-897d-868448b7af03",
+          "research_id": "4e559f56-f300-40f6-a9af-10fd47d98ba2",
+          "turn_id": "16e0f93f-e8be-487a-96c4-3aef0b4cf9f9",
+          "sequence": 28,
+          "at": "2026-10-13T04:22:42.429260+00:00",
+          "task_id": "1a74f24e-1a17-5dfe-adcd-c41fafd9e865",
+          "round": 4,
+          "kind": "compression_started",
+          "elapsed_ms": 605181
+        },
+        {
+          "version": 1,
+          "id": "fa6d57ee-f56e-4cf0-b276-8eb75707e281",
+          "research_id": "4e559f56-f300-40f6-a9af-10fd47d98ba2",
+          "turn_id": "16e0f93f-e8be-487a-96c4-3aef0b4cf9f9",
+          "sequence": 29,
+          "at": "2026-10-13T04:24:10.733932+00:00",
+          "task_id": "1a74f24e-1a17-5dfe-adcd-c41fafd9e865",
+          "round": 4,
+          "kind": "compression_finished",
+          "elapsed_ms": 693485
+        },
+        {
+          "version": 1,
+          "id": "53cabe88-d05c-4fbf-9cf5-ab3d9942e7e6",
+          "research_id": "4e559f56-f300-40f6-a9af-10fd47d98ba2",
+          "turn_id": "16e0f93f-e8be-487a-96c4-3aef0b4cf9f9",
+          "sequence": 30,
+          "at": "2026-10-13T04:24:10.747827+00:00",
+          "task_id": "1a74f24e-1a17-5dfe-adcd-c41fafd9e865",
+          "round": 4,
+          "kind": "completed",
+          "elapsed_ms": 693499,
+          "source_count": 8,
+          "sources": [
+            {
+              "title": "PEP 703 – Making the Global Interpreter Lock Optional in CPython | peps.python.org",
+              "url": "https://peps.python.org/pep-0703"
+            },
+            {
+              "title": "What’s New In Python 3.13 — Python 3.13.16 documentation",
+              "url": "https://docs.python.org/3.13/whatsnew/3.13.html#free-threaded-cpython"
+            },
+            {
+              "title": "What’s New In Python 3.13 — Python 3.13.16 documentation",
+              "url": "https://docs.python.org/3.13/whatsnew/3.13.html#changes-in-the-python-api"
+            },
+            {
+              "title": "What’s New In Python 3.13 — Python 3.13.16 documentation",
+              "url": "https://docs.python.org/3.13/whatsnew/3.13.html#id10"
+            },
+            {
+              "title": "C API Extension Support for Free Threading — Python 3.13.16 documentation",
+              "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html"
+            },
+            {
+              "title": "GIL Becomes Optional in Python 3.13: A Game-Changer for Multithreading! | by Mitesh Singh Jat | Medium",
+              "url": "https://medium.com/@mitesh.singh.jat/gil-becomes-optional-in-python-3-13-a-game-changer-for-multithreading-4c5d28856803"
+            },
+            {
+              "title": "Request for Clarification on Experimental Status of Free-Threaded Builds with GIL in CPython 3.13 · Issue #124287 · python/cpython · GitHub",
+              "url": "https://github.com/python/cpython/issues/124287"
+            },
+            {
+              "title": "State of Python 3.13 Performance: Free-Threading | CodSpeed",
+              "url": "https://codspeed.io/blog/state-of-python-3-13-performance-free-threading"
+            }
+          ],
+          "output": "# Python 3.13 自由线程（free-threaded）CPython 研究报告\n\n本报告严格依据三个官方来源（PEP 703、Python 3.13 What's New、Python 3.13 free-threading extensions how-to），按简报限定的三个维度逐项作答，不涉及性能、生态、迁移建议或生产采用。\n\n## A. GIL 状态\n\n- 自 Python 3.13 起，CPython 提供**实验性**支持，可在禁用全局解释器锁（GIL）的\"自由线程\"（free threading）配置下运行 [2][3]。\n- 启用方式为使用 `--disable-gil` 构建选项编译解释器，或安装标记为 free-threaded 的实验性构建；默认构建不受影响 [1][2]。\n- 自由线程构建支持在运行时通过环境变量 `PYTHON_GIL` 或命令行选项 `-X gil` 选择性地重新启用 GIL [2]。\n- PEP 703（作者 Sam Gross，赞助者 Łukasz Langa）状态为 Final，于 2023 年 1 月 9 日创建、2023 年 10 月 24 日被指导委员会接受，但附带明确条件：推广必须渐进、尽量减少破坏，并保留在必要时完全回滚的可能性（即该特性**可能变化**）[1]。\n- PEP 703 的长期目标是在 2028–2030 年实现单 ABI、运行时控制 GIL 且默认禁用，该目标属提案规划，**可能变化** [1]。\n\n## B. C 扩展兼容性\n\n- `--disable-gil` 构建与标准 CPython ABI **不兼容**，C 扩展必须针对自由线程构建专门重新编译 [1][3]。\n- 扩展模块必须显式声明支持无 GIL 运行，否则导入该扩展时会发出警告并在运行时启用 GIL [3]。\n- 声明方式分两种：使用多阶段初始化（`PyModuleDef_Init()`）的扩展应在模块定义中添加 `Py_mod_gil` 槽位；使用单阶段初始化（`PyModule_Create()`）的扩展应调用 `PyUnstable_Module_SetGIL()`，该函数仅在自由线程构建中定义，需用 `#ifdef Py_GIL_DISABLED` 保护以避免常规构建中的编译错误 [3]。\n- C API 暴露 `Py_GIL_DISABLED` 宏：自由线程构建中定义为 `1`，常规构建中未定义；在 Windows 上该宏不会自动定义，须在编译时显式指定 [3]。\n- 大部分 C API 是线程安全的，但存在例外：直接访问可能被并发修改的 Python C API 对象/结构体字段不是线程安全的；返回借用引用（borrowed references）的 C API 函数在容器对象被并发修改时可能不是线程安全的 [3]。\n- 依赖 GIL 保护全局状态的扩展需要添加显式锁；自定义内存分配器必须委托给底层分配器 [1]。\n- PEP 703 还引入 `PyList_FetchItem`、`PyDict_FetchItem` 等返回新引用的 API，用于替代不安全的借用引用 [1]。\n\n## C. 适用限制\n\n- 该模式为**实验性**，官方明确说明其\"存在一些预期的 bug 和显著的单线程性能损失\"（substantial single-threaded performance hit）[2]。\n- 指导委员会接受 PEP 703 时要求渐进推广、尽量减少破坏，并保留完全回滚的权利，表明该特性的未来形态**可能变化** [1]。\n- 自由线程构建在运行时通过 `PYTHON_GIL` 或 `-X gil` 重新启用 GIL 后是否仍应视为实验性：上述三个官方来源均未给出明确说明，**官方未明确**。\n- 关于自由线程模式适用的具体场景边界或禁用情形清单，官方文档未给出明确列举：**证据不足**。\n\n### Sources\n[1] PEP 703 – Making the Global Interpreter Lock Optional in CPython: https://peps.python.org/pep-0703\n[2] What's New In Python 3.13 — Free-threaded CPython: https://docs.python.org/3.13/whatsnew/3.13.html#free-threaded-cpython\n[3] C API Extension Support for Free Threading — Python 3.13 documentation: https://docs.python.org/3.13/howto/free-threading-extensions.html"
+        }
+      ],
+      "observations": [
+        {
+          "at": "2026-10-13T03:55:26.530Z",
+          "phase": "clarify",
+          "status": "running"
+        },
+        {
+          "at": "2026-10-13T03:58:42.572Z",
+          "phase": "clarify",
+          "status": "awaiting_input"
+        },
+        {
+          "at": "2026-10-13T03:58:43.597Z",
+          "phase": "clarify",
+          "status": "running"
+        },
+        {
+          "at": "2026-10-13T03:59:59.595Z",
+          "phase": "brief",
+          "status": "running"
+        },
+        {
+          "at": "2026-10-13T04:02:39.598Z",
+          "phase": "research",
+          "status": "running"
+        }
+      ]
+    },
+    "runCount": 2,
+    "modelHttpAttempts": [
+      {
+        "id": "80912613-9ccd-46d3-812f-4693d78f268d",
+        "node": "clarify_with_user",
+        "model": "moonshotai/kimi-k3",
+        "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+        "runId": "5fad6d46-5140-42fa-8a8d-5bb64daaff27",
+        "responseFormat": "json_schema",
+        "sdkRetryCount": "0",
+        "stream": false,
+        "tools": [],
+        "startedAt": "2026-10-13T03:55:27.354701+00:00",
+        "endedAt": "2026-10-13T03:56:00.108869+00:00",
+        "seconds": 32.753,
+        "httpStatus": null,
+        "outcome": "failed",
+        "toolCalls": [],
+        "exceptionTypes": ["RemoteProtocolError"],
+        "causeMessage": "Server disconnected without sending a response."
+      },
+      {
+        "id": "5b682ff0-e244-4a1b-96dd-3e4847537a7a",
+        "node": "clarify_with_user",
+        "model": "moonshotai/kimi-k3",
+        "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+        "runId": "5fad6d46-5140-42fa-8a8d-5bb64daaff27",
+        "responseFormat": "json_schema",
+        "sdkRetryCount": "1",
+        "stream": false,
+        "tools": [],
+        "startedAt": "2026-10-13T03:56:03.112675+00:00",
+        "endedAt": "2026-10-13T03:56:35.945563+00:00",
+        "seconds": 32.832,
+        "httpStatus": null,
+        "outcome": "failed",
+        "toolCalls": [],
+        "exceptionTypes": ["RemoteProtocolError"],
+        "causeMessage": "Server disconnected without sending a response."
+      },
+      {
+        "id": "7c94318f-3f74-4e26-a428-5ded485acdd3",
+        "node": "clarify_with_user",
+        "model": "moonshotai/kimi-k3",
+        "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+        "runId": "5fad6d46-5140-42fa-8a8d-5bb64daaff27",
+        "responseFormat": "json_schema",
+        "sdkRetryCount": "2",
+        "stream": false,
+        "tools": [],
+        "startedAt": "2026-10-13T03:56:41.947386+00:00",
+        "endedAt": "2026-10-13T03:57:14.949804+00:00",
+        "seconds": 33.001,
+        "httpStatus": null,
+        "outcome": "failed",
+        "toolCalls": [],
+        "exceptionTypes": ["RemoteProtocolError"],
+        "causeMessage": "Server disconnected without sending a response."
+      },
+      {
+        "id": "90a4403a-0273-495d-88a4-b53604f8b62e",
+        "node": "clarify_with_user",
+        "model": "moonshotai/kimi-k3",
+        "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+        "runId": "5fad6d46-5140-42fa-8a8d-5bb64daaff27",
+        "responseFormat": "json_schema",
+        "sdkRetryCount": "3",
+        "stream": false,
+        "tools": [],
+        "startedAt": "2026-10-13T03:57:26.952668+00:00",
+        "endedAt": "2026-10-13T03:57:44.553155+00:00",
+        "seconds": 17.6,
+        "httpStatus": null,
+        "outcome": "failed",
+        "toolCalls": [],
+        "exceptionTypes": ["RemoteProtocolError"],
+        "causeMessage": "Server disconnected without sending a response."
+      },
+      {
+        "id": "e9c75597-e2d7-4613-95cf-9b94e58e2749",
+        "node": "clarify_with_user",
+        "model": "moonshotai/kimi-k3",
+        "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+        "runId": "5fad6d46-5140-42fa-8a8d-5bb64daaff27",
+        "responseFormat": "json_schema",
+        "sdkRetryCount": "4",
+        "stream": false,
+        "tools": [],
+        "startedAt": "2026-10-13T03:58:08.554965+00:00",
+        "endedAt": "2026-10-13T03:58:42.442608+00:00",
+        "seconds": 33.887,
+        "httpStatus": 200,
+        "outcome": "response",
+        "toolCalls": []
+      },
+      {
+        "id": "4b50105d-37af-42b1-b297-95df35cacae0",
+        "node": "clarify_with_user",
+        "model": "moonshotai/kimi-k3",
+        "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+        "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+        "responseFormat": "json_schema",
+        "sdkRetryCount": "0",
+        "stream": false,
+        "tools": [],
+        "startedAt": "2026-10-13T03:58:44.076531+00:00",
+        "endedAt": "2026-10-13T03:59:01.350976+00:00",
+        "seconds": 17.274,
+        "httpStatus": null,
+        "outcome": "failed",
+        "toolCalls": [],
+        "exceptionTypes": ["RemoteProtocolError"],
+        "causeMessage": "Server disconnected without sending a response."
+      },
+      {
+        "id": "c8171b21-9c39-4b9b-bcc4-e2c5ca8c33e7",
+        "node": "clarify_with_user",
+        "model": "moonshotai/kimi-k3",
+        "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+        "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+        "responseFormat": "json_schema",
+        "sdkRetryCount": "1",
+        "stream": false,
+        "tools": [],
+        "startedAt": "2026-10-13T03:59:04.352798+00:00",
+        "endedAt": "2026-10-13T03:59:22.275044+00:00",
+        "seconds": 17.922,
+        "httpStatus": null,
+        "outcome": "failed",
+        "toolCalls": [],
+        "exceptionTypes": ["RemoteProtocolError"],
+        "causeMessage": "Server disconnected without sending a response."
+      },
+      {
+        "id": "56e27f97-a8d8-49a6-a21d-c81efd815d9b",
+        "node": "clarify_with_user",
+        "model": "moonshotai/kimi-k3",
+        "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+        "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+        "responseFormat": "json_schema",
+        "sdkRetryCount": "2",
+        "stream": false,
+        "tools": [],
+        "startedAt": "2026-10-13T03:59:28.277153+00:00",
+        "endedAt": "2026-10-13T03:59:57.914792+00:00",
+        "seconds": 29.637,
+        "httpStatus": 200,
+        "outcome": "response",
+        "toolCalls": []
+      },
+      {
+        "id": "dbe69996-a9ad-429a-adf3-59b9fed2153b",
+        "node": "write_research_brief",
+        "model": "moonshotai/kimi-k3",
+        "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+        "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+        "responseFormat": "json_schema",
+        "sdkRetryCount": "0",
+        "stream": false,
+        "tools": [],
+        "startedAt": "2026-10-13T03:59:57.976342+00:00",
+        "endedAt": "2026-10-13T04:00:15.416712+00:00",
+        "seconds": 17.44,
+        "httpStatus": null,
+        "outcome": "failed",
+        "toolCalls": [],
+        "exceptionTypes": ["RemoteProtocolError"],
+        "causeMessage": "Server disconnected without sending a response."
+      },
+      {
+        "id": "98e30c2d-d117-4cb9-9236-abd41a5a55a8",
+        "node": "write_research_brief",
+        "model": "moonshotai/kimi-k3",
+        "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+        "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+        "responseFormat": "json_schema",
+        "sdkRetryCount": "1",
+        "stream": false,
+        "tools": [],
+        "startedAt": "2026-10-13T04:00:18.419735+00:00",
+        "endedAt": "2026-10-13T04:00:36.009043+00:00",
+        "seconds": 17.589,
+        "httpStatus": null,
+        "outcome": "failed",
+        "toolCalls": [],
+        "exceptionTypes": ["RemoteProtocolError"],
+        "causeMessage": "Server disconnected without sending a response."
+      },
+      {
+        "id": "b99fc31e-e271-4085-9bb1-e5a3a8327b35",
+        "node": "write_research_brief",
+        "model": "moonshotai/kimi-k3",
+        "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+        "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+        "responseFormat": "json_schema",
+        "sdkRetryCount": "2",
+        "stream": false,
+        "tools": [],
+        "startedAt": "2026-10-13T04:00:42.011511+00:00",
+        "endedAt": "2026-10-13T04:01:14.730865+00:00",
+        "seconds": 32.719,
+        "httpStatus": null,
+        "outcome": "failed",
+        "toolCalls": [],
+        "exceptionTypes": ["RemoteProtocolError"],
+        "causeMessage": "Server disconnected without sending a response."
+      },
+      {
+        "id": "b4e7d3c9-f6df-4d5d-8ea8-f032ac8aa6a2",
+        "node": "write_research_brief",
+        "model": "moonshotai/kimi-k3",
+        "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+        "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+        "responseFormat": "json_schema",
+        "sdkRetryCount": "3",
+        "stream": false,
+        "tools": [],
+        "startedAt": "2026-10-13T04:01:26.732981+00:00",
+        "endedAt": "2026-10-13T04:01:44.360000+00:00",
+        "seconds": 17.627,
+        "httpStatus": null,
+        "outcome": "failed",
+        "toolCalls": [],
+        "exceptionTypes": ["RemoteProtocolError"],
+        "causeMessage": "Server disconnected without sending a response."
+      },
+      {
+        "id": "860d4ffd-00cf-4af7-b3fe-0b2c95137f15",
+        "node": "write_research_brief",
+        "model": "moonshotai/kimi-k3",
+        "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+        "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+        "responseFormat": "json_schema",
+        "sdkRetryCount": "4",
+        "stream": false,
+        "tools": [],
+        "startedAt": "2026-10-13T04:02:08.362146+00:00",
+        "endedAt": "2026-10-13T04:02:38.212679+00:00",
+        "seconds": 29.85,
+        "httpStatus": 200,
+        "outcome": "response",
+        "toolCalls": []
+      },
+      {
+        "id": "a9b80c0a-95ec-4081-b735-14a7e9f5135b",
+        "node": "supervisor",
+        "model": "moonshotai/kimi-k3",
+        "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+        "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+        "responseFormat": null,
+        "sdkRetryCount": "0",
+        "stream": false,
+        "tools": ["ConductResearch", "ResearchComplete", "think_tool"],
+        "startedAt": "2026-10-13T04:02:38.296957+00:00",
+        "endedAt": "2026-10-13T04:03:11.200615+00:00",
+        "seconds": 32.903,
+        "httpStatus": null,
+        "outcome": "failed",
+        "toolCalls": [],
+        "exceptionTypes": ["RemoteProtocolError"],
+        "causeMessage": "Server disconnected without sending a response."
+      },
+      {
+        "id": "440a1f35-133b-41bc-9ef6-5653e71c9631",
+        "node": "supervisor",
+        "model": "moonshotai/kimi-k3",
+        "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+        "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+        "responseFormat": null,
+        "sdkRetryCount": "1",
+        "stream": false,
+        "tools": ["ConductResearch", "ResearchComplete", "think_tool"],
+        "startedAt": "2026-10-13T04:03:14.209556+00:00",
+        "endedAt": "2026-10-13T04:03:47.125569+00:00",
+        "seconds": 32.915,
+        "httpStatus": null,
+        "outcome": "failed",
+        "toolCalls": [],
+        "exceptionTypes": ["RemoteProtocolError"],
+        "causeMessage": "Server disconnected without sending a response."
+      },
+      {
+        "id": "11cb2206-410c-473a-a41a-723ddf022043",
+        "node": "supervisor",
+        "model": "moonshotai/kimi-k3",
+        "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+        "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+        "responseFormat": null,
+        "sdkRetryCount": "2",
+        "stream": false,
+        "tools": ["ConductResearch", "ResearchComplete", "think_tool"],
+        "startedAt": "2026-10-13T04:03:53.135630+00:00",
+        "endedAt": "2026-10-13T04:04:10.788290+00:00",
+        "seconds": 17.652,
+        "httpStatus": null,
+        "outcome": "failed",
+        "toolCalls": [],
+        "exceptionTypes": ["RemoteProtocolError"],
+        "causeMessage": "Server disconnected without sending a response."
+      },
+      {
+        "id": "26203baf-1590-4c88-86ea-d90ad418c575",
+        "node": "supervisor",
+        "model": "moonshotai/kimi-k3",
+        "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+        "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+        "responseFormat": null,
+        "sdkRetryCount": "3",
+        "stream": false,
+        "tools": ["ConductResearch", "ResearchComplete", "think_tool"],
+        "startedAt": "2026-10-13T04:04:22.799439+00:00",
+        "endedAt": "2026-10-13T04:04:27.804221+00:00",
+        "seconds": 5.004,
+        "httpStatus": null,
+        "outcome": "failed",
+        "toolCalls": [],
+        "exceptionTypes": ["ConnectError", "EndOfStream", "SSLEOFError"],
+        "causeMessage": "[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1028)"
+      },
+      {
+        "id": "3e5113f5-11f8-42b0-bf8e-cfc90f4102d4",
+        "node": "supervisor",
+        "model": "moonshotai/kimi-k3",
+        "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+        "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+        "responseFormat": null,
+        "sdkRetryCount": "4",
+        "stream": false,
+        "tools": ["ConductResearch", "ResearchComplete", "think_tool"],
+        "startedAt": "2026-10-13T04:04:51.815869+00:00",
+        "endedAt": "2026-10-13T04:05:24.327743+00:00",
+        "seconds": 32.511,
+        "httpStatus": 200,
+        "outcome": "response",
+        "toolCalls": ["think_tool"]
+      },
+      {
+        "id": "9136d2cd-613c-40bc-8e4e-79ccb9670311",
+        "node": "supervisor",
+        "model": "moonshotai/kimi-k3",
+        "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+        "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+        "responseFormat": null,
+        "sdkRetryCount": "0",
+        "stream": false,
+        "tools": ["ConductResearch", "ResearchComplete", "think_tool"],
+        "startedAt": "2026-10-13T04:05:24.335876+00:00",
+        "endedAt": "2026-10-13T04:05:56.825075+00:00",
+        "seconds": 32.489,
+        "httpStatus": 200,
+        "outcome": "response",
+        "toolCalls": ["ConductResearch"]
+      },
+      {
+        "id": "bb719854-c9e4-477d-9631-1e6629170841",
+        "node": "llm_call",
+        "model": "moonshotai/kimi-k3",
+        "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+        "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+        "responseFormat": null,
+        "sdkRetryCount": "0",
+        "stream": false,
+        "tools": ["tavily_search", "think_tool", "load_skill"],
+        "startedAt": "2026-10-13T04:05:58.874303+00:00",
+        "endedAt": "2026-10-13T04:06:16.464393+00:00",
+        "seconds": 17.589,
+        "httpStatus": null,
+        "outcome": "failed",
+        "toolCalls": [],
+        "exceptionTypes": ["RemoteProtocolError"],
+        "causeMessage": "Server disconnected without sending a response."
+      },
+      {
+        "id": "60d2f7e7-38fc-498a-be2f-00ad6726507f",
+        "node": "llm_call",
+        "model": "moonshotai/kimi-k3",
+        "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+        "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+        "responseFormat": null,
+        "sdkRetryCount": "1",
+        "stream": false,
+        "tools": ["tavily_search", "think_tool", "load_skill"],
+        "startedAt": "2026-10-13T04:06:19.467173+00:00",
+        "endedAt": "2026-10-13T04:06:41.486650+00:00",
+        "seconds": 22.019,
+        "httpStatus": 200,
+        "outcome": "response",
+        "toolCalls": ["tavily_search", "tavily_search"]
+      },
+      {
+        "id": "b4486eff-a2d3-470c-83c1-0b6c35c28559",
+        "node": "supervisor",
+        "model": "moonshotai/kimi-k3",
+        "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+        "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+        "responseFormat": null,
+        "sdkRetryCount": "0",
+        "stream": false,
+        "tools": ["ConductResearch", "ResearchComplete", "think_tool"],
+        "startedAt": "2026-10-13T04:10:54.950032+00:00",
+        "endedAt": "2026-10-13T04:11:27.833393+00:00",
+        "seconds": 32.879,
+        "httpStatus": null,
+        "outcome": "failed",
+        "toolCalls": [],
+        "exceptionTypes": ["RemoteProtocolError"],
+        "causeMessage": "Server disconnected without sending a response."
+      },
+      {
+        "id": "0e120e56-5c82-493a-869b-62c2085a9c17",
+        "node": "supervisor",
+        "model": "moonshotai/kimi-k3",
+        "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+        "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+        "responseFormat": null,
+        "sdkRetryCount": "1",
+        "stream": false,
+        "tools": ["ConductResearch", "ResearchComplete", "think_tool"],
+        "startedAt": "2026-10-13T04:11:30.843064+00:00",
+        "endedAt": "2026-10-13T04:11:48.529283+00:00",
+        "seconds": 17.686,
+        "httpStatus": null,
+        "outcome": "failed",
+        "toolCalls": [],
+        "exceptionTypes": ["RemoteProtocolError"],
+        "causeMessage": "Server disconnected without sending a response."
+      },
+      {
+        "id": "7ed67056-a62b-4188-a4e4-6f0819f54751",
+        "node": "supervisor",
+        "model": "moonshotai/kimi-k3",
+        "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+        "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+        "responseFormat": null,
+        "sdkRetryCount": "2",
+        "stream": false,
+        "tools": ["ConductResearch", "ResearchComplete", "think_tool"],
+        "startedAt": "2026-10-13T04:11:54.541814+00:00",
+        "endedAt": "2026-10-13T04:12:15.458328+00:00",
+        "seconds": 20.916,
+        "httpStatus": 200,
+        "outcome": "response",
+        "toolCalls": ["think_tool"]
+      },
+      {
+        "id": "475579a7-e341-468b-8f58-eadc75b42e40",
+        "node": "supervisor",
+        "model": "moonshotai/kimi-k3",
+        "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+        "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+        "responseFormat": null,
+        "sdkRetryCount": "0",
+        "stream": false,
+        "tools": ["ConductResearch", "ResearchComplete", "think_tool"],
+        "startedAt": "2026-10-13T04:12:15.464286+00:00",
+        "endedAt": "2026-10-13T04:12:37.246077+00:00",
+        "seconds": 21.781,
+        "httpStatus": 200,
+        "outcome": "response",
+        "toolCalls": ["ConductResearch"]
+      },
+      {
+        "id": "69cd54e4-0a66-43d1-98e3-e3f98ad3601f",
+        "node": "llm_call",
+        "model": "moonshotai/kimi-k3",
+        "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+        "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+        "responseFormat": null,
+        "sdkRetryCount": "0",
+        "stream": false,
+        "tools": ["tavily_search", "think_tool", "load_skill"],
+        "startedAt": "2026-10-13T04:12:37.285129+00:00",
+        "endedAt": "2026-10-13T04:13:02.833538+00:00",
+        "seconds": 25.548,
+        "httpStatus": 200,
+        "outcome": "response",
+        "toolCalls": ["tavily_search", "tavily_search", "tavily_search"]
+      },
+      {
+        "id": "71b29353-0a72-49a8-9a88-a67b69fd74a2",
+        "node": "tool_node",
+        "model": "moonshotai/kimi-k3",
+        "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+        "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+        "responseFormat": null,
+        "sdkRetryCount": "0",
+        "stream": false,
+        "tools": ["Summary"],
+        "startedAt": "2026-10-13T04:13:09.039702+00:00",
+        "endedAt": "2026-10-13T04:13:42.275975+00:00",
+        "seconds": 33.228,
+        "httpStatus": null,
+        "outcome": "failed",
+        "toolCalls": [],
+        "exceptionTypes": ["RemoteProtocolError"],
+        "causeMessage": "Server disconnected without sending a response."
+      },
+      {
+        "id": "e52c666b-6a10-4d9b-815c-0fcac5536801",
+        "node": "tool_node",
+        "model": "moonshotai/kimi-k3",
+        "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+        "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+        "responseFormat": null,
+        "sdkRetryCount": "1",
+        "stream": false,
+        "tools": ["Summary"],
+        "startedAt": "2026-10-13T04:13:45.278486+00:00",
+        "endedAt": "2026-10-13T04:14:18.072860+00:00",
+        "seconds": 32.794,
+        "httpStatus": null,
+        "outcome": "failed",
+        "toolCalls": [],
+        "exceptionTypes": ["RemoteProtocolError"],
+        "causeMessage": "Server disconnected without sending a response."
+      },
+      {
+        "id": "22289647-f82e-4bf3-bc67-6e343e845722",
+        "node": "tool_node",
+        "model": "moonshotai/kimi-k3",
+        "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+        "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+        "responseFormat": null,
+        "sdkRetryCount": "2",
+        "stream": false,
+        "tools": ["Summary"],
+        "startedAt": "2026-10-13T04:14:24.075304+00:00",
+        "endedAt": "2026-10-13T04:15:13.140553+00:00",
+        "seconds": 49.065,
+        "httpStatus": 200,
+        "outcome": "response",
+        "toolCalls": ["Summary"]
+      },
+      {
+        "id": "79f74f9b-c563-4d2b-8e9a-964cdc1ee150",
+        "node": "tool_node",
+        "model": "moonshotai/kimi-k3",
+        "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+        "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+        "responseFormat": null,
+        "sdkRetryCount": "0",
+        "stream": false,
+        "tools": ["Summary"],
+        "startedAt": "2026-10-13T04:15:25.810214+00:00",
+        "endedAt": "2026-10-13T04:15:59.448899+00:00",
+        "seconds": 33.636,
+        "httpStatus": null,
+        "outcome": "failed",
+        "toolCalls": [],
+        "exceptionTypes": ["RemoteProtocolError"],
+        "causeMessage": "Server disconnected without sending a response."
+      },
+      {
+        "id": "7108991e-3145-4601-a3a3-b2fb5226c297",
+        "node": "tool_node",
+        "model": "moonshotai/kimi-k3",
+        "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+        "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+        "responseFormat": null,
+        "sdkRetryCount": "0",
+        "stream": false,
+        "tools": ["Summary"],
+        "startedAt": "2026-10-13T04:15:27.821335+00:00",
+        "endedAt": "2026-10-13T04:15:45.998725+00:00",
+        "seconds": 18.177,
+        "httpStatus": null,
+        "outcome": "failed",
+        "toolCalls": [],
+        "exceptionTypes": ["RemoteProtocolError"],
+        "causeMessage": "Server disconnected without sending a response."
+      },
+      {
+        "id": "7381e126-3714-44cf-8ace-eebbb8c9f848",
+        "node": "tool_node",
+        "model": "moonshotai/kimi-k3",
+        "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+        "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+        "responseFormat": null,
+        "sdkRetryCount": "0",
+        "stream": false,
+        "tools": ["Summary"],
+        "startedAt": "2026-10-13T04:15:29.831164+00:00",
+        "endedAt": "2026-10-13T04:16:03.533505+00:00",
+        "seconds": 33.702,
+        "httpStatus": null,
+        "outcome": "failed",
+        "toolCalls": [],
+        "exceptionTypes": ["RemoteProtocolError"],
+        "causeMessage": "Server disconnected without sending a response."
+      },
+      {
+        "id": "7ab1061b-cbd1-4c7d-a719-9e5a432d3eac",
+        "node": "tool_node",
+        "model": "moonshotai/kimi-k3",
+        "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+        "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+        "responseFormat": null,
+        "sdkRetryCount": "1",
+        "stream": false,
+        "tools": ["Summary"],
+        "startedAt": "2026-10-13T04:15:49.002028+00:00",
+        "endedAt": "2026-10-13T04:16:07.438782+00:00",
+        "seconds": 18.436,
+        "httpStatus": null,
+        "outcome": "failed",
+        "toolCalls": [],
+        "exceptionTypes": ["RemoteProtocolError"],
+        "causeMessage": "Server disconnected without sending a response."
+      },
+      {
+        "id": "fa26391a-343f-415e-b8e1-6b210b5bb490",
+        "node": "tool_node",
+        "model": "moonshotai/kimi-k3",
+        "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+        "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+        "responseFormat": null,
+        "sdkRetryCount": "1",
+        "stream": false,
+        "tools": ["Summary"],
+        "startedAt": "2026-10-13T04:16:02.451569+00:00",
+        "endedAt": "2026-10-13T04:16:20.691227+00:00",
+        "seconds": 18.239,
+        "httpStatus": null,
+        "outcome": "failed",
+        "toolCalls": [],
+        "exceptionTypes": ["RemoteProtocolError"],
+        "causeMessage": "Server disconnected without sending a response."
+      },
+      {
+        "id": "26ab728a-f93d-4d16-9b5f-0179141876f3",
+        "node": "tool_node",
+        "model": "moonshotai/kimi-k3",
+        "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+        "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+        "responseFormat": null,
+        "sdkRetryCount": "1",
+        "stream": false,
+        "tools": ["Summary"],
+        "startedAt": "2026-10-13T04:16:06.536936+00:00",
+        "endedAt": "2026-10-13T04:16:24.497559+00:00",
+        "seconds": 17.96,
+        "httpStatus": null,
+        "outcome": "failed",
+        "toolCalls": [],
+        "exceptionTypes": ["RemoteProtocolError"],
+        "causeMessage": "Server disconnected without sending a response."
+      },
+      {
+        "id": "7e631807-5ffa-405a-8279-4dc917bca032",
+        "node": "tool_node",
+        "model": "moonshotai/kimi-k3",
+        "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+        "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+        "responseFormat": null,
+        "sdkRetryCount": "2",
+        "stream": false,
+        "tools": ["Summary"],
+        "startedAt": "2026-10-13T04:16:13.442136+00:00",
+        "endedAt": "2026-10-13T04:17:01.648942+00:00",
+        "seconds": 48.206,
+        "httpStatus": null,
+        "outcome": "failed",
+        "toolCalls": [],
+        "exceptionTypes": ["RemoteProtocolError"],
+        "causeMessage": "Server disconnected without sending a response."
+      },
+      {
+        "id": "2b64747c-7570-4b41-9734-6aead80d997b",
+        "node": "tool_node",
+        "model": "moonshotai/kimi-k3",
+        "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+        "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+        "responseFormat": null,
+        "sdkRetryCount": "2",
+        "stream": false,
+        "tools": ["Summary"],
+        "startedAt": "2026-10-13T04:16:26.694484+00:00",
+        "endedAt": "2026-10-13T04:16:44.590708+00:00",
+        "seconds": 17.896,
+        "httpStatus": null,
+        "outcome": "failed",
+        "toolCalls": [],
+        "exceptionTypes": ["RemoteProtocolError"],
+        "causeMessage": "Server disconnected without sending a response."
+      },
+      {
+        "id": "26b6607b-e2a0-434b-9bf0-82440bffa4b0",
+        "node": "tool_node",
+        "model": "moonshotai/kimi-k3",
+        "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+        "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+        "responseFormat": null,
+        "sdkRetryCount": "2",
+        "stream": false,
+        "tools": ["Summary"],
+        "startedAt": "2026-10-13T04:16:30.500496+00:00",
+        "endedAt": "2026-10-13T04:17:18.803011+00:00",
+        "seconds": 48.302,
+        "httpStatus": null,
+        "outcome": "failed",
+        "toolCalls": [],
+        "exceptionTypes": ["RemoteProtocolError"],
+        "causeMessage": "Server disconnected without sending a response."
+      },
+      {
+        "id": "28d6432a-3240-4254-8168-a778a42f7501",
+        "node": "tool_node",
+        "model": "moonshotai/kimi-k3",
+        "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+        "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+        "responseFormat": null,
+        "sdkRetryCount": "3",
+        "stream": false,
+        "tools": ["Summary"],
+        "startedAt": "2026-10-13T04:16:56.593182+00:00",
+        "endedAt": "2026-10-13T04:18:00.325808+00:00",
+        "seconds": 63.732,
+        "httpStatus": null,
+        "outcome": "failed",
+        "toolCalls": [],
+        "exceptionTypes": ["RemoteProtocolError"],
+        "causeMessage": "Server disconnected without sending a response."
+      },
+      {
+        "id": "f00393d6-67f1-4c17-bab3-c4766358677b",
+        "node": "tool_node",
+        "model": "moonshotai/kimi-k3",
+        "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+        "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+        "responseFormat": null,
+        "sdkRetryCount": "3",
+        "stream": false,
+        "tools": ["Summary"],
+        "startedAt": "2026-10-13T04:17:13.651619+00:00",
+        "endedAt": "2026-10-13T04:17:46.716950+00:00",
+        "seconds": 33.065,
+        "httpStatus": null,
+        "outcome": "failed",
+        "toolCalls": [],
+        "exceptionTypes": ["RemoteProtocolError"],
+        "causeMessage": "Server disconnected without sending a response."
+      },
+      {
+        "id": "6727def3-c663-4097-851e-e24303092fb2",
+        "node": "tool_node",
+        "model": "moonshotai/kimi-k3",
+        "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+        "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+        "responseFormat": null,
+        "sdkRetryCount": "3",
+        "stream": false,
+        "tools": ["Summary"],
+        "startedAt": "2026-10-13T04:17:30.806299+00:00",
+        "endedAt": "2026-10-13T04:18:03.856307+00:00",
+        "seconds": 33.05,
+        "httpStatus": null,
+        "outcome": "failed",
+        "toolCalls": [],
+        "exceptionTypes": ["RemoteProtocolError"],
+        "causeMessage": "Server disconnected without sending a response."
+      },
+      {
+        "id": "752b8d70-cb18-4d05-8261-3e304cd49cb5",
+        "node": "tool_node",
+        "model": "moonshotai/kimi-k3",
+        "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+        "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+        "responseFormat": null,
+        "sdkRetryCount": "4",
+        "stream": false,
+        "tools": ["Summary"],
+        "startedAt": "2026-10-13T04:18:10.720226+00:00",
+        "endedAt": "2026-10-13T04:18:28.696848+00:00",
+        "seconds": 17.976,
+        "httpStatus": null,
+        "outcome": "failed",
+        "toolCalls": [],
+        "exceptionTypes": ["RemoteProtocolError"],
+        "causeMessage": "Server disconnected without sending a response."
+      },
+      {
+        "id": "ed94065d-e2f2-44fd-bc3c-2ed837ef659a",
+        "node": "tool_node",
+        "model": "moonshotai/kimi-k3",
+        "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+        "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+        "responseFormat": null,
+        "sdkRetryCount": "4",
+        "stream": false,
+        "tools": ["Summary"],
+        "startedAt": "2026-10-13T04:18:24.328732+00:00",
+        "endedAt": "2026-10-13T04:18:42.255854+00:00",
+        "seconds": 17.927,
+        "httpStatus": null,
+        "outcome": "failed",
+        "toolCalls": [],
+        "exceptionTypes": ["RemoteProtocolError"],
+        "causeMessage": "Server disconnected without sending a response."
+      },
+      {
+        "id": "6d0eadf7-ee58-406a-beee-731da9604734",
+        "node": "tool_node",
+        "model": "moonshotai/kimi-k3",
+        "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+        "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+        "responseFormat": null,
+        "sdkRetryCount": "4",
+        "stream": false,
+        "tools": ["Summary"],
+        "startedAt": "2026-10-13T04:18:27.860571+00:00",
+        "endedAt": "2026-10-13T04:19:32.341821+00:00",
+        "seconds": 64.48,
+        "httpStatus": 504,
+        "outcome": "response",
+        "toolCalls": []
+      },
+      {
+        "id": "08b81473-ff21-4ac3-9288-ead2a0c6c3d4",
+        "node": "llm_call",
+        "model": "moonshotai/kimi-k3",
+        "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+        "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+        "responseFormat": null,
+        "sdkRetryCount": "0",
+        "stream": false,
+        "tools": ["tavily_search", "think_tool", "load_skill"],
+        "startedAt": "2026-10-13T04:19:36.548190+00:00",
+        "endedAt": "2026-10-13T04:20:01.247042+00:00",
+        "seconds": 24.699,
+        "httpStatus": 200,
+        "outcome": "response",
+        "toolCalls": ["think_tool", "tavily_search"]
+      },
+      {
+        "id": "d8292381-d06d-43ad-a5ba-5524b04ac5e4",
+        "node": "tool_node",
+        "model": "moonshotai/kimi-k3",
+        "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+        "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+        "responseFormat": null,
+        "sdkRetryCount": "0",
+        "stream": false,
+        "tools": ["Summary"],
+        "startedAt": "2026-10-13T04:20:07.586403+00:00",
+        "endedAt": "2026-10-13T04:20:25.316714+00:00",
+        "seconds": 17.727,
+        "httpStatus": null,
+        "outcome": "failed",
+        "toolCalls": [],
+        "exceptionTypes": ["RemoteProtocolError"],
+        "causeMessage": "Server disconnected without sending a response."
+      },
+      {
+        "id": "419ec6e0-6433-48f6-8a37-2fe731c9e704",
+        "node": "tool_node",
+        "model": "moonshotai/kimi-k3",
+        "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+        "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+        "responseFormat": null,
+        "sdkRetryCount": "0",
+        "stream": false,
+        "tools": ["Summary"],
+        "startedAt": "2026-10-13T04:20:09.596810+00:00",
+        "endedAt": "2026-10-13T04:20:54.806852+00:00",
+        "seconds": 45.21,
+        "httpStatus": 200,
+        "outcome": "response",
+        "toolCalls": ["Summary"]
+      },
+      {
+        "id": "a6e6fdf2-b811-4c4c-87d7-488262deb971",
+        "node": "tool_node",
+        "model": "moonshotai/kimi-k3",
+        "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+        "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+        "responseFormat": null,
+        "sdkRetryCount": "0",
+        "stream": false,
+        "tools": ["Summary"],
+        "startedAt": "2026-10-13T04:20:11.611223+00:00",
+        "endedAt": "2026-10-13T04:20:56.761487+00:00",
+        "seconds": 45.15,
+        "httpStatus": 200,
+        "outcome": "response",
+        "toolCalls": ["Summary"]
+      },
+      {
+        "id": "deb00820-ed0e-48ee-995e-864d9f61a657",
+        "node": "tool_node",
+        "model": "moonshotai/kimi-k3",
+        "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+        "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+        "responseFormat": null,
+        "sdkRetryCount": "1",
+        "stream": false,
+        "tools": ["Summary"],
+        "startedAt": "2026-10-13T04:20:28.319069+00:00",
+        "endedAt": "2026-10-13T04:21:01.841102+00:00",
+        "seconds": 33.521,
+        "httpStatus": 200,
+        "outcome": "response",
+        "toolCalls": ["Summary"]
+      },
+      {
+        "id": "00bc67ff-ff7b-4d37-8cc1-1502914d9f28",
+        "node": "llm_call",
+        "model": "moonshotai/kimi-k3",
+        "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+        "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+        "responseFormat": null,
+        "sdkRetryCount": "0",
+        "stream": false,
+        "tools": ["tavily_search", "think_tool", "load_skill"],
+        "startedAt": "2026-10-13T04:21:01.879167+00:00",
+        "endedAt": "2026-10-13T04:21:26.778298+00:00",
+        "seconds": 24.899,
+        "httpStatus": 200,
+        "outcome": "response",
+        "toolCalls": ["think_tool"]
+      },
+      {
+        "id": "298109a0-9360-44f1-87e1-c93aba2db67b",
+        "node": "llm_call",
+        "model": "moonshotai/kimi-k3",
+        "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+        "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+        "responseFormat": null,
+        "sdkRetryCount": "0",
+        "stream": false,
+        "tools": ["tavily_search", "think_tool", "load_skill"],
+        "startedAt": "2026-10-13T04:21:26.863365+00:00",
+        "endedAt": "2026-10-13T04:21:59.366792+00:00",
+        "seconds": 32.503,
+        "httpStatus": null,
+        "outcome": "failed",
+        "toolCalls": [],
+        "exceptionTypes": ["RemoteProtocolError"],
+        "causeMessage": "Server disconnected without sending a response."
+      },
+      {
+        "id": "8086a64f-fa5b-4038-8294-55034a36d387",
+        "node": "llm_call",
+        "model": "moonshotai/kimi-k3",
+        "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+        "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+        "responseFormat": null,
+        "sdkRetryCount": "1",
+        "stream": false,
+        "tools": ["tavily_search", "think_tool", "load_skill"],
+        "startedAt": "2026-10-13T04:22:02.368883+00:00",
+        "endedAt": "2026-10-13T04:22:42.400922+00:00",
+        "seconds": 40.032,
+        "httpStatus": 200,
+        "outcome": "response",
+        "toolCalls": []
+      },
+      {
+        "id": "24e7985b-c6d2-4c09-a5f5-4aaae2a241c9",
+        "node": "compress_research",
+        "model": "moonshotai/kimi-k3",
+        "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+        "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+        "responseFormat": null,
+        "sdkRetryCount": "0",
+        "stream": false,
+        "tools": [],
+        "startedAt": "2026-10-13T04:22:42.447752+00:00",
+        "endedAt": "2026-10-13T04:22:59.788957+00:00",
+        "seconds": 17.341,
+        "httpStatus": null,
+        "outcome": "failed",
+        "toolCalls": [],
+        "exceptionTypes": ["RemoteProtocolError"],
+        "causeMessage": "Server disconnected without sending a response."
+      },
+      {
+        "id": "b5a23633-0d37-4f80-86bd-c7b476661dcb",
+        "node": "compress_research",
+        "model": "moonshotai/kimi-k3",
+        "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+        "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+        "responseFormat": null,
+        "sdkRetryCount": "1",
+        "stream": false,
+        "tools": [],
+        "startedAt": "2026-10-13T04:23:02.790857+00:00",
+        "endedAt": "2026-10-13T04:23:20.467819+00:00",
+        "seconds": 17.677,
+        "httpStatus": null,
+        "outcome": "failed",
+        "toolCalls": [],
+        "exceptionTypes": ["RemoteProtocolError"],
+        "causeMessage": "Server disconnected without sending a response."
+      },
+      {
+        "id": "958b644c-9afa-4b99-a34d-6ed36db3b655",
+        "node": "compress_research",
+        "model": "moonshotai/kimi-k3",
+        "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+        "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+        "responseFormat": null,
+        "sdkRetryCount": "2",
+        "stream": false,
+        "tools": [],
+        "startedAt": "2026-10-13T04:23:26.470415+00:00",
+        "endedAt": "2026-10-13T04:24:10.732469+00:00",
+        "seconds": 44.262,
+        "httpStatus": 200,
+        "outcome": "response",
+        "toolCalls": []
+      },
+      {
+        "id": "10541dae-3c7c-4a87-b537-1cce11895911",
+        "node": "supervisor",
+        "model": "moonshotai/kimi-k3",
+        "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+        "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+        "responseFormat": null,
+        "sdkRetryCount": "0",
+        "stream": false,
+        "tools": ["ConductResearch", "ResearchComplete", "think_tool"],
+        "startedAt": "2026-10-13T04:24:10.770123+00:00",
+        "endedAt": "2026-10-13T04:24:39.027678+00:00",
+        "seconds": 28.257,
+        "httpStatus": 200,
+        "outcome": "response",
+        "toolCalls": ["think_tool"]
+      },
+      {
+        "id": "27385151-a86a-447f-8242-ed691ac1825b",
+        "node": "supervisor",
+        "model": "moonshotai/kimi-k3",
+        "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+        "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+        "responseFormat": null,
+        "sdkRetryCount": "0",
+        "stream": false,
+        "tools": ["ConductResearch", "ResearchComplete", "think_tool"],
+        "startedAt": "2026-10-13T04:24:39.036870+00:00",
+        "endedAt": "2026-10-13T04:24:56.261515+00:00",
+        "seconds": 17.224,
+        "httpStatus": null,
+        "outcome": "failed",
+        "toolCalls": [],
+        "exceptionTypes": ["RemoteProtocolError"],
+        "causeMessage": "Server disconnected without sending a response."
+      },
+      {
+        "id": "b027bc3f-0c5c-45d0-a87e-998e8cefcbdd",
+        "node": "supervisor",
+        "model": "moonshotai/kimi-k3",
+        "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+        "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+        "responseFormat": null,
+        "sdkRetryCount": "1",
+        "stream": false,
+        "tools": ["ConductResearch", "ResearchComplete", "think_tool"],
+        "startedAt": "2026-10-13T04:24:59.267881+00:00",
+        "endedAt": "2026-10-13T04:25:21.115381+00:00",
+        "seconds": 21.847,
+        "httpStatus": 200,
+        "outcome": "response",
+        "toolCalls": ["ResearchComplete"]
+      },
+      {
+        "id": "81fc7f14-3f38-4a36-8d58-bc2b7fb8a525",
+        "node": "final_report_generation",
+        "model": "moonshotai/kimi-k3",
+        "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+        "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+        "responseFormat": null,
+        "sdkRetryCount": "0",
+        "stream": false,
+        "tools": [],
+        "startedAt": "2026-10-13T04:25:21.187171+00:00",
+        "endedAt": "2026-10-13T04:25:53.631469+00:00",
+        "seconds": 32.444,
+        "httpStatus": null,
+        "outcome": "failed",
+        "toolCalls": [],
+        "exceptionTypes": ["RemoteProtocolError"],
+        "causeMessage": "Server disconnected without sending a response."
+      },
+      {
+        "id": "2cb3a767-6fd9-4661-8bf1-d1b6965c1f57",
+        "node": "final_report_generation",
+        "model": "moonshotai/kimi-k3",
+        "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+        "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+        "responseFormat": null,
+        "sdkRetryCount": "1",
+        "stream": false,
+        "tools": [],
+        "startedAt": "2026-10-13T04:25:56.644769+00:00",
+        "endedAt": null,
+        "seconds": null,
+        "httpStatus": null,
+        "outcome": "in_flight",
+        "toolCalls": []
+      }
+    ],
+    "retrySchedules": [
+      {
+        "kind": "retry_scheduled",
+        "retryNumber": 1,
+        "delaySeconds": 3,
+        "at": "2026-10-13T03:56:00.109670+00:00"
+      },
+      {
+        "kind": "retry_scheduled",
+        "retryNumber": 2,
+        "delaySeconds": 6,
+        "at": "2026-10-13T03:56:35.946038+00:00"
+      },
+      {
+        "kind": "retry_scheduled",
+        "retryNumber": 3,
+        "delaySeconds": 12,
+        "at": "2026-10-13T03:57:14.950215+00:00"
+      },
+      {
+        "kind": "retry_scheduled",
+        "retryNumber": 4,
+        "delaySeconds": 24,
+        "at": "2026-10-13T03:57:44.553615+00:00"
+      },
+      {
+        "kind": "retry_scheduled",
+        "retryNumber": 1,
+        "delaySeconds": 3,
+        "at": "2026-10-13T03:59:01.351466+00:00"
+      },
+      {
+        "kind": "retry_scheduled",
+        "retryNumber": 2,
+        "delaySeconds": 6,
+        "at": "2026-10-13T03:59:22.275507+00:00"
+      },
+      {
+        "kind": "retry_scheduled",
+        "retryNumber": 1,
+        "delaySeconds": 3,
+        "at": "2026-10-13T04:00:15.417175+00:00"
+      },
+      {
+        "kind": "retry_scheduled",
+        "retryNumber": 2,
+        "delaySeconds": 6,
+        "at": "2026-10-13T04:00:36.009510+00:00"
+      },
+      {
+        "kind": "retry_scheduled",
+        "retryNumber": 3,
+        "delaySeconds": 12,
+        "at": "2026-10-13T04:01:14.731309+00:00"
+      },
+      {
+        "kind": "retry_scheduled",
+        "retryNumber": 4,
+        "delaySeconds": 24,
+        "at": "2026-10-13T04:01:44.360458+00:00"
+      },
+      {
+        "kind": "retry_scheduled",
+        "retryNumber": 1,
+        "delaySeconds": 3,
+        "at": "2026-10-13T04:03:11.201105+00:00"
+      },
+      {
+        "kind": "retry_scheduled",
+        "retryNumber": 2,
+        "delaySeconds": 6,
+        "at": "2026-10-13T04:03:47.126074+00:00"
+      },
+      {
+        "kind": "retry_scheduled",
+        "retryNumber": 3,
+        "delaySeconds": 12,
+        "at": "2026-10-13T04:04:10.788736+00:00"
+      },
+      {
+        "kind": "retry_scheduled",
+        "retryNumber": 4,
+        "delaySeconds": 24,
+        "at": "2026-10-13T04:04:27.804630+00:00"
+      },
+      {
+        "kind": "retry_scheduled",
+        "retryNumber": 1,
+        "delaySeconds": 3,
+        "at": "2026-10-13T04:06:16.465060+00:00"
+      },
+      {
+        "kind": "retry_scheduled",
+        "retryNumber": 1,
+        "delaySeconds": 3,
+        "at": "2026-10-13T04:11:27.833856+00:00"
+      },
+      {
+        "kind": "retry_scheduled",
+        "retryNumber": 2,
+        "delaySeconds": 6,
+        "at": "2026-10-13T04:11:48.529819+00:00"
+      },
+      {
+        "kind": "retry_scheduled",
+        "retryNumber": 1,
+        "delaySeconds": 3,
+        "at": "2026-10-13T04:13:42.276407+00:00"
+      },
+      {
+        "kind": "retry_scheduled",
+        "retryNumber": 2,
+        "delaySeconds": 6,
+        "at": "2026-10-13T04:14:18.073285+00:00"
+      },
+      {
+        "kind": "retry_scheduled",
+        "retryNumber": 1,
+        "delaySeconds": 3,
+        "at": "2026-10-13T04:15:45.999322+00:00"
+      },
+      {
+        "kind": "retry_scheduled",
+        "retryNumber": 1,
+        "delaySeconds": 3,
+        "at": "2026-10-13T04:15:59.449280+00:00"
+      },
+      {
+        "kind": "retry_scheduled",
+        "retryNumber": 1,
+        "delaySeconds": 3,
+        "at": "2026-10-13T04:16:03.533924+00:00"
+      },
+      {
+        "kind": "retry_scheduled",
+        "retryNumber": 2,
+        "delaySeconds": 6,
+        "at": "2026-10-13T04:16:07.439223+00:00"
+      },
+      {
+        "kind": "retry_scheduled",
+        "retryNumber": 2,
+        "delaySeconds": 6,
+        "at": "2026-10-13T04:16:20.691725+00:00"
+      },
+      {
+        "kind": "retry_scheduled",
+        "retryNumber": 2,
+        "delaySeconds": 6,
+        "at": "2026-10-13T04:16:24.498156+00:00"
+      },
+      {
+        "kind": "retry_scheduled",
+        "retryNumber": 3,
+        "delaySeconds": 12,
+        "at": "2026-10-13T04:16:44.591186+00:00"
+      },
+      {
+        "kind": "retry_scheduled",
+        "retryNumber": 3,
+        "delaySeconds": 12,
+        "at": "2026-10-13T04:17:01.649261+00:00"
+      },
+      {
+        "kind": "retry_scheduled",
+        "retryNumber": 3,
+        "delaySeconds": 12,
+        "at": "2026-10-13T04:17:18.803409+00:00"
+      },
+      {
+        "kind": "retry_scheduled",
+        "retryNumber": 4,
+        "delaySeconds": 24,
+        "at": "2026-10-13T04:17:46.717422+00:00"
+      },
+      {
+        "kind": "retry_scheduled",
+        "retryNumber": 4,
+        "delaySeconds": 24,
+        "at": "2026-10-13T04:18:00.326366+00:00"
+      },
+      {
+        "kind": "retry_scheduled",
+        "retryNumber": 4,
+        "delaySeconds": 24,
+        "at": "2026-10-13T04:18:03.856771+00:00"
+      },
+      {
+        "kind": "retry_scheduled",
+        "retryNumber": 1,
+        "delaySeconds": 3,
+        "at": "2026-10-13T04:20:25.317128+00:00"
+      },
+      {
+        "kind": "retry_scheduled",
+        "retryNumber": 1,
+        "delaySeconds": 3,
+        "at": "2026-10-13T04:21:59.367218+00:00"
+      },
+      {
+        "kind": "retry_scheduled",
+        "retryNumber": 1,
+        "delaySeconds": 3,
+        "at": "2026-10-13T04:22:59.789449+00:00"
+      },
+      {
+        "kind": "retry_scheduled",
+        "retryNumber": 2,
+        "delaySeconds": 6,
+        "at": "2026-10-13T04:23:20.468263+00:00"
+      },
+      {
+        "kind": "retry_scheduled",
+        "retryNumber": 1,
+        "delaySeconds": 3,
+        "at": "2026-10-13T04:24:56.262073+00:00"
+      },
+      {
+        "kind": "retry_scheduled",
+        "retryNumber": 1,
+        "delaySeconds": 3,
+        "at": "2026-10-13T04:25:53.632154+00:00"
+      }
+    ],
+    "nativeCompletions": [
+      {
+        "runId": "5fad6d46-5140-42fa-8a8d-5bb64daaff27",
+        "executionSeconds": 195.465,
+        "status": "success"
+      }
+    ],
+    "evidenceFile": "provider-2026-10-13-kimi-evidence.json",
+    "observationEnded": true
+  }
+]

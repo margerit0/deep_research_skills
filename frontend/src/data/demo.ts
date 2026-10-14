@@ -131,14 +131,21 @@ export const demoScenes = [
   },
 ] as const
 
+export interface DemoScene {
+  id: string
+  title: string
+  detail: string
+  duration: number
+  target: 'composer' | 'message' | 'inspector' | 'graph' | 'report'
+}
 export const demoDuration = demoScenes.reduce((sum, scene) => sum + scene.duration, 0)
-export const demoStart = (index: number) =>
-  demoScenes.slice(0, index).reduce((sum, scene) => sum + scene.duration, 0)
-export function demoPosition(elapsed: number) {
+export const demoStart = (index: number, scenes: readonly DemoScene[] = demoScenes) =>
+  scenes.slice(0, index).reduce((sum, scene) => sum + scene.duration, 0)
+export function demoPosition(elapsed: number, scenes: readonly DemoScene[] = demoScenes) {
   let start = 0
-  for (let index = 0; index < demoScenes.length; index++) {
-    const scene = demoScenes[index]
-    if (elapsed < start + scene.duration || index === demoScenes.length - 1)
+  for (let index = 0; index < scenes.length; index++) {
+    const scene = scenes[index]
+    if (elapsed < start + scene.duration || index === scenes.length - 1)
       return { index, scene, progress: Math.min(1, (elapsed - start) / scene.duration) }
     start += scene.duration
   }

@@ -6,9 +6,12 @@ import { StatusMark } from './StatusMark'
 import { Composer } from './Composer'
 import { demoReply, demoReport } from '../data/demo'
 import { LiveConversation } from './LiveConversation'
+import { RecordedConversation } from './RecordedConversation'
 
 export function Conversation({ controller }: { controller: WorkspaceController }) {
-  return controller.isLive ? (
+  return controller.demo.recording ? (
+    <RecordedConversation controller={controller} />
+  ) : controller.isLive ? (
     <LiveConversation controller={controller} />
   ) : (
     <MockConversation controller={controller} />

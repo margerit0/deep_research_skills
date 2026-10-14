@@ -1,8 +1,41 @@
 # 星图工作台后续任务与交接
 
-更新日期：2026-10-11。1A、1B、计划 2 已实现；最新验收与真实供应商复测见 [验收记录](verification.md) 首节。
+更新日期：2026-10-14。1A、1B、计划 2 已实现；GLM / Kimi 实录与下载包已完成整理。最新验收与真实供应商复测见 [验收记录](verification.md) 首节。
 
-## 计划 2 交接补充（当前入口）
+## 2026-10-14 实录回放交接（当前入口）
+
+接续聊天 `01a1331f-2648-7900-96dd-a55f40f6b0e0` 中断前的任务：保存真实调用数据、使用同 API key / base URL 试 `moonshotai/kimi-k3`，并按实际覆盖范围替换演示内容。接手时仍为 `chore/public-edits`、`2fc6299`，已有未提交的证据及前端改动已保留；本轮没有新增供应商调用，完成的是实录、导出和验收收尾。
+
+本次交接提交标题为 `feat: replay recorded Atlas research runs`，父提交为 `2fc6299`；具体提交号以交接消息和 `git log` 为准。实录、公开证据、截图和文档一并入库，`.local/` 下的下载包、原始材料及检查点仍只保留在本机。本轮收尾聊天为 `01a1389f-107a-7640-8826-6ccf3e027687`。新窗口先检查实际 HEAD 和工作区，保留后续提交及未提交修改。
+
+**现有数据仍不足以替换一次完整的成功流程。** GLM 增加等待与退避后确认简报失败；Kimi 取得 231 字简报、30 条研究事件、1 份笔记和 8 条检索来源，但报告为空。其两个研究任务一失败一完成，未成功加载 Skills；1950 秒专用后端保护期限到达后退出，最后仍是 `running/writing`，没有确认业务终态。Kimi 与 GLM 记录独立，不能拼接成完整交付。
+
+进入“全流程演示”，通过“数据来源”选择 GLM 或 Kimi 实录。原完整模拟继续保留。实录使用独立内存会话，只读显示实际内容、节点、请求记录及失败 / 中断，退出或刷新恢复原工作区。数据延迟加载，回放不创建 run、不改写历史，也没有实现计划 3 的在线正文流式。
+
+下载包位于 `.local/exports/atlas-real-calls-2026-10-13.zip`，包含四轮调用的安全材料、笔记 / 来源 / 事件、两条回放 JSON、原材料可用性清单与逐文件 SHA-256。临时浏览器材料的缺失、Kimi 浏览器与最终 API 快照的差异均明确保留。详细数据边界见 [真实记录回放](recorded-runs.md)。
+
+后续仍按两条路径安排：供应商稳定后，使用隔离环境补齐真实报告、来源与正文引用核验；如使用 1B 写作恢复，必须验证当前回执 / 精确检查点，恢复会新增有明确身份的 run，不能算作此前“两次 run”的同一验收。计划 3 可按 [实施方案](report-streaming-plan.md) 独立推进，真实流式验收仍需真实报告。下一轮根据新的任务要求选择，本轮未开始计划 3。
+
+继续保留生产后端 `.env`、原默认模型 / 网关、TLS 校验、`NO_PROXY=*`、共享 limiter、结构化 fallback 和 Qwen `/no_think`。Kimi 模型切换及 3 / 6 / 12 / 24 秒退避仅发生在 2026-10-13 的隔离进程中。
+
+## 2026-10-13 首轮复测交接（历史）
+
+本轮从 `chore/public-edits`、`2fc6299` 的干净工作区继续，保留计划 2 提交 `b5b53f4`。只执行真实复测、记录和下一步规划，未实现计划 3，未改变产品代码、视觉、交互与独立演示；这些交接修改尚未提交，接手时先核对 Git，不覆盖后续工作。
+
+**供应商链路仍不稳定，完整真实交付未验收。** 沙箱内请求受到 `WinError 10013` 限制，沙箱外同配置最小请求和实际结构化澄清均返回 HTTP 200（网络耗时分别 1.57 / 54.98 秒）。随后真实 Chrome 首问超过 180 秒期限，原节点依次发生 2 次 HTTP 504、2 次 `RemoteProtocolError`，第 5 次 HTTP 尝试才成功，worker 在约 251.63 秒后记为原生 `success`。这次没有复现证书失败，不直接沿用历史 TLS 结论。
+
+服务端只有 1 个 run；刷新不新增执行，原提交与回执 / 检查点配置一致。未发送第二次澄清回答，简报、研究 / Skills、报告、来源和引用核验均未执行。最后 API 回读和磁盘检查点仍为 `running/clarify`，迟到原生完成的终态业务检查点未确认，不能改记成业务成功或失败。
+
+本轮独立目录 `.local/provider-retest-20261013/browser`、2030 / 5181 服务已停止，端口已释放；原历史未使用。继续保持现有模型 / 网关、后端 `.env`、`NO_PROXY=*`、TLS 校验、`AGENT_RPM=30`、共享结构化 fallback 和 Qwen `/no_think`。详见 [新证据](provider-2026-10-13-evidence.json)；[2026-10-11 证据](provider-step2-evidence.json) 原样保留。
+
+下一步采用两个分支：
+
+- 供应商恢复：先补齐真实标准用例的完整交付，核验两次 run、配置与报告归属、真实来源、正文引用和刷新零新增执行，再安排计划 3。
+- 仍未稳定：可独立推进计划 3 的写作尝试身份、正文事件、持久回放、前端草稿归并及故障矩阵，全部替身结果明确标注；真实交付与真实流式验收仍保留为阻塞项。
+
+[计划 3 实施方案](report-streaming-plan.md) 已列出顺序、代码入口和验收矩阵：同 run 内重写也有新写作尝试，重连 / 重试不重复拼接，最终正文以所属检查点校准。**本轮只规划，尚未实施。** 既有替身基线仍为后端 122、Chrome 82、原生 API 14 项，本轮未重跑。
+
+## 计划 2 交接补充（2026-10-11 历史）
 
 本轮从 `acd0813`、`chore/public-edits` 的干净工作区继续。按次配置已接入六个模型角色、自动 / 手选 Skills 允许集合、不可变提交、澄清继承、历史回读和执行恢复。下一项为计划 3 的真实报告流式显示。下文保留 1A / 1B 的实施背景与计划 2 原目标；后续以本节和最新验收记录为准。
 
@@ -92,7 +125,7 @@
 
 ## 真实联调的触发条件
 
-供应商稳定恢复后补做。2026-10-11 已复测，完整研究仍失败；保留用户指定的模型、网关配置、后端本地 `.env` 和直连要求 `NO_PROXY=*`，保持 TLS 校验。
+供应商稳定恢复后补做。2026-10-13 已重新测量，前置探针通过，真实浏览器首问超时，完整交付仍未验收；详情以本文首节为准。保留用户指定的模型、网关配置、后端本地 `.env` 和直连要求 `NO_PROXY=*`，保持 TLS 校验。
 
 使用正常后端和前端，启用 `ATLAS_LIVE=1`，清除 `ATLAS_API_FIXTURE`。先完成一条真实研究：澄清 → 同 thread 补充 → 简报 → 实际检索 / Skills 事件 → 报告与来源 → 刷新回读。检查业务状态、报告归属和真实检索来源，并抽查正文引用是否有来源支持。
 
@@ -107,11 +140,14 @@
 1. `D:/deep_research_public_preview/AGENTS.md`
 2. `D:/deep_research_public_preview/frontend/docs/next-steps.md`
 3. `D:/deep_research_public_preview/frontend/docs/verification.md` 的最新章节
-4. `D:/deep_research_public_preview/frontend/README.md`
-5. `D:/deep_research_public_preview/frontend/docs/backend-contract.md`
-6. `D:/deep_research_public_preview/docs/maintenance.md`
-7. `D:/deep_research_public_preview/docs/architecture-decisions.md`
-8. `D:/deep_research_public_preview/langgraph.json`、`pyproject.toml` 和相关锁文件
+4. `D:/deep_research_public_preview/frontend/docs/provider-2026-10-13-kimi-evidence.json` 与 `provider-2026-10-13-backoff-evidence.json`；其他供应商证据按各自日期作历史对照
+5. `D:/deep_research_public_preview/frontend/README.md`
+6. `D:/deep_research_public_preview/frontend/docs/backend-contract.md`
+7. `D:/deep_research_public_preview/docs/maintenance.md`
+8. `D:/deep_research_public_preview/docs/architecture-decisions.md`
+9. `D:/deep_research_public_preview/frontend/docs/report-streaming-plan.md`
+10. `D:/deep_research_public_preview/langgraph.json`、`pyproject.toml` 和相关锁文件
+11. `D:/deep_research_public_preview/frontend/docs/recorded-runs.md`
 
 恢复相关代码入口：
 
@@ -123,11 +159,14 @@
 可复制到新窗口的任务说明：
 
 ```text
-继续「星图工作台」，从计划 3：真实报告流式显示开始。
+继续「星图工作台」，先读取 2026-10-14 实录交接、验收和计划 3 方案。
 
 项目：D:/deep_research_public_preview
 预期分支：chore/public-edits
-1B 已归入 feat: confirm Atlas submissions and recover interrupted execution 提交。
+实录回放提交标题为 feat: replay recorded Atlas research runs，父提交为 2fc6299。
+具体提交号以交接消息和 git log 为准；计划 2 提交为 b5b53f4。
+2026-10-13 完成多轮真实复测，2026-10-14 完成实录 / 导出收尾。
+计划 3 的在线报告正文流式仍未实施。
 先核对交接提供的提交号；若已有更新提交，保留后续工作。
 先用 git log -1 和 git status --short 核对状态，保留所有现有修改。
 读取 AGENTS.md、frontend/docs/next-steps.md、
@@ -137,20 +176,27 @@ frontend/docs/verification.md 最新章节及接口、维护与架构文档。
 受理意图与固定 run ID 先持久化，恢复 attempt 与原 turn 分开。
 只从验证过的澄清、简报、报告写作检查点恢复；研究子流程中断不盲目续跑。
 模型节点可能再次调用，报告恢复不重跑已完成检索；真实模型仍待验收。
-验收基线：后端 107、Chrome 76、原生 API 10 项通过；模型和搜索均为替身。
+本轮 Chrome 86 passed / 14 opt-in skipped；演示专项 11 项通过。
+后端 122、原生 API 14 项是此前替身基线，本轮没有重跑。
 
 计划 2 已贯通六个角色、Skills 允许集合、受理 / 澄清 / 恢复和历史快照。
 先读本文首节和最新验收记录，保留现有未提交修改。
-下一批做真实报告正文流式显示，重连 / 重试不重复拼接，按写作尝试隔离。
+下一批按新任务要求安排真实报告补验或计划 3；流式方案要求按写作尝试隔离。
 保留已验证的配置与受理契约，同一提交重试沿用原配置。
 测试需核对服务端 run 和替身调用次数，并使用隔离临时目录。
 当前 CLI 的持久化开关存在传递差异，按文档使用专用测试启动器。
 
-2026-10-11 已复测供应商，最小请求和澄清曾成功，完整研究仍失败。
-沙箱外又出现证书校验失败。保持现有模型 / 网关配置、
+GLM 延长澄清并增加退避后仍在简报阶段失败。
+同 key / base URL 的 Kimi 隔离测试取得 231 字简报、30 条事件、
+1 份笔记及 8 条来源，两个 run；1950 秒保护期限在写作中触发。
+最后 running/writing、报告为空，业务终态未确认；未成功加载 Skills。
+实录不新建执行、不拼接 GLM / Kimi 或模拟结果，保持原视觉与完整模拟。
+下载包在 .local/exports/atlas-real-calls-2026-10-13.zip；不进入 Git。
+新的真实测试第二阶段使用 30 分钟总预算的剩余时间并预留 30 秒回读，
+旧 Kimi 的 1140 秒观察超时记录保持不变。保持现有模型 / 网关配置、
 后端本地 .env、NO_PROXY=* 和 TLS 校验。
 真实模型完整闭环待供应商恢复后验收，替身结果明确标注。
 保留 Apple 银白 / 石墨视觉、交互与独立演示；
 继续遵守共享 structured_output_fallback 和 Qwen /no_think 约定。
-直接推进实现与验收。
+下一轮先核对新指令和 Git 状态，保留所有现有修改。
 ```

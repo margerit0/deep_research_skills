@@ -88,7 +88,8 @@ export default function App() {
           <div className="cw-header-title">
             <h1>{thread.title}</h1>
             <div className="cw-header-caption">
-              星图工作台{isLive ? ' · 真实研究' : ' · 演示数据'}
+              星图工作台
+              {demo.recording ? ' · 真实记录回放' : isLive ? ' · 真实研究' : ' · 演示数据'}
             </div>
           </div>
           <span className="cw-spacer" />

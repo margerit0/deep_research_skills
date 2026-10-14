@@ -1,0 +1,498 @@
+{
+  "date": "2026-10-13",
+  "userTimezone": "Asia/Shanghai",
+  "timestamps": "UTC (ISO 8601)",
+  "baseCommit": "2fc6299",
+  "branch": "chore/public-edits",
+  "initialWorktreeClean": true,
+  "modelAndSearchSubstitutes": false,
+  "noProxy": "*",
+  "tlsVerification": true,
+  "model": "z-ai/glm-5.3",
+  "endpointSha256": "33ce0d29b63b6403eedeb59bc0a8f6d5c252a6bd6b620ea712ee76f3fc0f8443",
+  "agentRpm": 30,
+  "fixtureModulesLoaded": [],
+  "fixtureEnvironmentNames": [],
+  "probeResults": [
+    {
+      "stage": "minimal",
+      "executionContext": "sandbox",
+      "startedAt": "2026-10-13T02:42:40.418712+00:00",
+      "noProxy": "*",
+      "tlsVerification": true,
+      "modelAndSearchSubstitutes": false,
+      "attempts": [
+        {
+          "number": 1,
+          "startedAt": "2026-10-13T02:42:43.161046+00:00",
+          "model": "z-ai/glm-5.3",
+          "responseFormat": null,
+          "toolCount": 0,
+          "sdkRetryCount": "0",
+          "status": "failed",
+          "seconds": 0.019,
+          "exceptionTypes": ["ConnectError", "PermissionError"],
+          "causeMessage": "[WinError 10013] 以一种访问权限不允许的方式做了一个访问套接字的尝试。"
+        }
+      ],
+      "model": "z-ai/glm-5.3",
+      "endpointSha256": "33ce0d29b63b6403eedeb59bc0a8f6d5c252a6bd6b620ea712ee76f3fc0f8443",
+      "sdkMaxRetries": 2,
+      "sdkTimeout": "None",
+      "agentRpm": "30",
+      "fixtureModulesLoaded": [],
+      "requestTimeoutSeconds": 30,
+      "requestMaxRetries": 0,
+      "seconds": 2.763,
+      "succeeded": false,
+      "exceptionTypes": ["APIConnectionError", "ConnectError", "PermissionError"],
+      "causeMessage": "[WinError 10013] 以一种访问权限不允许的方式做了一个访问套接字的尝试。"
+    },
+    {
+      "stage": "scope",
+      "executionContext": "sandbox",
+      "startedAt": "2026-10-13T02:42:43.628926+00:00",
+      "noProxy": "*",
+      "tlsVerification": true,
+      "modelAndSearchSubstitutes": false,
+      "attempts": [
+        {
+          "number": 1,
+          "startedAt": "2026-10-13T02:42:46.889278+00:00",
+          "model": "z-ai/glm-5.3",
+          "responseFormat": "json_schema",
+          "toolCount": 0,
+          "sdkRetryCount": "0",
+          "status": "failed",
+          "seconds": 0.002,
+          "exceptionTypes": ["ConnectError", "PermissionError"],
+          "causeMessage": "[WinError 10013] 以一种访问权限不允许的方式做了一个访问套接字的尝试。"
+        },
+        {
+          "number": 2,
+          "startedAt": "2026-10-13T02:42:47.353185+00:00",
+          "model": "z-ai/glm-5.3",
+          "responseFormat": "json_schema",
+          "toolCount": 0,
+          "sdkRetryCount": "1",
+          "status": "failed",
+          "seconds": 0.001,
+          "exceptionTypes": ["ConnectError", "PermissionError"],
+          "causeMessage": "[WinError 10013] 以一种访问权限不允许的方式做了一个访问套接字的尝试。"
+        },
+        {
+          "number": 3,
+          "startedAt": "2026-10-13T02:42:48.266337+00:00",
+          "model": "z-ai/glm-5.3",
+          "responseFormat": "json_schema",
+          "toolCount": 0,
+          "sdkRetryCount": "2",
+          "status": "failed",
+          "seconds": 0.001,
+          "exceptionTypes": ["ConnectError", "PermissionError"],
+          "causeMessage": "[WinError 10013] 以一种访问权限不允许的方式做了一个访问套接字的尝试。"
+        },
+        {
+          "number": 4,
+          "startedAt": "2026-10-13T02:42:48.440406+00:00",
+          "model": "z-ai/glm-5.3",
+          "responseFormat": null,
+          "toolCount": 0,
+          "sdkRetryCount": "0",
+          "status": "failed",
+          "seconds": 0.001,
+          "exceptionTypes": ["ConnectError", "PermissionError", "APIConnectionError"],
+          "causeMessage": "[WinError 10013] 以一种访问权限不允许的方式做了一个访问套接字的尝试。"
+        },
+        {
+          "number": 5,
+          "startedAt": "2026-10-13T02:42:48.835257+00:00",
+          "model": "z-ai/glm-5.3",
+          "responseFormat": null,
+          "toolCount": 0,
+          "sdkRetryCount": "1",
+          "status": "failed",
+          "seconds": 0.01,
+          "exceptionTypes": ["ConnectError", "PermissionError", "APIConnectionError"],
+          "causeMessage": "[WinError 10013] 以一种访问权限不允许的方式做了一个访问套接字的尝试。"
+        },
+        {
+          "number": 6,
+          "startedAt": "2026-10-13T02:42:49.679693+00:00",
+          "model": "z-ai/glm-5.3",
+          "responseFormat": null,
+          "toolCount": 0,
+          "sdkRetryCount": "2",
+          "status": "failed",
+          "seconds": 0.002,
+          "exceptionTypes": ["ConnectError", "PermissionError", "APIConnectionError"],
+          "causeMessage": "[WinError 10013] 以一种访问权限不允许的方式做了一个访问套接字的尝试。"
+        },
+        {
+          "number": 7,
+          "startedAt": "2026-10-13T02:42:49.943346+00:00",
+          "model": "z-ai/glm-5.3",
+          "responseFormat": "json_object",
+          "toolCount": 0,
+          "sdkRetryCount": "0",
+          "status": "failed",
+          "seconds": 0.026,
+          "exceptionTypes": ["ConnectError", "PermissionError", "APIConnectionError"],
+          "causeMessage": "[WinError 10013] 以一种访问权限不允许的方式做了一个访问套接字的尝试。"
+        }
+      ],
+      "model": "z-ai/glm-5.3",
+      "endpointSha256": "33ce0d29b63b6403eedeb59bc0a8f6d5c252a6bd6b620ea712ee76f3fc0f8443",
+      "sdkMaxRetries": 2,
+      "sdkTimeout": "None",
+      "agentRpm": "30",
+      "fixtureModulesLoaded": [],
+      "entryPoint": "deep_research.research_agent_scope.clarify_with_user",
+      "wallDeadlineSeconds": 240,
+      "seconds": 6.342,
+      "succeeded": false,
+      "exceptionTypes": ["APIConnectionError", "ConnectError", "PermissionError"],
+      "causeMessage": "[WinError 10013] 以一种访问权限不允许的方式做了一个访问套接字的尝试。"
+    },
+    {
+      "stage": "minimal",
+      "executionContext": "unsandboxed",
+      "startedAt": "2026-10-13T02:43:32.903374+00:00",
+      "noProxy": "*",
+      "tlsVerification": true,
+      "modelAndSearchSubstitutes": false,
+      "attempts": [
+        {
+          "number": 1,
+          "startedAt": "2026-10-13T02:43:35.168481+00:00",
+          "model": "z-ai/glm-5.3",
+          "responseFormat": null,
+          "toolCount": 0,
+          "sdkRetryCount": "0",
+          "status": "response",
+          "httpStatus": 200,
+          "seconds": 1.57
+        }
+      ],
+      "model": "z-ai/glm-5.3",
+      "endpointSha256": "33ce0d29b63b6403eedeb59bc0a8f6d5c252a6bd6b620ea712ee76f3fc0f8443",
+      "sdkMaxRetries": 2,
+      "sdkTimeout": "None",
+      "agentRpm": "30",
+      "fixtureModulesLoaded": [],
+      "requestTimeoutSeconds": 30,
+      "requestMaxRetries": 0,
+      "seconds": 3.839,
+      "choicesCount": 1,
+      "hasText": true,
+      "succeeded": true
+    },
+    {
+      "stage": "scope",
+      "executionContext": "unsandboxed",
+      "startedAt": "2026-10-13T02:43:37.100624+00:00",
+      "noProxy": "*",
+      "tlsVerification": true,
+      "modelAndSearchSubstitutes": false,
+      "attempts": [
+        {
+          "number": 1,
+          "startedAt": "2026-10-13T02:43:39.495808+00:00",
+          "model": "z-ai/glm-5.3",
+          "responseFormat": "json_schema",
+          "toolCount": 0,
+          "sdkRetryCount": "0",
+          "status": "response",
+          "httpStatus": 200,
+          "seconds": 54.981
+        }
+      ],
+      "model": "z-ai/glm-5.3",
+      "endpointSha256": "33ce0d29b63b6403eedeb59bc0a8f6d5c252a6bd6b620ea712ee76f3fc0f8443",
+      "sdkMaxRetries": 2,
+      "sdkTimeout": "None",
+      "agentRpm": "30",
+      "fixtureModulesLoaded": [],
+      "entryPoint": "deep_research.research_agent_scope.clarify_with_user",
+      "wallDeadlineSeconds": 240,
+      "seconds": 57.396,
+      "goto": "__end__",
+      "messageCount": 1,
+      "hasClarification": true,
+      "succeeded": true
+    }
+  ],
+  "browser": {
+    "atlasLive": "1",
+    "atlasApiFixture": null,
+    "backendPort": 2030,
+    "frontendPort": 5181,
+    "result": "failed_at_first_clarification_deadline",
+    "clarificationDeadlineSeconds": 180,
+    "testRetries": 0,
+    "threadId": "cc12139a-c683-49bc-9ae7-9bf92bfc0701",
+    "researchId": "68fc2b89-d082-48fc-bcd2-e3bc4cb97053",
+    "turnId": "8802743f-495a-4915-a74c-e970c4a6b226",
+    "runId": "0fc3ca58-832f-47c7-98f3-e9c4a8f657c5",
+    "serverRunCount": 1,
+    "expectedRunCountForCompleteStandardCase": 2,
+    "submissionPostCount": 1,
+    "pageLoadCount": 2,
+    "readbackAfterBrowserReload": {
+      "at": "2026-10-13T02:51:43.755191+00:00",
+      "serverRunCount": 1,
+      "nativeRunStatus": "running",
+      "businessStatus": "running",
+      "phase": "clarify",
+      "readbackAddedRun": false
+    },
+    "lateNativeCompletion": {
+      "evidence": "backend worker log",
+      "at": "2026-10-13T02:51:52.707694+00:00",
+      "status": "success",
+      "runExecutionSeconds": 251.625,
+      "terminalBusinessCheckpointConfirmed": false,
+      "note": "HTTP 200 from text JSON fallback arrived after browser deadline. Native completion alone does not establish business success."
+    },
+    "offlineCheckpointAfterStop": {
+      "checkpointId": "1f1c6b07-582c-6f7e-8001-8f6cc19325cb",
+      "checkpointAt": "2026-10-13T02:47:41.324674+00:00",
+      "businessStatus": "running",
+      "phase": "clarify",
+      "researchId": "68fc2b89-d082-48fc-bcd2-e3bc4cb97053",
+      "turnId": "8802743f-495a-4915-a74c-e970c4a6b226",
+      "reportLength": 0,
+      "sourceCount": 0,
+      "briefLength": 0,
+      "pendingWriteChannels": []
+    },
+    "reportLength": 0,
+    "sourceCount": 0,
+    "eventCount": 0,
+    "briefLength": 0,
+    "toolCallsObserved": 0,
+    "configuration": {
+      "contract_version": 1,
+      "graph_id": "research_agent_full",
+      "model_selection": "server",
+      "skills_mode": "auto",
+      "research_events_version": 1,
+      "research_event_replay_version": 1,
+      "submission_recovery_version": 1,
+      "models": [
+        {
+          "role": "SUMMARIZATION",
+          "config_id": "cc1d35e644df9364f473e423eba6f3e4b489030d9383d443b8c4d8224d3a8f9b",
+          "model": "z-ai/glm-5.3",
+          "provider": "openai",
+          "max_tokens": null
+        },
+        {
+          "role": "RESEARCHER",
+          "config_id": "cc1d35e644df9364f473e423eba6f3e4b489030d9383d443b8c4d8224d3a8f9b",
+          "model": "z-ai/glm-5.3",
+          "provider": "openai",
+          "max_tokens": null
+        },
+        {
+          "role": "COMPRESSION",
+          "config_id": "132177a917efc7f751634782bf7ccafa9bf7fe15c8c569bce4cbb351b63a8b60",
+          "model": "z-ai/glm-5.3",
+          "provider": "openai",
+          "max_tokens": 32000
+        },
+        {
+          "role": "SUPERVISOR",
+          "config_id": "cc1d35e644df9364f473e423eba6f3e4b489030d9383d443b8c4d8224d3a8f9b",
+          "model": "z-ai/glm-5.3",
+          "provider": "openai",
+          "max_tokens": null
+        },
+        {
+          "role": "SCOPING",
+          "config_id": "cc1d35e644df9364f473e423eba6f3e4b489030d9383d443b8c4d8224d3a8f9b",
+          "model": "z-ai/glm-5.3",
+          "provider": "openai",
+          "max_tokens": null
+        },
+        {
+          "role": "FINAL_REPORT",
+          "config_id": "132177a917efc7f751634782bf7ccafa9bf7fe15c8c569bce4cbb351b63a8b60",
+          "model": "z-ai/glm-5.3",
+          "provider": "openai",
+          "max_tokens": 32000
+        }
+      ],
+      "configuration_version": 1,
+      "selection": {
+        "version": 1,
+        "models": {
+          "SUMMARIZATION": "cc1d35e644df9364f473e423eba6f3e4b489030d9383d443b8c4d8224d3a8f9b",
+          "RESEARCHER": "cc1d35e644df9364f473e423eba6f3e4b489030d9383d443b8c4d8224d3a8f9b",
+          "COMPRESSION": "132177a917efc7f751634782bf7ccafa9bf7fe15c8c569bce4cbb351b63a8b60",
+          "SUPERVISOR": "cc1d35e644df9364f473e423eba6f3e4b489030d9383d443b8c4d8224d3a8f9b",
+          "SCOPING": "cc1d35e644df9364f473e423eba6f3e4b489030d9383d443b8c4d8224d3a8f9b",
+          "FINAL_REPORT": "132177a917efc7f751634782bf7ccafa9bf7fe15c8c569bce4cbb351b63a8b60"
+        },
+        "skills": {
+          "mode": "auto",
+          "allowed": []
+        }
+      },
+      "skill_revisions": {
+        "academic-research": "2fb1ec459ae2f12f3d008425365045a5f420ae931c73f04aa75e00153ccc157e",
+        "news-timeline": "faa1f1b3507dffa192fca5fba749f2c8b55444c3a97c43f80acf19376d35afd0",
+        "people-research": "4a2986c532cf1fb8107f3a907e4fe3b3a37422aa43207731a90850dc2bed2549",
+        "product-comparison": "30fef831acc46e8255b3db2f77d4003086f9ce3f74752c595a100b44bab081b3"
+      }
+    },
+    "configurationChecks": {
+      "submissionSelectionEqualsSnapshot": true,
+      "receiptSnapshotEqualsCheckpoint": true,
+      "receiptResponsesChecked": 100,
+      "offlineSnapshotUnchanged": true,
+      "clarificationInheritance": "not_executed",
+      "reportOwnership": "not_executed"
+    },
+    "modelHttpAttempts": [
+      {
+        "id": "191c1474-b79a-48fa-a8d4-c8613d643eac",
+        "node": "clarify_with_user",
+        "model": "z-ai/glm-5.3",
+        "startedAt": "2026-10-13T02:47:41.375447+00:00",
+        "responseFormat": "json_schema",
+        "sdkRetryCount": 0,
+        "seconds": 61.916,
+        "httpStatus": 504,
+        "outcome": "response"
+      },
+      {
+        "id": "a28c9130-d105-4074-966f-dba20895bb9f",
+        "node": "clarify_with_user",
+        "model": "z-ai/glm-5.3",
+        "startedAt": "2026-10-13T02:48:43.715674+00:00",
+        "responseFormat": "json_schema",
+        "sdkRetryCount": 1,
+        "seconds": 62.368,
+        "httpStatus": null,
+        "outcome": "failed",
+        "exceptionTypes": ["RemoteProtocolError", "RemoteProtocolError"],
+        "message": "Server disconnected without sending a response."
+      },
+      {
+        "id": "e3e7a134-113e-46c9-a2c1-ce47b998d656",
+        "node": "clarify_with_user",
+        "model": "z-ai/glm-5.3",
+        "startedAt": "2026-10-13T02:49:46.933482+00:00",
+        "responseFormat": "json_schema",
+        "sdkRetryCount": 2,
+        "seconds": 73.551,
+        "httpStatus": 504,
+        "outcome": "response"
+      },
+      {
+        "id": "88bb7260-006a-41e3-9ece-580050fb3113",
+        "node": "clarify_with_user",
+        "model": "z-ai/glm-5.3",
+        "startedAt": "2026-10-13T02:51:00.550170+00:00",
+        "responseFormat": null,
+        "sdkRetryCount": 0,
+        "seconds": 16.519,
+        "httpStatus": null,
+        "outcome": "failed",
+        "exceptionTypes": [
+          "RemoteProtocolError",
+          "RemoteProtocolError",
+          "InternalServerError",
+          "HTTPStatusError"
+        ],
+        "message": "Server disconnected without sending a response."
+      },
+      {
+        "id": "76c4c4a2-e08f-4df2-ab25-58a8cac1cc9a",
+        "node": "clarify_with_user",
+        "model": "z-ai/glm-5.3",
+        "startedAt": "2026-10-13T02:51:17.459913+00:00",
+        "responseFormat": null,
+        "sdkRetryCount": 1,
+        "seconds": 35.229,
+        "httpStatus": 200,
+        "outcome": "response"
+      }
+    ],
+    "observerLimitations": [
+      "Passive HTTP counters preserve original calls, transport and retries; counts are client attempts, not proof of provider-side executions.",
+      "The supplemental afterEach terminal-status assertion also timed out before writing observed-evidence.json. Trace, direct API snapshot and offline checkpoint provide evidence instead.",
+      "A temporary wrapper import path error was corrected before any browser run; it created no thread or model request."
+    ]
+  },
+  "classification": {
+    "sandbox": "WinError 10013 / PermissionError before provider access; environment restriction, not provider-health evidence.",
+    "unsandboxed": "Minimal and standalone structured clarification succeeded; browser first clarification had two HTTP 504 responses and two RemoteProtocolError failures before a late HTTP 200.",
+    "tls": "Verification remained enabled. No CERTIFICATE_VERIFY_FAILED observed outside sandbox in this measurement; past TLS failures are historical, not this run's cause.",
+    "rootCauseLimit": "Observed upstream gateway/path instability outside sandbox; evidence does not isolate supplier infrastructure from an intervening network component.",
+    "delivery": "Not accepted; do not treat late native run success as a completed research delivery."
+  },
+  "notExecuted": [
+    "same-thread clarification answer",
+    "research brief",
+    "supervisor/researcher model calls",
+    "real search / Skills loading",
+    "final report generation",
+    "real source and citation verification",
+    "completed report refresh and two-run acceptance"
+  ],
+  "cleanup": {
+    "testBackendStopped": true,
+    "testFrontendStopped": true,
+    "ports": {
+      "2030": "free_after_cleanup",
+      "5181": "free_after_cleanup"
+    },
+    "existingServicesStopped": false,
+    "existingHistoryUsed": false
+  },
+  "localEvidence": {
+    ".local/provider-retest-20261013/browser/model-http.jsonl": {
+      "sha256": "3a599815ed9895291fa2926b85e4e038736aa2050548d5e91650871bc8916e0d"
+    },
+    ".local/provider-retest-20261013/browser/api-snapshot.json": {
+      "sha256": "3cfa516640db48a7f048392dc4289e756dbac9672bbc4f825fd0a661b73cfdaa"
+    },
+    ".local/provider-retest-20261013/browser/offline-final.json": {
+      "sha256": "a49119c05fb94142e3992a338dfd7ea58b1114b7584db27e2b6b9c9fdd824435"
+    },
+    ".local/provider-retest-20261013/backend.log": {
+      "sha256": "8795b010b8cd1b049d03d96be32701d7e3105ff6d0f29e5b0db2766556685307"
+    },
+    "frontend/test-results/provider-20261013-output/observed-native-LangGraph--d424c-r-report-sources-and-reload/trace.zip": {
+      "sha256": "bf059e9b7a5f09c7d0bb452148f78ea741b736adb86a7adf4d7a16ba952baebe"
+    },
+    ".local/provider_retest_20261013.py": {
+      "sha256": "469561e49f6ddbc82957175b232dcd1fac5c24033b4c1887822140e386354e15"
+    },
+    ".local/provider_real_server_20261013.py": {
+      "sha256": "11560d18ab2c1b4ba5d70968b341e0997c8736d927b1e9515bd97255ca4c5d61"
+    },
+    ".local/provider-retest-20261013/sandbox-minimal.json": {
+      "sha256": "93f97fff3b7aae6641eeb28c21fad05d983442042787047c35e293369fa6d4b2"
+    },
+    ".local/provider-retest-20261013/sandbox-scope.json": {
+      "sha256": "0d636aa4fe4f0327660906a55ea6dee388d87a9e81070e91fbc723c32de82646"
+    },
+    ".local/provider-retest-20261013/unsandboxed-minimal.json": {
+      "sha256": "9835cd083f2d20cc3b5d0cb45535314b59f9e407ae2efd7b4d23d21882d23105"
+    },
+    ".local/provider-retest-20261013/unsandboxed-scope.json": {
+      "sha256": "9ef57f3e3f8ac18a6ad03ab856aea87ed84833377cdeb7f18da7affac2dd8211"
+    }
+  },
+  "baseline": {
+    "backendPassed": 122,
+    "chromePassed": 82,
+    "nativeApiPassed": 14,
+    "usesSubstitutes": true,
+    "rerunThisRound": false
+  },
+  "nextStep": "Plan 3 may proceed independently after separate authorization; this round only records a plan. Real delivery acceptance remains required when provider is stable."
+}

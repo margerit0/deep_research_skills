@@ -21,6 +21,11 @@ export function Inspector({
   onClose: () => void
 }) {
   const { state, dispatch, isLive, liveRun } = controller
+  const actualMode = isLive || Boolean(controller.demo.recording)
+  const recordedInterruption =
+    Boolean(controller.demo.recording?.observationEnded) &&
+    controller.demo.scene.id === 'record-result' &&
+    node.status === 'running'
   const role =
     node.modelRole ??
     (
@@ -39,7 +44,7 @@ export function Inspector({
       id="cw-inspector"
       className="cw-inspector"
       data-status={node.status}
-      data-live={isLive || undefined}
+      data-live={actualMode || undefined}
       aria-label="节点检查器"
       onKeyDown={(e) => {
         if (e.key === 'Escape') {
@@ -52,7 +57,9 @@ export function Inspector({
         <Icon name="inspector" />
         <span>节点检查器</span>
         <span className="cw-spacer" />
-        <span className="cw-detail-status">{statusText[node.status]}</span>
+        <span className="cw-detail-status">
+          {recordedInterruption ? '记录中断' : statusText[node.status]}
+        </span>
         <button
           type="button"
           className="cw-icon-button"
@@ -117,10 +124,10 @@ export function Inspector({
           <div>
             <dt>执行模型</dt>
             <dd
-              title={isLive ? actualModel : run ? modelName(run.config.model) : '待执行'}
+              title={actualMode ? actualModel : run ? modelName(run.config.model) : '待执行'}
               data-testid="run-model"
             >
-              {isLive
+              {actualMode
                 ? pending
                   ? '待执行'
                   : actualModel
@@ -178,7 +185,17 @@ export function Inspector({
           <Icon name="output" />
           输出
           <span className="cw-spacer" />
-          <span>{pending ? '待执行' : node.status === 'completed' ? '已返回' : '处理中'}</span>
+          <span>
+            {pending
+              ? '待执行'
+              : recordedInterruption
+                ? '未完成'
+                : node.status === 'completed'
+                  ? '已返回'
+                  : node.status === 'failed' || node.status === 'partial'
+                    ? '未完整返回'
+                    : '处理中'}
+          </span>
         </div>
         <pre className="cw-payload" data-testid="node-output">
           {node.output}
@@ -199,7 +216,11 @@ export function Inspector({
               <li
                 key={i}
                 className="cw-event"
-                data-current={i === node.events.length - 1 && node.status !== 'completed'}
+                data-current={
+                  !recordedInterruption &&
+                  i === node.events.length - 1 &&
+                  node.status !== 'completed'
+                }
               >
                 <span className="cw-event-time">{event[0]}</span>
                 <span className="cw-event-dot" aria-hidden="true" />
@@ -212,7 +233,7 @@ export function Inspector({
           </ol>
         ) : (
           <div className="cw-inspector-empty">
-            {isLive ? '暂无该节点的执行记录。' : '等待该节点开始执行。'}
+            {actualMode ? '暂无该节点的执行记录。' : '等待该节点开始执行。'}
           </div>
         )}
       </div>

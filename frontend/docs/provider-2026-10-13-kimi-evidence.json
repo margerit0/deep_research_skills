@@ -1,0 +1,1855 @@
+{
+  "date": "2026-10-13",
+  "userTimezone": "Asia/Shanghai",
+  "timestamps": "UTC (ISO 8601)",
+  "baseCommit": "2fc6299",
+  "branch": "chore/public-edits",
+  "priorUncommittedWorkPreserved": true,
+  "modelAndSearchSubstitutes": false,
+  "noProxy": "*",
+  "tlsVerification": true,
+  "modelOverride": {
+    "roles": "all_six",
+    "model": "moonshotai/kimi-k3",
+    "scope": "isolated_test_process",
+    "backendEnvFileChanged": false,
+    "sameCredentialsAndEndpointAsGlm": true
+  },
+  "probeResults": [
+    {
+      "stage": "minimal",
+      "executionContext": "unsandboxed",
+      "startedAt": "2026-10-13T03:46:11.616646+00:00",
+      "noProxy": "*",
+      "tlsVerification": true,
+      "modelAndSearchSubstitutes": false,
+      "attempts": [
+        {
+          "number": 1,
+          "startedAt": "2026-10-13T03:46:14.548016+00:00",
+          "model": "moonshotai/kimi-k3",
+          "responseFormat": null,
+          "toolCount": 0,
+          "sdkRetryCount": "0",
+          "status": "failed",
+          "exceptionChain": [
+            {
+              "type": "RemoteProtocolError",
+              "message": "Server disconnected without sending a response."
+            },
+            {
+              "type": "RemoteProtocolError",
+              "message": "Server disconnected without sending a response."
+            }
+          ],
+          "seconds": 17.627
+        },
+        {
+          "number": 2,
+          "startedAt": "2026-10-13T03:46:35.176318+00:00",
+          "model": "moonshotai/kimi-k3",
+          "responseFormat": null,
+          "toolCount": 0,
+          "sdkRetryCount": "1",
+          "status": "failed",
+          "exceptionChain": [
+            {
+              "type": "RemoteProtocolError",
+              "message": "Server disconnected without sending a response."
+            },
+            {
+              "type": "RemoteProtocolError",
+              "message": "Server disconnected without sending a response."
+            }
+          ],
+          "seconds": 17.649
+        },
+        {
+          "number": 3,
+          "startedAt": "2026-10-13T03:46:58.827785+00:00",
+          "model": "moonshotai/kimi-k3",
+          "responseFormat": null,
+          "toolCount": 0,
+          "sdkRetryCount": "2",
+          "status": "response",
+          "httpStatus": 200,
+          "seconds": 20.457
+        }
+      ],
+      "model": "moonshotai/kimi-k3",
+      "endpointSha256": "33ce0d29b63b6403eedeb59bc0a8f6d5c252a6bd6b620ea712ee76f3fc0f8443",
+      "sdkMaxRetries": 4,
+      "sdkTimeout": "None",
+      "agentRpm": "30",
+      "fixtureModulesLoaded": [],
+      "requestTimeoutSeconds": 30,
+      "requestMaxRetries": 4,
+      "seconds": 67.672,
+      "retrySchedules": [
+        {
+          "kind": "retry_scheduled",
+          "retryNumber": 1,
+          "delaySeconds": 3
+        },
+        {
+          "kind": "retry_scheduled",
+          "retryNumber": 2,
+          "delaySeconds": 6
+        }
+      ],
+      "choicesCount": 1,
+      "hasText": true,
+      "succeeded": true
+    },
+    {
+      "stage": "scope",
+      "executionContext": "unsandboxed",
+      "startedAt": "2026-10-13T03:47:19.724124+00:00",
+      "noProxy": "*",
+      "tlsVerification": true,
+      "modelAndSearchSubstitutes": false,
+      "attempts": [
+        {
+          "number": 1,
+          "startedAt": "2026-10-13T03:47:23.056211+00:00",
+          "model": "moonshotai/kimi-k3",
+          "responseFormat": "json_schema",
+          "toolCount": 0,
+          "sdkRetryCount": "0",
+          "status": "response",
+          "httpStatus": 200,
+          "seconds": 25.156
+        }
+      ],
+      "model": "moonshotai/kimi-k3",
+      "endpointSha256": "33ce0d29b63b6403eedeb59bc0a8f6d5c252a6bd6b620ea712ee76f3fc0f8443",
+      "sdkMaxRetries": 4,
+      "sdkTimeout": "None",
+      "agentRpm": "30",
+      "fixtureModulesLoaded": [],
+      "entryPoint": "deep_research.research_agent_scope.clarify_with_user",
+      "wallDeadlineSeconds": 600,
+      "seconds": 28.505,
+      "goto": "__end__",
+      "messageCount": 1,
+      "hasClarification": true,
+      "succeeded": true
+    }
+  ],
+  "endpointSha256": "33ce0d29b63b6403eedeb59bc0a8f6d5c252a6bd6b620ea712ee76f3fc0f8443",
+  "agentRpm": "30",
+  "fixtureModulesLoaded": [],
+  "fixtureEnvironmentNames": [],
+  "observationBudgets": {
+    "clarificationSeconds": 600,
+    "secondRunSeconds": 1140,
+    "testTotalSeconds": 1800,
+    "testRetries": 0,
+    "backendWatchdogSeconds": 1950,
+    "backendRetryPolicyChanged": true
+  },
+  "browser": {
+    "atlasLive": "1",
+    "atlasApiFixture": null,
+    "testStatus": "timed_out_at_1140_second_second_run_window",
+    "backendPort": 2033,
+    "frontendPort": 5184,
+    "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+    "researchId": "4e559f56-f300-40f6-a9af-10fd47d98ba2",
+    "turns": [
+      {
+        "turnId": "2ac5867b-8dc2-4a7c-a572-02d861940ddd",
+        "runId": "5fad6d46-5140-42fa-8a8d-5bb64daaff27"
+      },
+      {
+        "turnId": "16e0f93f-e8be-487a-96c4-3aef0b4cf9f9",
+        "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b"
+      }
+    ],
+    "runs": [
+      {
+        "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+        "status": "running"
+      },
+      {
+        "runId": "5fad6d46-5140-42fa-8a8d-5bb64daaff27",
+        "status": "success"
+      }
+    ],
+    "serverRunCount": 2,
+    "submissionPostCount": 2,
+    "submissionPostEvidence": "standard test passed its two-POST assertion before timing out; latest direct API confirms two runs",
+    "lateReadbackExecutionPosts": 0,
+    "runsBeforeReload": 2,
+    "runsAfterReload": 2,
+    "businessStatus": "running",
+    "phase": "writing",
+    "reportLength": 0,
+    "reportSha256": null,
+    "sourceCount": 8,
+    "eventCount": 30,
+    "briefLength": 231,
+    "errors": [
+      {
+        "code": "researcher_failed",
+        "message": "一个研究任务未获得有效结果，研究覆盖可能不完整。",
+        "node": "supervisor_subgraph"
+      }
+    ],
+    "configuration": {
+      "contract_version": 1,
+      "graph_id": "research_agent_full",
+      "model_selection": "server",
+      "skills_mode": "auto",
+      "research_events_version": 1,
+      "research_event_replay_version": 1,
+      "submission_recovery_version": 1,
+      "models": [
+        {
+          "role": "SUMMARIZATION",
+          "config_id": "ed2f440907d932b55a5541c77c37a4a809d9dffbc16b4b16e7fb6dd6a6da7f89",
+          "model": "moonshotai/kimi-k3",
+          "provider": "openai",
+          "max_tokens": null
+        },
+        {
+          "role": "RESEARCHER",
+          "config_id": "ed2f440907d932b55a5541c77c37a4a809d9dffbc16b4b16e7fb6dd6a6da7f89",
+          "model": "moonshotai/kimi-k3",
+          "provider": "openai",
+          "max_tokens": null
+        },
+        {
+          "role": "COMPRESSION",
+          "config_id": "1d1c4f0131801120fbc9e6d1186bfe5fc93cec2782af5956c0f7ecbd3cdc8958",
+          "model": "moonshotai/kimi-k3",
+          "provider": "openai",
+          "max_tokens": 32000
+        },
+        {
+          "role": "SUPERVISOR",
+          "config_id": "ed2f440907d932b55a5541c77c37a4a809d9dffbc16b4b16e7fb6dd6a6da7f89",
+          "model": "moonshotai/kimi-k3",
+          "provider": "openai",
+          "max_tokens": null
+        },
+        {
+          "role": "SCOPING",
+          "config_id": "ed2f440907d932b55a5541c77c37a4a809d9dffbc16b4b16e7fb6dd6a6da7f89",
+          "model": "moonshotai/kimi-k3",
+          "provider": "openai",
+          "max_tokens": null
+        },
+        {
+          "role": "FINAL_REPORT",
+          "config_id": "1d1c4f0131801120fbc9e6d1186bfe5fc93cec2782af5956c0f7ecbd3cdc8958",
+          "model": "moonshotai/kimi-k3",
+          "provider": "openai",
+          "max_tokens": 32000
+        }
+      ],
+      "configuration_version": 1,
+      "selection": {
+        "version": 1,
+        "models": {
+          "SUMMARIZATION": "ed2f440907d932b55a5541c77c37a4a809d9dffbc16b4b16e7fb6dd6a6da7f89",
+          "RESEARCHER": "ed2f440907d932b55a5541c77c37a4a809d9dffbc16b4b16e7fb6dd6a6da7f89",
+          "COMPRESSION": "1d1c4f0131801120fbc9e6d1186bfe5fc93cec2782af5956c0f7ecbd3cdc8958",
+          "SUPERVISOR": "ed2f440907d932b55a5541c77c37a4a809d9dffbc16b4b16e7fb6dd6a6da7f89",
+          "SCOPING": "ed2f440907d932b55a5541c77c37a4a809d9dffbc16b4b16e7fb6dd6a6da7f89",
+          "FINAL_REPORT": "1d1c4f0131801120fbc9e6d1186bfe5fc93cec2782af5956c0f7ecbd3cdc8958"
+        },
+        "skills": {
+          "mode": "auto",
+          "allowed": []
+        }
+      },
+      "skill_revisions": {
+        "academic-research": "2fb1ec459ae2f12f3d008425365045a5f420ae931c73f04aa75e00153ccc157e",
+        "news-timeline": "faa1f1b3507dffa192fca5fba749f2c8b55444c3a97c43f80acf19376d35afd0",
+        "people-research": "4a2986c532cf1fb8107f3a907e4fe3b3a37422aa43207731a90850dc2bed2549",
+        "product-comparison": "30fef831acc46e8255b3db2f77d4003086f9ce3f74752c595a100b44bab081b3"
+      }
+    },
+    "receipts": [
+      {
+        "status": "accepted",
+        "turn_id": "16e0f93f-e8be-487a-96c4-3aef0b4cf9f9",
+        "run_id": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+        "checkpoint_id": null
+      },
+      {
+        "status": "completed",
+        "turn_id": "2ac5867b-8dc2-4a7c-a572-02d861940ddd",
+        "run_id": "5fad6d46-5140-42fa-8a8d-5bb64daaff27",
+        "checkpoint_id": "1f1c6ba6-157c-6070-8002-4c726dd458df"
+      }
+    ],
+    "checkpointChecks": {
+      "firstTurnAwaitingInput": true,
+      "allReceiptsCompleted": false,
+      "allReceiptConfigurationsMatch": true,
+      "allCheckpointConfigurationsMatch": true,
+      "allSubmittedSelectionsMatch": true,
+      "finalCheckpointMatchesBusinessState": false,
+      "reportOwnership": "not_executed",
+      "reportMatchesBrowser": "not_executed",
+      "reportMatchesFixedCheckpoint": "not_executed",
+      "sourcesMatchBrowser": false,
+      "sourcesReturnedByActualSearchEvents": true,
+      "reloadAddedRun": false
+    },
+    "nativeCompletions": [
+      {
+        "runId": "5fad6d46-5140-42fa-8a8d-5bb64daaff27",
+        "executionSeconds": 195.465,
+        "status": "success"
+      }
+    ],
+    "observerError": "TypeError: apiRequestContext.get: Invalid URL"
+  },
+  "retryPolicy": {
+    "scope": "isolated_test_process",
+    "maxRetries": 4,
+    "delaySeconds": [3, 6, 12, 24],
+    "actualScopingClientMaxRetries": 4,
+    "actualAsyncScopingClientMaxRetries": 4,
+    "longerRetryAfterUpTo60SecondsRespected": true
+  },
+  "retrySchedules": [
+    {
+      "kind": "retry_scheduled",
+      "retryNumber": 1,
+      "delaySeconds": 3,
+      "at": "2026-10-13T03:56:00.109670+00:00"
+    },
+    {
+      "kind": "retry_scheduled",
+      "retryNumber": 2,
+      "delaySeconds": 6,
+      "at": "2026-10-13T03:56:35.946038+00:00"
+    },
+    {
+      "kind": "retry_scheduled",
+      "retryNumber": 3,
+      "delaySeconds": 12,
+      "at": "2026-10-13T03:57:14.950215+00:00"
+    },
+    {
+      "kind": "retry_scheduled",
+      "retryNumber": 4,
+      "delaySeconds": 24,
+      "at": "2026-10-13T03:57:44.553615+00:00"
+    },
+    {
+      "kind": "retry_scheduled",
+      "retryNumber": 1,
+      "delaySeconds": 3,
+      "at": "2026-10-13T03:59:01.351466+00:00"
+    },
+    {
+      "kind": "retry_scheduled",
+      "retryNumber": 2,
+      "delaySeconds": 6,
+      "at": "2026-10-13T03:59:22.275507+00:00"
+    },
+    {
+      "kind": "retry_scheduled",
+      "retryNumber": 1,
+      "delaySeconds": 3,
+      "at": "2026-10-13T04:00:15.417175+00:00"
+    },
+    {
+      "kind": "retry_scheduled",
+      "retryNumber": 2,
+      "delaySeconds": 6,
+      "at": "2026-10-13T04:00:36.009510+00:00"
+    },
+    {
+      "kind": "retry_scheduled",
+      "retryNumber": 3,
+      "delaySeconds": 12,
+      "at": "2026-10-13T04:01:14.731309+00:00"
+    },
+    {
+      "kind": "retry_scheduled",
+      "retryNumber": 4,
+      "delaySeconds": 24,
+      "at": "2026-10-13T04:01:44.360458+00:00"
+    },
+    {
+      "kind": "retry_scheduled",
+      "retryNumber": 1,
+      "delaySeconds": 3,
+      "at": "2026-10-13T04:03:11.201105+00:00"
+    },
+    {
+      "kind": "retry_scheduled",
+      "retryNumber": 2,
+      "delaySeconds": 6,
+      "at": "2026-10-13T04:03:47.126074+00:00"
+    },
+    {
+      "kind": "retry_scheduled",
+      "retryNumber": 3,
+      "delaySeconds": 12,
+      "at": "2026-10-13T04:04:10.788736+00:00"
+    },
+    {
+      "kind": "retry_scheduled",
+      "retryNumber": 4,
+      "delaySeconds": 24,
+      "at": "2026-10-13T04:04:27.804630+00:00"
+    },
+    {
+      "kind": "retry_scheduled",
+      "retryNumber": 1,
+      "delaySeconds": 3,
+      "at": "2026-10-13T04:06:16.465060+00:00"
+    },
+    {
+      "kind": "retry_scheduled",
+      "retryNumber": 1,
+      "delaySeconds": 3,
+      "at": "2026-10-13T04:11:27.833856+00:00"
+    },
+    {
+      "kind": "retry_scheduled",
+      "retryNumber": 2,
+      "delaySeconds": 6,
+      "at": "2026-10-13T04:11:48.529819+00:00"
+    },
+    {
+      "kind": "retry_scheduled",
+      "retryNumber": 1,
+      "delaySeconds": 3,
+      "at": "2026-10-13T04:13:42.276407+00:00"
+    },
+    {
+      "kind": "retry_scheduled",
+      "retryNumber": 2,
+      "delaySeconds": 6,
+      "at": "2026-10-13T04:14:18.073285+00:00"
+    },
+    {
+      "kind": "retry_scheduled",
+      "retryNumber": 1,
+      "delaySeconds": 3,
+      "at": "2026-10-13T04:15:45.999322+00:00"
+    },
+    {
+      "kind": "retry_scheduled",
+      "retryNumber": 1,
+      "delaySeconds": 3,
+      "at": "2026-10-13T04:15:59.449280+00:00"
+    },
+    {
+      "kind": "retry_scheduled",
+      "retryNumber": 1,
+      "delaySeconds": 3,
+      "at": "2026-10-13T04:16:03.533924+00:00"
+    },
+    {
+      "kind": "retry_scheduled",
+      "retryNumber": 2,
+      "delaySeconds": 6,
+      "at": "2026-10-13T04:16:07.439223+00:00"
+    },
+    {
+      "kind": "retry_scheduled",
+      "retryNumber": 2,
+      "delaySeconds": 6,
+      "at": "2026-10-13T04:16:20.691725+00:00"
+    },
+    {
+      "kind": "retry_scheduled",
+      "retryNumber": 2,
+      "delaySeconds": 6,
+      "at": "2026-10-13T04:16:24.498156+00:00"
+    },
+    {
+      "kind": "retry_scheduled",
+      "retryNumber": 3,
+      "delaySeconds": 12,
+      "at": "2026-10-13T04:16:44.591186+00:00"
+    },
+    {
+      "kind": "retry_scheduled",
+      "retryNumber": 3,
+      "delaySeconds": 12,
+      "at": "2026-10-13T04:17:01.649261+00:00"
+    },
+    {
+      "kind": "retry_scheduled",
+      "retryNumber": 3,
+      "delaySeconds": 12,
+      "at": "2026-10-13T04:17:18.803409+00:00"
+    },
+    {
+      "kind": "retry_scheduled",
+      "retryNumber": 4,
+      "delaySeconds": 24,
+      "at": "2026-10-13T04:17:46.717422+00:00"
+    },
+    {
+      "kind": "retry_scheduled",
+      "retryNumber": 4,
+      "delaySeconds": 24,
+      "at": "2026-10-13T04:18:00.326366+00:00"
+    },
+    {
+      "kind": "retry_scheduled",
+      "retryNumber": 4,
+      "delaySeconds": 24,
+      "at": "2026-10-13T04:18:03.856771+00:00"
+    },
+    {
+      "kind": "retry_scheduled",
+      "retryNumber": 1,
+      "delaySeconds": 3,
+      "at": "2026-10-13T04:20:25.317128+00:00"
+    },
+    {
+      "kind": "retry_scheduled",
+      "retryNumber": 1,
+      "delaySeconds": 3,
+      "at": "2026-10-13T04:21:59.367218+00:00"
+    },
+    {
+      "kind": "retry_scheduled",
+      "retryNumber": 1,
+      "delaySeconds": 3,
+      "at": "2026-10-13T04:22:59.789449+00:00"
+    },
+    {
+      "kind": "retry_scheduled",
+      "retryNumber": 2,
+      "delaySeconds": 6,
+      "at": "2026-10-13T04:23:20.468263+00:00"
+    },
+    {
+      "kind": "retry_scheduled",
+      "retryNumber": 1,
+      "delaySeconds": 3,
+      "at": "2026-10-13T04:24:56.262073+00:00"
+    },
+    {
+      "kind": "retry_scheduled",
+      "retryNumber": 1,
+      "delaySeconds": 3,
+      "at": "2026-10-13T04:25:53.632154+00:00"
+    }
+  ],
+  "policySelfCheck": {
+    "passed": true,
+    "usesMockTransport": true,
+    "separateFromRealBrowserProcess": true,
+    "checks": [
+      "sync 3/6/12/24 delays",
+      "persistent 504 stops at five attempts",
+      "401 not retried",
+      "async connection retry",
+      "longer Retry-After respected"
+    ]
+  },
+  "artifactLimitations": [
+    "No full trace was recorded. Temporary browser output was later cleaned by the UI regression runner; stable late-readback workspace, API snapshots, model log, event database and offline checkpoint remain.",
+    "Late readback performed zero execution POSTs; a relative-URL bug prevented its final API calls, so run count and checkpoint verification use the separate direct API snapshot.",
+    "Screenshot capture timed out before temporary outputs were cleaned. Replay screenshots are reconstructions, not original live browser screenshots."
+  ],
+  "observationEnd": {
+    "status": "interrupted_at_writing",
+    "terminalBusinessStateConfirmed": false,
+    "browserPhaseDeadlineReached": true,
+    "watchdog": {
+      "at": "2026-10-13T04:26:28.546728+00:00",
+      "reason": "1950-second isolated-server lifetime limit"
+    },
+    "offlineCheckpoint": {
+      "checkpointId": "1f1c6be1-a3b3-66d7-8008-40cc850dc747",
+      "checkpointAt": "2026-10-13T04:25:21.137000+00:00",
+      "businessStatus": "running",
+      "phase": "writing",
+      "researchId": "4e559f56-f300-40f6-a9af-10fd47d98ba2",
+      "turnId": "16e0f93f-e8be-487a-96c4-3aef0b4cf9f9",
+      "reportLength": 0,
+      "sourceCount": 8,
+      "briefLength": 231,
+      "configuration": {
+        "contract_version": 1,
+        "graph_id": "research_agent_full",
+        "model_selection": "server",
+        "skills_mode": "auto",
+        "research_events_version": 1,
+        "research_event_replay_version": 1,
+        "submission_recovery_version": 1,
+        "models": [
+          {
+            "role": "SUMMARIZATION",
+            "config_id": "ed2f440907d932b55a5541c77c37a4a809d9dffbc16b4b16e7fb6dd6a6da7f89",
+            "model": "moonshotai/kimi-k3",
+            "provider": "openai",
+            "max_tokens": null
+          },
+          {
+            "role": "RESEARCHER",
+            "config_id": "ed2f440907d932b55a5541c77c37a4a809d9dffbc16b4b16e7fb6dd6a6da7f89",
+            "model": "moonshotai/kimi-k3",
+            "provider": "openai",
+            "max_tokens": null
+          },
+          {
+            "role": "COMPRESSION",
+            "config_id": "1d1c4f0131801120fbc9e6d1186bfe5fc93cec2782af5956c0f7ecbd3cdc8958",
+            "model": "moonshotai/kimi-k3",
+            "provider": "openai",
+            "max_tokens": 32000
+          },
+          {
+            "role": "SUPERVISOR",
+            "config_id": "ed2f440907d932b55a5541c77c37a4a809d9dffbc16b4b16e7fb6dd6a6da7f89",
+            "model": "moonshotai/kimi-k3",
+            "provider": "openai",
+            "max_tokens": null
+          },
+          {
+            "role": "SCOPING",
+            "config_id": "ed2f440907d932b55a5541c77c37a4a809d9dffbc16b4b16e7fb6dd6a6da7f89",
+            "model": "moonshotai/kimi-k3",
+            "provider": "openai",
+            "max_tokens": null
+          },
+          {
+            "role": "FINAL_REPORT",
+            "config_id": "1d1c4f0131801120fbc9e6d1186bfe5fc93cec2782af5956c0f7ecbd3cdc8958",
+            "model": "moonshotai/kimi-k3",
+            "provider": "openai",
+            "max_tokens": 32000
+          }
+        ],
+        "configuration_version": 1,
+        "selection": {
+          "version": 1,
+          "models": {
+            "SUMMARIZATION": "ed2f440907d932b55a5541c77c37a4a809d9dffbc16b4b16e7fb6dd6a6da7f89",
+            "RESEARCHER": "ed2f440907d932b55a5541c77c37a4a809d9dffbc16b4b16e7fb6dd6a6da7f89",
+            "COMPRESSION": "1d1c4f0131801120fbc9e6d1186bfe5fc93cec2782af5956c0f7ecbd3cdc8958",
+            "SUPERVISOR": "ed2f440907d932b55a5541c77c37a4a809d9dffbc16b4b16e7fb6dd6a6da7f89",
+            "SCOPING": "ed2f440907d932b55a5541c77c37a4a809d9dffbc16b4b16e7fb6dd6a6da7f89",
+            "FINAL_REPORT": "1d1c4f0131801120fbc9e6d1186bfe5fc93cec2782af5956c0f7ecbd3cdc8958"
+          },
+          "skills": {
+            "mode": "auto",
+            "allowed": []
+          }
+        },
+        "skill_revisions": {
+          "academic-research": "2fb1ec459ae2f12f3d008425365045a5f420ae931c73f04aa75e00153ccc157e",
+          "news-timeline": "faa1f1b3507dffa192fca5fba749f2c8b55444c3a97c43f80acf19376d35afd0",
+          "people-research": "4a2986c532cf1fb8107f3a907e4fe3b3a37422aa43207731a90850dc2bed2549",
+          "product-comparison": "30fef831acc46e8255b3db2f77d4003086f9ce3f74752c595a100b44bab081b3"
+        }
+      },
+      "pendingWriteChannels": []
+    }
+  },
+  "modelHttpAttempts": [
+    {
+      "id": "80912613-9ccd-46d3-812f-4693d78f268d",
+      "node": "clarify_with_user",
+      "model": "moonshotai/kimi-k3",
+      "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+      "runId": "5fad6d46-5140-42fa-8a8d-5bb64daaff27",
+      "responseFormat": "json_schema",
+      "sdkRetryCount": "0",
+      "stream": false,
+      "tools": [],
+      "startedAt": "2026-10-13T03:55:27.354701+00:00",
+      "endedAt": "2026-10-13T03:56:00.108869+00:00",
+      "seconds": 32.753,
+      "httpStatus": null,
+      "outcome": "failed",
+      "toolCalls": [],
+      "exceptionTypes": ["RemoteProtocolError"],
+      "causeMessage": "Server disconnected without sending a response."
+    },
+    {
+      "id": "5b682ff0-e244-4a1b-96dd-3e4847537a7a",
+      "node": "clarify_with_user",
+      "model": "moonshotai/kimi-k3",
+      "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+      "runId": "5fad6d46-5140-42fa-8a8d-5bb64daaff27",
+      "responseFormat": "json_schema",
+      "sdkRetryCount": "1",
+      "stream": false,
+      "tools": [],
+      "startedAt": "2026-10-13T03:56:03.112675+00:00",
+      "endedAt": "2026-10-13T03:56:35.945563+00:00",
+      "seconds": 32.832,
+      "httpStatus": null,
+      "outcome": "failed",
+      "toolCalls": [],
+      "exceptionTypes": ["RemoteProtocolError"],
+      "causeMessage": "Server disconnected without sending a response."
+    },
+    {
+      "id": "7c94318f-3f74-4e26-a428-5ded485acdd3",
+      "node": "clarify_with_user",
+      "model": "moonshotai/kimi-k3",
+      "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+      "runId": "5fad6d46-5140-42fa-8a8d-5bb64daaff27",
+      "responseFormat": "json_schema",
+      "sdkRetryCount": "2",
+      "stream": false,
+      "tools": [],
+      "startedAt": "2026-10-13T03:56:41.947386+00:00",
+      "endedAt": "2026-10-13T03:57:14.949804+00:00",
+      "seconds": 33.001,
+      "httpStatus": null,
+      "outcome": "failed",
+      "toolCalls": [],
+      "exceptionTypes": ["RemoteProtocolError"],
+      "causeMessage": "Server disconnected without sending a response."
+    },
+    {
+      "id": "90a4403a-0273-495d-88a4-b53604f8b62e",
+      "node": "clarify_with_user",
+      "model": "moonshotai/kimi-k3",
+      "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+      "runId": "5fad6d46-5140-42fa-8a8d-5bb64daaff27",
+      "responseFormat": "json_schema",
+      "sdkRetryCount": "3",
+      "stream": false,
+      "tools": [],
+      "startedAt": "2026-10-13T03:57:26.952668+00:00",
+      "endedAt": "2026-10-13T03:57:44.553155+00:00",
+      "seconds": 17.6,
+      "httpStatus": null,
+      "outcome": "failed",
+      "toolCalls": [],
+      "exceptionTypes": ["RemoteProtocolError"],
+      "causeMessage": "Server disconnected without sending a response."
+    },
+    {
+      "id": "e9c75597-e2d7-4613-95cf-9b94e58e2749",
+      "node": "clarify_with_user",
+      "model": "moonshotai/kimi-k3",
+      "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+      "runId": "5fad6d46-5140-42fa-8a8d-5bb64daaff27",
+      "responseFormat": "json_schema",
+      "sdkRetryCount": "4",
+      "stream": false,
+      "tools": [],
+      "startedAt": "2026-10-13T03:58:08.554965+00:00",
+      "endedAt": "2026-10-13T03:58:42.442608+00:00",
+      "seconds": 33.887,
+      "httpStatus": 200,
+      "outcome": "response",
+      "toolCalls": []
+    },
+    {
+      "id": "4b50105d-37af-42b1-b297-95df35cacae0",
+      "node": "clarify_with_user",
+      "model": "moonshotai/kimi-k3",
+      "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+      "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+      "responseFormat": "json_schema",
+      "sdkRetryCount": "0",
+      "stream": false,
+      "tools": [],
+      "startedAt": "2026-10-13T03:58:44.076531+00:00",
+      "endedAt": "2026-10-13T03:59:01.350976+00:00",
+      "seconds": 17.274,
+      "httpStatus": null,
+      "outcome": "failed",
+      "toolCalls": [],
+      "exceptionTypes": ["RemoteProtocolError"],
+      "causeMessage": "Server disconnected without sending a response."
+    },
+    {
+      "id": "c8171b21-9c39-4b9b-bcc4-e2c5ca8c33e7",
+      "node": "clarify_with_user",
+      "model": "moonshotai/kimi-k3",
+      "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+      "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+      "responseFormat": "json_schema",
+      "sdkRetryCount": "1",
+      "stream": false,
+      "tools": [],
+      "startedAt": "2026-10-13T03:59:04.352798+00:00",
+      "endedAt": "2026-10-13T03:59:22.275044+00:00",
+      "seconds": 17.922,
+      "httpStatus": null,
+      "outcome": "failed",
+      "toolCalls": [],
+      "exceptionTypes": ["RemoteProtocolError"],
+      "causeMessage": "Server disconnected without sending a response."
+    },
+    {
+      "id": "56e27f97-a8d8-49a6-a21d-c81efd815d9b",
+      "node": "clarify_with_user",
+      "model": "moonshotai/kimi-k3",
+      "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+      "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+      "responseFormat": "json_schema",
+      "sdkRetryCount": "2",
+      "stream": false,
+      "tools": [],
+      "startedAt": "2026-10-13T03:59:28.277153+00:00",
+      "endedAt": "2026-10-13T03:59:57.914792+00:00",
+      "seconds": 29.637,
+      "httpStatus": 200,
+      "outcome": "response",
+      "toolCalls": []
+    },
+    {
+      "id": "dbe69996-a9ad-429a-adf3-59b9fed2153b",
+      "node": "write_research_brief",
+      "model": "moonshotai/kimi-k3",
+      "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+      "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+      "responseFormat": "json_schema",
+      "sdkRetryCount": "0",
+      "stream": false,
+      "tools": [],
+      "startedAt": "2026-10-13T03:59:57.976342+00:00",
+      "endedAt": "2026-10-13T04:00:15.416712+00:00",
+      "seconds": 17.44,
+      "httpStatus": null,
+      "outcome": "failed",
+      "toolCalls": [],
+      "exceptionTypes": ["RemoteProtocolError"],
+      "causeMessage": "Server disconnected without sending a response."
+    },
+    {
+      "id": "98e30c2d-d117-4cb9-9236-abd41a5a55a8",
+      "node": "write_research_brief",
+      "model": "moonshotai/kimi-k3",
+      "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+      "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+      "responseFormat": "json_schema",
+      "sdkRetryCount": "1",
+      "stream": false,
+      "tools": [],
+      "startedAt": "2026-10-13T04:00:18.419735+00:00",
+      "endedAt": "2026-10-13T04:00:36.009043+00:00",
+      "seconds": 17.589,
+      "httpStatus": null,
+      "outcome": "failed",
+      "toolCalls": [],
+      "exceptionTypes": ["RemoteProtocolError"],
+      "causeMessage": "Server disconnected without sending a response."
+    },
+    {
+      "id": "b99fc31e-e271-4085-9bb1-e5a3a8327b35",
+      "node": "write_research_brief",
+      "model": "moonshotai/kimi-k3",
+      "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+      "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+      "responseFormat": "json_schema",
+      "sdkRetryCount": "2",
+      "stream": false,
+      "tools": [],
+      "startedAt": "2026-10-13T04:00:42.011511+00:00",
+      "endedAt": "2026-10-13T04:01:14.730865+00:00",
+      "seconds": 32.719,
+      "httpStatus": null,
+      "outcome": "failed",
+      "toolCalls": [],
+      "exceptionTypes": ["RemoteProtocolError"],
+      "causeMessage": "Server disconnected without sending a response."
+    },
+    {
+      "id": "b4e7d3c9-f6df-4d5d-8ea8-f032ac8aa6a2",
+      "node": "write_research_brief",
+      "model": "moonshotai/kimi-k3",
+      "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+      "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+      "responseFormat": "json_schema",
+      "sdkRetryCount": "3",
+      "stream": false,
+      "tools": [],
+      "startedAt": "2026-10-13T04:01:26.732981+00:00",
+      "endedAt": "2026-10-13T04:01:44.360000+00:00",
+      "seconds": 17.627,
+      "httpStatus": null,
+      "outcome": "failed",
+      "toolCalls": [],
+      "exceptionTypes": ["RemoteProtocolError"],
+      "causeMessage": "Server disconnected without sending a response."
+    },
+    {
+      "id": "860d4ffd-00cf-4af7-b3fe-0b2c95137f15",
+      "node": "write_research_brief",
+      "model": "moonshotai/kimi-k3",
+      "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+      "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+      "responseFormat": "json_schema",
+      "sdkRetryCount": "4",
+      "stream": false,
+      "tools": [],
+      "startedAt": "2026-10-13T04:02:08.362146+00:00",
+      "endedAt": "2026-10-13T04:02:38.212679+00:00",
+      "seconds": 29.85,
+      "httpStatus": 200,
+      "outcome": "response",
+      "toolCalls": []
+    },
+    {
+      "id": "a9b80c0a-95ec-4081-b735-14a7e9f5135b",
+      "node": "supervisor",
+      "model": "moonshotai/kimi-k3",
+      "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+      "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+      "responseFormat": null,
+      "sdkRetryCount": "0",
+      "stream": false,
+      "tools": ["ConductResearch", "ResearchComplete", "think_tool"],
+      "startedAt": "2026-10-13T04:02:38.296957+00:00",
+      "endedAt": "2026-10-13T04:03:11.200615+00:00",
+      "seconds": 32.903,
+      "httpStatus": null,
+      "outcome": "failed",
+      "toolCalls": [],
+      "exceptionTypes": ["RemoteProtocolError"],
+      "causeMessage": "Server disconnected without sending a response."
+    },
+    {
+      "id": "440a1f35-133b-41bc-9ef6-5653e71c9631",
+      "node": "supervisor",
+      "model": "moonshotai/kimi-k3",
+      "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+      "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+      "responseFormat": null,
+      "sdkRetryCount": "1",
+      "stream": false,
+      "tools": ["ConductResearch", "ResearchComplete", "think_tool"],
+      "startedAt": "2026-10-13T04:03:14.209556+00:00",
+      "endedAt": "2026-10-13T04:03:47.125569+00:00",
+      "seconds": 32.915,
+      "httpStatus": null,
+      "outcome": "failed",
+      "toolCalls": [],
+      "exceptionTypes": ["RemoteProtocolError"],
+      "causeMessage": "Server disconnected without sending a response."
+    },
+    {
+      "id": "11cb2206-410c-473a-a41a-723ddf022043",
+      "node": "supervisor",
+      "model": "moonshotai/kimi-k3",
+      "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+      "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+      "responseFormat": null,
+      "sdkRetryCount": "2",
+      "stream": false,
+      "tools": ["ConductResearch", "ResearchComplete", "think_tool"],
+      "startedAt": "2026-10-13T04:03:53.135630+00:00",
+      "endedAt": "2026-10-13T04:04:10.788290+00:00",
+      "seconds": 17.652,
+      "httpStatus": null,
+      "outcome": "failed",
+      "toolCalls": [],
+      "exceptionTypes": ["RemoteProtocolError"],
+      "causeMessage": "Server disconnected without sending a response."
+    },
+    {
+      "id": "26203baf-1590-4c88-86ea-d90ad418c575",
+      "node": "supervisor",
+      "model": "moonshotai/kimi-k3",
+      "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+      "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+      "responseFormat": null,
+      "sdkRetryCount": "3",
+      "stream": false,
+      "tools": ["ConductResearch", "ResearchComplete", "think_tool"],
+      "startedAt": "2026-10-13T04:04:22.799439+00:00",
+      "endedAt": "2026-10-13T04:04:27.804221+00:00",
+      "seconds": 5.004,
+      "httpStatus": null,
+      "outcome": "failed",
+      "toolCalls": [],
+      "exceptionTypes": ["ConnectError", "EndOfStream", "SSLEOFError"],
+      "causeMessage": "[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1028)"
+    },
+    {
+      "id": "3e5113f5-11f8-42b0-bf8e-cfc90f4102d4",
+      "node": "supervisor",
+      "model": "moonshotai/kimi-k3",
+      "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+      "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+      "responseFormat": null,
+      "sdkRetryCount": "4",
+      "stream": false,
+      "tools": ["ConductResearch", "ResearchComplete", "think_tool"],
+      "startedAt": "2026-10-13T04:04:51.815869+00:00",
+      "endedAt": "2026-10-13T04:05:24.327743+00:00",
+      "seconds": 32.511,
+      "httpStatus": 200,
+      "outcome": "response",
+      "toolCalls": ["think_tool"]
+    },
+    {
+      "id": "9136d2cd-613c-40bc-8e4e-79ccb9670311",
+      "node": "supervisor",
+      "model": "moonshotai/kimi-k3",
+      "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+      "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+      "responseFormat": null,
+      "sdkRetryCount": "0",
+      "stream": false,
+      "tools": ["ConductResearch", "ResearchComplete", "think_tool"],
+      "startedAt": "2026-10-13T04:05:24.335876+00:00",
+      "endedAt": "2026-10-13T04:05:56.825075+00:00",
+      "seconds": 32.489,
+      "httpStatus": 200,
+      "outcome": "response",
+      "toolCalls": ["ConductResearch"]
+    },
+    {
+      "id": "bb719854-c9e4-477d-9631-1e6629170841",
+      "node": "llm_call",
+      "model": "moonshotai/kimi-k3",
+      "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+      "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+      "responseFormat": null,
+      "sdkRetryCount": "0",
+      "stream": false,
+      "tools": ["tavily_search", "think_tool", "load_skill"],
+      "startedAt": "2026-10-13T04:05:58.874303+00:00",
+      "endedAt": "2026-10-13T04:06:16.464393+00:00",
+      "seconds": 17.589,
+      "httpStatus": null,
+      "outcome": "failed",
+      "toolCalls": [],
+      "exceptionTypes": ["RemoteProtocolError"],
+      "causeMessage": "Server disconnected without sending a response."
+    },
+    {
+      "id": "60d2f7e7-38fc-498a-be2f-00ad6726507f",
+      "node": "llm_call",
+      "model": "moonshotai/kimi-k3",
+      "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+      "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+      "responseFormat": null,
+      "sdkRetryCount": "1",
+      "stream": false,
+      "tools": ["tavily_search", "think_tool", "load_skill"],
+      "startedAt": "2026-10-13T04:06:19.467173+00:00",
+      "endedAt": "2026-10-13T04:06:41.486650+00:00",
+      "seconds": 22.019,
+      "httpStatus": 200,
+      "outcome": "response",
+      "toolCalls": ["tavily_search", "tavily_search"]
+    },
+    {
+      "id": "b4486eff-a2d3-470c-83c1-0b6c35c28559",
+      "node": "supervisor",
+      "model": "moonshotai/kimi-k3",
+      "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+      "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+      "responseFormat": null,
+      "sdkRetryCount": "0",
+      "stream": false,
+      "tools": ["ConductResearch", "ResearchComplete", "think_tool"],
+      "startedAt": "2026-10-13T04:10:54.950032+00:00",
+      "endedAt": "2026-10-13T04:11:27.833393+00:00",
+      "seconds": 32.879,
+      "httpStatus": null,
+      "outcome": "failed",
+      "toolCalls": [],
+      "exceptionTypes": ["RemoteProtocolError"],
+      "causeMessage": "Server disconnected without sending a response."
+    },
+    {
+      "id": "0e120e56-5c82-493a-869b-62c2085a9c17",
+      "node": "supervisor",
+      "model": "moonshotai/kimi-k3",
+      "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+      "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+      "responseFormat": null,
+      "sdkRetryCount": "1",
+      "stream": false,
+      "tools": ["ConductResearch", "ResearchComplete", "think_tool"],
+      "startedAt": "2026-10-13T04:11:30.843064+00:00",
+      "endedAt": "2026-10-13T04:11:48.529283+00:00",
+      "seconds": 17.686,
+      "httpStatus": null,
+      "outcome": "failed",
+      "toolCalls": [],
+      "exceptionTypes": ["RemoteProtocolError"],
+      "causeMessage": "Server disconnected without sending a response."
+    },
+    {
+      "id": "7ed67056-a62b-4188-a4e4-6f0819f54751",
+      "node": "supervisor",
+      "model": "moonshotai/kimi-k3",
+      "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+      "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+      "responseFormat": null,
+      "sdkRetryCount": "2",
+      "stream": false,
+      "tools": ["ConductResearch", "ResearchComplete", "think_tool"],
+      "startedAt": "2026-10-13T04:11:54.541814+00:00",
+      "endedAt": "2026-10-13T04:12:15.458328+00:00",
+      "seconds": 20.916,
+      "httpStatus": 200,
+      "outcome": "response",
+      "toolCalls": ["think_tool"]
+    },
+    {
+      "id": "475579a7-e341-468b-8f58-eadc75b42e40",
+      "node": "supervisor",
+      "model": "moonshotai/kimi-k3",
+      "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+      "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+      "responseFormat": null,
+      "sdkRetryCount": "0",
+      "stream": false,
+      "tools": ["ConductResearch", "ResearchComplete", "think_tool"],
+      "startedAt": "2026-10-13T04:12:15.464286+00:00",
+      "endedAt": "2026-10-13T04:12:37.246077+00:00",
+      "seconds": 21.781,
+      "httpStatus": 200,
+      "outcome": "response",
+      "toolCalls": ["ConductResearch"]
+    },
+    {
+      "id": "69cd54e4-0a66-43d1-98e3-e3f98ad3601f",
+      "node": "llm_call",
+      "model": "moonshotai/kimi-k3",
+      "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+      "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+      "responseFormat": null,
+      "sdkRetryCount": "0",
+      "stream": false,
+      "tools": ["tavily_search", "think_tool", "load_skill"],
+      "startedAt": "2026-10-13T04:12:37.285129+00:00",
+      "endedAt": "2026-10-13T04:13:02.833538+00:00",
+      "seconds": 25.548,
+      "httpStatus": 200,
+      "outcome": "response",
+      "toolCalls": ["tavily_search", "tavily_search", "tavily_search"]
+    },
+    {
+      "id": "71b29353-0a72-49a8-9a88-a67b69fd74a2",
+      "node": "tool_node",
+      "model": "moonshotai/kimi-k3",
+      "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+      "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+      "responseFormat": null,
+      "sdkRetryCount": "0",
+      "stream": false,
+      "tools": ["Summary"],
+      "startedAt": "2026-10-13T04:13:09.039702+00:00",
+      "endedAt": "2026-10-13T04:13:42.275975+00:00",
+      "seconds": 33.228,
+      "httpStatus": null,
+      "outcome": "failed",
+      "toolCalls": [],
+      "exceptionTypes": ["RemoteProtocolError"],
+      "causeMessage": "Server disconnected without sending a response."
+    },
+    {
+      "id": "e52c666b-6a10-4d9b-815c-0fcac5536801",
+      "node": "tool_node",
+      "model": "moonshotai/kimi-k3",
+      "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+      "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+      "responseFormat": null,
+      "sdkRetryCount": "1",
+      "stream": false,
+      "tools": ["Summary"],
+      "startedAt": "2026-10-13T04:13:45.278486+00:00",
+      "endedAt": "2026-10-13T04:14:18.072860+00:00",
+      "seconds": 32.794,
+      "httpStatus": null,
+      "outcome": "failed",
+      "toolCalls": [],
+      "exceptionTypes": ["RemoteProtocolError"],
+      "causeMessage": "Server disconnected without sending a response."
+    },
+    {
+      "id": "22289647-f82e-4bf3-bc67-6e343e845722",
+      "node": "tool_node",
+      "model": "moonshotai/kimi-k3",
+      "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+      "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+      "responseFormat": null,
+      "sdkRetryCount": "2",
+      "stream": false,
+      "tools": ["Summary"],
+      "startedAt": "2026-10-13T04:14:24.075304+00:00",
+      "endedAt": "2026-10-13T04:15:13.140553+00:00",
+      "seconds": 49.065,
+      "httpStatus": 200,
+      "outcome": "response",
+      "toolCalls": ["Summary"]
+    },
+    {
+      "id": "79f74f9b-c563-4d2b-8e9a-964cdc1ee150",
+      "node": "tool_node",
+      "model": "moonshotai/kimi-k3",
+      "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+      "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+      "responseFormat": null,
+      "sdkRetryCount": "0",
+      "stream": false,
+      "tools": ["Summary"],
+      "startedAt": "2026-10-13T04:15:25.810214+00:00",
+      "endedAt": "2026-10-13T04:15:59.448899+00:00",
+      "seconds": 33.636,
+      "httpStatus": null,
+      "outcome": "failed",
+      "toolCalls": [],
+      "exceptionTypes": ["RemoteProtocolError"],
+      "causeMessage": "Server disconnected without sending a response."
+    },
+    {
+      "id": "7108991e-3145-4601-a3a3-b2fb5226c297",
+      "node": "tool_node",
+      "model": "moonshotai/kimi-k3",
+      "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+      "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+      "responseFormat": null,
+      "sdkRetryCount": "0",
+      "stream": false,
+      "tools": ["Summary"],
+      "startedAt": "2026-10-13T04:15:27.821335+00:00",
+      "endedAt": "2026-10-13T04:15:45.998725+00:00",
+      "seconds": 18.177,
+      "httpStatus": null,
+      "outcome": "failed",
+      "toolCalls": [],
+      "exceptionTypes": ["RemoteProtocolError"],
+      "causeMessage": "Server disconnected without sending a response."
+    },
+    {
+      "id": "7381e126-3714-44cf-8ace-eebbb8c9f848",
+      "node": "tool_node",
+      "model": "moonshotai/kimi-k3",
+      "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+      "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+      "responseFormat": null,
+      "sdkRetryCount": "0",
+      "stream": false,
+      "tools": ["Summary"],
+      "startedAt": "2026-10-13T04:15:29.831164+00:00",
+      "endedAt": "2026-10-13T04:16:03.533505+00:00",
+      "seconds": 33.702,
+      "httpStatus": null,
+      "outcome": "failed",
+      "toolCalls": [],
+      "exceptionTypes": ["RemoteProtocolError"],
+      "causeMessage": "Server disconnected without sending a response."
+    },
+    {
+      "id": "7ab1061b-cbd1-4c7d-a719-9e5a432d3eac",
+      "node": "tool_node",
+      "model": "moonshotai/kimi-k3",
+      "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+      "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+      "responseFormat": null,
+      "sdkRetryCount": "1",
+      "stream": false,
+      "tools": ["Summary"],
+      "startedAt": "2026-10-13T04:15:49.002028+00:00",
+      "endedAt": "2026-10-13T04:16:07.438782+00:00",
+      "seconds": 18.436,
+      "httpStatus": null,
+      "outcome": "failed",
+      "toolCalls": [],
+      "exceptionTypes": ["RemoteProtocolError"],
+      "causeMessage": "Server disconnected without sending a response."
+    },
+    {
+      "id": "fa26391a-343f-415e-b8e1-6b210b5bb490",
+      "node": "tool_node",
+      "model": "moonshotai/kimi-k3",
+      "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+      "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+      "responseFormat": null,
+      "sdkRetryCount": "1",
+      "stream": false,
+      "tools": ["Summary"],
+      "startedAt": "2026-10-13T04:16:02.451569+00:00",
+      "endedAt": "2026-10-13T04:16:20.691227+00:00",
+      "seconds": 18.239,
+      "httpStatus": null,
+      "outcome": "failed",
+      "toolCalls": [],
+      "exceptionTypes": ["RemoteProtocolError"],
+      "causeMessage": "Server disconnected without sending a response."
+    },
+    {
+      "id": "26ab728a-f93d-4d16-9b5f-0179141876f3",
+      "node": "tool_node",
+      "model": "moonshotai/kimi-k3",
+      "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+      "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+      "responseFormat": null,
+      "sdkRetryCount": "1",
+      "stream": false,
+      "tools": ["Summary"],
+      "startedAt": "2026-10-13T04:16:06.536936+00:00",
+      "endedAt": "2026-10-13T04:16:24.497559+00:00",
+      "seconds": 17.96,
+      "httpStatus": null,
+      "outcome": "failed",
+      "toolCalls": [],
+      "exceptionTypes": ["RemoteProtocolError"],
+      "causeMessage": "Server disconnected without sending a response."
+    },
+    {
+      "id": "7e631807-5ffa-405a-8279-4dc917bca032",
+      "node": "tool_node",
+      "model": "moonshotai/kimi-k3",
+      "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+      "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+      "responseFormat": null,
+      "sdkRetryCount": "2",
+      "stream": false,
+      "tools": ["Summary"],
+      "startedAt": "2026-10-13T04:16:13.442136+00:00",
+      "endedAt": "2026-10-13T04:17:01.648942+00:00",
+      "seconds": 48.206,
+      "httpStatus": null,
+      "outcome": "failed",
+      "toolCalls": [],
+      "exceptionTypes": ["RemoteProtocolError"],
+      "causeMessage": "Server disconnected without sending a response."
+    },
+    {
+      "id": "2b64747c-7570-4b41-9734-6aead80d997b",
+      "node": "tool_node",
+      "model": "moonshotai/kimi-k3",
+      "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+      "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+      "responseFormat": null,
+      "sdkRetryCount": "2",
+      "stream": false,
+      "tools": ["Summary"],
+      "startedAt": "2026-10-13T04:16:26.694484+00:00",
+      "endedAt": "2026-10-13T04:16:44.590708+00:00",
+      "seconds": 17.896,
+      "httpStatus": null,
+      "outcome": "failed",
+      "toolCalls": [],
+      "exceptionTypes": ["RemoteProtocolError"],
+      "causeMessage": "Server disconnected without sending a response."
+    },
+    {
+      "id": "26b6607b-e2a0-434b-9bf0-82440bffa4b0",
+      "node": "tool_node",
+      "model": "moonshotai/kimi-k3",
+      "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+      "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+      "responseFormat": null,
+      "sdkRetryCount": "2",
+      "stream": false,
+      "tools": ["Summary"],
+      "startedAt": "2026-10-13T04:16:30.500496+00:00",
+      "endedAt": "2026-10-13T04:17:18.803011+00:00",
+      "seconds": 48.302,
+      "httpStatus": null,
+      "outcome": "failed",
+      "toolCalls": [],
+      "exceptionTypes": ["RemoteProtocolError"],
+      "causeMessage": "Server disconnected without sending a response."
+    },
+    {
+      "id": "28d6432a-3240-4254-8168-a778a42f7501",
+      "node": "tool_node",
+      "model": "moonshotai/kimi-k3",
+      "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+      "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+      "responseFormat": null,
+      "sdkRetryCount": "3",
+      "stream": false,
+      "tools": ["Summary"],
+      "startedAt": "2026-10-13T04:16:56.593182+00:00",
+      "endedAt": "2026-10-13T04:18:00.325808+00:00",
+      "seconds": 63.732,
+      "httpStatus": null,
+      "outcome": "failed",
+      "toolCalls": [],
+      "exceptionTypes": ["RemoteProtocolError"],
+      "causeMessage": "Server disconnected without sending a response."
+    },
+    {
+      "id": "f00393d6-67f1-4c17-bab3-c4766358677b",
+      "node": "tool_node",
+      "model": "moonshotai/kimi-k3",
+      "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+      "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+      "responseFormat": null,
+      "sdkRetryCount": "3",
+      "stream": false,
+      "tools": ["Summary"],
+      "startedAt": "2026-10-13T04:17:13.651619+00:00",
+      "endedAt": "2026-10-13T04:17:46.716950+00:00",
+      "seconds": 33.065,
+      "httpStatus": null,
+      "outcome": "failed",
+      "toolCalls": [],
+      "exceptionTypes": ["RemoteProtocolError"],
+      "causeMessage": "Server disconnected without sending a response."
+    },
+    {
+      "id": "6727def3-c663-4097-851e-e24303092fb2",
+      "node": "tool_node",
+      "model": "moonshotai/kimi-k3",
+      "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+      "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+      "responseFormat": null,
+      "sdkRetryCount": "3",
+      "stream": false,
+      "tools": ["Summary"],
+      "startedAt": "2026-10-13T04:17:30.806299+00:00",
+      "endedAt": "2026-10-13T04:18:03.856307+00:00",
+      "seconds": 33.05,
+      "httpStatus": null,
+      "outcome": "failed",
+      "toolCalls": [],
+      "exceptionTypes": ["RemoteProtocolError"],
+      "causeMessage": "Server disconnected without sending a response."
+    },
+    {
+      "id": "752b8d70-cb18-4d05-8261-3e304cd49cb5",
+      "node": "tool_node",
+      "model": "moonshotai/kimi-k3",
+      "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+      "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+      "responseFormat": null,
+      "sdkRetryCount": "4",
+      "stream": false,
+      "tools": ["Summary"],
+      "startedAt": "2026-10-13T04:18:10.720226+00:00",
+      "endedAt": "2026-10-13T04:18:28.696848+00:00",
+      "seconds": 17.976,
+      "httpStatus": null,
+      "outcome": "failed",
+      "toolCalls": [],
+      "exceptionTypes": ["RemoteProtocolError"],
+      "causeMessage": "Server disconnected without sending a response."
+    },
+    {
+      "id": "ed94065d-e2f2-44fd-bc3c-2ed837ef659a",
+      "node": "tool_node",
+      "model": "moonshotai/kimi-k3",
+      "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+      "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+      "responseFormat": null,
+      "sdkRetryCount": "4",
+      "stream": false,
+      "tools": ["Summary"],
+      "startedAt": "2026-10-13T04:18:24.328732+00:00",
+      "endedAt": "2026-10-13T04:18:42.255854+00:00",
+      "seconds": 17.927,
+      "httpStatus": null,
+      "outcome": "failed",
+      "toolCalls": [],
+      "exceptionTypes": ["RemoteProtocolError"],
+      "causeMessage": "Server disconnected without sending a response."
+    },
+    {
+      "id": "6d0eadf7-ee58-406a-beee-731da9604734",
+      "node": "tool_node",
+      "model": "moonshotai/kimi-k3",
+      "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+      "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+      "responseFormat": null,
+      "sdkRetryCount": "4",
+      "stream": false,
+      "tools": ["Summary"],
+      "startedAt": "2026-10-13T04:18:27.860571+00:00",
+      "endedAt": "2026-10-13T04:19:32.341821+00:00",
+      "seconds": 64.48,
+      "httpStatus": 504,
+      "outcome": "response",
+      "toolCalls": []
+    },
+    {
+      "id": "08b81473-ff21-4ac3-9288-ead2a0c6c3d4",
+      "node": "llm_call",
+      "model": "moonshotai/kimi-k3",
+      "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+      "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+      "responseFormat": null,
+      "sdkRetryCount": "0",
+      "stream": false,
+      "tools": ["tavily_search", "think_tool", "load_skill"],
+      "startedAt": "2026-10-13T04:19:36.548190+00:00",
+      "endedAt": "2026-10-13T04:20:01.247042+00:00",
+      "seconds": 24.699,
+      "httpStatus": 200,
+      "outcome": "response",
+      "toolCalls": ["think_tool", "tavily_search"]
+    },
+    {
+      "id": "d8292381-d06d-43ad-a5ba-5524b04ac5e4",
+      "node": "tool_node",
+      "model": "moonshotai/kimi-k3",
+      "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+      "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+      "responseFormat": null,
+      "sdkRetryCount": "0",
+      "stream": false,
+      "tools": ["Summary"],
+      "startedAt": "2026-10-13T04:20:07.586403+00:00",
+      "endedAt": "2026-10-13T04:20:25.316714+00:00",
+      "seconds": 17.727,
+      "httpStatus": null,
+      "outcome": "failed",
+      "toolCalls": [],
+      "exceptionTypes": ["RemoteProtocolError"],
+      "causeMessage": "Server disconnected without sending a response."
+    },
+    {
+      "id": "419ec6e0-6433-48f6-8a37-2fe731c9e704",
+      "node": "tool_node",
+      "model": "moonshotai/kimi-k3",
+      "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+      "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+      "responseFormat": null,
+      "sdkRetryCount": "0",
+      "stream": false,
+      "tools": ["Summary"],
+      "startedAt": "2026-10-13T04:20:09.596810+00:00",
+      "endedAt": "2026-10-13T04:20:54.806852+00:00",
+      "seconds": 45.21,
+      "httpStatus": 200,
+      "outcome": "response",
+      "toolCalls": ["Summary"]
+    },
+    {
+      "id": "a6e6fdf2-b811-4c4c-87d7-488262deb971",
+      "node": "tool_node",
+      "model": "moonshotai/kimi-k3",
+      "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+      "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+      "responseFormat": null,
+      "sdkRetryCount": "0",
+      "stream": false,
+      "tools": ["Summary"],
+      "startedAt": "2026-10-13T04:20:11.611223+00:00",
+      "endedAt": "2026-10-13T04:20:56.761487+00:00",
+      "seconds": 45.15,
+      "httpStatus": 200,
+      "outcome": "response",
+      "toolCalls": ["Summary"]
+    },
+    {
+      "id": "deb00820-ed0e-48ee-995e-864d9f61a657",
+      "node": "tool_node",
+      "model": "moonshotai/kimi-k3",
+      "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+      "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+      "responseFormat": null,
+      "sdkRetryCount": "1",
+      "stream": false,
+      "tools": ["Summary"],
+      "startedAt": "2026-10-13T04:20:28.319069+00:00",
+      "endedAt": "2026-10-13T04:21:01.841102+00:00",
+      "seconds": 33.521,
+      "httpStatus": 200,
+      "outcome": "response",
+      "toolCalls": ["Summary"]
+    },
+    {
+      "id": "00bc67ff-ff7b-4d37-8cc1-1502914d9f28",
+      "node": "llm_call",
+      "model": "moonshotai/kimi-k3",
+      "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+      "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+      "responseFormat": null,
+      "sdkRetryCount": "0",
+      "stream": false,
+      "tools": ["tavily_search", "think_tool", "load_skill"],
+      "startedAt": "2026-10-13T04:21:01.879167+00:00",
+      "endedAt": "2026-10-13T04:21:26.778298+00:00",
+      "seconds": 24.899,
+      "httpStatus": 200,
+      "outcome": "response",
+      "toolCalls": ["think_tool"]
+    },
+    {
+      "id": "298109a0-9360-44f1-87e1-c93aba2db67b",
+      "node": "llm_call",
+      "model": "moonshotai/kimi-k3",
+      "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+      "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+      "responseFormat": null,
+      "sdkRetryCount": "0",
+      "stream": false,
+      "tools": ["tavily_search", "think_tool", "load_skill"],
+      "startedAt": "2026-10-13T04:21:26.863365+00:00",
+      "endedAt": "2026-10-13T04:21:59.366792+00:00",
+      "seconds": 32.503,
+      "httpStatus": null,
+      "outcome": "failed",
+      "toolCalls": [],
+      "exceptionTypes": ["RemoteProtocolError"],
+      "causeMessage": "Server disconnected without sending a response."
+    },
+    {
+      "id": "8086a64f-fa5b-4038-8294-55034a36d387",
+      "node": "llm_call",
+      "model": "moonshotai/kimi-k3",
+      "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+      "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+      "responseFormat": null,
+      "sdkRetryCount": "1",
+      "stream": false,
+      "tools": ["tavily_search", "think_tool", "load_skill"],
+      "startedAt": "2026-10-13T04:22:02.368883+00:00",
+      "endedAt": "2026-10-13T04:22:42.400922+00:00",
+      "seconds": 40.032,
+      "httpStatus": 200,
+      "outcome": "response",
+      "toolCalls": []
+    },
+    {
+      "id": "24e7985b-c6d2-4c09-a5f5-4aaae2a241c9",
+      "node": "compress_research",
+      "model": "moonshotai/kimi-k3",
+      "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+      "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+      "responseFormat": null,
+      "sdkRetryCount": "0",
+      "stream": false,
+      "tools": [],
+      "startedAt": "2026-10-13T04:22:42.447752+00:00",
+      "endedAt": "2026-10-13T04:22:59.788957+00:00",
+      "seconds": 17.341,
+      "httpStatus": null,
+      "outcome": "failed",
+      "toolCalls": [],
+      "exceptionTypes": ["RemoteProtocolError"],
+      "causeMessage": "Server disconnected without sending a response."
+    },
+    {
+      "id": "b5a23633-0d37-4f80-86bd-c7b476661dcb",
+      "node": "compress_research",
+      "model": "moonshotai/kimi-k3",
+      "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+      "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+      "responseFormat": null,
+      "sdkRetryCount": "1",
+      "stream": false,
+      "tools": [],
+      "startedAt": "2026-10-13T04:23:02.790857+00:00",
+      "endedAt": "2026-10-13T04:23:20.467819+00:00",
+      "seconds": 17.677,
+      "httpStatus": null,
+      "outcome": "failed",
+      "toolCalls": [],
+      "exceptionTypes": ["RemoteProtocolError"],
+      "causeMessage": "Server disconnected without sending a response."
+    },
+    {
+      "id": "958b644c-9afa-4b99-a34d-6ed36db3b655",
+      "node": "compress_research",
+      "model": "moonshotai/kimi-k3",
+      "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+      "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+      "responseFormat": null,
+      "sdkRetryCount": "2",
+      "stream": false,
+      "tools": [],
+      "startedAt": "2026-10-13T04:23:26.470415+00:00",
+      "endedAt": "2026-10-13T04:24:10.732469+00:00",
+      "seconds": 44.262,
+      "httpStatus": 200,
+      "outcome": "response",
+      "toolCalls": []
+    },
+    {
+      "id": "10541dae-3c7c-4a87-b537-1cce11895911",
+      "node": "supervisor",
+      "model": "moonshotai/kimi-k3",
+      "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+      "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+      "responseFormat": null,
+      "sdkRetryCount": "0",
+      "stream": false,
+      "tools": ["ConductResearch", "ResearchComplete", "think_tool"],
+      "startedAt": "2026-10-13T04:24:10.770123+00:00",
+      "endedAt": "2026-10-13T04:24:39.027678+00:00",
+      "seconds": 28.257,
+      "httpStatus": 200,
+      "outcome": "response",
+      "toolCalls": ["think_tool"]
+    },
+    {
+      "id": "27385151-a86a-447f-8242-ed691ac1825b",
+      "node": "supervisor",
+      "model": "moonshotai/kimi-k3",
+      "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+      "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+      "responseFormat": null,
+      "sdkRetryCount": "0",
+      "stream": false,
+      "tools": ["ConductResearch", "ResearchComplete", "think_tool"],
+      "startedAt": "2026-10-13T04:24:39.036870+00:00",
+      "endedAt": "2026-10-13T04:24:56.261515+00:00",
+      "seconds": 17.224,
+      "httpStatus": null,
+      "outcome": "failed",
+      "toolCalls": [],
+      "exceptionTypes": ["RemoteProtocolError"],
+      "causeMessage": "Server disconnected without sending a response."
+    },
+    {
+      "id": "b027bc3f-0c5c-45d0-a87e-998e8cefcbdd",
+      "node": "supervisor",
+      "model": "moonshotai/kimi-k3",
+      "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+      "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+      "responseFormat": null,
+      "sdkRetryCount": "1",
+      "stream": false,
+      "tools": ["ConductResearch", "ResearchComplete", "think_tool"],
+      "startedAt": "2026-10-13T04:24:59.267881+00:00",
+      "endedAt": "2026-10-13T04:25:21.115381+00:00",
+      "seconds": 21.847,
+      "httpStatus": 200,
+      "outcome": "response",
+      "toolCalls": ["ResearchComplete"]
+    },
+    {
+      "id": "81fc7f14-3f38-4a36-8d58-bc2b7fb8a525",
+      "node": "final_report_generation",
+      "model": "moonshotai/kimi-k3",
+      "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+      "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+      "responseFormat": null,
+      "sdkRetryCount": "0",
+      "stream": false,
+      "tools": [],
+      "startedAt": "2026-10-13T04:25:21.187171+00:00",
+      "endedAt": "2026-10-13T04:25:53.631469+00:00",
+      "seconds": 32.444,
+      "httpStatus": null,
+      "outcome": "failed",
+      "toolCalls": [],
+      "exceptionTypes": ["RemoteProtocolError"],
+      "causeMessage": "Server disconnected without sending a response."
+    },
+    {
+      "id": "2cb3a767-6fd9-4661-8bf1-d1b6965c1f57",
+      "node": "final_report_generation",
+      "model": "moonshotai/kimi-k3",
+      "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+      "runId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+      "responseFormat": null,
+      "sdkRetryCount": "1",
+      "stream": false,
+      "tools": [],
+      "startedAt": "2026-10-13T04:25:56.644769+00:00",
+      "endedAt": null,
+      "seconds": null,
+      "httpStatus": null,
+      "outcome": "in_flight",
+      "toolCalls": []
+    }
+  ],
+  "modelHttpSummary": {
+    "count": 60,
+    "byNode": {
+      "clarify_with_user": 8,
+      "write_research_brief": 5,
+      "supervisor": 13,
+      "llm_call": 7,
+      "tool_node": 22,
+      "compress_research": 3,
+      "final_report_generation": 2
+    },
+    "httpStatuses": {
+      "200": 19,
+      "504": 1
+    },
+    "transportFailures": 39,
+    "sdkRetryAttempts": 37
+  },
+  "actualTools": {
+    "started": {
+      "tavily_search": 5,
+      "think_tool": 2
+    },
+    "finished": {
+      "tavily_search": 4,
+      "think_tool": 2
+    },
+    "failed": {
+      "tavily_search": 1
+    },
+    "loadedSkills": []
+  },
+  "sources": [
+    {
+      "url": "https://peps.python.org/pep-0703",
+      "title": "PEP 703 – Making the Global Interpreter Lock Optional in CPython | peps.python.org"
+    },
+    {
+      "url": "https://docs.python.org/3.13/whatsnew/3.13.html#free-threaded-cpython",
+      "title": "What’s New In Python 3.13 — Python 3.13.16 documentation"
+    },
+    {
+      "url": "https://docs.python.org/3.13/whatsnew/3.13.html#changes-in-the-python-api",
+      "title": "What’s New In Python 3.13 — Python 3.13.16 documentation"
+    },
+    {
+      "url": "https://docs.python.org/3.13/whatsnew/3.13.html#id10",
+      "title": "What’s New In Python 3.13 — Python 3.13.16 documentation"
+    },
+    {
+      "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+      "title": "C API Extension Support for Free Threading — Python 3.13.16 documentation"
+    },
+    {
+      "url": "https://medium.com/@mitesh.singh.jat/gil-becomes-optional-in-python-3-13-a-game-changer-for-multithreading-4c5d28856803",
+      "title": "GIL Becomes Optional in Python 3.13: A Game-Changer for Multithreading! | by Mitesh Singh Jat | Medium"
+    },
+    {
+      "url": "https://github.com/python/cpython/issues/124287",
+      "title": "Request for Clarification on Experimental Status of Free-Threaded Builds with GIL in CPython 3.13 · Issue #124287 · python/cpython · GitHub"
+    },
+    {
+      "url": "https://codspeed.io/blog/state-of-python-3-13-performance-free-threading",
+      "title": "State of Python 3.13 Performance: Free-Threading | CodSpeed"
+    }
+  ],
+  "citationReview": "not_executed",
+  "cleanup": {
+    "ports": {
+      "2033": "free_after_cleanup",
+      "5184": "unavailable"
+    },
+    "existingServicesStopped": false,
+    "existingHistoryUsed": false,
+    "watchdogTriggered": true
+  },
+  "localEvidence": {
+    ".local/provider-retest-20261013-kimi/browser/model-http.jsonl": {
+      "sha256": "9883a4c2d202cb0abece8dcf3e59580651d9776a046786ecc0dd426e5018b521"
+    },
+    ".local/provider-retest-20261013-kimi/browser/api-snapshot.json": {
+      "sha256": "ce47ef5b6ae86d38786931e74a3e33b33fa1caa62ccadb4c8a1929713212f2f2"
+    },
+    ".local/provider-retest-20261013-kimi/backend.log": {
+      "sha256": "2d4bf5029a33898071f2665748dda31402a48cd198f54945f716598d85385812"
+    },
+    ".local/provider-retest-20261013-kimi/browser/late-readback.json": {
+      "sha256": "d2ef743e6ea950c86938b854e357cc487f851245b7a1982433c4c75537043036"
+    },
+    ".local/provider-retest-20261013-kimi/browser/offline-final.json": {
+      "sha256": "0a06415cb77bfe0367acda4c167460cdd756674fbaf75d4826672c87632be68b"
+    },
+    ".local/provider_real_server_kimi_20261013.py": {
+      "sha256": "17e9f5e78fdc4f794b7d0fb9a9a6a3a2469fd347a31a9a8e282d28bedf84531d"
+    },
+    ".local/provider_retry_policy_20261013.py": {
+      "sha256": "a5c1a158f2c4e957276e77003341737457e81c9488f9c309c9b1b4b7da7f689f"
+    }
+  }
+}
