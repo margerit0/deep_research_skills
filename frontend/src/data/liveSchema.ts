@@ -65,7 +65,11 @@ export const researchStatusSchema = z.enum([
   'partial',
 ])
 export const researchPhaseSchema = z.enum(['clarify', 'brief', 'research', 'writing', 'complete'])
-export const sourceSchema = z.object({ title: z.string(), url: z.string() })
+export const sourceSchema = z.object({
+  title: z.string(),
+  url: z.string(),
+  retrieval: z.literal('specified_url').optional(),
+})
 export const errorSchema = z.object({ code: z.string(), message: z.string(), node: z.string() })
 export const researchEventSchema = z.object({
   version: z.literal(1),
@@ -96,6 +100,26 @@ export const researchEventSchema = z.object({
   query: z.string().max(1050).optional(),
   sources: z.array(sourceSchema).max(50).optional(),
   source_count: z.number().int().nonnegative().optional(),
+  source_audit: z
+    .array(
+      z.object({
+        url: z.string().max(2100),
+        decision: z.enum([
+          'accepted',
+          'out_of_scope',
+          'redirect_out_of_scope',
+          'redirect_unverified',
+          'redirect_limit',
+          'source_http_error',
+          'source_unverified',
+        ]),
+        http_status: z.number().int().nullable(),
+        retrieval: z.enum(['search', 'specified_url']).optional(),
+      }),
+    )
+    .max(50)
+    .optional(),
+  source_audit_count: z.number().int().nonnegative().optional(),
   output: z.string().max(8050).optional(),
 })
 export type ResearchEvent = z.infer<typeof researchEventSchema>

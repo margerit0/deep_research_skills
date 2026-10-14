@@ -1,3 +1,5 @@
 # Preserve the exact model output used by the published SHA-256 evidence.
 frontend/docs/provider-2026-10-14-kimi-report.md -text
 frontend/docs/provider-2026-10-14-kimi-full-report.md -text
+frontend/docs/provider-2026-10-15-kimi-fixes-report.md -text
+frontend/docs/provider-2026-10-15-kimi-fixes-reviewed-report.md -text

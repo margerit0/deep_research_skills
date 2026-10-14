@@ -286,7 +286,9 @@ test('recovery: a position for a different run is not reused', async ({ page }) 
   control.events = [event(run, 1, 'delegated'), event(run, 2, 'model_started')]
   await refresh(page)
   await expect.poll(async () => (await saved(page)).eventRecovery?.sequence).toBe(2)
-  await page.evaluate(() => {
+  // Inject on the new document so an in-flight save in the old page cannot
+  // replace the deliberately stale position before reload reads it.
+  await page.addInitScript(() => {
     const data = JSON.parse(localStorage.getItem('atlas-workspace:v1')!)
     const thread = data.threads.find((thread: { id: string }) => thread.id === data.activeThreadId)
     thread.live.researches.at(-1).eventRecovery.runId = 'another-run'

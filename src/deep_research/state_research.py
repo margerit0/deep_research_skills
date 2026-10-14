@@ -11,7 +11,8 @@ from typing_extensions import TypedDict, Annotated, List, Sequence
 from pydantic import BaseModel, Field
 from langchain_core.messages import BaseMessage
 from langgraph.graph.message import add_messages
-from deep_research.workflow_contract import ResearchSource
+from deep_research.workflow_contract import ResearchError, ResearchSource
+from deep_research.research_requirements import ResearchConstraints
 
 # ===== 状态定义 (STATE DEFINITIONS) =====
 
@@ -26,6 +27,11 @@ class ResearcherState(TypedDict):
     researcher_messages: Annotated[Sequence[BaseMessage], add_messages]
     tool_call_iterations: int
     research_topic: str
+    research_brief: str
+    user_requirements: str
+    research_constraints: ResearchConstraints
+    loaded_required_skills: list[str]
+    research_errors: list[ResearchError]
     compressed_research: str
     raw_notes: Annotated[List[str], operator.add]
     sources: list[ResearchSource]
@@ -41,6 +47,7 @@ class ResearcherOutputState(TypedDict):
     raw_notes: Annotated[List[str], operator.add]
     researcher_messages: Annotated[Sequence[BaseMessage], add_messages]
     sources: list[ResearchSource]
+    research_errors: list[ResearchError]
 
 # ===== 结构化输出模式 (STRUCTURED OUTPUT SCHEMAS) =====
 

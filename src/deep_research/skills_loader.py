@@ -133,6 +133,10 @@ def load_skill(skill_name: str) -> str:
     bodies = SKILLS_BODY if selected is None else {name: item["body"] for name, item in selected.items()}
     if skill_name not in bodies:
         available = ", ".join(sorted(bodies)) or "(无)"
+        if selected is not None and not selected:
+            return f"错误：本轮配置已禁用全部 Skills，无法加载 '{skill_name}'。"
+        if selected is not None and skill_name in SKILLS_BODY:
+            return f"错误：skill '{skill_name}' 不在本轮允许集合中。可用 skill：{available}。"
         return (
             f"错误：skill '{skill_name}' 不存在。"
             f"可用 skill：{available}。请从中选择并重试。"

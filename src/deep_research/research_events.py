@@ -20,6 +20,7 @@ from langgraph.config import get_config, get_stream_writer
 
 from deep_research.event_journal import EventIdentity, EventJournal, get_event_journal
 from deep_research.workflow_contract import ResearchSource, merge_sources
+from deep_research.research_requirements import normalized_url
 
 
 EventKind = Literal[
@@ -59,6 +60,8 @@ class ResearchEvent(TypedDict):
     sources: NotRequired[list[ResearchSource]]
     source_count: NotRequired[int]
     output: NotRequired[str]
+    source_audit: NotRequired[list[dict]]
+    source_audit_count: NotRequired[int]
 
 
 @dataclass
@@ -107,6 +110,7 @@ class EventRecorder:
         query: str | None = None,
         sources: list[ResearchSource] | None = None,
         output: str | None = None,
+        source_audit: list[dict] | None = None,
     ) -> None:
         # Serialize append + publish so parallel workers share a stable order.
         with self.lock:
@@ -134,6 +138,7 @@ class EventRecorder:
                     {
                         "title": self.public_text(source["title"], 240),
                         "url": source["url"],
+                        **({"retrieval": source["retrieval"]} if source.get("retrieval") else {}),
                     }
                     for source in merge_sources(sources)
                     if len(source["url"]) <= 2048
@@ -143,6 +148,16 @@ class EventRecorder:
                 event["sources"] = safe[:50]
             if isinstance(output, str):
                 event["output"] = self.public_text(output, 8000)
+            if source_audit is not None:
+                # Raw hit decisions are audit metadata, never adopted evidence.
+                decisions = [{
+                    "url": self.public_text(str(item.get("url", "")), 2048) if normalized_url(item.get("url", "")) else "[invalid URL]",
+                    "decision": item["decision"],
+                    "http_status": item.get("http_status"),
+                    "retrieval": item.get("retrieval", "search"),
+                } for item in source_audit]
+                event["source_audit_count"] = len(decisions)
+                event["source_audit"] = decisions[:50]
             self.events.append(event)
             if self.journal and self.identity:
                 try:

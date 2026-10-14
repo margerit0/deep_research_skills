@@ -267,9 +267,10 @@ export function LiveConversation({ controller }: { controller: WorkspaceControll
                 <LiveReportDraft
                   thread={thread.live!}
                   research={run}
-                  retrying={
-                    live.reportReplayStates[thread.id]?.runId === run.turns.at(-1)?.runId &&
-                    live.reportReplayStates[thread.id]?.state === 'retrying'
+                  replayState={
+                    live.reportReplayStates[thread.id]?.runId === run.turns.at(-1)?.runId
+                      ? live.reportReplayStates[thread.id]?.state
+                      : undefined
                   }
                 />
                 {run.report && (

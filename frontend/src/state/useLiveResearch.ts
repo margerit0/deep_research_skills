@@ -9,7 +9,7 @@ import { streamResearchEvents } from '../api/researchStream'
 import { readEventPage } from '../api/eventReplay'
 import { retryDelay, savedRecovery } from '../data/eventRecovery'
 import { getResearcherNodes, mergeResearchEvents } from '../data/researchEvents'
-import { readReportPage } from '../api/reportReplay'
+import { readReportPage, ReportReplayError, reportReplayDiagnostic } from '../api/reportReplay'
 import { savedReportStream } from '../data/reportEvents'
 import type { ReportReplay } from '../data/reportEvents'
 
@@ -61,6 +61,7 @@ type EventStream = {
   controller?: AbortController
 }
 type ReplayState = { runId: string; state: 'ready' | 'retrying' | 'incomplete' }
+type ReportReplayState = { runId: string; state: ReplayState['state'] | 'pending' }
 type Retry = { failures: number; at: number }
 
 export function useLiveResearch(
@@ -85,7 +86,9 @@ export function useLiveResearch(
   const reportReplays = useRef(new Map<string, AbortController>())
   const reportRetries = useRef(new Map<string, Retry>())
   const capabilities = useRef(new Map<string, BackendConfig>())
-  const [reportReplayStates, setReportReplayStates] = useState<Record<string, ReplayState>>({})
+  const [reportReplayStates, setReportReplayStates] = useState<Record<string, ReportReplayState>>(
+    {},
+  )
 
   function supportsReports(thread: Thread, research: LiveResearch) {
     return (
@@ -98,10 +101,21 @@ export function useLiveResearch(
 
   async function recoverReports(thread: Thread, research: LiveResearch, force: boolean) {
     const turn = research.turns.at(-1)!
+    const saved = savedReportStream(thread.live!, research)
+    // Research SSE cursors do not establish that writing has started.
+    if (!saved?.events.length && !['writing', 'complete'].includes(research.phase)) {
+      if (turn.runId) reportRetries.current.delete(turn.runId)
+      setReportReplayStates((previous) => {
+        if (previous[thread.id]?.runId !== turn.runId) return previous
+        const next = { ...previous }
+        delete next[thread.id]
+        return next
+      })
+      return
+    }
     if (
       !turn.runId ||
       !supportsReports(thread, research) ||
-      (!research.reportStreams?.length && !['writing', 'complete'].includes(research.phase)) ||
       (research.config.report_event_replay_version !== 1 &&
         capabilities.current.get(thread.live!.serverUrl)?.report_event_replay_version !== 1)
     )
@@ -111,10 +125,9 @@ export function useLiveResearch(
     if (!force && retry && retry.at > Date.now()) return
     const controller = new AbortController()
     reportReplays.current.set(thread.id, controller)
-    const saved = savedReportStream(thread.live!, research)
     let after = saved?.sequence ?? 0
     let journalId = saved?.journalId
-    const state = (value: ReplayState['state']) => {
+    const state = (value: ReportReplayState['state']) => {
       if (mounted.current)
         setReportReplayStates((previous) =>
           previous[thread.id]?.runId === turn.runId && previous[thread.id]?.state === value
@@ -122,8 +135,25 @@ export function useLiveResearch(
             : { ...previous, [thread.id]: { runId: turn.runId!, state: value } },
         )
     }
+    let requestId = crypto.randomUUID()
+    let requestedAt = performance.now()
+    const diagnose = (
+      details: Omit<
+        Parameters<typeof reportReplayDiagnostic>[2],
+        'requestId' | 'after' | 'elapsedMs'
+      >,
+    ) =>
+      reportReplayDiagnostic(thread.live!, research, {
+        requestId,
+        after,
+        elapsedMs: Math.round(performance.now() - requestedAt),
+        writingAttemptId: saved?.events.at(-1)?.writing_attempt_id,
+        ...details,
+      })
     try {
       for (let index = 0; index < 4; index++) {
+        requestId = crypto.randomUUID()
+        requestedAt = performance.now()
         const page = await readReportPage(
           thread.live!,
           research,
@@ -141,13 +171,31 @@ export function useLiveResearch(
           latest.turns.at(-1)?.runId !== turn.runId
         )
           return
-        if (page.status === 'missing' && research.status === 'running' && !saved?.journalId) {
+        const pending =
+          page.status === 'missing' &&
+          latest.status === 'running' &&
+          !journalId &&
+          !saved?.events.length
+        const gap = page.gap || (latest.status !== 'running' && !page.sealed)
+        diagnose({
+          outcome: pending ? 'pending' : gap ? 'incomplete' : 'ready',
+          httpStatus: 200,
+          pageStatus: page.status,
+          journalId: page.journal_id,
+          writingAttemptId:
+            page.events.at(-1)?.writing_attempt_id ?? saved?.events.at(-1)?.writing_attempt_id,
+          nextSequence: page.next_sequence,
+          lastSequence: page.last_sequence,
+          eventCount: page.events.length,
+          gap: page.gap,
+          sealed: page.sealed,
+        })
+        if (pending) {
           const failures = (retry?.failures ?? 0) + 1
           reportRetries.current.set(turn.runId, { failures, at: Date.now() + retryDelay(failures) })
-          if (failures > 1) state('retrying')
+          state('pending')
           return
         }
-        const gap = page.gap || (research.status !== 'running' && !page.sealed)
         const action: LiveUpdate = {
           type: 'live-report-events',
           threadId: thread.id,
@@ -171,7 +219,7 @@ export function useLiveResearch(
             ...action,
             replay: { ...action.replay!, sequence: after, journalId, reset: false },
           })
-          throw new Error('Report could not be saved')
+          throw new ReportReplayError('storage', 200)
         }
         after = page.next_sequence
         journalId = page.journal_id ?? undefined
@@ -182,8 +230,14 @@ export function useLiveResearch(
         }
       }
       reportRetries.current.set(turn.runId, { failures: 0, at: Date.now() + 2000 })
-    } catch {
+    } catch (error) {
       if (!mounted.current || controller.signal.aborted) return
+      diagnose({
+        outcome: 'failed',
+        category: error instanceof ReportReplayError ? error.category : 'unknown',
+        httpStatus: error instanceof ReportReplayError ? error.httpStatus : undefined,
+        journalId,
+      })
       const failures = (retry?.failures ?? 0) + 1
       reportRetries.current.set(turn.runId, { failures, at: Date.now() + retryDelay(failures) })
       state('retrying')

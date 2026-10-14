@@ -48,7 +48,14 @@ function start(run: ServerRun, text: string, sequence = 1) {
   ]
 }
 
-async function setup(page: Page) {
+async function setup(page: Page, phase: 'research' | 'writing' = 'writing') {
+  await page.addInitScript(() => {
+    const target = window as typeof window & { reportDiagnostics: unknown[] }
+    target.reportDiagnostics = []
+    window.addEventListener('atlas:report-replay', (event) => {
+      target.reportDiagnostics.push((event as CustomEvent).detail)
+    })
+  })
   const fake = await fakeLangGraph(page)
   Object.assign(fake.config, {
     research_events_version: 1,
@@ -64,9 +71,15 @@ async function setup(page: Page) {
     missing: false,
     gap: false,
     unconfirmedBefore: 0,
+    invalidBody: {} as Record<string, unknown>,
+    networkFailure: false,
+    invalidJson: false,
   }
   const positions: number[] = []
   await page.route(/\/api\/atlas\/threads\/[^/]+\/runs\/[^/]+\/report-events\?/, async (route) => {
+    if (control.networkFailure) return route.abort('failed')
+    if (control.invalidJson)
+      return route.fulfill({ contentType: 'application/json', body: 'PRIVATE INVALID BODY' })
     if (control.unavailable) return route.fulfill({ status: 503 })
     const url = new URL(route.request().url())
     const run = fake.runs.find((item) => url.pathname.includes(item.run_id))!
@@ -99,6 +112,7 @@ async function setup(page: Page) {
         gap: control.gap || control.missing,
         reset,
         unconfirmed_before_sequence: control.unconfirmedBefore,
+        ...control.invalidBody,
       },
     })
   })
@@ -124,7 +138,7 @@ async function setup(page: Page) {
   const run = fake.runs[0]
   fake.change(
     {
-      research_phase: 'writing',
+      research_phase: phase,
       notes: ['保留的真实接口测试笔记'],
       sources: [{ title: '测试来源', url: 'https://example.com/a' }],
     },
@@ -132,6 +146,171 @@ async function setup(page: Page) {
   )
   return { fake, run, control, positions }
 }
+
+const diagnostics = (page: Page) =>
+  page.evaluate(
+    () =>
+      (
+        window as typeof window & {
+          reportDiagnostics: {
+            outcome: string
+            category?: string
+            httpStatus?: number
+            pageStatus?: string
+          }[]
+        }
+      ).reportDiagnostics,
+  )
+
+test('report: an expired request deadline is classified without exposing an error payload', async ({
+  page,
+}) => {
+  await setup(page)
+  const category = await page.evaluate(async () => {
+    const modulePath = '/src/api/reportReplay.ts'
+    const { readReportPage } = await import(modulePath)
+    const data = JSON.parse(localStorage.getItem('atlas-workspace:v1')!)
+    const live = data.threads.find(
+      (thread: { id: string }) => thread.id === data.activeThreadId,
+    ).live
+    const original = AbortSignal.timeout
+    AbortSignal.timeout = () =>
+      AbortSignal.abort(new DOMException('PRIVATE timeout detail', 'TimeoutError'))
+    try {
+      await readReportPage(live, live.researches.at(-1), 0, undefined, new AbortController().signal)
+      return 'unexpected success'
+    } catch (error) {
+      return (error as { category: string }).category
+    } finally {
+      AbortSignal.timeout = original
+    }
+  })
+  expect(category).toBe('timeout')
+})
+
+test('report: a research-only SSE cursor never polls a not-yet-started writing journal', async ({
+  page,
+}) => {
+  const { run, fake, control, positions } = await setup(page, 'research')
+  const researchEvent = {
+    version: 1,
+    id: crypto.randomUUID(),
+    research_id: run.metadata.atlas_research_id,
+    turn_id: run.metadata.atlas_turn_id,
+    sequence: 1,
+    at: '2026-10-15T00:00:00Z',
+    task_id: crypto.randomUUID(),
+    round: 1,
+    kind: 'delegated',
+    elapsed_ms: 0,
+    topic: '实际研究事件替身',
+  }
+  control.missing = true
+  await page.route(/\/api\/threads\/[^/]+\/runs\/[^/]+\/stream\?/, (route) =>
+    route.fulfill({
+      contentType: 'text/event-stream',
+      body: `id: 1-0\nevent: custom\ndata: ${JSON.stringify({ type: 'atlas.research_event', event: researchEvent })}\n\n`,
+    }),
+  )
+  await refresh(page)
+  await page.evaluate(() => window.dispatchEvent(new Event('focus')))
+  await expect.poll(async () => (await saved(page)).reportStreams?.[0]?.cursor).toBe('1-0')
+  expect((await saved(page)).reportStreams?.[0]?.events).toEqual([])
+  for (let index = 0; index < 3; index++) await refresh(page)
+  expect(positions).toEqual([])
+  await expect(page.getByTestId('report-recovery-note')).toHaveCount(0)
+  control.missing = false
+  control.events = start(run, '实际进入写作后立即回读')
+  fake.change({ research_phase: 'writing' }, 'running')
+  await refresh(page)
+  await expect(draft(page)).toContainText('实际进入写作后立即回读')
+  expect(positions).toContain(0)
+  expect(fake.runs).toHaveLength(1)
+  expect(fake.submissions).toHaveLength(1)
+})
+
+test('report: repeated missing journal before writing is pending and clears on readiness', async ({
+  page,
+}) => {
+  const { fake, run, control } = await setup(page)
+  control.missing = true
+  for (let index = 0; index < 3; index++) {
+    await refresh(page)
+    await expect(page.getByTestId('report-recovery-note')).toContainText('尚未就绪')
+  }
+  await expect(page.getByTestId('report-recovery-note')).not.toContainText('暂时无法回读')
+  expect(
+    (await diagnostics(page))
+      .filter((entry) => entry.pageStatus === 'missing')
+      .every((entry) => entry.outcome === 'pending'),
+  ).toBe(true)
+  control.missing = false
+  control.events = start(run, '日志创建后的连续正文')
+  await refresh(page)
+  await expect(draft(page)).toContainText('日志创建后的连续正文')
+  await expect(page.getByTestId('report-recovery-note')).toHaveCount(0)
+  await page.reload()
+  await expect(draft(page)).toContainText('日志创建后的连续正文')
+  expect(fake.runs).toHaveLength(1)
+  expect(fake.submissions).toHaveLength(1)
+})
+
+for (const category of [
+  'http',
+  'json',
+  'schema',
+  'ownership',
+  'cursor',
+  'sequence',
+  'network',
+] as const) {
+  test(`report: ${category} diagnostics are safe, retain draft and clear after recovery`, async ({
+    page,
+  }) => {
+    const { fake, run, control } = await setup(page)
+    control.events = start(run, '故障前草稿必须保留')
+    await refresh(page)
+    await expect(draft(page)).toContainText('故障前草稿必须保留')
+    if (category === 'http') control.unavailable = true
+    if (category === 'json') control.invalidJson = true
+    if (category === 'network') control.networkFailure = true
+    if (category === 'schema') control.invalidBody = { version: 99, detail: 'PRIVATE BODY' }
+    if (category === 'ownership')
+      control.invalidBody = { thread_id: 'other-thread', detail: 'PRIVATE BODY' }
+    if (category === 'cursor') control.invalidBody = { next_sequence: 4, last_sequence: 2 }
+    if (category === 'sequence') control.invalidBody = { events: [control.events[1]] }
+    await refresh(page)
+    await expect(page.getByTestId('report-recovery-note')).toContainText('暂时无法回读')
+    await expect(draft(page)).toContainText('故障前草稿必须保留')
+    await expect
+      .poll(async () => (await diagnostics(page)).some((entry) => entry.category === category))
+      .toBe(true)
+    const log = await diagnostics(page)
+    expect(JSON.stringify(log)).not.toMatch(/PRIVATE|故障前草稿|serverUrl|https?:\/\//)
+    if (category === 'http')
+      expect(log.find((entry) => entry.category === 'http')?.httpStatus).toBe(503)
+    expect((await saved(page)).reportStreams?.[0].sequence).toBe(2)
+    control.unavailable = control.invalidJson = control.networkFailure = false
+    control.invalidBody = {}
+    await refresh(page)
+    await expect(page.getByTestId('report-recovery-note')).toHaveCount(0)
+    await expect(draft(page)).toContainText('故障前草稿必须保留')
+    expect(fake.submissions).toHaveLength(1)
+    expect(fake.runs).toHaveLength(1)
+  })
+}
+
+test('report: known journal disappearing is a gap, not initial readiness', async ({ page }) => {
+  const { run, control } = await setup(page)
+  control.events = start(run, '已读正文')
+  await refresh(page)
+  await expect(draft(page)).toContainText('已读正文')
+  control.missing = true
+  await refresh(page)
+  await expect(page.getByTestId('report-recovery-note')).toContainText('部分写作记录无法确认')
+  expect((await diagnostics(page)).at(-1)?.outcome).toBe('incomplete')
+  await expect(draft(page)).toContainText('已读正文')
+})
 
 test('report: paragraph is visible before completion; only owned checkpoint confirms report', async ({
   page,
@@ -333,6 +512,9 @@ test('report: durable save failure keeps draft in memory without advancing repla
   control.events = start(run, '内存中仍能看到')
   await refresh(page)
   await expect(draft(page)).toContainText('内存中仍能看到')
+  await expect
+    .poll(async () => (await diagnostics(page)).some((entry) => entry.category === 'storage'))
+    .toBe(true)
   await refresh(page)
   await expect.poll(() => positions.filter((position) => position === 0).length).toBeGreaterThan(1)
   expect((await saved(page)).reportStreams?.some((stream) => stream.sequence > 0) ?? false).toBe(

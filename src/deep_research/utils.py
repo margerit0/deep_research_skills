@@ -6,6 +6,7 @@
 """
 
 import os
+import logging
 import sys
 import time
 from contextvars import copy_context
@@ -30,6 +31,8 @@ from deep_research.structured_output_fallback import (
 )
 from deep_research.state_research import Summary
 from deep_research.prompts import summarize_webpage_prompt
+from deep_research.research_requirements import filter_search_results, has_source_restriction, retrieve_specified_sources
+from deep_research.workflow_contract import log_node_failure
 
 # ===== 工具函数 (UTILITY FUNCTIONS) =====
 
@@ -162,7 +165,23 @@ def summarize_webpage_content(webpage_content: str) -> str:
             summary = invoke_with_structured_output_fallback(selected, Summary, prompt, base_url=base_url, api_key=api_key)
         else:
             structured_model = selected.with_structured_output(Summary, method="function_calling")
-            summary = structured_model.invoke([HumanMessage(content=prompt)])
+            messages = [HumanMessage(content=prompt)]
+            if callable(getattr(structured_model, "stream", None)):
+                # Consume structured chunks locally. This avoids waiting for the
+                # complete summary before the gateway can send response headers.
+                summary = None
+                chunks = structured_model.stream(messages)
+                try:
+                    for value in chunks:
+                        if value is not None:
+                            summary = value
+                finally:
+                    if callable(getattr(chunks, "close", None)):
+                        chunks.close()
+                if summary is None:
+                    raise ValueError("Empty webpage summary stream")
+            else:
+                summary = structured_model.invoke(messages)
 
         # 以清晰的结构格式化摘要
         formatted_summary = (
@@ -173,8 +192,14 @@ def summarize_webpage_content(webpage_content: str) -> str:
         return formatted_summary
 
     except Exception as e:
-        print(f"Failed to summarize webpage: {str(e)}")
-        return webpage_content[:1000] + "..." if len(webpage_content) > 1000 else webpage_content
+        log_node_failure(logging.getLogger(__name__), "summarize_webpage_content", e)
+        # A provider outage must not silently erase a short source's conditions
+        # and limitations (often near its end). Keep bounded actual evidence.
+        limit = 24000
+        notice = "网页摘要调用失败，以下为实际来源原文。"
+        if len(webpage_content) > limit:
+            notice += "原文超过长度上限，以下仅为前段；未覆盖部分不能据此推断。"
+        return notice + "\n" + webpage_content[:limit]
 
 def deduplicate_search_results(search_results: List[dict]) -> dict:
     """按 URL 对搜索结果去重，避免重复处理相同内容。
@@ -210,7 +235,8 @@ def process_search_results(unique_results: dict) -> dict:
             content = result["content"]
         else:
             content = summarize_webpage_content(result["raw_content"])
-        return url, {"title": result["title"], "content": content}
+        return url, {"title": result["title"], "content": content,
+                     **({"retrieval": result["retrieval"]} if result.get("retrieval") else {})}
 
     items = list(unique_results.items())
     if not items:
@@ -241,7 +267,10 @@ def format_search_output(summarized_results: dict) -> str:
 
     for i, (url, result) in enumerate(summarized_results.items(), 1):
         formatted_output += f"\n\n--- SOURCE {i}: {result['title']} ---\n"
-        formatted_output += f"URL: {url}\n\n"
+        formatted_output += f"URL: {url}\n"
+        if result.get("retrieval") == "specified_url":
+            formatted_output += "RETRIEVAL: specified_url\n"
+        formatted_output += "\n"
         formatted_output += f"SUMMARY:\n{result['content']}\n\n"
         formatted_output += "-" * 80 + "\n"
 
@@ -274,10 +303,17 @@ def tavily_search(
     )
 
     # 按 URL 对结果去重，避免重复处理相同内容
-    unique_results = deduplicate_search_results(search_results)
+    unique_results = deduplicate_search_results(filter_search_results(search_results))
+    if has_source_restriction():
+        unique_results.update(deduplicate_search_results(retrieve_specified_sources(
+            max_results - len(unique_results), excluded_urls=unique_results,
+        )))
 
     # 对结果进行摘要处理
     summarized_results = process_search_results(unique_results)
+    if not summarized_results and has_source_restriction():
+        return ("No valid search results found within the user's allowed sources. "
+                "证据不足；只能在允许范围内调整查询，不得补入其他来源或自行构造链接。")
 
     # 格式化输出以供消费使用
     return format_search_output(summarized_results)

@@ -14,6 +14,7 @@ from langgraph.graph.message import add_messages
 from pydantic import BaseModel, Field
 from deep_research.workflow_contract import ResearchError, ResearchPhase, ResearchSource, ResearchStatus
 from deep_research.research_events import ResearchEvent
+from deep_research.research_requirements import ResearchConstraints
 
 # ===== 状态定义 (STATE DEFINITIONS) =====
 
@@ -33,6 +34,8 @@ class AgentState(MessagesState):
 
     # 基于用户历史对话上下文生成的最终研究简报 (Research brief)
     research_brief: Optional[str]
+    user_requirements: str
+    research_constraints: ResearchConstraints
     # 与监督者 (Supervisor) 智能体交互以进行任务协调的对话消息记录
     supervisor_messages: Annotated[Sequence[BaseMessage], add_messages]
     # 在研究阶段收集的、未经处理的原始研究笔记

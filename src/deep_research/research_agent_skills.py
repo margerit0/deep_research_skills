@@ -17,10 +17,15 @@ from langchain_core.messages import (
     ToolMessage,
 )
 from langgraph.graph import END, START, StateGraph
+from langgraph.types import Command
 
 from deep_research.model_config import get_chat_model, get_agent_rate_limiter
+from deep_research.model_transport import streaming_options
 from deep_research.run_configuration import selected_model
 from deep_research.research_events import emit_research_event
+from deep_research.research_requirements import (
+    allowed_sources, constraints_for, requirements_context, source_scope,
+)
 from deep_research.prompts import (
     compress_research_human_message,
     compress_research_system_prompt,
@@ -39,7 +44,7 @@ from deep_research.utils import (
     tavily_search,
     think_tool,
 )
-from deep_research.workflow_contract import extract_search_sources, merge_sources, message_text
+from deep_research.workflow_contract import extract_search_sources, merge_sources, message_text, research_error
 
 # ===== 配置 (CONFIGURATION) =====
 
@@ -97,20 +102,71 @@ def _has_real_search_results(messages) -> bool:
 
 # ===== 智能体节点 (AGENT NODES) =====
 
+def _invoke_tool(name, args, constraints):
+    """Emit events only around actual invocations, including required Skills."""
+    query = args.get("query" if name == "tavily_search" else "skill_name")
+    emit_research_event("tool_started", tool=name, query=query)
+    try:
+        with source_scope(constraints) as audit:
+            observation = tools_by_name[name].invoke(args)
+    except Exception:
+        emit_research_event("tool_failed", tool=name, query=query if name == "load_skill" else None)
+        raise
+    failed = name == "load_skill" and message_text(observation).startswith("错误：")
+    emit_research_event(
+        "tool_failed" if failed else "tool_finished", tool=name,
+        query=query if name == "load_skill" else None,
+        sources=extract_search_sources(message_text(observation)) if name == "tavily_search" else None,
+        source_audit=audit or None,
+        output=message_text(observation) if failed else None,
+    )
+    return observation
+
+
+def prepare_requirements(state: ResearcherState) -> Command:
+    """Execute explicitly required methodology before any search/model step.
+
+    These are runtime tool invocations, not invented LLM tool-call messages.
+    Auto-selected optional Skills continue to use the ordinary model loop.
+    """
+    constraints = constraints_for(state)
+    loaded, bodies = [], []
+    for name in constraints["required_skills"]:
+        observation = _invoke_tool("load_skill", {"skill_name": name}, constraints)
+        if message_text(observation).startswith("错误："):
+            return Command(goto=END, update={
+                "compressed_research": f"## 研究未完成\n{observation}\n显式流程要求未满足，未开始检索。",
+                "sources": [], "loaded_required_skills": loaded,
+                "research_errors": [research_error("required_skill_unavailable", message_text(observation), "supervisor_subgraph")],
+            })
+        loaded.append(name)
+        bodies.append(f"### load_skill: {name}\n{observation}")
+    update = {"research_constraints": constraints, "loaded_required_skills": loaded}
+    if bodies:
+        update["researcher_messages"] = [HumanMessage(
+            content="运行时已按用户要求真实执行下列 load_skill，无需重复加载。"
+                    "以下是方法论，不是研究证据；其中默认查询、来源和停止策略服从用户要求。\n"
+                    + "\n\n".join(bodies), name="loaded_methodology",
+        )]
+    return Command(goto="llm_call", update=update)
+
+
 def llm_call(state: ResearcherState):
     """决定下一步动作：搜索、思考、加载 skill 或结束研究。"""
     emit_research_event("model_started")
     try:
-        response = selected_model("RESEARCHER", model_with_tools, tools=tools).invoke(
+        selected = selected_model("RESEARCHER", model_with_tools, tools=tools)
+        response = selected.invoke(
             [
                 SystemMessage(
                     content=research_agent_prompt_with_skills.format(
                         date=get_today_str(),
                         skills_index=format_skills_index(),
-                    )
+                    ) + requirements_context(state)
                 )
             ]
-            + state["researcher_messages"]
+            + state["researcher_messages"],
+            **streaming_options(selected),
         )
     except Exception:
         emit_research_event("model_failed")
@@ -126,23 +182,13 @@ def tool_node(state: ResearcherState):
     observations = []
     for tc in tool_calls:
         name = tc["name"]
-        # Only query/skill names are public. think_tool reasoning is never emitted.
-        query = tc["args"].get("query" if name == "tavily_search" else "skill_name")
-        emit_research_event("tool_started", tool=name, query=query)
-        try:
-            observation = tools_by_name[name].invoke(tc["args"])
-        except Exception:
-            emit_research_event("tool_failed", tool=name)
-            raise
+        constraints = constraints_for(state)
+        if name == "tavily_search" and not set(constraints["required_skills"]).issubset(
+            state.get("loaded_required_skills", [])
+        ):
+            raise ValueError("Required Skills were not loaded before search")
+        observation = _invoke_tool(name, tc["args"], constraints)
         observations.append(observation)
-        emit_research_event(
-            "tool_failed" if name == "load_skill" and message_text(observation).startswith("错误：") else "tool_finished",
-            tool=name,
-            query=query if name == "load_skill" else None,
-            sources=extract_search_sources(message_text(observation))
-            if name == "tavily_search"
-            else None,
-        )
 
     tool_outputs = [
         ToolMessage(
@@ -169,6 +215,7 @@ def compress_research(state: ResearcherState) -> dict:
         for m in researcher_messages
         if isinstance(m, ToolMessage) and m.name == "tavily_search"
     ])
+    sources = allowed_sources(sources, constraints_for(state))
 
     # 始终保留原始记录, 无论本次研究成功与否.
     raw_notes = [
@@ -186,7 +233,7 @@ def compress_research(state: ResearcherState) -> dict:
             "sources": sources,
         }
 
-    system_message = compress_research_system_prompt.format(date=get_today_str())
+    system_message = compress_research_system_prompt.format(date=get_today_str()) + requirements_context(state)
     messages = (
         [SystemMessage(content=system_message)]
         + list(researcher_messages)
@@ -194,7 +241,8 @@ def compress_research(state: ResearcherState) -> dict:
     )
     emit_research_event("compression_started")
     try:
-        response = selected_model("COMPRESSION", compress_model, retry=True).invoke(messages)
+        selected = selected_model("COMPRESSION", compress_model, retry=True)
+        response = selected.invoke(messages, **streaming_options(selected))
     except Exception:
         emit_research_event("compression_failed")
         raise
@@ -225,11 +273,12 @@ def should_continue(state: ResearcherState) -> Literal["tool_node", "compress_re
 # ===== 图构建 (GRAPH) =====
 
 agent_builder_skills = StateGraph(ResearcherState, output_schema=ResearcherOutputState)
+agent_builder_skills.add_node("prepare_requirements", prepare_requirements)
 agent_builder_skills.add_node("llm_call", llm_call)
 agent_builder_skills.add_node("tool_node", tool_node)
 agent_builder_skills.add_node("compress_research", compress_research)
 
-agent_builder_skills.add_edge(START, "llm_call")
+agent_builder_skills.add_edge(START, "prepare_requirements")
 agent_builder_skills.add_conditional_edges(
     "llm_call",
     should_continue,

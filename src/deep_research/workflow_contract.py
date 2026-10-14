@@ -2,7 +2,7 @@
 
 import os
 import re
-from typing import Literal, TypedDict
+from typing import Literal, NotRequired, TypedDict
 from urllib.parse import urlsplit
 
 
@@ -11,10 +11,11 @@ ResearchPhase = Literal["clarify", "brief", "research", "writing", "complete"]
 
 
 class ResearchSource(TypedDict):
-    """A source actually returned by the search tool (not an LLM citation)."""
+    """Actually retrieved evidence; explicit-page HTTP reads carry provenance."""
 
     title: str
     url: str
+    retrieval: NotRequired[Literal["specified_url"]]
 
 
 class ResearchError(TypedDict):
@@ -58,7 +59,8 @@ def merge_sources(*groups: list[ResearchSource]) -> list[ResearchSource]:
                 valid = False
             if valid:
                 result.setdefault(
-                    url, {"url": url, "title": source.get("title") or url}
+                    url, {"url": url, "title": source.get("title") or url,
+                          **({"retrieval": "specified_url"} if source.get("retrieval") == "specified_url" else {})}
                 )
     return list(result.values())
 
@@ -66,11 +68,13 @@ def merge_sources(*groups: list[ResearchSource]) -> list[ResearchSource]:
 def extract_search_sources(content: str) -> list[ResearchSource]:
     """Parse the SOURCE/URL records emitted by utils.format_search_output."""
     matches = re.findall(
-        r"^--- SOURCE \d+: (.*?) ---\r?\nURL: (https?://[^\s]+)",
+        r"^--- SOURCE \d+: (.*?) ---\r?\nURL: (https?://[^\s]+)(?:\r?\nRETRIEVAL: (specified_url))?",
         content,
         flags=re.MULTILINE,
     )
-    return merge_sources([{"title": title, "url": url} for title, url in matches])
+    return merge_sources([{"title": title, "url": url,
+                           **({"retrieval": retrieval} if retrieval else {})}
+                          for title, url, retrieval in matches])
 
 
 def research_error(code: str, message: str, node: str) -> ResearchError:

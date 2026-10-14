@@ -299,6 +299,60 @@ def test_thinking_and_failed_notes_are_not_research_evidence():
     assert supervisor.get_notes_from_tool_calls(messages) == ["Valid finding"]
 
 
+def test_original_requirements_survive_brief_and_delegation_omissions(harness):
+    h = harness
+    original = (
+        "先调用 load_skill，skill_name=product-comparison。"
+        "仅使用 https://example.com/research。请用简单关键词查询，约 500 字。"
+    )
+    seen = []
+
+    def research(messages):
+        seen.append(messages)
+        if any(isinstance(m, ToolMessage) and m.name == "tavily_search" for m in messages):
+            return AIMessage(content="Ready to compress")
+        return AIMessage(content="", tool_calls=[{
+            "id": "search", "name": "tavily_search", "args": {"query": "simple keywords"},
+        }])
+
+    search = SimpleNamespace(invoke=lambda args: format_search_output({
+        SOURCE["url"]: {"title": SOURCE["title"], "content": "Conditional evidence"},
+    }))
+    with (
+        patch.object(supervisor, "researcher_agent", worker.researcher_agent_skills),
+        patch.object(worker, "model_with_tools", SimpleNamespace(invoke=research)),
+        patch.object(worker, "compress_model", SimpleNamespace(invoke=lambda _: AIMessage(content="Conditional finding [1]"))),
+        patch.dict(worker.tools_by_name, {"tavily_search": search}),
+    ):
+        result = invoke(h.graph.ainvoke(request(original, "r-constraints", "t-constraints"), h.config))
+    assert result["research_status"] == "succeeded"
+    assert result["research_brief"] == "Current brief"  # model omitted every requirement
+    assert result["user_requirements"] == original
+    assert result["research_constraints"] == {
+        "required_skills": ["product-comparison"],
+        "allowed_source_urls": [SOURCE["url"]],
+    }
+    assert original in seen[0][0].content and "Current brief" in seen[0][0].content
+    assert seen[0][1].content == "Current topic"  # scope remains distinct
+    assert any(m.name == "loaded_methodology" and "产品对比方法论" in m.content for m in seen[0])
+    events = result["research_events"]
+    loaded = next(e for e in events if e["kind"] == "tool_finished" and e.get("tool") == "load_skill")
+    searched = next(e for e in events if e["kind"] == "tool_started" and e.get("tool") == "tavily_search")
+    assert loaded["query"] == "product-comparison"
+    assert loaded["sequence"] < searched["sequence"]
+    assert "产品对比方法论" not in str(result["raw_notes"])
+    assert original in h.writer.call_args.args[0][0].content
+
+
+def test_writer_cannot_publish_a_url_not_returned_by_search(harness):
+    harness.writer.return_value = AIMessage(content="Unsupported fact [1].\n[1] https://example.com/other-version")
+    result = invoke(harness.graph.ainvoke(request("Question", "r-citation", "t-citation"), harness.config))
+    assert result["research_status"] == "partial"
+    assert result["final_report"] == ""
+    assert result["sources"] == [SOURCE]
+    assert result["notes"]
+
+
 def test_sources_are_deduplicated_from_search_records_and_urls_are_safe():
     output = "--- SOURCE 1: A ---\nURL: https://example.com/a\n\nSUMMARY: text"
     source = {"title": "A", "url": "https://example.com/a"}

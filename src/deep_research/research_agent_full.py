@@ -24,6 +24,10 @@ from deep_research.submission_journal import guard_execution
 from deep_research.submission_journal import accepted_configuration
 from deep_research.run_configuration import configured_node, selected_model
 from deep_research.report_streaming import stream_final_report
+from deep_research.research_requirements import (
+    allowed_sources, constraints_for, report_citations_within_sources,
+    requirements_context, resolve_constraints,
+)
 from deep_research.utils import get_today_str
 from deep_research.workflow_contract import (
     is_research_note,
@@ -88,6 +92,8 @@ def prepare_research(state: AgentState) -> Command:
         "research_phase": "clarify",
         "effective_config": accepted_configuration() or (state.get("effective_config") if same_research else None) or public_model_config(include_catalog=False),
         "research_brief": "",
+        "user_requirements": "",
+        "research_constraints": {"required_skills": [], "allowed_source_urls": None},
         "final_report": "",
         "report_research_id": "",
         "notes": Overwrite([]),
@@ -149,8 +155,14 @@ def write_research_brief(state: AgentState) -> Command:
         result = scope_brief(state)
         if not result["research_brief"].strip():
             raise ValueError("Empty research brief")
+        originals = [message_text(m.content) for m in state.get("messages", [])
+                     if isinstance(m, HumanMessage)]
         return Command(
-            goto="supervisor_subgraph", update={**result, "research_phase": "research"}
+            goto="supervisor_subgraph", update={
+                **result, "research_phase": "research",
+                "user_requirements": "\n\n".join(originals),
+                "research_constraints": resolve_constraints(originals),
+            }
         )
     except Exception as exc:
         log_node_failure(logger, "write_research_brief", exc)
@@ -177,6 +189,8 @@ async def supervisor_subgraph(state: AgentState) -> Command:
                 {
                     "supervisor_messages": state["supervisor_messages"],
                     "research_brief": state["research_brief"],
+                    "user_requirements": state.get("user_requirements", ""),
+                    "research_constraints": constraints_for(state),
                     "notes": [],
                     "raw_notes": [],
                     "sources": [],
@@ -206,7 +220,7 @@ async def supervisor_subgraph(state: AgentState) -> Command:
         "raw_notes": Overwrite(result.get("raw_notes", [])),
         "supervisor_messages": Overwrite(result.get("supervisor_messages", [])),
         "research_iterations": result.get("research_iterations", 0),
-        "sources": result.get("sources", []),
+        "sources": allowed_sources(result.get("sources", []), constraints_for(state)),
         "research_errors": result.get("research_errors", []),
         "supervisor_status": result.get("supervisor_status", "failed"),
     }
@@ -254,10 +268,19 @@ async def final_report_generation(state: AgentState):
             findings="\n".join(notes),
             date=get_today_str(),
         )
+        prompt += requirements_context(state)
+        prompt += (
+            "\n<Accepted sources>\n只有下列实际采用的来源可被引用；不得从记忆补链接、"
+            "替换版本路径或把来源中链接的其他页面当作已读证据。\n"
+            + "\n".join(source["url"] for source in state.get("sources", []))
+            + "\n</Accepted sources>"
+        )
         report, report_identity = await stream_final_report(
             selected_model("FINAL_REPORT", writer_model),
             [HumanMessage(content=prompt)], state,
         )
+        if not report_citations_within_sources(report, state.get("sources", [])):
+            raise ValueError("Report cites a source that was not consumed")
     except Exception as exc:
         log_node_failure(logger, "final_report_generation", exc)
         return {

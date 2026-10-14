@@ -26,7 +26,9 @@ from langgraph.graph import StateGraph, START, END
 from langgraph.types import Command
 
 from deep_research.model_config import get_chat_model
+from deep_research.model_transport import streaming_options
 from deep_research.run_configuration import selected_model
+from deep_research.research_requirements import allowed_sources, constraints_for, requirements_context
 from deep_research.prompts import lead_researcher_prompt
 from deep_research.research_events import emit_research_event, researcher_task
 from deep_research.research_agent_skills import researcher_agent_skills as researcher_agent
@@ -113,10 +115,12 @@ async def supervisor(state: SupervisorState) -> Command[Literal["supervisor_tool
         max_researcher_iterations=max_researcher_iterations
     )
     messages = [SystemMessage(content=system_message)] + supervisor_messages
+    messages[0].content += requirements_context(state)
 
     # 对下一步研究行动做出决策
     try:
-        response = await selected_model("SUPERVISOR", supervisor_model_with_tools, tools=supervisor_tool_definitions).ainvoke(messages)
+        selected = selected_model("SUPERVISOR", supervisor_model_with_tools, tools=supervisor_tool_definitions)
+        response = await selected.ainvoke(messages, **streaming_options(selected))
     except Exception as exc:
         log_node_failure(logger, "supervisor", exc)
         errors = [*state.get("research_errors", []), research_error(
@@ -167,7 +171,10 @@ async def supervisor_tools(state: SupervisorState) -> Command[Literal["superviso
             with researcher_task(call["id"], topic, state.get("research_iterations", 1)):
                 try:
                     result = await researcher_agent.ainvoke({
-                        "researcher_messages": [HumanMessage(content=topic)], "research_topic": topic
+                        "researcher_messages": [HumanMessage(content=topic)], "research_topic": topic,
+                        "research_brief": state.get("research_brief", ""),
+                        "user_requirements": state.get("user_requirements", ""),
+                        "research_constraints": constraints_for(state),
                     })
                 except Exception:
                     emit_research_event("failed")
@@ -187,7 +194,8 @@ async def supervisor_tools(state: SupervisorState) -> Command[Literal["superviso
             content = message_text(result.get("compressed_research")) if isinstance(result, dict) else ""
             if isinstance(result, dict):
                 all_raw_notes.extend(result.get("raw_notes", []))
-                sources = merge_sources(sources, result.get("sources", []))
+                errors.extend(result.get("research_errors", []))
+                sources = merge_sources(sources, allowed_sources(result.get("sources", []), constraints_for(state)))
             if not is_research_note(content):
                 if isinstance(result, Exception):
                     log_node_failure(logger, "researcher", result)

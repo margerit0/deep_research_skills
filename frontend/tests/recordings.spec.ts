@@ -124,8 +124,9 @@ for (const record of records.filter((item) => item.id.startsWith('kimi'))) {
       )
       await page.getByRole('button', { name: '全流程演示', exact: true }).click()
       await page.getByLabel('演示数据来源').selectOption(record.id)
-      await page.getByRole('button', { name: '跳转：记录结束状态', exact: true }).click()
+      // Freeze the timeline before checking a chapter's scroll position.
       await page.getByRole('button', { name: '暂停演示' }).click()
+      await page.getByRole('button', { name: '跳转：记录结束状态', exact: true }).click()
       await expect(page.getByTestId('recorded-status')).toBeInViewport({ ratio: 0.9 })
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
         true,

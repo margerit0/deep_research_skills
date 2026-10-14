@@ -17,6 +17,8 @@
 
 持久回放为 `GET /atlas/threads/{thread_id}/runs/{run_id}/report-events`，参数、分页位置、`missing/expired/gap/reset/sealed/unconfirmed_before_sequence` 沿用下方研究日志协议，但事件类型独立。使用单独的 `atlas-report-events.sqlite3`，默认与研究日志同目录，可设 `ATLAS_REPORT_EVENT_DB`；保留期沿用 `ATLAS_EVENT_RETENTION_DAYS`。写入先提交后发布，读取不启动运行。恢复写作使用新 run 的正文日志，原 `event_run_id` 仍指向检索记录。
 
+研究 SSE 的游标可以创建空写作流，但它不证明写作已开始。客户端仅在当前写作流有实际事件或阶段为 `writing` / `complete` 时回读写作日志，分别处理未就绪、暂时失败和真实缺口。可监听 `atlas:report-replay` 获取安全诊断：身份、研究阶段、时间、HTTP 状态、游标和错误类别，不含正文、响应 payload、服务地址、凭据或推理。
+
 浏览器按后端 / thread / research / turn / run / attempt 保存事件和回放位置，去重且只应用连续、offset 匹配的正文。失败草稿独立保留；日志替换建立新的活动记录。存储失败不推进持久化位置，旧进程缺少终态时停止显示为仍在写作。最终结果增加 `report_run_id`、`report_turn_id`、`report_attempt_id`、`report_writing_attempt_id`，匹配后以终态检查点完整正文校准；原生 success、SSE 结束和日志 sealed 都不是业务成功。
 
 原生 `submission-api.spec.ts` 的 `report native` 用例在实际流式替身的首块之后停止服务，验证即时落盘、重启回放、浏览器恢复、固定配置、原检索事件 run、搜索 / 压缩不重跑，以及重复恢复零新增调用。沿用下方 1B 启动命令，可用 `--grep 'report native'` 单独运行。实现细节与真实 Kimi 验收边界见 [实施说明](report-streaming-plan.md) 和 [验收记录](verification.md)。
@@ -123,19 +125,19 @@
 
 ## 图状态
 
-| 字段                                   | 说明                                                           |
-| -------------------------------------- | -------------------------------------------------------------- |
-| `active_research_id`, `active_turn_id` | 当前检查点已接受并开始处理的研究 / 提交标识                    |
-| `research_status`                      | `running`、`awaiting_input`、`succeeded`、`failed`、`partial`  |
-| `research_phase`                       | `clarify`、`brief`、`research`、`writing`、`complete`          |
-| `effective_config`                     | 本次执行的实际模型及自动 Skills 配置快照                       |
-| `messages`                             | 本轮对话；最终报告是命名为 `final_report` 的 AIMessage         |
-| `research_brief`                       | 实际生成的研究简报                                             |
-| `notes`, `raw_notes`                   | 有效研究笔记与原始材料；原始材料不进入前端本地存储             |
-| `sources`                              | `{title, url}[]`，从 `tavily_search` 工具输出提取并按 URL 去重 |
-| `supervisor_status`, `research_errors` | 研究子图完成情况与安全错误摘要 `{code, message, node}`         |
-| `final_report`, `report_research_id`   | 报告正文及归属研究                                             |
-| `research_events`                      | 本次提交的安全研究员事件；研究子流程返回时写入父图检查点       |
+| 字段                                   | 说明                                                                                                                 |
+| -------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| `active_research_id`, `active_turn_id` | 当前检查点已接受并开始处理的研究 / 提交标识                                                                          |
+| `research_status`                      | `running`、`awaiting_input`、`succeeded`、`failed`、`partial`                                                        |
+| `research_phase`                       | `clarify`、`brief`、`research`、`writing`、`complete`                                                                |
+| `effective_config`                     | 本次执行的实际模型及自动 Skills 配置快照                                                                             |
+| `messages`                             | 本轮对话；最终报告是命名为 `final_report` 的 AIMessage                                                               |
+| `research_brief`                       | 实际生成的研究简报                                                                                                   |
+| `notes`, `raw_notes`                   | 有效研究笔记与原始材料；原始材料不进入前端本地存储                                                                   |
+| `sources`                              | `{title, url, retrieval?}[]`，从实际工具证据提取并按 URL 去重；直接读取明确指定页面时 `retrieval` 为 `specified_url` |
+| `supervisor_status`, `research_errors` | 研究子图完成情况与安全错误摘要 `{code, message, node}`                                                               |
+| `final_report`, `report_research_id`   | 报告正文及归属研究                                                                                                   |
+| `research_events`                      | 本次提交的安全研究员事件；研究子流程返回时写入父图检查点                                                             |
 
 前端先核对 run 的 thread ID 和 metadata，再核对检查点的 active research / turn。LangGraph run 的 `pending/running` 表示执行中；`success` 仍要检查业务状态。原生 `error/timeout/interrupted` 优先于检查点中的旧状态，显示失败或带已有笔记的部分完成。
 
@@ -178,6 +180,7 @@
 - `task_id` 由研究、提交、本次子流程调用、协调轮次与工具调用标识生成。每次实际委派展示独立节点，再次进入子流程不会覆盖先前任务。`round` 是协调器的决策轮次，包含未委派任务的决策，因此可跳号。
 - 事件类型为 `delegated`、`model_started/finished/failed`、`tool_started/finished/failed`、`compression_started/finished/failed`、`completed`、`failed`。单个工具返回不代表研究员完成，SSE 结束也不代表研究成功。
 - `delegated.topic` 保存实际任务；工具只允许公开搜索 `query` 或 Skills 名称。检索完成可带 `sources` / `source_count`，任务完成可带压缩笔记 `output`。不发送模型推理文本、Skills 正文、原始搜索正文、异常响应或凭据。任务 / 查询 / 笔记分别限 2000 / 1000 / 8000 字符，截断有明确标记；单事件最多附 50 个来源。
+- 精确来源范围可增加 `source_audit` / `source_audit_count`。每项包含 URL、`decision`、`http_status` 和可选 `retrieval`（`search` 或 `specified_url`），最多保留 50 项并记录总数。范围外命中只属于审计，不进入 `sources` 或模型证据。直接读取只使用明确允许 URL，每一步重定向仍受范围限制。未知字段对旧客户端为可选扩展。
 
 客户端首次用 `Last-Event-ID: -1` 读取当前 run 可用的缓冲，此后将已应用事件与 SSE 游标一起保存。刷新后使用同一作用域的已保存游标；缓冲游标被服务端拒绝时回退到 `-1`，业务日志回放独立继续。浏览器缓存扩展 `LiveResearch.events` 和可选 `eventRecovery`；旧会话缺少事件时默认为空，损坏的恢复位置单独丢弃，不丢弃对话。未知事件版本或无效自定义载荷不会阻止报告回读。
 
@@ -346,7 +349,7 @@ npm test -- tests/submission-api.spec.ts --workers=1 --output test-results/submi
 
 当前 CLI 0.4.26 / API 0.8.7 会覆盖 `LANGGRAPH_DISABLE_FILE_PERSISTENCE`，其配置校验又会过滤顶层 `disable_persistence`。因此旧命令仅在 `env` 中设为 true，不能证明已关闭持久化。普通替身使用上述专用启动器，提前设置环境并直接传入原生服务参数；恢复用例明确启用持久化、提前注入环境且使用独立目录。不要用正常开发数据目录进行强制停止验收。
 
-真实模型联调使用正常后端与前端，清除 `ATLAS_API_FIXTURE`，显式设置 `$env:ATLAS_LIVE = '1'` 和 `$env:NO_PROXY = '*'` 再运行 `tests/live-api.spec.ts`。此模式调用模型和 Tavily，产生真实费用；测试要求完成澄清、补充回答、报告与来源，并在刷新后仍只有两次运行提交。2026-10-13 后续 GLM 复测确认简报失败；同网关 / 同密钥的 Kimi 隔离测试取得笔记和 8 条来源，但在报告写作时被预设保护期限中断。2026-10-14 通过代理恢复该写作检查点后获得部分完成报告，共 3 个 run；原研究失败与严格首段观测缺口仍保留。完整成功研究仍未验收，详见 [最新记录](verification.md)；不能将单步成功、原生 run 成功或离线回放画面记为真实闭环通过。
+真实模型联调使用正常后端与前端，清除 `ATLAS_API_FIXTURE`，显式设置 `$env:ATLAS_LIVE = '1'` 和 `$env:NO_PROXY = '*'` 再运行 `tests/live-api.spec.ts`。此模式调用模型和 Tavily，产生真实费用；测试要求完成澄清、补充回答、报告与来源，并在刷新后仍只有两次运行提交。历史 GLM 简报失败、Kimi 中断与部分写作恢复均保留。2026-10-15 新隔离 Kimi 全流程已通过真实 Skills 加载、来源范围、完整首段、固定检查点和刷新零新增执行的机械检查；原生报告仍有事实限定遗漏，独立修订另行通过内容审查，未替换原生报告。详见 [最新记录](verification.md)；不能将单步成功、原生 run 成功或离线回放画面记为所有事实要求通过。
 
 真实模式当前使用 **600 秒**澄清观察窗口，单测试整体最多 **1800 秒（30 分钟）**。第二次提交后的终态等待取整体剩余时间并预留 **30 秒**回读，替代此前固定的 1140 秒阶段窗口；Kimi 旧用例仍按当时的 1140 秒超时如实记录，不回写成新预算已通过。这些是浏览器观察期限，不会增加 SDK / helper / 节点的有限重试次数，也不会在观察失败时重新提交问题。替身模式仍使用原 180 / 660 / 900 秒预算。真实复测应显式设置测试级 `retries: 0`，为专属后端设置清理期限，结束前先回读受理回执及所属终态检查点；超时只能记为未完成，不能用原生 run 的 `success` 推断报告交付。
 

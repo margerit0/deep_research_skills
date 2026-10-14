@@ -34,6 +34,8 @@ from deep_research.research_agent_full import agent
 
 ## 星图工作台真实模式
 
+2026-10-15 的 [Kimi 约束修复](../frontend/docs/kimi-fixes-2026-10-15.md) 为委派保留原始要求、真实预加载指定 Skills，并在摘要前执行精确 URL 范围。直接读取指定页面带独立来源标记；摘要支持结构化流式，失败时保留有界原文与安全诊断。写作日志不再因研究 SSE 的空游标记录而提前回读。新要求字段已纳入恢复校验，旧检查点摘要仍兼容；生产 `.env` 与共享结构化 / Qwen fallback 文件保持原样。真实各轮结果以新验收记录为准，不覆盖旧记录。
+
 2026-10-14 的计划 3 已接入最终报告正文流式。独立 `report_streaming.py` 仅发送正文，按约 150 毫秒或 2048 字符合并；明确区分至多三次生成尝试，SDK 重试另计，模型完成不等于业务成功。取消执行时关闭模型流、保留已提交草稿并传播取消信号，不重新生成。正文日志默认与研究事件库同目录，名为 `atlas-report-events.sqlite3`，可设 `ATLAS_REPORT_EVENT_DB`；应与其余恢复数据库一并保留。API 与前端分别使用 `report_events_version`、`report_event_replay_version`、`atlas.report_event` 和 `/report-events`，见 [实施说明](../frontend/docs/report-streaming-plan.md)。
 
 2026-10-14 的新建 Kimi 研究已完成两次提交 / 两个 run，业务为 `succeeded/complete`，报告 1610 字符、3 条来源、103 条正文事件；检查点与刷新回读一致，完整首段截图早于写作结束 29.436 秒。六角色使用同一 Kimi、原网关 / 凭据和显式 SOCKS5 `127.0.0.1:55430`。实际 Skills 加载、严格两页检索及部分报告表述未通过全部场景要求；首段截图上的瞬时日志回读提示原因未确认。结果与独立失败轮的证据见 [最新验收](../frontend/docs/verification.md)。

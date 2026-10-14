@@ -14,6 +14,7 @@ from langchain_core.tools import tool
 from langgraph.graph.message import add_messages
 from pydantic import BaseModel, Field
 from deep_research.workflow_contract import ResearchError, ResearchSource
+from deep_research.research_requirements import ResearchConstraints
 
 class SupervisorState(TypedDict):
     """
@@ -27,6 +28,8 @@ class SupervisorState(TypedDict):
     supervisor_messages: Annotated[Sequence[BaseMessage], add_messages]
     # 指引整体研究方向的详细研究简报 (Research brief)
     research_brief: str
+    user_requirements: str
+    research_constraints: ResearchConstraints
     # 经过清洗与结构化处理，可直接用于生成最终报告的研究笔记
     notes: Annotated[list[str], operator.add] = []
     # 用于追踪已执行研究迭代次数的计数器

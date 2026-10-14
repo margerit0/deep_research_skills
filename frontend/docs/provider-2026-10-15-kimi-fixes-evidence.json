@@ -1,0 +1,855 @@
+{
+  "reviewedAt": "2026-10-14T18:16:23.096926+00:00",
+  "timezone": "Asia/Shanghai",
+  "baseCommit": "2d9704aff2e005fa0df429eac93caf7b92737ddf",
+  "scope": "four_isolated_full_workflow_attempts_plus_three_separate_writer_reviews",
+  "conclusion": {
+    "fullWorkflowMechanicalAcceptance": true,
+    "nativeReportFactualAcceptance": false,
+    "separateReviewedReportAccepted": true,
+    "allRequirementsProvenBySingleFinalProductionWorkflow": false,
+    "limitation": "Final prompt refinements were made after the successful full workflow. Independent writer revisions also used original source texts and explicit review feedback; they are not checkpoint reports or a prompt-only A/B comparison."
+  },
+  "completedFullWorkflow": {
+    "reviewedAt": "2026-10-14T17:54:38.883615+00:00",
+    "timezone": "Asia/Shanghai",
+    "baseCommit": "2d9704aff2e005fa0df429eac93caf7b92737ddf",
+    "evidenceDirectory": ".local/kimi-fixes-20261015-streamed",
+    "modelAndSearchSubstitutes": false,
+    "identity": {
+      "instanceId": "0fd355c1-e08f-43bd-976e-bb2b65c6a183",
+      "experiment": "kimi-fixes-20261015-streamed",
+      "modelAndSearchSubstitutes": false,
+      "scope": "fresh_complete_workflow",
+      "models": [
+        {
+          "role": "SCOPING",
+          "model": "moonshotai/kimi-k3",
+          "provider": "openai",
+          "max_tokens": null
+        },
+        {
+          "role": "SUPERVISOR",
+          "model": "moonshotai/kimi-k3",
+          "provider": "openai",
+          "max_tokens": null
+        },
+        {
+          "role": "RESEARCHER",
+          "model": "moonshotai/kimi-k3",
+          "provider": "openai",
+          "max_tokens": null
+        },
+        {
+          "role": "SUMMARIZATION",
+          "model": "moonshotai/kimi-k3",
+          "provider": "openai",
+          "max_tokens": null
+        },
+        {
+          "role": "COMPRESSION",
+          "model": "moonshotai/kimi-k3",
+          "provider": "openai",
+          "max_tokens": 32000
+        },
+        {
+          "role": "FINAL_REPORT",
+          "model": "moonshotai/kimi-k3",
+          "provider": "openai",
+          "max_tokens": 32000
+        }
+      ],
+      "proxy": {
+        "scheme": "socks5",
+        "host": "127.0.0.1",
+        "port": 55430
+      },
+      "searchProxyConfigured": true,
+      "tlsVerification": true,
+      "noProxy": "*",
+      "agentRpm": "30",
+      "maximumSdkHttpAttempts": 5,
+      "retryDelays": [3, 6, 12, 24],
+      "writingAttemptsMaximum": 3,
+      "fixtureModules": [],
+      "backendEnvUnchanged": true
+    },
+    "threadId": "3fc8a815-add9-4bf5-99d6-785e26d4bb64",
+    "researchId": "fa33291f-adb4-40c8-b2e6-510a906a19e1",
+    "turns": [
+      {
+        "turn_id": "b7bbc65a-edf4-4f57-9e98-de9e39720784",
+        "run_id": "cf78ed67-31c8-4230-bab0-c845afbb328d",
+        "attempt_id": "b7bbc65a-edf4-4f57-9e98-de9e39720784",
+        "checkpoint_id": "1f1c7f63-e4c7-6397-8002-cec4026f2264",
+        "status": "completed"
+      },
+      {
+        "turn_id": "9458bbfd-ab1c-4c44-bd06-ea79acff3b34",
+        "run_id": "9019dc8e-21f1-4ce5-be27-39286e569691",
+        "attempt_id": "9458bbfd-ab1c-4c44-bd06-ea79acff3b34",
+        "checkpoint_id": "1f1c7f7b-5e45-6d1d-8009-6eb4ad8c0c57",
+        "status": "completed"
+      }
+    ],
+    "businessStatus": "succeeded",
+    "phase": "complete",
+    "researchErrors": [],
+    "checks": {
+      "requiredSkillPerTaskBeforeSearch": true,
+      "exactRequestedSourceSet": true,
+      "persistedConstraints": true,
+      "searchesHaveScopeAudit": true,
+      "reportMatchesRefresh": true,
+      "sourcesMatchRefresh": true,
+      "configMatchesReceipts": true,
+      "nativeRunsSucceeded": true,
+      "refreshCreatesNoRun": true,
+      "approximately500ChineseCharacters": true,
+      "durableWritingComplete": true,
+      "replayDiagnosticsCaptured": true,
+      "noPrematureWritingReplay": true,
+      "realModelsAndSearch": true,
+      "allModelsKimi": true,
+      "sixRolesActuallyCalled": true,
+      "originalEndpoints": true,
+      "originalEnvironment": true,
+      "explicitProxyAndTLS": true,
+      "twoSubmissionsTwoRuns": true,
+      "clarificationCompleted": true,
+      "receiptsCompleted": true,
+      "businessSucceeded": true,
+      "allResearchTasksCompleted": true,
+      "workerReceivedOriginalRequirementsAndBrief": true,
+      "adoptedSourcesWereActuallyRetrieved": true,
+      "directSourcesHaveHonestProvenance": true,
+      "noOutOfScopeSourceAdopted": true,
+      "reportAndResearchJournalsAreComplete": true,
+      "reportIdentityMatchesReceipt": true,
+      "reportEventIdsAndSequences": true,
+      "utf8OffsetsMatch": true,
+      "streamAndFileMatchCheckpoint": true,
+      "firstParagraphBeforeModelFinished": true,
+      "firstParagraphScreenshotBeforeModelFinished": true,
+      "citationIdsResolve": true,
+      "citationsOnlyUseAdoptedAllowedPages": true,
+      "narrowLayout": true,
+      "browserObserverHasNoErrors": true
+    },
+    "allMechanicalChecksPassed": true,
+    "citationReview": "pending_independent_claim_review",
+    "reportCharacters": 1488,
+    "bodyHanCharacters": 473,
+    "reportSha256": "37cd5600f5960375d97258a2fc110836f809bcda137df7f4d51d05df1fa08f53",
+    "sources": [
+      {
+        "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+        "title": "Python experimental support for free threading — Python 3.13.16 documentation"
+      },
+      {
+        "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+        "title": "C API Extension Support for Free Threading — Python 3.13.16 documentation",
+        "retrieval": "specified_url"
+      }
+    ],
+    "sourceAuditCounts": {
+      "search:out_of_scope": 5,
+      "search:accepted": 1,
+      "specified_url:accepted": 3
+    },
+    "rawSearchUrls": [
+      "https://docs.python.org/3.13/howto/free-threading-python.html",
+      "https://docs.python.org/3/howto/abi3t-migration.html",
+      "https://docs.python.org/3/howto/free-threading-extensions.html",
+      "https://docs.python.org/3/howto/free-threading-python.html",
+      "https://docs.python.org/zh-cn/3/howto/free-threading-extensions.html",
+      "https://docs.python.org/zh-cn/dev/howto/free-threading-python.html"
+    ],
+    "directlyRetrievedUrls": [
+      "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+      "https://docs.python.org/3.13/howto/free-threading-python.html"
+    ],
+    "citations": {
+      "1": "https://docs.python.org/3.13/howto/free-threading-python.html",
+      "2": "https://docs.python.org/3.13/howto/free-threading-extensions.html"
+    },
+    "researchEventCount": 18,
+    "reportEventCount": 67,
+    "writingAttempts": 1,
+    "noteCount": 1,
+    "researcherCount": 1,
+    "firstParagraphScreenshot": {
+      "observedAt": "2026-10-14T17:50:06.139Z",
+      "captureStartedAt": "2026-10-14T17:50:06.236Z",
+      "captureFinishedAt": "2026-10-14T17:50:06.443Z"
+    },
+    "modelFinishedAt": "2026-10-14T17:50:14.739810+00:00",
+    "firstParagraphLeadSeconds": 8.297,
+    "modelHttp": {
+      "attempts": 16,
+      "byRole": {
+        "SCOPING": 3,
+        "SUPERVISOR": 4,
+        "RESEARCHER": 3,
+        "SUMMARIZATION": 4,
+        "COMPRESSION": 1,
+        "FINAL_REPORT": 1
+      },
+      "statuses": {
+        "200": 16
+      },
+      "transportFailures": 0,
+      "missingResponses": [],
+      "retryDelays": []
+    },
+    "searchHttp": {
+      "attempts": 2,
+      "statuses": {
+        "200": 2
+      },
+      "transportFailures": 0
+    },
+    "thinking": {
+      "explicitEffortValues": [null],
+      "explicitThinkingTypes": [null],
+      "explicitEnableValues": [null],
+      "reportedReasoningTokens": [53, 76, 311],
+      "inference": "Provider-reported token counts only; no model reasoning content retained; no effort A/B comparison."
+    },
+    "replayDiagnostics": {
+      "count": 20,
+      "outcomes": {
+        "ready": 20
+      },
+      "failureCategories": {},
+      "notices": []
+    },
+    "feedback": {
+      "langsmithEvaluationRun": false,
+      "expectedFeedback": 0,
+      "claimReview": "manual"
+    }
+  },
+  "earlierAttempts": [
+    {
+      "evidenceDirectory": ".local/kimi-fixes-20261014-live",
+      "threadId": "a9b28034-5b5b-4400-a7db-d2718603585a",
+      "researchId": "27335af9-f76a-4e7b-93ac-18ed0aeb9f12",
+      "businessStatus": "failed",
+      "phase": "research",
+      "researchErrors": [
+        {
+          "code": "researcher_failed",
+          "message": "一个研究任务未获得有效结果，研究覆盖可能不完整。",
+          "node": "supervisor_subgraph"
+        },
+        {
+          "code": "researcher_failed",
+          "message": "一个研究任务未获得有效结果，研究覆盖可能不完整。",
+          "node": "supervisor_subgraph"
+        },
+        {
+          "code": "iteration_limit",
+          "message": "研究达到协调轮次上限，覆盖范围可能不完整。",
+          "node": "supervisor_subgraph"
+        },
+        {
+          "code": "no_findings",
+          "message": "未获得有效研究结果，无法生成有依据的报告。",
+          "node": "supervisor_subgraph"
+        }
+      ],
+      "modelHttp": {
+        "attempts": 21,
+        "byRole": {
+          "SCOPING": 3,
+          "SUPERVISOR": 6,
+          "RESEARCHER": 12
+        },
+        "statuses": {
+          "200": 19,
+          "504": 2
+        },
+        "transportFailures": 0,
+        "missingResponses": [],
+        "retryDelays": [3, 6]
+      },
+      "searchHttp": {
+        "attempts": 19,
+        "statuses": {
+          "200": 9
+        },
+        "transportFailures": 10
+      },
+      "sourceAuditCounts": {
+        "search:out_of_scope": 27
+      },
+      "reportCharacters": 0,
+      "researchEventCount": 50,
+      "interpretation": "business_failed"
+    },
+    {
+      "evidenceDirectory": ".local/kimi-fixes-20261015-live",
+      "threadId": "15f8ddb8-213c-4985-9410-421e8ac64f53",
+      "researchId": "eb1826fc-1a8c-4b63-ab25-bbb816e97211",
+      "businessStatus": "running",
+      "phase": "research",
+      "researchErrors": [],
+      "modelHttp": {
+        "attempts": 39,
+        "byRole": {
+          "SCOPING": 3,
+          "SUPERVISOR": 2,
+          "RESEARCHER": 5,
+          "SUMMARIZATION": 29
+        },
+        "statuses": {
+          "200": 9,
+          "504": 29
+        },
+        "transportFailures": 0,
+        "missingResponses": ["8d4a4514-7187-4d06-ba5b-f5ff17bc3eb1"],
+        "retryDelays": [
+          3, 6, 12, 24, 3, 3, 6, 6, 12, 12, 24, 24, 3, 6, 3, 3, 6, 6, 12, 12, 24, 24, 3, 6
+        ]
+      },
+      "searchHttp": {
+        "attempts": 9,
+        "statuses": {
+          "200": 5
+        },
+        "transportFailures": 4
+      },
+      "sourceAuditCounts": {
+        "search:out_of_scope": 11,
+        "search:source_unverified": 1,
+        "specified_url:source_unverified": 3,
+        "specified_url:accepted": 5
+      },
+      "reportCharacters": 0,
+      "researchEventCount": 18,
+      "interpretation": "unfinished_at_observation_timeout_not_business_failed"
+    },
+    {
+      "evidenceDirectory": ".local/kimi-fixes-20261015-final",
+      "threadId": "ac46c1b2-514d-4b1d-b427-56332204d74a",
+      "researchId": "09c17e51-02a0-451b-8e7a-a2e9b3377778",
+      "businessStatus": "running",
+      "phase": "research",
+      "researchErrors": [],
+      "modelHttp": {
+        "attempts": 31,
+        "byRole": {
+          "SCOPING": 4,
+          "SUPERVISOR": 5,
+          "RESEARCHER": 12,
+          "SUMMARIZATION": 8,
+          "COMPRESSION": 2
+        },
+        "statuses": {
+          "200": 22,
+          "504": 8
+        },
+        "transportFailures": 0,
+        "missingResponses": ["93709bfc-b5a3-4a36-a1dd-16bb6d52ad3c"],
+        "retryDelays": [3, 3, 6, 12, 24, 3, 3]
+      },
+      "searchHttp": {
+        "attempts": 18,
+        "statuses": {
+          "200": 6
+        },
+        "transportFailures": 12
+      },
+      "sourceAuditCounts": {
+        "search:out_of_scope": 15,
+        "search:source_unverified": 3,
+        "specified_url:accepted": 8,
+        "specified_url:source_unverified": 4
+      },
+      "reportCharacters": 0,
+      "researchEventCount": 42,
+      "interpretation": "unfinished_at_observation_timeout_not_business_failed"
+    }
+  ],
+  "nativeReportReview": {
+    "reportSha256": "37cd5600f5960375d97258a2fc110836f809bcda137df7f4d51d05df1fa08f53",
+    "passed": false,
+    "missingQualifications": [
+      "internal state / concurrency safety review beyond declaration and rebuild",
+      "C-extension and I/O-heavy workload exception to benchmark overhead"
+    ],
+    "otherWordingToTighten": "Fallback for an unmarked extension does not rule out other loading failures."
+  },
+  "independentWriterReviews": [
+    {
+      "reviewedAt": "2026-10-14T18:16:23.096926+00:00",
+      "reviewId": "c0af6d9c-2b2f-4935-b900-149c8719a2dd",
+      "directory": ".local/kimi-fixes-20261015-report-review",
+      "method": "manual_source_comparison",
+      "reportSha256": "969c99e99e8094981985f92776b4f0ee98a23f3e62c40a279ee162dbe4eaa2b1",
+      "bodyHanCharacters": 637,
+      "factualQualificationsPassed": false,
+      "lengthAcceptanceRange": [400, 650],
+      "lengthPassed": true,
+      "accepted": false,
+      "assessment": "Required omissions repaired, but 'only when' overstates a risk condition and blanket fallback wording needs qualification.",
+      "nativeGraphRecovery": false,
+      "newNativeRuns": 0,
+      "modelHttp": {
+        "attempts": 1,
+        "statuses": {
+          "200": 1
+        },
+        "transportFailures": 0,
+        "retryDelays": []
+      },
+      "inputManifest": {
+        "reviewId": "c0af6d9c-2b2f-4935-b900-149c8719a2dd",
+        "startedAt": "2026-10-14T18:06:35.189632+00:00",
+        "timezone": "Asia/Shanghai",
+        "scope": "independent_writer_revision_with_source_texts_and_explicit_review_feedback",
+        "nativeGraphRecovery": false,
+        "newNativeRuns": 0,
+        "modelAndSearchSubstitutes": false,
+        "originalThreadId": "3fc8a815-add9-4bf5-99d6-785e26d4bb64",
+        "originalResearchId": "fa33291f-adb4-40c8-b2e6-510a906a19e1",
+        "originalReportSha256": "37cd5600f5960375d97258a2fc110836f809bcda137df7f4d51d05df1fa08f53",
+        "originalSnapshotSha256": "ff6e86e82d8a0e1f2be6fda0b142ea262313064ebe355dda4022661c3fd5c428",
+        "writerTemplateSha256": "0bb2ebd6874e075d44d99592b24d34d36314423169f1aadee3eba3d3eba5b8d9",
+        "promptsFileSha256": "67d57662faa0ff955a4f9e1c4d69c29a1fb370d7a6ef5d4a8fa769fa26770144",
+        "promptSha256": "38bb9e0faf4465be9695400bc43966cbb6937595fe56c80e75dd20a87f2c1913",
+        "feedbackSha256": "927f4460c2055c23942f3433dfee530ca5ee48272d81e2c7807b673161fb9e12",
+        "briefSha256": "74fced0b09e1a61a53fda52d79554b2e1e9d06e95928efc8a62e815c1b74d97a",
+        "notesSha256": "ee4c3f6cdf3a8f4f3150619d784607a75b7d008523b9c157ce5beabece80450d",
+        "sources": [
+          {
+            "number": 1,
+            "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+            "finalUrl": "https://docs.python.org/3.13/howto/free-threading-python.html",
+            "status": 200,
+            "retrievedAt": "2026-10-14T17:47:01.687257+00:00",
+            "sha256": "eca52c8788b7749131d83ae77cc1f905e54fc64f1781d5cfe42256c03b0d7d27",
+            "textSha256": "117a8291c9e51aad2751e093f56f1187eaefd6674cea88faa3a471bf9edff8de",
+            "textCharacters": 7370
+          },
+          {
+            "number": 2,
+            "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+            "finalUrl": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+            "status": 200,
+            "retrievedAt": "2026-10-14T17:47:01.662535+00:00",
+            "sha256": "03d23f4d2774f1b51485c326466f8e44fab52c9506c4834f07758f126d32b8ae",
+            "textSha256": "e7204e1019c1d0b6c2772184e7b16302092f84ef3a1bd2b9146876270ce362cc",
+            "textCharacters": 10383
+          }
+        ],
+        "model": "moonshotai/kimi-k3",
+        "sourceNetworkFetches": 0,
+        "proxy": {
+          "scheme": "socks5",
+          "host": "127.0.0.1",
+          "port": 55430
+        },
+        "tlsVerification": true,
+        "noProxy": "*",
+        "agentRpm": "30",
+        "explicitReasoningEffort": null,
+        "effortComparison": false,
+        "maximumSdkHttpAttempts": 5,
+        "retryDelays": [3, 6, 12, 24]
+      },
+      "result": {
+        "reviewId": "c0af6d9c-2b2f-4935-b900-149c8719a2dd",
+        "startedAt": "2026-10-14T18:06:35.189632+00:00",
+        "completedAt": "2026-10-14T18:07:33.845435+00:00",
+        "status": "completed",
+        "scope": "independent_writer_revision_with_source_texts_and_explicit_review_feedback",
+        "nativeGraphRecovery": false,
+        "newNativeRuns": 0,
+        "originalReportSha256": "37cd5600f5960375d97258a2fc110836f809bcda137df7f4d51d05df1fa08f53",
+        "reportSha256": "969c99e99e8094981985f92776b4f0ee98a23f3e62c40a279ee162dbe4eaa2b1",
+        "reportBytes": 3069,
+        "reportCharacters": 1649,
+        "bodyHanCharacters": 637,
+        "firstTextAt": "2026-10-14T18:07:02.444543+00:00",
+        "chunkCount": 770,
+        "finishReason": "stop",
+        "usage": {},
+        "checks": {
+          "nonemptyCompleteReport": true,
+          "approximately500ChineseCharacters": true,
+          "citationUrlsWithinSources": true,
+          "originalWorkflowFilesUnchanged": true,
+          "backendEnvironmentUnchanged": true
+        },
+        "protectedOriginalWorkflowFiles": 42,
+        "changedOriginalFiles": [],
+        "claimReview": "pending_independent_manual_review"
+      }
+    },
+    {
+      "reviewedAt": "2026-10-14T18:16:23.096926+00:00",
+      "reviewId": "8d0b8643-56dc-4e39-8b0d-39cb1f0eefd1",
+      "directory": ".local/kimi-fixes-20261015-report-review-final",
+      "method": "manual_source_comparison",
+      "reportSha256": "5af4925630bcbafb5cdbecd80f1ca2d630c93362d5179a1cd8cb05033501a553",
+      "bodyHanCharacters": 670,
+      "factualQualificationsPassed": true,
+      "lengthAcceptanceRange": [400, 650],
+      "lengthPassed": false,
+      "accepted": false,
+      "assessment": "Claim qualifications accepted; 670 Han body characters exceed the unchanged 400-650 acceptance range.",
+      "nativeGraphRecovery": false,
+      "newNativeRuns": 0,
+      "modelHttp": {
+        "attempts": 2,
+        "statuses": {
+          "504": 1,
+          "200": 1
+        },
+        "transportFailures": 0,
+        "retryDelays": [3]
+      },
+      "inputManifest": {
+        "reviewId": "8d0b8643-56dc-4e39-8b0d-39cb1f0eefd1",
+        "startedAt": "2026-10-14T18:09:04.624486+00:00",
+        "timezone": "Asia/Shanghai",
+        "scope": "independent_writer_revision_with_source_texts_and_explicit_review_feedback",
+        "nativeGraphRecovery": false,
+        "newNativeRuns": 0,
+        "modelAndSearchSubstitutes": false,
+        "originalThreadId": "3fc8a815-add9-4bf5-99d6-785e26d4bb64",
+        "originalResearchId": "fa33291f-adb4-40c8-b2e6-510a906a19e1",
+        "originalReportSha256": "37cd5600f5960375d97258a2fc110836f809bcda137df7f4d51d05df1fa08f53",
+        "originalSnapshotSha256": "ff6e86e82d8a0e1f2be6fda0b142ea262313064ebe355dda4022661c3fd5c428",
+        "previousReviewReportSha256": "969c99e99e8094981985f92776b4f0ee98a23f3e62c40a279ee162dbe4eaa2b1",
+        "previousReviewId": "c0af6d9c-2b2f-4935-b900-149c8719a2dd",
+        "writerTemplateSha256": "2f66a9b6c3000d630f83b16549153134824bc5b2c38e0b1ea45e92aac2db539e",
+        "promptsFileSha256": "51d01671f2f77b03ce4ce275e788bfcd96e1502df4100cfa4027821d105b01c6",
+        "promptSha256": "dce66673e33b26d766edf2b23b0b45f09df56d1493e7c405c3c7136d37dae096",
+        "feedbackSha256": "5ee7fe4cad25266df58de6b67f36bd0579957cb93eedf173872f8632c48ba008",
+        "briefSha256": "74fced0b09e1a61a53fda52d79554b2e1e9d06e95928efc8a62e815c1b74d97a",
+        "notesSha256": "ee4c3f6cdf3a8f4f3150619d784607a75b7d008523b9c157ce5beabece80450d",
+        "sources": [
+          {
+            "number": 1,
+            "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+            "finalUrl": "https://docs.python.org/3.13/howto/free-threading-python.html",
+            "status": 200,
+            "retrievedAt": "2026-10-14T17:47:01.687257+00:00",
+            "sha256": "eca52c8788b7749131d83ae77cc1f905e54fc64f1781d5cfe42256c03b0d7d27",
+            "textSha256": "117a8291c9e51aad2751e093f56f1187eaefd6674cea88faa3a471bf9edff8de",
+            "textCharacters": 7370
+          },
+          {
+            "number": 2,
+            "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+            "finalUrl": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+            "status": 200,
+            "retrievedAt": "2026-10-14T17:47:01.662535+00:00",
+            "sha256": "03d23f4d2774f1b51485c326466f8e44fab52c9506c4834f07758f126d32b8ae",
+            "textSha256": "e7204e1019c1d0b6c2772184e7b16302092f84ef3a1bd2b9146876270ce362cc",
+            "textCharacters": 10383
+          }
+        ],
+        "model": "moonshotai/kimi-k3",
+        "sourceNetworkFetches": 0,
+        "proxy": {
+          "scheme": "socks5",
+          "host": "127.0.0.1",
+          "port": 55430
+        },
+        "tlsVerification": true,
+        "noProxy": "*",
+        "agentRpm": "30",
+        "explicitReasoningEffort": null,
+        "effortComparison": false,
+        "maximumSdkHttpAttempts": 5,
+        "retryDelays": [3, 6, 12, 24]
+      },
+      "result": {
+        "reviewId": "8d0b8643-56dc-4e39-8b0d-39cb1f0eefd1",
+        "startedAt": "2026-10-14T18:09:04.624486+00:00",
+        "completedAt": "2026-10-14T18:11:00.437500+00:00",
+        "status": "completed",
+        "scope": "independent_writer_revision_with_source_texts_and_explicit_review_feedback",
+        "nativeGraphRecovery": false,
+        "newNativeRuns": 0,
+        "originalReportSha256": "37cd5600f5960375d97258a2fc110836f809bcda137df7f4d51d05df1fa08f53",
+        "reportSha256": "5af4925630bcbafb5cdbecd80f1ca2d630c93362d5179a1cd8cb05033501a553",
+        "reportBytes": 3158,
+        "reportCharacters": 1666,
+        "bodyHanCharacters": 670,
+        "firstTextAt": "2026-10-14T18:10:41.955141+00:00",
+        "chunkCount": 215,
+        "finishReason": "stop",
+        "usage": {},
+        "checks": {
+          "nonemptyCompleteReport": true,
+          "approximately500ChineseCharacters": false,
+          "citationUrlsWithinSources": true,
+          "originalWorkflowFilesUnchanged": true,
+          "backendEnvironmentUnchanged": true
+        },
+        "protectedOriginalWorkflowFiles": 42,
+        "changedOriginalFiles": [],
+        "claimReview": "pending_independent_manual_review"
+      }
+    },
+    {
+      "reviewedAt": "2026-10-14T18:16:23.096926+00:00",
+      "reviewId": "fe6fdfdd-5b47-459b-ac13-9d71a29ba9a7",
+      "directory": ".local/kimi-fixes-20261015-report-review-compact",
+      "method": "manual_source_comparison",
+      "reportSha256": "7b513560fa3df6af1da1c3d9db398489d3f3815db17c15e57fee25c2d77850e2",
+      "bodyHanCharacters": 585,
+      "factualQualificationsPassed": true,
+      "lengthAcceptanceRange": [400, 650],
+      "lengthPassed": true,
+      "accepted": true,
+      "assessment": "Key claims checked against the two actual source snapshots; accepted within the original 400-650 Han range.",
+      "nativeGraphRecovery": false,
+      "newNativeRuns": 0,
+      "modelHttp": {
+        "attempts": 1,
+        "statuses": {
+          "200": 1
+        },
+        "transportFailures": 0,
+        "retryDelays": []
+      },
+      "inputManifest": {
+        "reviewId": "fe6fdfdd-5b47-459b-ac13-9d71a29ba9a7",
+        "startedAt": "2026-10-14T18:13:02.103717+00:00",
+        "timezone": "Asia/Shanghai",
+        "scope": "independent_writer_revision_with_source_texts_and_explicit_review_feedback",
+        "nativeGraphRecovery": false,
+        "newNativeRuns": 0,
+        "modelAndSearchSubstitutes": false,
+        "originalThreadId": "3fc8a815-add9-4bf5-99d6-785e26d4bb64",
+        "originalResearchId": "fa33291f-adb4-40c8-b2e6-510a906a19e1",
+        "originalReportSha256": "37cd5600f5960375d97258a2fc110836f809bcda137df7f4d51d05df1fa08f53",
+        "originalSnapshotSha256": "ff6e86e82d8a0e1f2be6fda0b142ea262313064ebe355dda4022661c3fd5c428",
+        "previousReviewReportSha256": "5af4925630bcbafb5cdbecd80f1ca2d630c93362d5179a1cd8cb05033501a553",
+        "previousReviewId": "8d0b8643-56dc-4e39-8b0d-39cb1f0eefd1",
+        "writerTemplateSha256": "2f66a9b6c3000d630f83b16549153134824bc5b2c38e0b1ea45e92aac2db539e",
+        "promptsFileSha256": "51d01671f2f77b03ce4ce275e788bfcd96e1502df4100cfa4027821d105b01c6",
+        "promptSha256": "905b1a84e3cac54216ce6deaefd627db24c3bb26b7e2a8749dd87fcc8b50814d",
+        "feedbackSha256": "234f02c0495c73c94c4258aad07181f403f35fb12b34f37668cc9e05edcf38c1",
+        "briefSha256": "74fced0b09e1a61a53fda52d79554b2e1e9d06e95928efc8a62e815c1b74d97a",
+        "notesSha256": "ee4c3f6cdf3a8f4f3150619d784607a75b7d008523b9c157ce5beabece80450d",
+        "sources": [
+          {
+            "number": 1,
+            "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+            "finalUrl": "https://docs.python.org/3.13/howto/free-threading-python.html",
+            "status": 200,
+            "retrievedAt": "2026-10-14T17:47:01.687257+00:00",
+            "sha256": "eca52c8788b7749131d83ae77cc1f905e54fc64f1781d5cfe42256c03b0d7d27",
+            "textSha256": "117a8291c9e51aad2751e093f56f1187eaefd6674cea88faa3a471bf9edff8de",
+            "textCharacters": 7370
+          },
+          {
+            "number": 2,
+            "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+            "finalUrl": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+            "status": 200,
+            "retrievedAt": "2026-10-14T17:47:01.662535+00:00",
+            "sha256": "03d23f4d2774f1b51485c326466f8e44fab52c9506c4834f07758f126d32b8ae",
+            "textSha256": "e7204e1019c1d0b6c2772184e7b16302092f84ef3a1bd2b9146876270ce362cc",
+            "textCharacters": 10383
+          }
+        ],
+        "model": "moonshotai/kimi-k3",
+        "sourceNetworkFetches": 0,
+        "proxy": {
+          "scheme": "socks5",
+          "host": "127.0.0.1",
+          "port": 55430
+        },
+        "tlsVerification": true,
+        "noProxy": "*",
+        "agentRpm": "30",
+        "explicitReasoningEffort": null,
+        "effortComparison": false,
+        "maximumSdkHttpAttempts": 5,
+        "retryDelays": [3, 6, 12, 24]
+      },
+      "result": {
+        "reviewId": "fe6fdfdd-5b47-459b-ac13-9d71a29ba9a7",
+        "startedAt": "2026-10-14T18:13:02.103717+00:00",
+        "completedAt": "2026-10-14T18:14:00.903204+00:00",
+        "status": "completed",
+        "scope": "independent_writer_revision_with_source_texts_and_explicit_review_feedback",
+        "nativeGraphRecovery": false,
+        "newNativeRuns": 0,
+        "originalReportSha256": "37cd5600f5960375d97258a2fc110836f809bcda137df7f4d51d05df1fa08f53",
+        "reportSha256": "7b513560fa3df6af1da1c3d9db398489d3f3815db17c15e57fee25c2d77850e2",
+        "reportBytes": 2600,
+        "reportCharacters": 1308,
+        "bodyHanCharacters": 585,
+        "firstTextAt": "2026-10-14T18:13:49.031853+00:00",
+        "chunkCount": 180,
+        "finishReason": "stop",
+        "usage": {},
+        "checks": {
+          "nonemptyCompleteReport": true,
+          "approximately500ChineseCharacters": true,
+          "citationUrlsWithinSources": true,
+          "originalWorkflowFilesUnchanged": true,
+          "backendEnvironmentUnchanged": true
+        },
+        "protectedOriginalWorkflowFiles": 42,
+        "changedOriginalFiles": [],
+        "claimReview": "pending_independent_manual_review"
+      },
+      "additionalCompressionTarget": [450, 550],
+      "additionalCompressionTargetMet": false,
+      "note": "585 Han characters meet the predeclared acceptance range but not the narrower request in this revision prompt."
+    }
+  ],
+  "acceptedRevision": {
+    "reviewId": "fe6fdfdd-5b47-459b-ac13-9d71a29ba9a7",
+    "reportSha256": "7b513560fa3df6af1da1c3d9db398489d3f3815db17c15e57fee25c2d77850e2",
+    "reportCharacters": 1308,
+    "bodyHanCharacters": 585,
+    "sourceSnapshots": [
+      {
+        "number": 1,
+        "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+        "finalUrl": "https://docs.python.org/3.13/howto/free-threading-python.html",
+        "status": 200,
+        "retrievedAt": "2026-10-14T17:47:01.687257+00:00",
+        "sha256": "eca52c8788b7749131d83ae77cc1f905e54fc64f1781d5cfe42256c03b0d7d27",
+        "textSha256": "117a8291c9e51aad2751e093f56f1187eaefd6674cea88faa3a471bf9edff8de",
+        "textCharacters": 7370
+      },
+      {
+        "number": 2,
+        "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+        "finalUrl": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+        "status": 200,
+        "retrievedAt": "2026-10-14T17:47:01.662535+00:00",
+        "sha256": "03d23f4d2774f1b51485c326466f8e44fab52c9506c4834f07758f126d32b8ae",
+        "textSha256": "e7204e1019c1d0b6c2772184e7b16302092f84ef3a1bd2b9146876270ce362cc",
+        "textCharacters": 10383
+      }
+    ],
+    "citationIdsResolve": true,
+    "onlyTwoAllowedSources": true,
+    "claims": [
+      {
+        "id": "installation_not_exclusive",
+        "source": 1,
+        "sourceSection": "Installation",
+        "passed": true,
+        "revisedEvidence": "安装途径包括官方 macOS/Windows 安装程序的可选二进制，源码构建则用 --disable-gil 选项"
+      },
+      {
+        "id": "gil_benefit_workload_qualified",
+        "source": 1,
+        "sourceSection": "Introduction / The global interpreter lock in free-threaded Python",
+        "passed": true,
+        "revisedEvidence": "并行收益可能因此受限，需实测性能与内存影响"
+      },
+      {
+        "id": "thread_safety_beyond_declaration",
+        "source": 2,
+        "sourceSection": "Protecting Internal Extension State",
+        "passed": true,
+        "revisedEvidence": "声明支持并针对该构建重新编译不代表线程安全适配完成；审查内部共享状态与并发访问，必要时加锁或改用线程局部存储"
+      },
+      {
+        "id": "borrowed_reference_condition",
+        "source": 2,
+        "sourceSection": "Borrowed References",
+        "passed": true,
+        "revisedEvidence": "若包含对象被并发修改，相关借用引用 API 可能不安全"
+      },
+      {
+        "id": "performance_scope_and_exception",
+        "source": 1,
+        "sourceSection": "Single-threaded performance",
+        "passed": true,
+        "revisedEvidence": "3.13 / pyperformance / 约 40%；主要耗时于 C 扩展或 I/O 的程序受影响较小"
+      },
+      {
+        "id": "future_target_not_guarantee",
+        "source": 1,
+        "sourceSection": "Single-threaded performance",
+        "passed": true,
+        "revisedEvidence": "10% 或更低是该文档所述的未来目标，并非已兑现保证；没有等待 3.14 的建议"
+      },
+      {
+        "id": "startup_options_and_unknown_values",
+        "source": 1,
+        "sourceSection": "The global interpreter lock in free-threaded Python",
+        "passed": true,
+        "revisedEvidence": "PYTHON_GIL / -X gil 在启动时设置；具体取值和运行中动态切换未由两页说明"
+      },
+      {
+        "id": "limited_api_abi_restriction",
+        "source": 2,
+        "sourceSection": "Limited C API and Stable ABI",
+        "passed": true,
+        "revisedEvidence": "该构建目前不支持 Limited C API 和稳定 ABI"
+      },
+      {
+        "id": "fallback_not_all_failure_modes",
+        "source": 2,
+        "sourceSection": "Module Initialization",
+        "passed": true,
+        "revisedEvidence": "未声明支持的扩展导入时启用 GIL 并警告；两页未说明其他加载失败的一般处理方式"
+      },
+      {
+        "id": "production_and_advice_qualified",
+        "source": 1,
+        "sourceSection": "Introduction / Known limitations",
+        "passed": true,
+        "revisedEvidence": "实验性风险；无明确生产禁令或支持承诺；试用建议明确为依据来源的推断"
+      }
+    ],
+    "allReviewedClaimsPassed": true,
+    "manualTextEdits": false,
+    "nativeGraphRecovery": false,
+    "newNativeRuns": 0
+  },
+  "tests": {
+    "modelAndSearchSubstitutes": true,
+    "backend": {
+      "passed": 165,
+      "seconds": 25.87,
+      "junit": ".local/kimi-fixes-20261014/pytest-closeout.xml"
+    },
+    "browser": {
+      "passed": 110,
+      "optInSkipped": 15,
+      "directory": ".local/kimi-fixes-20261014/ui-1792000478734"
+    },
+    "nativeApi": {
+      "passed": 13,
+      "directory": ".local/kimi-fixes-20261014/ui-1791996554188"
+    },
+    "targetedLiveReport": {
+      "passed": 21,
+      "directory": ".local/kimi-fixes-20261014/ui-1791996267173"
+    },
+    "remainingOptIn": "Two older opt-in tests were not separately rerun in this repair session.",
+    "allOutcomes": ".local/kimi-fixes-20261014/test-evidence.json",
+    "staticChecks": ".local/kimi-fixes-20261014/final-checks.json"
+  },
+  "preservationEvidence": ".local/kimi-fixes-20261014/preservation.json",
+  "originalReportSha256": "fc2d4f6985bd1e595ba5466693b4a89205646b93cbbc6740913d402b0b9ab0b3",
+  "artifacts": {
+    "nativeReport": "frontend/docs/provider-2026-10-15-kimi-fixes-report.md",
+    "reviewedReport": "frontend/docs/provider-2026-10-15-kimi-fixes-reviewed-report.md",
+    "citationReview": "frontend/docs/provider-2026-10-15-kimi-fixes-citation-review.md",
+    "evidencePackage": ".local/exports/atlas-kimi-fixes-2026-10-15.zip"
+  },
+  "evaluation": {
+    "langsmithEvaluationRun": false,
+    "expectedFeedbackCount": 0,
+    "claimReviewMethod": "manual_source_comparison"
+  }
+}

@@ -13,11 +13,11 @@ const labels = {
 export function LiveReportDraft({
   thread,
   research,
-  retrying,
+  replayState,
 }: {
   thread: LiveThread
   research: LiveResearch
-  retrying?: boolean
+  replayState?: 'ready' | 'pending' | 'retrying' | 'incomplete'
 }) {
   const stream = savedReportStream(thread, research)
   const active = stream ? writingDrafts(stream).at(-1) : undefined
@@ -49,13 +49,17 @@ export function LiveReportDraft({
           )}
         </div>
       )}
-      {!research.report && (retrying || (stream && reportHasGap(stream))) && (
-        <p className="cw-sync-note" role="status" data-testid="report-recovery-note">
-          {stream && reportHasGap(stream)
-            ? '部分写作记录无法确认，已保留连续正文，等待回读或最终报告。'
-            : '写作记录暂时无法回读，正在重试；已收到的草稿会保留。'}
-        </p>
-      )}
+      {!research.report &&
+        (['pending', 'retrying', 'incomplete'].includes(replayState ?? '') ||
+          (stream && reportHasGap(stream))) && (
+          <p className="cw-sync-note" role="status" data-testid="report-recovery-note">
+            {replayState === 'incomplete' || (stream && reportHasGap(stream))
+              ? '部分写作记录无法确认，已保留连续正文，等待回读或最终报告。'
+              : replayState === 'pending'
+                ? '写作记录尚未就绪，正在等待；已收到的草稿会保留。'
+                : '写作记录暂时无法回读，正在重试；已收到的草稿会保留。'}
+          </p>
+        )}
       {history.length > 0 && (
         <details className="cw-report-message" data-testid="report-attempt-history">
           <summary>先前写作尝试 · {history.length}</summary>
