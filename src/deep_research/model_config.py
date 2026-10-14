@@ -83,12 +83,15 @@ def public_model_config(*, include_catalog=True) -> dict:
     from deep_research.atlas_runtime import submissions_enabled
 
     from deep_research.run_configuration import catalog
+    from deep_research.report_streaming import report_journal_path
     return {
         "contract_version": 1,
         "graph_id": "research_agent_full",
         "model_selection": "server",
         "skills_mode": "auto",
         "research_events_version": 1,
+        "report_events_version": 1,
+        **({"report_event_replay_version": 1} if report_journal_path() is not None else {}),
         **({"research_event_replay_version": 1} if journal_path() is not None else {}),
         **({"submission_recovery_version": 1} if submissions_enabled() else {}),
         "models": [dict(_model_snapshots[role]) for role in MODEL_ROLES if role in _model_snapshots],

@@ -537,6 +537,7 @@ dependencies = [
     { name = "python-frontmatter" },
     { name = "rich" },
     { name = "tavily-python" },
+    { name = "tenacity" },
 ]
 
 [package.optional-dependencies]
@@ -574,6 +575,7 @@ requires-dist = [
     { name = "rich", specifier = ">=14.0.0" },
     { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.6.1" },
     { name = "tavily-python", specifier = ">=0.5.0" },
+    { name = "tenacity", specifier = ">=9.1.2" },
 ]
 provides-extras = ["dev"]
 

@@ -12,6 +12,7 @@ from starlette.routing import Route
 from deep_research.model_config import MODEL_ROLES, public_model_config
 from deep_research.event_journal import EventIdentity, get_event_journal
 from deep_research.submission_api import get_receipt, recover, submit
+from deep_research.report_streaming import get_report_journal
 
 
 async def config(request):
@@ -46,7 +47,11 @@ async def events(request):
         turn_id,
     )
     try:
-        journal = get_event_journal()
+        journal = (
+            get_report_journal()
+            if request.url.path.endswith("/report-events")
+            else get_event_journal()
+        )
         if journal is None:
             return JSONResponse(
                 {"detail": "Event replay is disabled."}, status_code=404
@@ -86,6 +91,11 @@ app = Starlette(
         ),
         Route(
             "/atlas/threads/{thread_id:uuid}/runs/{run_id:uuid}/events",
+            events,
+            methods=["GET"],
+        ),
+        Route(
+            "/atlas/threads/{thread_id:uuid}/runs/{run_id:uuid}/report-events",
             events,
             methods=["GET"],
         ),

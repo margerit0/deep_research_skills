@@ -34,6 +34,10 @@ from deep_research.research_agent_full import agent
 
 ## 星图工作台真实模式
 
+2026-10-14 的计划 3 已接入最终报告正文流式。独立 `report_streaming.py` 仅发送正文，按约 150 毫秒或 2048 字符合并；明确区分至多三次生成尝试，SDK 重试另计，模型完成不等于业务成功。取消执行时关闭模型流、保留已提交草稿并传播取消信号，不重新生成。正文日志默认与研究事件库同目录，名为 `atlas-report-events.sqlite3`，可设 `ATLAS_REPORT_EVENT_DB`；应与其余恢复数据库一并保留。API 与前端分别使用 `report_events_version`、`report_event_replay_version`、`atlas.report_event` 和 `/report-events`，见 [实施说明](../frontend/docs/report-streaming-plan.md)。
+
+本轮 Kimi 通过显式 SOCKS5 `127.0.0.1:55430` 从原写作检查点恢复。原两次提交 / 两个 run 加一个写作恢复，共三个 run；一条真实流式 HTTP 请求返回 200，固定回执完成，业务仍为部分完成。原研究笔记、8 条来源、研究失败与配置均保留；生产 `.env` 和原证据不变。三个正文引用的主要事实有官方来源支持，仍有表达和覆盖缺口；严格完整首段提前显示时点未单独记录。不得把部分完成或离线回放改记为完整成功。
+
 2026-10-11 的计划 2 已支持按次模型 / Skills。前端从现有六角色配置的去重目录选择各角色模型，发送后锁定一轮研究；澄清、提交重试、恢复和历史都沿用受理快照。`run_configuration.py` 通过执行作用域和模型缓存隔离请求，网页摘要线程复制上下文，共享限流器及 Qwen `/no_think` 路径保留。旧独立图、评估和不支持选择的后端继续使用默认调用。
 
 新配置归档默认是受理库同目录的 `atlas-configs.sqlite3`，可用 `ATLAS_CONFIG_DB` 改路径，必须与受理、事件和原生检查点一起备份。归档包含原网关、模型参数、凭据环境变量名和 Skills 正文修订，不含密钥值；前端只看到公开快照与修订 ID。重启后默认模型 / Skills 内容变化不覆盖历史。旧修订的网关仍需可访问，密钥仍从本地 `.env` 加载；不要删除归档后期待恢复旧研究。

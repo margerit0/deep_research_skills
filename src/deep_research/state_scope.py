@@ -46,6 +46,10 @@ class AgentState(MessagesState):
     active_research_id: str
     active_turn_id: str
     report_research_id: str
+    report_run_id: str
+    report_turn_id: str
+    report_attempt_id: str
+    report_writing_attempt_id: str
     research_status: ResearchStatus
     research_phase: ResearchPhase
     research_iterations: int

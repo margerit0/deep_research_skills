@@ -400,7 +400,9 @@ def test_research_events_stream_before_child_finishes_and_match_checkpoint(harne
                 stream_mode=["custom", "values"],
             ):
                 if mode == "custom":
-                    assert value["type"] == "atlas.research_event"
+                    assert value["type"] in {"atlas.research_event", "atlas.report_event"}
+                    if value["type"] == "atlas.report_event":
+                        continue
                     event = value["event"]
                     seen.append(event)
                     if (

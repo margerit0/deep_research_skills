@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import * as api from '../api/langgraph'
 import * as submissions from '../api/submissions'
-import type { BackendConfig, LiveResearch, ResearchEvent } from '../data/liveSchema'
+import type { BackendConfig, LiveResearch, ResearchEvent, ReportEvent } from '../data/liveSchema'
 import type { Thread, Workspace } from '../data/schema'
 import { applySnapshot } from '../data/live'
 import { applyReceipt } from '../data/executionRecovery'
@@ -9,8 +9,22 @@ import { streamResearchEvents } from '../api/researchStream'
 import { readEventPage } from '../api/eventReplay'
 import { retryDelay, savedRecovery } from '../data/eventRecovery'
 import { getResearcherNodes, mergeResearchEvents } from '../data/researchEvents'
+import { readReportPage } from '../api/reportReplay'
+import { savedReportStream } from '../data/reportEvents'
+import type { ReportReplay } from '../data/reportEvents'
 
 export type LiveUpdate =
+  | {
+      type: 'live-report-events'
+      threadId: string
+      serverUrl: string
+      researchId: string
+      turnId: string
+      runId: string
+      events: ReportEvent[]
+      cursor?: string
+      replay?: ReportReplay
+    }
   | {
       type: 'live'
       threadId: string
@@ -40,6 +54,7 @@ type Connection = { config?: BackendConfig; loading: boolean; error?: string }
 type EventConnection = 'connecting' | 'live' | 'retrying' | 'ended'
 type EventStream = {
   runId: string
+  serverUrl: string
   cursor: string
   retryAt: number
   failures: number
@@ -67,6 +82,116 @@ export function useLiveResearch(
   const replays = useRef(new Map<string, AbortController>())
   const replayRetries = useRef(new Map<string, Retry>())
   const syncRetries = useRef(new Map<string, Retry>())
+  const reportReplays = useRef(new Map<string, AbortController>())
+  const reportRetries = useRef(new Map<string, Retry>())
+  const capabilities = useRef(new Map<string, BackendConfig>())
+  const [reportReplayStates, setReportReplayStates] = useState<Record<string, ReplayState>>({})
+
+  function supportsReports(thread: Thread, research: LiveResearch) {
+    return (
+      research.config.report_events_version === 1 ||
+      !!savedReportStream(thread.live!, research)?.events.length ||
+      (research.execution?.attempts.at(-1)?.kind === 'resume' &&
+        capabilities.current.get(thread.live!.serverUrl)?.report_events_version === 1)
+    )
+  }
+
+  async function recoverReports(thread: Thread, research: LiveResearch, force: boolean) {
+    const turn = research.turns.at(-1)!
+    if (
+      !turn.runId ||
+      !supportsReports(thread, research) ||
+      (!research.reportStreams?.length && !['writing', 'complete'].includes(research.phase)) ||
+      (research.config.report_event_replay_version !== 1 &&
+        capabilities.current.get(thread.live!.serverUrl)?.report_event_replay_version !== 1)
+    )
+      return
+    if (reportReplays.current.has(thread.id)) return
+    const retry = reportRetries.current.get(turn.runId)
+    if (!force && retry && retry.at > Date.now()) return
+    const controller = new AbortController()
+    reportReplays.current.set(thread.id, controller)
+    const saved = savedReportStream(thread.live!, research)
+    let after = saved?.sequence ?? 0
+    let journalId = saved?.journalId
+    const state = (value: ReplayState['state']) => {
+      if (mounted.current)
+        setReportReplayStates((previous) =>
+          previous[thread.id]?.runId === turn.runId && previous[thread.id]?.state === value
+            ? previous
+            : { ...previous, [thread.id]: { runId: turn.runId!, state: value } },
+        )
+    }
+    try {
+      for (let index = 0; index < 4; index++) {
+        const page = await readReportPage(
+          thread.live!,
+          research,
+          after,
+          journalId,
+          controller.signal,
+        )
+        const latest = current.current.threads
+          .find((item) => item.id === thread.id)
+          ?.live?.researches.at(-1)
+        if (
+          !mounted.current ||
+          controller.signal.aborted ||
+          latest?.id !== research.id ||
+          latest.turns.at(-1)?.runId !== turn.runId
+        )
+          return
+        if (page.status === 'missing' && research.status === 'running' && !saved?.journalId) {
+          const failures = (retry?.failures ?? 0) + 1
+          reportRetries.current.set(turn.runId, { failures, at: Date.now() + retryDelay(failures) })
+          if (failures > 1) state('retrying')
+          return
+        }
+        const gap = page.gap || (research.status !== 'running' && !page.sealed)
+        const action: LiveUpdate = {
+          type: 'live-report-events',
+          threadId: thread.id,
+          serverUrl: thread.live!.serverUrl,
+          researchId: research.id,
+          turnId: turn.id,
+          runId: turn.runId,
+          events: page.events,
+          replay: {
+            journalId: page.journal_id ?? undefined,
+            sequence: page.status === 'ready' ? page.next_sequence : after,
+            gap,
+            sealed: page.sealed,
+            reset: page.reset,
+            unconfirmedBefore: page.unconfirmed_before_sequence,
+          },
+        }
+        if (!commitRef.current(action, true)) {
+          // Preserve the actual draft in memory, but retry from the old saved position.
+          commitRef.current({
+            ...action,
+            replay: { ...action.replay!, sequence: after, journalId, reset: false },
+          })
+          throw new Error('Report could not be saved')
+        }
+        after = page.next_sequence
+        journalId = page.journal_id ?? undefined
+        state(gap ? 'incomplete' : 'ready')
+        if (!page.has_more) {
+          reportRetries.current.delete(turn.runId)
+          return
+        }
+      }
+      reportRetries.current.set(turn.runId, { failures: 0, at: Date.now() + 2000 })
+    } catch {
+      if (!mounted.current || controller.signal.aborted) return
+      const failures = (retry?.failures ?? 0) + 1
+      reportRetries.current.set(turn.runId, { failures, at: Date.now() + retryDelay(failures) })
+      state('retrying')
+    } finally {
+      if (reportReplays.current.get(thread.id) === controller)
+        reportReplays.current.delete(thread.id)
+    }
+  }
 
   function updateReplayState(id: string, value: ReplayState) {
     if (mounted.current)
@@ -179,13 +304,17 @@ export function useLiveResearch(
         research?.status === 'running' &&
         research.config.research_events_version === 1 &&
         research.turns.at(-1)?.runId &&
-        (!research.turns.at(-1)?.eventRunId ||
+        (supportsReports(thread, research) ||
+          !research.turns.at(-1)?.eventRunId ||
           research.turns.at(-1)?.eventRunId === research.turns.at(-1)?.runId)
       )
     })
     for (const [id, stream] of streams.current) {
       const candidate = candidates.find((thread) => thread.id === id)
-      if (candidate?.live?.researches.at(-1)?.turns.at(-1)?.runId !== stream.runId) {
+      if (
+        candidate?.live?.researches.at(-1)?.turns.at(-1)?.runId !== stream.runId ||
+        candidate?.live?.serverUrl !== stream.serverUrl
+      ) {
         stream.controller?.abort()
         streams.current.delete(id)
         updateEventConnection(id, 'ended')
@@ -194,9 +323,13 @@ export function useLiveResearch(
     for (const thread of candidates) {
       const research = thread.live!.researches.at(-1)!
       const turn = research.turns.at(-1)!
-      const stream = streams.current.get(thread.id) ?? {
+      const stream: EventStream = streams.current.get(thread.id) ?? {
         runId: turn.runId!,
-        cursor: savedRecovery(thread.live!, research)?.cursor ?? '-1',
+        serverUrl: thread.live!.serverUrl,
+        cursor:
+          savedReportStream(thread.live!, research)?.cursor ??
+          savedRecovery(thread.live!, research)?.cursor ??
+          '-1',
         retryAt: 0,
         failures: 0,
       }
@@ -211,6 +344,23 @@ export function useLiveResearch(
         onOpen: () => updateEventConnection(thread.id, 'live'),
         onCursor: (id) => {
           if (!mounted.current || controller.signal.aborted) return
+          if (
+            supportsReports(thread, research) &&
+            !commitRef.current(
+              {
+                type: 'live-report-events',
+                threadId: thread.id,
+                serverUrl: thread.live!.serverUrl,
+                researchId: research.id,
+                turnId: turn.id,
+                runId: turn.runId!,
+                events: [],
+                cursor: id,
+              },
+              true,
+            )
+          )
+            return
           if (
             commitRef.current(
               {
@@ -233,6 +383,19 @@ export function useLiveResearch(
           commitRef.current({
             type: 'live-events',
             threadId: thread.id,
+            researchId: research.id,
+            turnId: turn.id,
+            runId: turn.runId!,
+            events: [event],
+          })
+        },
+        onReportEvent: (event) => {
+          if (!mounted.current || controller.signal.aborted) return
+          stream.failures = 0
+          commitRef.current({
+            type: 'live-report-events',
+            threadId: thread.id,
+            serverUrl: thread.live!.serverUrl,
             researchId: research.id,
             turnId: turn.id,
             runId: turn.runId!,
@@ -278,6 +441,7 @@ export function useLiveResearch(
     setConnection({ loading: true })
     try {
       const config = await api.getConfig()
+      capabilities.current.set(api.apiUrl, config)
       if (mounted.current) setConnection({ loading: false, config })
     } catch {
       if (mounted.current)
@@ -322,7 +486,7 @@ export function useLiveResearch(
         commitRef.current({ type: 'live', threadId, research: next })
         updateSync(threadId, { state: 'ready' })
         syncRetries.current.delete(threadId)
-        await recoverEvents(thread, next, force)
+        await Promise.all([recoverEvents(thread, next, force), recoverReports(thread, next, force)])
         return
       }
       const serverRun = await api.findRun(thread.live, research)
@@ -345,7 +509,7 @@ export function useLiveResearch(
       commitRef.current({ type: 'live', threadId, research: next })
       updateSync(threadId, { state: 'ready' })
       syncRetries.current.delete(threadId)
-      await recoverEvents(thread, next, force)
+      await Promise.all([recoverEvents(thread, next, force), recoverReports(thread, next, force)])
     } catch (error) {
       const latest = current.current.threads
         .find((item) => item.id === threadId)
@@ -393,6 +557,7 @@ export function useLiveResearch(
       // A restarted backend may have new process-level configuration. Refresh
       // its public snapshot before recording this submission's actual models.
       config = await api.getConfig(live.serverUrl)
+      capabilities.current.set(live.serverUrl, config)
       if (!mounted.current) {
         sending.current.delete(thread.id)
         return
@@ -656,6 +821,8 @@ export function useLiveResearch(
       streams.current.clear()
       for (const controller of replays.current.values()) controller.abort()
       replays.current.clear()
+      for (const controller of reportReplays.current.values()) controller.abort()
+      reportReplays.current.clear()
     }
   }, [])
   useEffect(() => {
@@ -669,7 +836,10 @@ export function useLiveResearch(
       for (const thread of current.current.threads) {
         const last = thread.live?.researches.at(-1)
         const runId = last?.turns.at(-1)?.runId
-        if (last?.status === 'running' || (runId && replayRetries.current.has(runId)))
+        if (
+          last?.status === 'running' ||
+          (runId && (replayRetries.current.has(runId) || reportRetries.current.has(runId)))
+        )
           void refresh(thread.id, false)
       }
       syncStreams()
@@ -678,6 +848,7 @@ export function useLiveResearch(
       for (const stream of streams.current.values()) stream.retryAt = 0
       for (const retry of syncRetries.current.values()) retry.at = 0
       for (const retry of replayRetries.current.values()) retry.at = 0
+      for (const retry of reportRetries.current.values()) retry.at = 0
       syncStreams()
       for (const thread of current.current.threads) {
         if (
@@ -705,6 +876,7 @@ export function useLiveResearch(
     connect,
     eventConnections,
     replayStates,
+    reportReplayStates,
     retrySubmission,
     recoverExecution,
   }

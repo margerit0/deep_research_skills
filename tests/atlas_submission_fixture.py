@@ -6,6 +6,7 @@ from pathlib import Path
 import sqlite3
 import time
 from types import SimpleNamespace
+from langchain_core.messages import AIMessageChunk
 
 from starlette.applications import Starlette
 from starlette.responses import JSONResponse
@@ -101,6 +102,16 @@ async def write(messages):
     return await original_write(messages)
 
 
+async def stream_write(messages):
+    count("writer")
+    response = await original_write(messages)
+    text = response.content
+    middle = max(1, len(text) // 2)
+    yield AIMessageChunk(content=text[:middle])
+    await apause("writer-stream")
+    yield AIMessageChunk(content=text[middle:])
+
+
 async def create_native(*args):
     await apause("before-create")
     result = await original_create(*args)
@@ -135,6 +146,8 @@ if not getattr(fixture, "_atlas_submission_instrumented", False):
     fixture.researcher.tools_by_name["tavily_search"].invoke = search
     fixture.researcher.compress_model = SimpleNamespace(invoke=compress)
     fixture.full.writer_model = SimpleNamespace(ainvoke=write)
+    if (directory / "report-streaming-fixture").exists():
+        fixture.full.writer_model = SimpleNamespace(astream=stream_write, ainvoke=write)
     submission_api.create_native = create_native
     if os.getenv("ATLAS_CONFIG_FIXTURE") == "1":
         from tests.atlas_configuration_fixture import install

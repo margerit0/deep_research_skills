@@ -2,6 +2,25 @@
 
 工作台使用 `langgraph.json` 注册的 `research_agent_full`。自定义接口提供配置、事件回放、幂等受理和受限执行恢复；会话、运行、检查点与 SSE 仍由 LangGraph 管理。前端不拥有模型、Tavily 或 LangSmith 凭据。
 
+## 报告正文事件扩展 · 2026-10-14
+
+`GET /atlas/config` 新增 `report_events_version: 1` 和可选 `report_event_replay_version: 1`。独立类型 `atlas.report_event` 与研究员 v1 共用原生 `custom` SSE 观察连接，不改变研究员事件格式。旧服务 / 缓存仍支持检查点模式；历史受理配置不增加字段，恢复旧配置的写作 run 时使用当前后端能力。
+
+事件公共字段为 `version: 1`、事件 `id`、`thread_id`、`research_id`、`turn_id`、`run_id`、`attempt_id`、`writing_attempt_id`、单调 `sequence`、UTC `at`、UTF-8 字节 `offset`。原生 metadata 中没有受理 attempt 的旧 run 使用 run ID 作为该身份。四种类型：
+
+- `started`：真正开始一次写作，offset 为 0，独立写作 UUID；同 run 中重写也更换 UUID。
+- `delta`：`text` 是有界正文块；offset 为该块之前的 UTF-8 字节数。
+- `failed`：本次生成失败，保留已收到的连续草稿，不包含原始异常。
+- `finished`：模型输出结束，`sha256` 为去除首尾空白后的完整正文摘要；仍需终态检查点确认。
+
+只从最终模型的文本内容提取正文，过滤推理 / 工具块、供应商元数据和跨分片秘密值。按约 150 毫秒或 2048 个 Python 字符合并，上限 1,000,000 字符。显式最多三次重新生成，SDK 请求重试单独计算；不依赖不会重试流的 `RunnableRetry`。取消与退出信号不重试，当前流关闭后直接传播，已收到的草稿保留。非流式独立模型只发布实际完整输出。
+
+持久回放为 `GET /atlas/threads/{thread_id}/runs/{run_id}/report-events`，参数、分页位置、`missing/expired/gap/reset/sealed/unconfirmed_before_sequence` 沿用下方研究日志协议，但事件类型独立。使用单独的 `atlas-report-events.sqlite3`，默认与研究日志同目录，可设 `ATLAS_REPORT_EVENT_DB`；保留期沿用 `ATLAS_EVENT_RETENTION_DAYS`。写入先提交后发布，读取不启动运行。恢复写作使用新 run 的正文日志，原 `event_run_id` 仍指向检索记录。
+
+浏览器按后端 / thread / research / turn / run / attempt 保存事件和回放位置，去重且只应用连续、offset 匹配的正文。失败草稿独立保留；日志替换建立新的活动记录。存储失败不推进持久化位置，旧进程缺少终态时停止显示为仍在写作。最终结果增加 `report_run_id`、`report_turn_id`、`report_attempt_id`、`report_writing_attempt_id`，匹配后以终态检查点完整正文校准；原生 success、SSE 结束和日志 sealed 都不是业务成功。
+
+原生 `submission-api.spec.ts` 的 `report native` 用例在实际流式替身的首块之后停止服务，验证即时落盘、重启回放、浏览器恢复、固定配置、原检索事件 run、搜索 / 压缩不重跑，以及重复恢复零新增调用。沿用下方 1B 启动命令，可用 `--grep 'report native'` 单独运行。实现细节与真实 Kimi 验收边界见 [实施说明](report-streaming-plan.md) 和 [验收记录](verification.md)。
+
 ## 标识及生命周期
 
 | 标识                              | 所属层                    | 规则                                                   |
@@ -254,7 +273,7 @@ SQLite 受理意图包含固定 run UUID，在创建原生 run 之前提交。�
 
 1A 保证观察与记录恢复；事件日志不会自行恢复执行。1B 受理回执识别旧进程，提供上述三个经过验证的恢复边界，不能仅信任原生 `running` 状态。日志中的未确认任务仍显示“完成状态未确认”；无法续跑时保留本地、检查点和后续回放中已确认的笔记、来源与报告。日志文件丢失、保留期已过、从未成功提交的事件不保证补回。
 
-本实现面向单进程本地开发服务；SQLite 文件和进程身份不是多实例部署的共享执行协调协议。未纳入恢复白名单的节点、逐 token 报告、跨设备会话发现和多用户权限仍属后续范围。
+本实现面向单进程本地开发服务；SQLite 文件和进程身份不是多实例部署的共享执行协调协议。未纳入恢复白名单的节点、跨设备会话发现和多用户权限仍属后续范围。
 
 ## 原生 API 的可复现替身验证
 
@@ -327,7 +346,7 @@ npm test -- tests/submission-api.spec.ts --workers=1 --output test-results/submi
 
 当前 CLI 0.4.26 / API 0.8.7 会覆盖 `LANGGRAPH_DISABLE_FILE_PERSISTENCE`，其配置校验又会过滤顶层 `disable_persistence`。因此旧命令仅在 `env` 中设为 true，不能证明已关闭持久化。普通替身使用上述专用启动器，提前设置环境并直接传入原生服务参数；恢复用例明确启用持久化、提前注入环境且使用独立目录。不要用正常开发数据目录进行强制停止验收。
 
-真实模型联调使用正常后端与前端，清除 `ATLAS_API_FIXTURE`，显式设置 `$env:ATLAS_LIVE = '1'` 和 `$env:NO_PROXY = '*'` 再运行 `tests/live-api.spec.ts`。此模式调用模型和 Tavily，产生真实费用；测试要求完成澄清、补充回答、报告与来源，并在刷新后仍只有两次运行提交。2026-10-13 后续 GLM 复测确认简报失败；同网关 / 同密钥的 Kimi 隔离测试取得笔记和 8 条来源，但在报告写作时被预设保护期限中断。完整交付仍未验收，详见 [最新记录](verification.md)；不能将单步成功、原生 run 成功或离线回放画面记为真实闭环通过。
+真实模型联调使用正常后端与前端，清除 `ATLAS_API_FIXTURE`，显式设置 `$env:ATLAS_LIVE = '1'` 和 `$env:NO_PROXY = '*'` 再运行 `tests/live-api.spec.ts`。此模式调用模型和 Tavily，产生真实费用；测试要求完成澄清、补充回答、报告与来源，并在刷新后仍只有两次运行提交。2026-10-13 后续 GLM 复测确认简报失败；同网关 / 同密钥的 Kimi 隔离测试取得笔记和 8 条来源，但在报告写作时被预设保护期限中断。2026-10-14 通过代理恢复该写作检查点后获得部分完成报告，共 3 个 run；原研究失败与严格首段观测缺口仍保留。完整成功研究仍未验收，详见 [最新记录](verification.md)；不能将单步成功、原生 run 成功或离线回放画面记为真实闭环通过。
 
 真实模式当前使用 **600 秒**澄清观察窗口，单测试整体最多 **1800 秒（30 分钟）**。第二次提交后的终态等待取整体剩余时间并预留 **30 秒**回读，替代此前固定的 1140 秒阶段窗口；Kimi 旧用例仍按当时的 1140 秒超时如实记录，不回写成新预算已通过。这些是浏览器观察期限，不会增加 SDK / helper / 节点的有限重试次数，也不会在观察失败时重新提交问题。替身模式仍使用原 180 / 660 / 900 秒预算。真实复测应显式设置测试级 `retries: 0`，为专属后端设置清理期限，结束前先回读受理回执及所属终态检查点；超时只能记为未完成，不能用原生 run 的 `success` 推断报告交付。
 

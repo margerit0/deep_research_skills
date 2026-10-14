@@ -23,6 +23,7 @@ from deep_research.state_scope import AgentInputState, AgentState
 from deep_research.submission_journal import guard_execution
 from deep_research.submission_journal import accepted_configuration
 from deep_research.run_configuration import configured_node, selected_model
+from deep_research.report_streaming import stream_final_report
 from deep_research.utils import get_today_str
 from deep_research.workflow_contract import (
     is_research_note,
@@ -32,10 +33,7 @@ from deep_research.workflow_contract import (
 )
 
 logger = logging.getLogger(__name__)
-writer_model = get_chat_model("FINAL_REPORT", max_tokens=32000).with_retry(
-    stop_after_attempt=3,
-    wait_exponential_jitter=True,
-)
+writer_model = get_chat_model("FINAL_REPORT", max_tokens=32000)
 
 
 def _failure(state, node, code, text):
@@ -93,6 +91,10 @@ def prepare_research(state: AgentState) -> Command:
         "final_report": "",
         "report_research_id": "",
         "notes": Overwrite([]),
+        "report_run_id": "",
+        "report_turn_id": "",
+        "report_attempt_id": "",
+        "report_writing_attempt_id": "",
         "raw_notes": Overwrite([]),
         "supervisor_messages": Overwrite([]),
         "research_iterations": 0,
@@ -252,10 +254,10 @@ async def final_report_generation(state: AgentState):
             findings="\n".join(notes),
             date=get_today_str(),
         )
-        response = await selected_model("FINAL_REPORT", writer_model, retry=True).ainvoke([HumanMessage(content=prompt)])
-        report = message_text(response.content)
-        if not is_research_note(report):
-            raise ValueError("Empty or failed final report")
+        report, report_identity = await stream_final_report(
+            selected_model("FINAL_REPORT", writer_model),
+            [HumanMessage(content=prompt)], state,
+        )
     except Exception as exc:
         log_node_failure(logger, "final_report_generation", exc)
         return {
@@ -273,6 +275,7 @@ async def final_report_generation(state: AgentState):
         }
     return {
         "final_report": report,
+        **report_identity,
         "report_research_id": state.get("active_research_id", ""),
         "research_status": "partial"
         if errors or state.get("supervisor_status") != "completed"

@@ -1,0 +1,204 @@
+{
+  "date": "2026-10-14",
+  "timezone": "Asia/Shanghai",
+  "baseCommit": "87705a4",
+  "codeState": "plan_3_implementation_uncommitted_during_real_call",
+  "modelAndSearchSubstitutes": false,
+  "scope": "writer_only_recovery_of_original_kimi_checkpoint_on_verified_copy",
+  "threadId": "555a9b2b-eec3-41b3-b294-6727c533c55b",
+  "researchId": "4e559f56-f300-40f6-a9af-10fd47d98ba2",
+  "turnId": "16e0f93f-e8be-487a-96c4-3aef0b4cf9f9",
+  "parentRunId": "d208d0c2-02bb-421a-8ac9-f1523db4e98b",
+  "sourceCheckpointId": "1f1c6be1-a3b3-66d7-8008-40cc850dc747",
+  "recoveryAttemptId": "c810f886-6c80-4081-948e-00106fb86ee5",
+  "runId": "e54efbd8-2650-4620-9bc5-aaf6d5665a21",
+  "writingAttemptId": "3d8bfae1-0568-4dc5-a445-2c0a294b42a8",
+  "finalCheckpointId": "1f1c7c3c-d409-699d-8009-c77bd3ffd051",
+  "originalSubmissionCount": 2,
+  "originalRunCount": 2,
+  "newRecoveryRunCount": 1,
+  "totalRunCount": 3,
+  "originalStateUnmodified": true,
+  "receiptStatus": "completed",
+  "businessStatus": "partial",
+  "phase": "complete",
+  "errors": [
+    {
+      "code": "researcher_failed",
+      "message": "一个研究任务未获得有效结果，研究覆盖可能不完整。",
+      "node": "supervisor_subgraph"
+    }
+  ],
+  "noteCount": 1,
+  "sourceCount": 8,
+  "successfulSkillsLoads": [],
+  "reportLength": 1405,
+  "bodyHanCharacters": 506,
+  "reportSha256": "e6344d445ec73088c022870480f011d418a68c0178b1e24b358bf7e82c5d522e",
+  "reportEventCount": 80,
+  "writingAttempts": 1,
+  "startedAt": "2026-10-14T11:38:13.845Z",
+  "firstVisibleAt": "2026-10-14T11:38:21.716Z",
+  "modelFinishedAt": "2026-10-14T11:38:40.098389+00:00",
+  "browserVerificationFinishedAt": "2026-10-14T11:38:41.750Z",
+  "firstVisibleTextLength": 48,
+  "firstTextBeforeCompletion": true,
+  "firstCompleteParagraphBeforeCompletion": "not_separately_captured",
+  "modelHttpAttempts": [
+    {
+      "at": 1791977896.4676194,
+      "kind": "request",
+      "id": "8b3c6ba7-3b67-4b6d-8862-904e3dfb6517",
+      "model": "moonshotai/kimi-k3",
+      "stream": true,
+      "node": "final_report_generation",
+      "runId": "e54efbd8-2650-4620-9bc5-aaf6d5665a21",
+      "sdkRetryCount": "0",
+      "endpointMatchesArchive": true
+    },
+    {
+      "at": 1791977896.4685895,
+      "kind": "socket",
+      "requestId": "8b3c6ba7-3b67-4b6d-8862-904e3dfb6517",
+      "hostIsProxy": true,
+      "port": 55430
+    },
+    {
+      "at": 1791977900.4519477,
+      "kind": "response",
+      "id": "8b3c6ba7-3b67-4b6d-8862-904e3dfb6517",
+      "httpStatus": 200
+    }
+  ],
+  "proxy": {
+    "scheme": "socks5",
+    "host": "127.0.0.1",
+    "port": 55430
+  },
+  "tlsVerification": true,
+  "noProxy": "*",
+  "agentRpm": "30",
+  "httpAttemptsPerWritingAttempt": 5,
+  "writingAttemptsMaximum": 3,
+  "checks": {
+    "originalFilesUnchanged": true,
+    "backendEnvUnchanged": true,
+    "fixedReceiptCompleted": true,
+    "reportMatchesBrowserBeforeReload": true,
+    "reportMatchesBrowserAfterReload": true,
+    "reportMatchesFixedCheckpoint": true,
+    "sourcesMatchBrowser": true,
+    "sourcesPreserved": true,
+    "notesPreserved": true,
+    "configurationPreserved": true,
+    "originalResearchEventsPreserved": true,
+    "onlyWriterNodeEntered": true,
+    "oneNewRunAndNoReloadExecution": true,
+    "oneRecoveryPost": true,
+    "proxySocketObserved": true,
+    "newModelRequestsUseKimiAndArchiveEndpoint": true,
+    "continuousReportEvents": true,
+    "streamTextMatchesCheckpoint": true,
+    "streamFinishDigestMatches": true,
+    "citationIdsResolve": true,
+    "citationsAreActualSearchSources": true,
+    "citationsUseOfficialPythonDomains": true
+  },
+  "rawObserverCorrections": {
+    "reason": "Two JSON.stringify equality checks were sensitive to object key order; parsed source/configuration values are exactly equal.",
+    "originalBrowserEvidenceRetained": true,
+    "sourcesSemanticallyEqual": true,
+    "configurationSemanticallyEqual": true
+  },
+  "citationReview": {
+    "status": "reviewed_with_findings",
+    "sourceMappingPassed": true,
+    "referenceCount": 3,
+    "sources": [
+      {
+        "number": 1,
+        "url": "https://peps.python.org/pep-0703",
+        "finalUrl": "https://peps.python.org/pep-0703/",
+        "status": 200,
+        "retrievedAt": "2026-10-14T11:42:51.635580+00:00",
+        "sha256": "24e3e5e94f1f53b38f7d2bebf0ef09697a83bfff516692ec6c9af56a4c7ecb27",
+        "textSha256": "348659e1fd5b026e9fe0d837d7543cd87ad562d5cc9be881117a814157804f0f",
+        "textLength": 82687
+      },
+      {
+        "number": 2,
+        "url": "https://docs.python.org/3.13/whatsnew/3.13.html#free-threaded-cpython",
+        "finalUrl": "https://docs.python.org/3.13/whatsnew/3.13.html#free-threaded-cpython",
+        "status": 200,
+        "retrievedAt": "2026-10-14T11:42:50.216709+00:00",
+        "sha256": "9ebfc25ff631fd04c8ded720c7ce65a1348b59589ed600c7f586e7159af3f474",
+        "textSha256": "66c11484e262ce285f426967a1221d0bda5433e74ef324cee7650ccda9b6ed91",
+        "textLength": 111758
+      },
+      {
+        "number": 3,
+        "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+        "finalUrl": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+        "status": 200,
+        "retrievedAt": "2026-10-14T11:42:49.788645+00:00",
+        "sha256": "03d23f4d2774f1b51485c326466f8e44fab52c9506c4834f07758f126d32b8ae",
+        "textSha256": "e7204e1019c1d0b6c2772184e7b16302092f84ef3a1bd2b9146876270ce362cc",
+        "textLength": 10383
+      }
+    ],
+    "findings": [
+      "The applicability section does not incorporate the official guidance on programs designed for threading and multi-core workloads.",
+      "The GIL re-enable statement should qualify the explicit PYTHON_GIL=0 / -X gil=0 override described by source 2.",
+      "The PEP's 2028-2030 roadmap is historical and tentative; the report labels it as proposal planning rather than a guarantee."
+    ],
+    "reportWasNotEdited": true
+  },
+  "acceptance": {
+    "writerRecovery": "passed",
+    "streamDeliveryAndCheckpointReconciliation": "passed_for_partial_research",
+    "completeSuccessfulResearch": "not_passed",
+    "strictFirstParagraphTiming": "not_confirmed",
+    "reason": "Original researcher failure and no successful Skills loads remain; the live screenshot captured initial headings, not a complete first paragraph."
+  },
+  "localEvidence": {
+    ".local/kimi-writing-20261014/original-audit.json": {
+      "sha256": "69348cee278644758acfb4b8b1c75bc261ae26964fc77ba0c972c3b59c451ae5"
+    },
+    ".local/kimi-writing-20261014/preflight.json": {
+      "sha256": "6673f6195292792798401998bd0f1cabe711212115997a462210ec4c490c8b97"
+    },
+    ".local/kimi-writing-20261014/final.json": {
+      "sha256": "23c26db57df5bc5eec2f0b78b5ea7c6ba5ca6688d13c40572c2032b95a616c98"
+    },
+    ".local/kimi-writing-20261014/browser-evidence.json": {
+      "sha256": "5303df23c8aed0192c79a69de90b40ba3b84071540eb2087281600220b69da61"
+    },
+    ".local/kimi-writing-20261014/model-http.jsonl": {
+      "sha256": "d3dd89834910b0cddebc2da2b1a62a0175e9ca4e878fe9d4a8f03cd57565fdb4"
+    },
+    ".local/kimi-writing-20261014/node-entries.jsonl": {
+      "sha256": "0fca75be8b014d7acca46cc9518f671593a515670d2ce5e5c4336164337082d1"
+    },
+    ".local/kimi-writing-20261014/report.md": {
+      "sha256": "e6344d445ec73088c022870480f011d418a68c0178b1e24b358bf7e82c5d522e"
+    },
+    ".local/kimi-writing-20261014/report-events.json": {
+      "sha256": "ebc0112c46116497016c498eee8023daf2b4590a7e3a82e9573bd20d2885d5f9"
+    },
+    ".local/kimi-writing-20261014/before-resume.png": {
+      "sha256": "09b586e836b2ef14790e4cd885bedb7a7c5c7474279a3659d5c31e6f4e5f1d6e"
+    },
+    ".local/kimi-writing-20261014/first-live-draft.png": {
+      "sha256": "bfab734f90f324ba94f5475a1b1d0bbcfe54893f2e4380a535f1529410086297"
+    },
+    ".local/kimi-writing-20261014/final-live-report-1440.png": {
+      "sha256": "2bd6249220531b6a8835239afda162c33052140e1cd6b5d4b9fd715a0e47c1dd"
+    },
+    ".local/kimi-writing-20261014/final-live-report-320.png": {
+      "sha256": "bbac87253948640bc4f2b913d177c7d2390a6cdeaea859390a65c2c59eff5050"
+    },
+    ".local/kimi-writing-20261014/citations/manifest.json": {
+      "sha256": "aa63968811412de2c2be1992997fed693e695a78de084cd4aa1dcd03e3e04061"
+    }
+  }
+}

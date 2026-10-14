@@ -16,7 +16,8 @@ export function applyReceipt(
           ? ('interrupted' as const)
           : receipt.run.status,
   }
-  let next = server && values ? applySnapshot(research, server, values) : { ...research }
+  let next =
+    server && values ? applySnapshot(research, server, values, receipt.attempt_id) : { ...research }
   if (receipt.configuration) next.config = receipt.configuration
   if (interrupted) {
     // Native checkpoints may be older than evidence already confirmed locally.

@@ -10,6 +10,7 @@ import {
 import { executionMessage } from '../data/executionRecovery'
 import { Composer } from './Composer'
 import { Icon } from './Icon'
+import { LiveReportDraft } from './LiveReportDraft'
 
 const MarkdownReport = lazy(() => import('./ReportText'))
 
@@ -263,6 +264,14 @@ export function LiveConversation({ controller }: { controller: WorkspaceControll
                     ))}
                   </div>
                 )}
+                <LiveReportDraft
+                  thread={thread.live!}
+                  research={run}
+                  retrying={
+                    live.reportReplayStates[thread.id]?.runId === run.turns.at(-1)?.runId &&
+                    live.reportReplayStates[thread.id]?.state === 'retrying'
+                  }
+                />
                 {run.report && (
                   <div className="cw-report-message" data-testid="live-report">
                     <div className="cw-row">

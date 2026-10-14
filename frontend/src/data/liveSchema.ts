@@ -30,6 +30,8 @@ export const backendConfigSchema = z.object({
   skills_mode: z.literal('auto'),
   research_events_version: z.literal(1).optional(),
   research_event_replay_version: z.literal(1).optional(),
+  report_events_version: z.literal(1).optional(),
+  report_event_replay_version: z.literal(1).optional(),
   submission_recovery_version: z.literal(1).optional(),
   configuration_version: z.literal(1).optional(),
   selection: selectionSchema.optional(),
@@ -115,6 +117,56 @@ export const eventPageSchema = z.object({
   unconfirmed_before_sequence: z.number().int().nonnegative().default(0),
 })
 export type EventPage = z.infer<typeof eventPageSchema>
+export const reportEventSchema = z
+  .object({
+    version: z.literal(1),
+    id: z.uuid(),
+    thread_id: z.string().min(1),
+    run_id: z.string().min(1),
+    research_id: z.string().min(1),
+    turn_id: z.string().min(1),
+    attempt_id: z.string().min(1),
+    writing_attempt_id: z.uuid(),
+    sequence: z.number().int().positive(),
+    at: z.iso.datetime({ offset: true }),
+    kind: z.enum(['started', 'delta', 'failed', 'finished']),
+    offset: z.number().int().nonnegative(),
+    text: z.string().max(4096).optional(),
+    sha256: z
+      .string()
+      .regex(/^[a-f0-9]{64}$/)
+      .optional(),
+  })
+  .refine((event) => event.kind !== 'delta' || !!event.text)
+  .refine((event) => event.kind !== 'started' || event.offset === 0)
+  .refine((event) => event.kind !== 'finished' || !!event.sha256)
+export type ReportEvent = z.infer<typeof reportEventSchema>
+export const reportPageSchema = eventPageSchema.extend({
+  events: z.array(reportEventSchema).max(100),
+})
+export type ReportPage = z.infer<typeof reportPageSchema>
+export const reportStreamSchema = z.object({
+  serverUrl: z.string(),
+  threadId: z.string(),
+  researchId: z.string(),
+  turnId: z.string(),
+  runId: z.string(),
+  attemptId: z.string(),
+  events: z.array(reportEventSchema).max(10000),
+  sequence: z.number().int().nonnegative(),
+  cursor: z
+    .string()
+    .max(256)
+    .regex(/^(?:-1|\d+-\d+)$/)
+    .optional(),
+  journalId: z.uuid().optional(),
+  gap: z.boolean(),
+  sealed: z.boolean(),
+  unconfirmedBefore: z.number().int().nonnegative(),
+  conflicts: z.array(z.number().int().positive()),
+  archived: z.boolean().optional(),
+})
+export type ReportStream = z.infer<typeof reportStreamSchema>
 export const eventRecoverySchema = z.object({
   serverUrl: z.string(),
   threadId: z.string(),
@@ -210,6 +262,16 @@ export const liveResearchSchema = z.object({
   events: z.array(researchEventSchema).default([]),
   // A damaged recovery position must not discard the user's conversation.
   eventRecovery: eventRecoverySchema.optional().catch(undefined),
+  reportStreams: z.array(reportStreamSchema).optional().catch(undefined),
+  reportIdentity: z
+    .object({
+      runId: z.string(),
+      turnId: z.string(),
+      attemptId: z.string(),
+      writingAttemptId: z.string(),
+    })
+    .optional()
+    .catch(undefined),
   execution: submissionReceiptSchema.optional().catch(undefined),
   observations: z.array(
     z.object({ at: z.string(), phase: researchPhaseSchema, status: researchStatusSchema }),
@@ -231,6 +293,10 @@ export const graphValuesSchema = z.object({
   active_research_id: z.string().optional(),
   active_turn_id: z.string().optional(),
   report_research_id: z.string().optional(),
+  report_run_id: z.string().optional(),
+  report_turn_id: z.string().optional(),
+  report_attempt_id: z.string().optional(),
+  report_writing_attempt_id: z.string().optional(),
   research_status: researchStatusSchema.optional(),
   research_phase: researchPhaseSchema.optional(),
   effective_config: backendConfigSchema.optional(),

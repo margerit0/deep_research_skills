@@ -62,6 +62,7 @@ export function applySnapshot(
   run: LiveResearch,
   server: ServerRun,
   values: GraphValues,
+  expectedAttemptId?: string,
 ): LiveResearch {
   const turn = run.turns.at(-1)!
   const matches =
@@ -86,11 +87,35 @@ export function applySnapshot(
     next.sources = (values.sources ?? []).filter((source) => safeHttpUrl(source.url))
     next.errors = values.research_errors ?? []
     next.events = mergeResearchEvents(run, values.research_events ?? [])
+    const hasReportIdentity = !!(
+      values.report_run_id ||
+      values.report_turn_id ||
+      values.report_attempt_id ||
+      values.report_writing_attempt_id
+    )
+    const reportOwned =
+      !hasReportIdentity ||
+      (values.report_run_id === server.run_id &&
+        values.report_turn_id === turn.id &&
+        values.report_attempt_id ===
+          (expectedAttemptId ?? run.execution?.attempt_id ?? server.run_id) &&
+        !!values.report_writing_attempt_id)
     next.report =
       values.report_research_id === run.id &&
+      reportOwned &&
+      !apiRunning &&
       ['succeeded', 'partial'].includes(values.research_status ?? '')
         ? (values.final_report ?? '')
         : ''
+    next.reportIdentity =
+      next.report && hasReportIdentity
+        ? {
+            runId: values.report_run_id!,
+            turnId: values.report_turn_id!,
+            attemptId: values.report_attempt_id!,
+            writingAttemptId: values.report_writing_attempt_id!,
+          }
+        : undefined
     const messages = (values.messages ?? []).flatMap((message, i) =>
       ['human', 'ai'].includes(message.type) && message.name !== 'final_report'
         ? [

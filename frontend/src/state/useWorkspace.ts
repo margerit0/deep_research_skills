@@ -11,6 +11,7 @@ import type { RunSelection } from '../data/liveSchema'
 import { mergeResearchEvents } from '../data/researchEvents'
 import { recoveryScope, savedRecovery } from '../data/eventRecovery'
 import { applyReceipt } from '../data/executionRecovery'
+import { mergeReportEvents } from '../data/reportEvents'
 
 export const STORAGE_KEY = 'atlas-workspace:v1'
 type Action =
@@ -162,6 +163,36 @@ function reducer(state: Workspace, action: Action): Workspace {
         { selectedNode: currentNode(next) },
       )
     }
+    case 'live-report-events': {
+      const target = state.threads.find((item) => item.id === action.threadId)
+      const existing = target?.live?.researches.at(-1)
+      if (
+        !target?.live ||
+        target.live.serverUrl !== action.serverUrl ||
+        !existing ||
+        existing.id !== action.researchId ||
+        existing.turns.at(-1)?.id !== action.turnId ||
+        existing.turns.at(-1)?.runId !== action.runId
+      )
+        return state
+      const reportStreams = mergeReportEvents(
+        target.live,
+        existing,
+        action.events,
+        action.cursor,
+        action.replay,
+      )
+      if (JSON.stringify(reportStreams) === JSON.stringify(existing.reportStreams)) return state
+      return update({
+        ...target,
+        live: {
+          ...target.live,
+          researches: target.live.researches.map((item) =>
+            item === existing ? { ...item, reportStreams } : item,
+          ),
+        },
+      })
+    }
     case 'live-events': {
       const target = state.threads.find((t) => t.id === action.threadId)
       const existing = target?.live?.researches.at(-1)
@@ -238,6 +269,7 @@ function reducer(state: Workspace, action: Action): Workspace {
                           ? action.research.events
                           : mergeResearchEvents(action.research, r.events),
                         eventRecovery: action.submission ? undefined : r.eventRecovery,
+                        reportStreams: action.submission ? undefined : r.reportStreams,
                       }
                     : r,
                 )

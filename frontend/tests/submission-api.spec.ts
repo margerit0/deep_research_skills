@@ -21,7 +21,12 @@ test.beforeEach(() => {
   test.setTimeout(180000)
 })
 
-async function fixture(request: APIRequestContext, info: TestInfo, configuration = false) {
+async function fixture(
+  request: APIRequestContext,
+  info: TestInfo,
+  configuration = false,
+  streaming = false,
+) {
   const root = resolve('..')
   const port = Number(process.env.ATLAS_SUBMISSION_PORT ?? 2027)
   const base = `http://127.0.0.1:${port}`
@@ -30,6 +35,7 @@ async function fixture(request: APIRequestContext, info: TestInfo, configuration
   await mkdir(parent, { recursive: true })
   const directory = await mkdtemp(join(parent, 'case-'))
   if (configuration) await writeFile(join(directory, 'configuration-fixture'), '1')
+  if (streaming) await writeFile(join(directory, 'report-streaming-fixture'), '1')
   let child: ChildProcess | undefined
   let logs = ''
   let instance = ''
@@ -208,6 +214,92 @@ const cache = (page: Page): Promise<LiveThread> =>
     return workspace.threads.find((item: { id: string }) => item.id === workspace.activeThreadId)
       .live
   })
+
+test('report native: persisted partial stream survives restart and writer-only recovery', async ({
+  page,
+}, info) => {
+  const f = await fixture(page.request, info, false, true)
+  try {
+    await f.pause('writer-stream')
+    await page.goto('/')
+    expect((await (await page.request.get('/api/atlas-fixture/identity')).json()).fixture_id).toBe(
+      f.id,
+    )
+    await page
+      .getByRole('textbox', { name: '研究问题或补充要求' })
+      .fill('比较 Python 3.13 free-threaded 与默认构建。')
+    await expect(page.getByRole('button', { name: '发送消息' })).toBeEnabled()
+    await page.getByRole('button', { name: '发送消息' }).click()
+    await f.entered('writer-stream')
+    await expect(page.getByTestId('live-report-draft')).toContainText('API 测试替身')
+    await expect(page.getByTestId('live-report')).toHaveCount(0)
+    const beforeLive = await cache(page)
+    const original = beforeLive.researches.at(-1)!
+    const turn = original.turns.at(-1)!
+    const before = await f.counts()
+    expect(before.writer).toBe(1)
+    expect(before.search).toBe(1)
+    expect(before.compression).toBe(1)
+    const path = `/atlas/threads/${beforeLive.threadId}/submissions/${turn.id}`
+    const query = `?research_id=${original.id}&turn_id=${turn.id}`
+    const reportPath = `/atlas/threads/${beforeLive.threadId}/runs/${turn.runId}/report-events${query}`
+    const firstPage = await (await f.get(reportPath)).json()
+    expect(firstPage.events.some((item: { kind: string }) => item.kind === 'delta')).toBe(true)
+    expect(firstPage.sealed).toBe(false)
+    const checkpointBefore = (await (await f.get(`/threads/${beforeLive.threadId}/state`)).json())
+      .values
+    expect(checkpointBefore.final_report).toBe('')
+    await f.stop()
+    await f.start()
+    const interrupted = (await (await f.get(path)).json()) as SubmissionReceipt
+    expect(interrupted.status).toBe('interrupted')
+    expect(interrupted.recovery.allowed).toBe(true)
+    expect(interrupted.recovery.node).toBe('final_report_generation')
+    await page.reload()
+    await expect(page.getByTestId('live-report-draft')).toContainText('API 测试替身')
+    await expect(page.getByTestId('live-report-draft')).toContainText('已中断')
+    expect(await f.runs(beforeLive.threadId)).toHaveLength(1)
+    expect(await f.counts()).toEqual(before)
+    await f.release('writer-stream')
+    await page.getByRole('button', { name: '继续生成报告', exact: true }).click()
+    const completed = await f.completed(path)
+    await expect(page.getByTestId('live-report')).toContainText('API 测试替身')
+    const afterLive = await cache(page)
+    const final = afterLive.researches.at(-1)!
+    const checkpoint = (
+      await (await f.get(`/threads/${beforeLive.threadId}/state/${completed.checkpoint_id}`)).json()
+    ).values
+    expect(final.report).toBe(checkpoint.final_report)
+    expect(final.reportIdentity?.runId).toBe(completed.run_id)
+    expect(final.reportIdentity?.attemptId).toBe(completed.attempt_id)
+    expect(completed.run_id).not.toBe(turn.runId)
+    expect(completed.event_run_id).toBe(turn.runId)
+    expect(completed.configuration).toEqual(interrupted.configuration)
+    expect(final.sources).toEqual(checkpointBefore.sources)
+    expect(final.notes).toEqual(checkpointBefore.notes)
+    const counts = await f.counts()
+    expect(counts.writer).toBe(2)
+    expect(counts.search).toBe(before.search)
+    expect(counts.compression).toBe(before.compression)
+    expect(await f.runs(beforeLive.threadId)).toHaveLength(2)
+    expect(
+      (
+        await f.post(`${path}/recoveries/${completed.attempt_id}`, {
+          research_id: original.id,
+          parent_run_id: turn.runId,
+          checkpoint_id: interrupted.recovery.checkpoint_id,
+        })
+      ).ok(),
+    ).toBe(true)
+    await page.reload()
+    await expect(page.getByTestId('live-report')).toContainText('API 测试替身')
+    expect(await f.runs(beforeLive.threadId)).toHaveLength(2)
+    expect(await f.counts()).toEqual(counts)
+    await page.screenshot({ path: info.outputPath('native-stream-recovery.png'), fullPage: true })
+  } finally {
+    await f.finish()
+  }
+})
 
 async function configure(
   f: Awaited<ReturnType<typeof fixture>>,

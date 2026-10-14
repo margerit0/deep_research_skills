@@ -281,7 +281,7 @@ def selected_model(role, fallback, *, tools=None, retry=False):
     if identifier == _defaults.get(role):
         return fallback
     definition = archive(identifier)
-    key = (role, identifier)
+    key = (role, identifier, retry)
     with _lock:
         if key not in _models:
             from deep_research.model_config import (

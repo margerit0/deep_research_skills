@@ -1,8 +1,26 @@
-# 计划 3：真实报告正文流式显示（待实施）
+# 计划 3：真实报告正文流式显示（已实施）
 
-规划日期：2026-10-13。计划 3 尚未实施；2026-10-14 收尾的 GLM / Kimi 离线实录只展示已保存内容，不是在线报告正文流式。1A、1B、计划 2 的状态、配置、视觉和独立演示继续作为基线。供应商复测结果与进入条件见 [交接入口](next-steps.md) 和 [最新验收](verification.md)。
+规划日期：2026-10-13，实施日期：2026-10-14。计划 3 已实现，Kimi 从原检查点恢复得到部分完成报告。完整成功研究及完整首段提前可见的严格观测仍有缺口；见 [交接入口](next-steps.md) 和 [最新验收](verification.md)。离线实录、完整模拟和在线真实结果继续分开。
 
-## 实施顺序与验收门槛
+## 当前实现
+
+配置能力为 `report_events_version: 1` 和可选 `report_event_replay_version: 1`。新增 `atlas.report_event`，包含 thread / research / turn / run / 受理 attempt / 独立 writing attempt、事件 UUID、单调序号、UTC 时间及 UTF-8 字节 offset；事件为 `started`、`delta`、`failed`、`finished`。`finished.sha256` 对应去除首尾空白后的正文，不等于终态确认。
+
+`report_streaming.py` 从最终写作模型的文本内容提取正文，忽略推理块、工具和原始载荷，并支持跨分片秘密过滤。按约 150 毫秒或大小窗口合并，单块最多 2048 个 Python 字符，报告上限 1,000,000 字符。非流式独立模型仅发送其一次性实际输出，不伪造 token。
+
+锁定版本的 `RunnableRetry` 不重试流，因此显式管理最多三次重新生成；每次都有新写作 UUID。SDK 请求重试单独保留和计数，认证 / 一般 4xx 不进行应用层重写，408 / 409 / 429 除外。任务取消和进程退出信号直接向上传播，关闭当前流并保留草稿，不开启新写作尝试。其他模型角色和共享 limiter 不增加重试层。
+
+正文复用 `EventJournal` 的先提交后发布、WAL / FULL 同步、分页、保留期、缺口与旧进程识别机制，但使用独立数据库。默认是研究事件库同目录的 `atlas-report-events.sqlite3`，可设 `ATLAS_REPORT_EVENT_DB`；保留期沿用 `ATLAS_EVENT_RETENTION_DAYS`。只读接口为 `GET /atlas/threads/{thread_id}/runs/{run_id}/report-events`。写作恢复沿用原检索事件 run，正文归新 run。
+
+前端共享同一原生 SSE 连接，按完整作用域、事件 UUID 和序号去重，只应用连续且字节位置匹配的正文。草稿与回放位置原子保存；失败时保留内存成果而不推进位置。日志替换保留旧尝试，新的生成替换活动草稿；旧草稿可展开查看，不能拼成一篇。缺口、存储丢失、进程中断和未确认终态有明确提示。
+
+最终检查点增加 `report_run_id`、`report_turn_id`、`report_attempt_id`、`report_writing_attempt_id`。前端确认这些归属及业务终态后，用完整 `final_report` 校准正文。旧检查点 / 旧客户端继续兼容；历史受理配置不改写，恢复旧研究时使用当前后端能力观察新的写作 run。原三个父节点恢复白名单不变。
+
+真实 Kimi 有 80 条连续写作事件，正文与固定检查点和刷新后的浏览器逐字一致。首批 48 字符在完成前显示；截图是标题及小节起始，未单独捕获完整首段的时点。业务保持部分完成，不将这一结果记为完整成功研究。已完成的 turn 不再恢复，也不为补截图重发原问题。
+
+代码入口新增 `report_streaming.py`、`reportEvents.ts`、`reportReplay.ts` 和 `LiveReportDraft.tsx`；详细协议见 [接口约定](backend-contract.md)，故障矩阵和真实证据见验收记录。下方保留实施前的顺序与验收门槛。
+
+## 实施顺序与验收门槛（原规划）
 
 1. **先确定写作事件及尝试身份。** 为报告增加可选能力和独立事件类型，不改变研究员 v1 事件的含义。范围至少包括后端、thread、research、turn、run、受理 / 恢复 attempt 和独立 `writing_attempt_id`。同一 run 内每次真正重新生成正文都要新建写作尝试；连接重试、观察重连与重新写作分别计数。开始、正文增量、失败、模型输出结束分别记录事件 ID 和单调序号；输出结束不等于检查点已确认。
 2. **接入实际最终写作调用。** 只从 `final_report_generation` 取得正文增量，不暴露推理字段、工具参数、其他节点输出或原始供应商载荷。当前调用是 `selected_model(..., retry=True).ainvoke(...)`，默认写作模型已有最多三次的重试包装；实施前核对锁定版本的流式及重试行为，不能只把 `ainvoke` 改名为 `astream` 并假设中途断流会正确重试。保持六角色快照、共享限流及有限重试预算，避免 SDK 与应用重试无意叠加。
