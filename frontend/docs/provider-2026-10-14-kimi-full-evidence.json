@@ -1,0 +1,349 @@
+{
+  "date": "2026-10-14",
+  "timezone": "Asia/Shanghai",
+  "baseCommit": "1a2e368",
+  "modelAndSearchSubstitutes": false,
+  "scope": "fresh_complete_workflow",
+  "identity": {
+    "instanceId": "6204bfcf-0b6a-442a-b54c-f6eb8180ffc4",
+    "experiment": "kimi-full-20261014-focused",
+    "modelAndSearchSubstitutes": false,
+    "scope": "fresh_complete_workflow",
+    "models": [
+      {
+        "role": "SCOPING",
+        "model": "moonshotai/kimi-k3",
+        "provider": "openai",
+        "max_tokens": null
+      },
+      {
+        "role": "SUPERVISOR",
+        "model": "moonshotai/kimi-k3",
+        "provider": "openai",
+        "max_tokens": null
+      },
+      {
+        "role": "RESEARCHER",
+        "model": "moonshotai/kimi-k3",
+        "provider": "openai",
+        "max_tokens": null
+      },
+      {
+        "role": "SUMMARIZATION",
+        "model": "moonshotai/kimi-k3",
+        "provider": "openai",
+        "max_tokens": null
+      },
+      {
+        "role": "COMPRESSION",
+        "model": "moonshotai/kimi-k3",
+        "provider": "openai",
+        "max_tokens": 32000
+      },
+      {
+        "role": "FINAL_REPORT",
+        "model": "moonshotai/kimi-k3",
+        "provider": "openai",
+        "max_tokens": 32000
+      }
+    ],
+    "proxy": {
+      "scheme": "socks5",
+      "host": "127.0.0.1",
+      "port": 55430
+    },
+    "searchProxyConfigured": true,
+    "tlsVerification": true,
+    "noProxy": "*",
+    "agentRpm": "30",
+    "maximumSdkHttpAttempts": 5,
+    "retryDelays": [3, 6, 12, 24],
+    "writingAttemptsMaximum": 3,
+    "fixtureModules": [],
+    "backendEnvUnchanged": true
+  },
+  "threadId": "c468ce34-1b78-4bf9-a5ce-ec817c369292",
+  "researchId": "f9c25b2d-1da7-4cc9-b49f-fe4e842afcb9",
+  "turns": [
+    {
+      "turnId": "9c3f9867-1f39-4f8a-9ceb-ccf0794e3b8c",
+      "runId": "d1474ea3-621c-4716-aa23-814d4033dd04",
+      "attemptId": "9c3f9867-1f39-4f8a-9ceb-ccf0794e3b8c",
+      "checkpointId": "1f1c7d46-75f6-629b-8002-c1a18641761d"
+    },
+    {
+      "turnId": "72a3bf54-468f-417e-a723-9294cc29c4d3",
+      "runId": "5c263020-b39f-4315-ae37-dec598406583",
+      "attemptId": "72a3bf54-468f-417e-a723-9294cc29c4d3",
+      "checkpointId": "1f1c7d52-afaf-62ee-8009-c0163eca7861"
+    }
+  ],
+  "businessStatus": "succeeded",
+  "phase": "complete",
+  "errors": [],
+  "runCount": 2,
+  "researcherCount": 1,
+  "successfulSkills": [],
+  "reportCharacters": 1610,
+  "bodyHanCharacters": 568,
+  "reportSha256": "fc2d4f6985bd1e595ba5466693b4a89205646b93cbbc6740913d402b0b9ab0b3",
+  "sourceCount": 3,
+  "noteCount": 1,
+  "researchEventCount": 22,
+  "reportEventCount": 103,
+  "writingAttempts": 1,
+  "startedAt": "2026-10-14T13:37:19.105Z",
+  "completedAt": "2026-10-14T13:43:09.606Z",
+  "firstParagraphScreenshot": {
+    "observedAt": "2026-10-14T13:42:28.913Z",
+    "captureStartedAt": "2026-10-14T13:42:28.957Z",
+    "captureFinishedAt": "2026-10-14T13:42:29.226Z"
+  },
+  "modelFinishedAt": "2026-10-14T13:42:58.661730+00:00",
+  "modelHttpSummary": {
+    "requests": 15,
+    "byNode": {
+      "clarify_with_user": 2,
+      "write_research_brief": 1,
+      "supervisor": 4,
+      "llm_call": 5,
+      "tool_node": 1,
+      "compress_research": 1,
+      "final_report_generation": 1
+    },
+    "httpStatuses": {
+      "200": 14
+    },
+    "transportFailures": 1,
+    "sdkRetryAttempts": 1
+  },
+  "searchHttpSummary": {
+    "requests": 4,
+    "httpStatuses": {
+      "200": 3
+    },
+    "transportFailures": 1
+  },
+  "checks": {
+    "realModelsAndSearch": true,
+    "allModelsKimi": true,
+    "originalEndpointsPreserved": true,
+    "proxyConnectionsObserved": true,
+    "searchUsesProxyAndTLS": true,
+    "backendEnvUnchanged": true,
+    "freshTwoRuns": true,
+    "clarificationCompleted": true,
+    "receiptsCompleted": true,
+    "researchSucceeded": true,
+    "researchTasksCompleted": true,
+    "realSkillLoaded": false,
+    "configurationInherited": true,
+    "sourcesMatchActualSearch": true,
+    "sourcesMatchBrowser": true,
+    "researchJournalMatchesCheckpoint": true,
+    "reportBytesMatchCheckpoint": true,
+    "reportMatchesBrowser": true,
+    "reportOwned": true,
+    "reportJournalComplete": true,
+    "streamTextAndDigestMatch": true,
+    "completeParagraphVisibleBeforeModelFinished": true,
+    "refreshCreatesNoRun": true,
+    "noBrowserErrors": true,
+    "narrowLayoutNoOverflow": true,
+    "citationIdsResolve": true,
+    "citationsFromSearchSources": true,
+    "citationsUseOfficialDocuments": true,
+    "nativeRunsSuccessful": true,
+    "continuousOwnedReportBytes": true,
+    "firstParagraphScreenshotFinishedBeforeModel": true,
+    "strictTwoPageSearchScope": false
+  },
+  "citations": {
+    "1": "https://docs.python.org/3.13/howto/free-threading-python.html",
+    "2": "https://docs.python.org/3.13/howto/free-threading-extensions.html"
+  },
+  "citationReview": {
+    "status": "reviewed_with_qualifications",
+    "document": "provider-2026-10-14-kimi-full-citation-review.md",
+    "sources": [
+      {
+        "number": 1,
+        "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+        "finalUrl": "https://docs.python.org/3.13/howto/free-threading-python.html",
+        "status": 200,
+        "retrievedAt": "2026-10-14T14:11:00.703596+00:00",
+        "sha256": "eca52c8788b7749131d83ae77cc1f905e54fc64f1781d5cfe42256c03b0d7d27",
+        "textSha256": "117a8291c9e51aad2751e093f56f1187eaefd6674cea88faa3a471bf9edff8de",
+        "textCharacters": 7370
+      },
+      {
+        "number": 2,
+        "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+        "finalUrl": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+        "status": 200,
+        "retrievedAt": "2026-10-14T14:11:00.723613+00:00",
+        "sha256": "03d23f4d2774f1b51485c326466f8e44fab52c9506c4834f07758f126d32b8ae",
+        "textSha256": "e7204e1019c1d0b6c2772184e7b16302092f84ef3a1bd2b9146876270ce362cc",
+        "textCharacters": 10383
+      }
+    ],
+    "originalReportEdited": false
+  },
+  "localEvidence": {
+    ".local/kimi-full-20261014-focused/clarification.json": {
+      "sha256": "7f7f7157673520b8b8c08993c7e5997ddf43984051a8cf0309d1a4b80049faeb"
+    },
+    ".local/kimi-full-20261014-focused/final.json": {
+      "sha256": "7e267bdca99e466c8f632f9c79693327c2174493a397c8053c2182f99d48ec5c"
+    },
+    ".local/kimi-full-20261014-focused/browser-evidence.json": {
+      "sha256": "5346f42d6e61b2d436b8dccf9aa3e9c47072bfa9689213cf3a1e5a494a646546"
+    },
+    ".local/kimi-full-20261014-focused/model-http.jsonl": {
+      "sha256": "2727eed0084143e997d913b2282875ad9ea29b4284467395239cb464a59fd75d"
+    },
+    ".local/kimi-full-20261014-focused/search-http.jsonl": {
+      "sha256": "95295f88991314c3e6bc4f36ddd406fe1eac004d275f06ea18f3ddc1ad52003e"
+    },
+    ".local/kimi-full-20261014-focused/node-entries.jsonl": {
+      "sha256": "b3faa8bc3458693d0ad9d33f6a222d661d281a926d7dd77c37e9f67fb900ef18"
+    },
+    ".local/kimi-full-20261014-focused/report.md": {
+      "sha256": "fc2d4f6985bd1e595ba5466693b4a89205646b93cbbc6740913d402b0b9ab0b3"
+    },
+    ".local/kimi-full-20261014-focused/report-events.json": {
+      "sha256": "67661802ded29c54b9425b13792cdaf5ed9036cab869263e6c5762d0ef7ca391"
+    },
+    ".local/kimi-full-20261014-focused/research-events.json": {
+      "sha256": "7aaaa4247d8421ae86d3c72cb3a8b900d8450a52abed9c6008444dd9df104f37"
+    },
+    ".local/kimi-full-20261014-focused/first-complete-paragraph-1440.png": {
+      "sha256": "36b116e892168dafe1aff2f11265b2e531becf32d7ccbba5987c6a801ec0080f"
+    },
+    ".local/kimi-full-20261014-focused/final-report-1440.png": {
+      "sha256": "7aad5766f90b73599f99268162e07fe3a96d921450f351b1aeaf993357d29fc4"
+    },
+    ".local/kimi-full-20261014-focused/final-report-320.png": {
+      "sha256": "abec42be554d8babd03f7a1c4cf99863c5f3a35a59f2bb4e68d7a105d652ea5a"
+    },
+    ".local/kimi-full-20261014-focused/server.py": {
+      "sha256": "39e77bd83614bc1c588c2d3be2f75abe3073272bee31ea41d1c32a44f47c36cc"
+    },
+    ".local/kimi-full-20261014-focused/application.py": {
+      "sha256": "27a023f9114592111be1e97f02806bfa0ca9cebf92fde101f2317757afa2b14b"
+    },
+    ".local/kimi-full-20261014-focused/driver.mjs": {
+      "sha256": "e64389cecbc985c7af88c9dab0e5d81a99f1732b48513a14995b7d961ca2f13d"
+    },
+    ".local/kimi-full-20261014-focused/run.mjs": {
+      "sha256": "bf1d28941248da4ddb92255779601889de26983a2686bb1cb14918d4116ed0b7"
+    }
+  },
+  "earlierAttempt": {
+    "threadId": "9178f987-2d8e-4e18-8bae-69a9cf23ae3b",
+    "researchId": "0de89586-d949-486c-bd2d-2b0d666ef807",
+    "turns": [
+      {
+        "turnId": "4dbdf9c1-1090-4792-b85a-eecd553bd949",
+        "runId": "6d4c62d6-a2a7-4cbd-87e7-c575ea213de2",
+        "attemptId": "4dbdf9c1-1090-4792-b85a-eecd553bd949",
+        "checkpointId": "1f1c7cf6-facd-62d0-8002-ac675be7501b"
+      },
+      {
+        "turnId": "1b19c731-0be2-45b4-b90d-620b064df4aa",
+        "runId": "641dd84d-ed7a-40e0-a566-8f50d6ed8515",
+        "attemptId": "1b19c731-0be2-45b4-b90d-620b064df4aa",
+        "checkpointId": null
+      }
+    ],
+    "businessStatus": "running",
+    "phase": "research",
+    "runCount": 2,
+    "reportCharacters": 0,
+    "sourceCount": 0,
+    "researcherCount": 2,
+    "modelHttpSummary": {
+      "requests": 52,
+      "byNode": {
+        "clarify_with_user": 2,
+        "write_research_brief": 1,
+        "supervisor": 4,
+        "llm_call": 3,
+        "tool_node": 42
+      },
+      "httpStatuses": {
+        "200": 17,
+        "504": 31
+      },
+      "transportFailures": 1,
+      "sdkRetryAttempts": 27
+    },
+    "searchHttpSummary": {
+      "requests": 12,
+      "httpStatuses": {
+        "200": 5
+      },
+      "transportFailures": 7
+    },
+    "startedAt": "2026-10-14T13:01:08.870Z",
+    "completedAt": "2026-10-14T13:31:11.117Z",
+    "observationEnded": true,
+    "reason": "30-minute observation limit; isolated service stopped without a report",
+    "failedResearchTasks": 1,
+    "journalEventCount": 24,
+    "localDirectory": ".local/kimi-full-20261014"
+  },
+  "firstParagraph": {
+    "observation": {
+      "at": "2026-10-14T13:42:28.913Z",
+      "paragraph": "Python 3.13 起提供实验性的 free-threaded 构建，其中全局解释器锁（GIL）被禁用，线程可在多核 CPU 上真正并行运行；默认构建则始终启用 GIL [1]。官方 macOS 和 Windows 安装程序可选装 free-threaded 二进制，其他平台需用 --disable-gil 从源码构建 [1]。",
+      "hasFollowingBlock": true,
+      "fullyVisible": true,
+      "firstVisibleText": "Free-threaded CPython 3.13 与默认 GIL 构建对比报告\n一、GIL 状态\nPython 3.13 起提供实验性的 free-threaded 构建，其中全局解释器锁（GIL）被禁用，线程可在多核 CPU 上真正并行运行；默认构建则始终启用 GIL [1]。官方 macOS 和 Windows 安装程序可选装 free-threaded 二进制，其他平台需用 --disable-gil 从源码构建 [1]。\n**",
+      "status": "running",
+      "finalReportVisible": false
+    },
+    "screenshot": {
+      "observedAt": "2026-10-14T13:42:28.913Z",
+      "captureStartedAt": "2026-10-14T13:42:28.957Z",
+      "captureFinishedAt": "2026-10-14T13:42:29.226Z"
+    },
+    "modelFinishedAt": "2026-10-14T13:42:58.661730+00:00",
+    "screenshotLeadSeconds": 29.436,
+    "transientReplayWarningVisible": true,
+    "finalReplayComplete": true
+  },
+  "acceptance": {
+    "completeResearchExecution": "passed",
+    "strictFirstParagraphTiming": "passed",
+    "reportAndReloadConsistency": "passed",
+    "actualSkillLoading": "not_passed",
+    "strictTwoPageSearchScope": "not_passed",
+    "allScenarioRequirements": "not_passed",
+    "reportContent": "reviewed_with_qualifications"
+  },
+  "limitations": [
+    "简报要求先加载 product-comparison，但主管委派未保留这一要求；没有 load_skill 工具调用。",
+    "搜索额外返回 Python 当前版本的 C 扩展指南；正文只列出指定的两个 3.13 来源。",
+    "报告中的其他平台必须源码构建、并行收益归零及性能和版本建议需要限定，详见独立引用核验。",
+    "首段截图出现写作记录暂时无法回读提示；结束后正文日志完整且与检查点一致，未保存该瞬时请求的诊断。"
+  ],
+  "extraSearchSources": [
+    {
+      "url": "https://docs.python.org/3/howto/free-threading-extensions.html",
+      "title": "C API Extension Support for Free Threading"
+    }
+  ],
+  "closeout": {
+    "date": "2026-10-14",
+    "timezone": "Asia/Shanghai",
+    "sourceChat": "01a13a51-5671-7b91-95fb-0b0b651effe2",
+    "newModelCalls": 0,
+    "productionCodeChangedForRun": false,
+    "baselineHead": "1a2e36804c9f534ddf9329f4478d1bd7af1fe3e7",
+    "cleanup": {
+      "backendPortFree": true,
+      "frontendPortFree": true
+    }
+  }
+}

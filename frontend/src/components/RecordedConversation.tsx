@@ -52,7 +52,7 @@ export function RecordedConversation({ controller }: { controller: WorkspaceCont
                 </span>
                 <div className="cw-agent-content">
                   <div className="cw-agent-name">Deep Research · 实录</div>
-                  <Suspense fallback={<p>{message.content}</p>}>
+                  <Suspense fallback={<p data-recording-loading>{message.content}</p>}>
                     <ReportText>{message.content}</ReportText>
                   </Suspense>
                 </div>
@@ -69,7 +69,14 @@ export function RecordedConversation({ controller }: { controller: WorkspaceCont
         {run.report && (
           <section className="cw-report-message" data-testid="recorded-report">
             <h3>真实检查点报告</h3>
-            <Suspense fallback={<p>{run.report}</p>}>
+            {record.acceptanceNotes && (
+              <aside className="cw-sync-note" aria-label="实录验收说明">
+                {record.acceptanceNotes.map((note) => (
+                  <p key={note}>{note}</p>
+                ))}
+              </aside>
+            )}
+            <Suspense fallback={<p data-recording-loading>{run.report}</p>}>
               <ReportText>{run.report}</ReportText>
             </Suspense>
           </section>

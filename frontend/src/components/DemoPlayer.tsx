@@ -14,7 +14,8 @@ export function DemoPlayer({ controller }: { controller: WorkspaceController }) 
   }, [])
   // Follow scene changes, never move keyboard focus away from the player.
   useEffect(() => {
-    const timer = window.setTimeout(() => {
+    let pendingContent: MutationObserver | undefined
+    const followScene = () => {
       const selector = {
         composer: '.cw-composer-wrap',
         message: '.cw-message-pair',
@@ -28,6 +29,7 @@ export function DemoPlayer({ controller }: { controller: WorkspaceController }) 
         'record-answer': '[data-recording] .cw-user-message',
         'record-brief': '[data-testid="recorded-brief"]',
         'record-research': '.cw-flow',
+        'record-report': '[data-testid="recorded-report"]',
         'record-result': '[data-testid="recorded-status"]',
       }
       const element = demo.recording
@@ -55,8 +57,24 @@ export function DemoPlayer({ controller }: { controller: WorkspaceController }) 
           left: active.offsetLeft - chapters.clientWidth / 2 + active.clientWidth / 2,
           behavior,
         })
+    }
+    const timer = window.setTimeout(() => {
+      const recording = demo.recording && document.querySelector('[data-recording]')
+      if (recording && recording.querySelector('[data-recording-loading]')) {
+        // Markdown can change a long report's height after the chapter is mounted.
+        pendingContent = new MutationObserver(() => {
+          if (!recording.querySelector('[data-recording-loading]')) {
+            pendingContent?.disconnect()
+            followScene()
+          }
+        })
+        pendingContent.observe(recording, { childList: true, subtree: true })
+      } else followScene()
     }, 180)
-    return () => clearTimeout(timer)
+    return () => {
+      clearTimeout(timer)
+      pendingContent?.disconnect()
+    }
   }, [demo.index, demo.scene.id, demo.scene.target, demo.reducedMotion, demo.recording?.id])
   return (
     <section className="cw-demo-player" aria-label="全流程演示控制" data-scene={demo.scene.id}>

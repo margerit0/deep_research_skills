@@ -40,14 +40,48 @@ for (const record of records) {
     await expect(page.locator('.cw-demo-report')).toHaveCount(0)
     await expect(page.locator('.cw-graph-subheader')).toContainText('真实记录')
     await expect(page.locator('.cw-graph-header [role="status"]')).toHaveText(
-      record.observationEnded ? '记录中断' : '研究失败',
+      record.observationEnded
+        ? '记录中断'
+        : record.research.status === 'succeeded'
+          ? '研究完成'
+          : '研究失败',
     )
-    if (record.id === 'kimi') {
+    if (record.research.sources.length) {
       await expect(page.getByTestId('recorded-brief')).toContainText(record.research.brief)
       const sources = page.getByRole('region', { name: '实录检索来源' }).getByRole('link')
       expect(
         await sources.evaluateAll((links) => links.map((link) => link.getAttribute('href'))),
       ).toEqual(record.research.sources.map((source) => source.url))
+    }
+    if (record.research.report) {
+      await expect(page.getByTestId('recorded-report')).toContainText('Free-threaded CPython 3.13')
+      await expect(page.getByRole('complementary', { name: '实录验收说明' })).toContainText(
+        '未实际加载 Skills',
+      )
+      await expect(page.locator('.cw-fork[data-status="failed"]')).toHaveCount(0)
+      await expect(page.locator('.cw-fork[data-status="completed"]')).toHaveCount(1)
+      await expect(page.locator('[data-flow-node="report"]')).toHaveAttribute(
+        'data-status',
+        'completed',
+      )
+      await page.getByRole('tab', { name: '输入 / 输出', exact: true }).click()
+      await expect(page.getByTestId('node-output')).toHaveText(record.research.report)
+      await page.getByRole('tab', { name: '执行记录', exact: true }).click()
+      await expect(page.getByRole('tabpanel').filter({ visible: true })).toContainText(
+        '响应头 3.4 s',
+      )
+      await page.getByRole('button', { name: '跳转：实际研究事件', exact: true }).click()
+      await expect(page.getByTestId('recorded-report')).toHaveCount(0)
+      await page.getByRole('button', { name: '跳转：实际报告与来源', exact: true }).click()
+      await expect(page.getByTestId('recorded-report')).toBeVisible()
+      await expect(page.getByTestId('recorded-status')).toHaveCount(0)
+      await page.getByRole('button', { name: '跳转：记录结束状态', exact: true }).click()
+    } else {
+      await expect(
+        page.getByRole('button', { name: '跳转：实际报告与来源', exact: true }),
+      ).toHaveCount(0)
+    }
+    if (record.id === 'kimi') {
       await expect(page.locator('.cw-fork[data-status="failed"]')).toHaveCount(1)
       await expect(page.locator('.cw-fork[data-status="completed"]')).toHaveCount(1)
       await expect(page.locator('.cw-detail-stats')).toContainText('HTTP 尝试2')
@@ -76,28 +110,44 @@ for (const record of records) {
   })
 }
 
-for (const width of [1440, 320]) {
-  test(`real playback fits ${width}px and reload restores the original workspace`, async ({
-    page,
-  }, testInfo) => {
-    await fakeLangGraph(page)
-    await page.setViewportSize({ width, height: 962 })
-    await page.emulateMedia({ reducedMotion: 'reduce' })
-    await page.goto('/')
-    const before = await page.evaluate(() =>
-      JSON.parse(localStorage.getItem('atlas-workspace:v1')!),
-    )
-    await page.getByRole('button', { name: '全流程演示', exact: true }).click()
-    await page.getByLabel('演示数据来源').selectOption(records.at(-1)!.id)
-    await page.getByRole('button', { name: '跳转：记录结束状态', exact: true }).click()
-    await page.getByRole('button', { name: '暂停演示' }).click()
-    await expect(page.getByTestId('recorded-status')).toBeInViewport({ ratio: 0.9 })
-    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
-    await page.screenshot({ path: testInfo.outputPath(`recorded-${width}.png`) })
-    await page.reload()
-    await expect(page.getByRole('region', { name: '全流程演示控制' })).toHaveCount(0)
-    expect(
-      await page.evaluate(() => JSON.parse(localStorage.getItem('atlas-workspace:v1')!)),
-    ).toEqual(before)
-  })
+for (const record of records.filter((item) => item.id.startsWith('kimi'))) {
+  for (const width of [1440, 320]) {
+    test(`${record.id}: real playback fits ${width}px and reload restores the original workspace`, async ({
+      page,
+    }, testInfo) => {
+      await fakeLangGraph(page)
+      await page.setViewportSize({ width, height: 962 })
+      await page.emulateMedia({ reducedMotion: 'reduce' })
+      await page.goto('/')
+      const before = await page.evaluate(() =>
+        JSON.parse(localStorage.getItem('atlas-workspace:v1')!),
+      )
+      await page.getByRole('button', { name: '全流程演示', exact: true }).click()
+      await page.getByLabel('演示数据来源').selectOption(record.id)
+      await page.getByRole('button', { name: '跳转：记录结束状态', exact: true }).click()
+      await page.getByRole('button', { name: '暂停演示' }).click()
+      await expect(page.getByTestId('recorded-status')).toBeInViewport({ ratio: 0.9 })
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
+        true,
+      )
+      await page.screenshot({ path: testInfo.outputPath(`recorded-${record.id}-${width}.png`) })
+      if (record.research.report) {
+        await page.getByRole('button', { name: '跳转：实际报告与来源', exact: true }).click()
+        await page
+          .getByTestId('recorded-report')
+          .getByRole('heading', { name: '真实检查点报告', exact: true })
+          .scrollIntoViewIfNeeded()
+        await expect(page.getByTestId('recorded-report')).toBeVisible()
+        expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
+          true,
+        )
+        await page.screenshot({ path: testInfo.outputPath(`recorded-report-${width}.png`) })
+      }
+      await page.reload()
+      await expect(page.getByRole('region', { name: '全流程演示控制' })).toHaveCount(0)
+      expect(
+        await page.evaluate(() => JSON.parse(localStorage.getItem('atlas-workspace:v1')!)),
+      ).toEqual(before)
+    })
+  }
 }

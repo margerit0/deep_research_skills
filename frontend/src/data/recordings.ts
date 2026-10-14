@@ -58,6 +58,14 @@ export function recordingScenes(record: Recording): PlaybackScene[] {
       duration: 6000,
       target: 'graph',
     })
+  if (record.research.report)
+    scenes.push({
+      id: 'record-report',
+      title: '实际报告与来源',
+      detail: '保留模型报告原文与引用核验限制',
+      duration: 8000,
+      target: 'report',
+    })
   scenes.push({
     id: 'record-result',
     title: '记录结束状态',
@@ -73,7 +81,7 @@ export function recordingScenes(record: Recording): PlaybackScene[] {
 
 export function recordingFrame(record: Recording, scene: string): LiveResearch {
   const original = record.research
-  if (scene === 'record-result') return original
+  if (scene === 'record-result' || scene === 'record-report') return original
   const beforeAnswer = ['record-question', 'record-clarification'].includes(scene)
   const firstAnswer = original.messages.findIndex(
     (message, index) => index > 0 && message.type === 'human',
@@ -154,7 +162,7 @@ export function recordingNodes(record: Recording, frame: LiveResearch, scene: st
       events: calls.map((call): [string, string, string] => [
         new Date(call.startedAt).toLocaleTimeString('zh-CN', { hour12: false }),
         `模型请求 · ${call.responseFormat ?? '文本 / 工具'}`,
-        `SDK 重试序号 ${call.sdkRetryCount ?? 0} · ${call.seconds ?? '—'} s · ${call.httpStatus ? `HTTP ${call.httpStatus}` : call.outcome === 'in_flight' ? '响应未记录' : '连接失败'}`,
+        `SDK 重试序号 ${call.sdkRetryCount ?? 0} · ${'headersSeconds' in call && call.headersSeconds != null ? `响应头 ${call.headersSeconds} s` : `${call.seconds ?? '—'} s`} · ${call.httpStatus ? `HTTP ${call.httpStatus}` : call.outcome === 'in_flight' ? '响应未记录' : '连接失败'}`,
       ]),
     }
   })
