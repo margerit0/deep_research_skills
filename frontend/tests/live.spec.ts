@@ -251,8 +251,8 @@ test('demo remains separate while a real research finishes in the background', a
   await send(page)
   await expect.poll(() => fake.runs.length).toBe(1)
   await page.getByRole('button', { name: '全流程演示', exact: true }).click()
-  await page.getByRole('button', { name: '跳转：报告已就绪', exact: true }).click()
-  await expect(page.locator('.cw-demo-report')).toBeVisible()
+  await page.getByRole('button', { name: '跳转：实际报告与来源', exact: true }).click()
+  await expect(page.getByTestId('recorded-report')).toBeVisible()
   fake.succeed()
   await expect
     .poll(async () => {
@@ -265,7 +265,7 @@ test('demo remains separate while a real research finishes in the background', a
     .toBe('succeeded')
   await page.getByRole('button', { name: '退出', exact: true }).click()
   await expect(page.getByTestId('live-report')).toContainText('实际研究报告')
-  await expect(page.locator('.cw-demo-report')).toHaveCount(0)
+  await expect(page.getByTestId('recorded-report')).toHaveCount(0)
   expect(fake.submissions).toHaveLength(1)
 })
 

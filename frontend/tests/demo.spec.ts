@@ -14,6 +14,7 @@ async function start(page: Page) {
   await page.clock.install({ time: new Date('2026-10-10T00:00:00Z') })
   await page.clock.pauseAt(new Date('2026-10-10T00:00:01Z'))
   await page.getByRole('button', { name: '全流程演示', exact: true }).click()
+  await page.getByLabel('演示数据来源').selectOption('simulated')
 }
 async function seek(page: Page, name: string) {
   await page.getByRole('button', { name: `跳转：${name}`, exact: true }).click()
@@ -118,6 +119,7 @@ test('exit, reload and navigation preserve original drafts, snapshots and prefer
   await page.getByRole('button', { name: '外观：跟随系统' }).click()
   const before = await saved(page)
   await page.getByRole('button', { name: '全流程演示', exact: true }).click()
+  await page.getByLabel('演示数据来源').selectOption('simulated')
   await seek(page, '另一种光线')
   await page.getByRole('button', { name: '暂停演示' }).click()
   await page.getByRole('button', { name: '选择模型', exact: true }).click()
@@ -129,6 +131,7 @@ test('exit, reload and navigation preserve original drafts, snapshots and prefer
   await expect(page.locator('html')).toHaveCSS('color-scheme', 'light')
   await expect(page.getByRole('button', { name: '全流程演示', exact: true })).toBeFocused()
   await page.getByRole('button', { name: '全流程演示', exact: true }).click()
+  await page.getByLabel('演示数据来源').selectOption('simulated')
   await seek(page, '撰写研究报告')
   await page.reload()
   await expect(player(page)).toHaveCount(0)

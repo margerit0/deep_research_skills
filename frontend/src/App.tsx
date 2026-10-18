@@ -103,9 +103,17 @@ export default function App() {
             </button>
           )}
           {!demo.active && (
-            <button id="demo-start" type="button" className="cw-demo-start" onClick={demo.start}>
+            <button
+              id="demo-start"
+              type="button"
+              className="cw-demo-start"
+              onClick={demo.start}
+              aria-label="全流程演示"
+              aria-busy={demo.loadingRecording}
+              disabled={demo.loadingRecording}
+            >
               <Icon name="play" />
-              全流程演示
+              {demo.loadingRecording ? '加载实录…' : '全流程演示'}
             </button>
           )}
           <button
@@ -144,6 +152,11 @@ export default function App() {
           </button>
         </header>
         {demo.active && <DemoPlayer controller={controller} />}
+        {demo.recordingLoadError && !demo.active && (
+          <p className="cw-storage-alert" role="alert">
+            实录暂时无法加载，请刷新后重试。当前会话已保留。
+          </p>
+        )}
         {storageError && (
           <p className="cw-storage-alert" role="status">
             浏览器暂时无法保存本地会话；当前内容可继续使用，但刷新后可能丢失。

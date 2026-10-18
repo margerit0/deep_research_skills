@@ -1,7 +1,8 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { demoNodes, demoPosition, demoScenes, demoStart, demoWorkspace } from '../data/demo'
 import {
   loadRecordings,
+  DEFAULT_RECORDING_ID,
   type Recording,
   recordingScenes,
   recordingFrame,
@@ -25,13 +26,16 @@ export function useDemo(base: Workspace) {
   const [session, setSession] = useState<Session | null>(null)
   const [recordings, setRecordings] = useState<Recording[]>([])
   const [recordingLoadError, setRecordingLoadError] = useState(false)
-  useEffect(() => {
-    if (session && !recordings.length && !recordingLoadError) {
-      void loadRecordings()
-        .then(setRecordings)
-        .catch(() => setRecordingLoadError(true))
-    }
-  }, [Boolean(session), recordings.length, recordingLoadError])
+  const [loadingRecording, setLoadingRecording] = useState(false)
+  const loadRequest = useRef(0)
+  const baseRef = useRef(base)
+  baseRef.current = base
+  useEffect(
+    () => () => {
+      loadRequest.current++
+    },
+    [],
+  )
   const recording = recordings.find((item) => item.id === session?.recordingId)
   const scenes = useMemo(() => (recording ? recordingScenes(recording) : demoScenes), [recording])
   const duration = scenes.reduce((sum, scene) => sum + scene.duration, 0)
@@ -94,17 +98,40 @@ export function useDemo(base: Workspace) {
   )
   const state = session?.override ?? scriptedState
   const run = state?.threads[0].runs[0]
-  const start = () => {
-    const dark =
-      base.theme === 'dark' ||
-      (base.theme === 'system' && matchMedia('(prefers-color-scheme: dark)').matches)
-    setSession({
-      base,
-      alternateTheme: dark ? 'light' : 'dark',
-      elapsed: 0,
-      playing: true,
-      speed: 1,
-    })
+  const start = async () => {
+    if (loadingRecording) return
+    const request = ++loadRequest.current
+    setLoadingRecording(true)
+    setRecordingLoadError(false)
+    try {
+      const available = recordings.length ? recordings : await loadRecordings()
+      if (request !== loadRequest.current) return
+      if (!available.some((item) => item.id === DEFAULT_RECORDING_ID))
+        throw new Error('Default recording unavailable')
+      setRecordings(available)
+      const current = baseRef.current
+      const dark =
+        current.theme === 'dark' ||
+        (current.theme === 'system' && matchMedia('(prefers-color-scheme: dark)').matches)
+      setSession({
+        base: current,
+        alternateTheme: dark ? 'light' : 'dark',
+        elapsed: 0,
+        playing: true,
+        speed: 1,
+        recordingId: DEFAULT_RECORDING_ID,
+      })
+    } catch {
+      if (request === loadRequest.current) setRecordingLoadError(true)
+    } finally {
+      if (request === loadRequest.current) setLoadingRecording(false)
+    }
+  }
+  const exit = () => {
+    loadRequest.current++
+    setLoadingRecording(false)
+    setRecordingLoadError(false)
+    setSession(null)
   }
   return {
     state,
@@ -112,6 +139,7 @@ export function useDemo(base: Workspace) {
     recordedRun,
     recordings,
     recordingLoadError,
+    loadingRecording,
     scenes,
     duration,
     currentNode: scriptedState?.selectedNode ?? 'clarify',
@@ -137,7 +165,7 @@ export function useDemo(base: Workspace) {
             ? ('skill' as const)
             : null,
     start,
-    exit: () => setSession(null),
+    exit,
     pause: () => setSession((current) => (current ? { ...current, playing: false } : null)),
     toggle: () =>
       setSession((current) =>

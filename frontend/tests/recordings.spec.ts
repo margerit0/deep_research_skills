@@ -1,6 +1,127 @@
 import { test, expect } from '@playwright/test'
 import { fakeLangGraph } from './langgraph-fixture'
-import records from '../src/data/recordings.json' with { type: 'json' }
+import { createHash } from 'node:crypto'
+import { readFileSync } from 'node:fs'
+import history from '../src/data/recordings.json' with { type: 'json' }
+import latest from '../src/data/deepseek-p0-recording.json' with { type: 'json' }
+import evidence from '../docs/provider-2026-10-17-deepseek-p0-evidence.json' with { type: 'json' }
+
+const records = [latest, ...history]
+
+test('DeepSeek recording matches accepted report, identity and source constraints', () => {
+  expect(createHash('sha256').update(latest.research.report).digest('hex')).toBe(
+    evidence.native_attempt.report_sha256,
+  )
+  expect(latest.research.report).toBe(
+    readFileSync(
+      new URL('../docs/provider-2026-10-17-deepseek-p0-report.md', import.meta.url),
+      'utf8',
+    ).replace(/\r\n/g, '\n'),
+  )
+  expect(latest.threadId).toBe(evidence.native_attempt.thread_id)
+  expect(latest.research.reportIdentity.writingAttemptId).toBe(
+    evidence.native_attempt.writing_attempt_id,
+  )
+  expect(latest.research.sources.map((source) => source.url).sort()).toEqual([
+    'https://docs.python.org/3.13/howto/free-threading-extensions.html',
+    'https://docs.python.org/3.13/howto/free-threading-python.html',
+  ])
+  expect(latest.research.events).toHaveLength(42)
+  expect(latest.modelHttpAttempts).toHaveLength(32)
+  expect(latest.modelHttpAttempts.filter((call) => call.httpStatus === 429)).toHaveLength(3)
+  for (const task of latest.research.events.filter((event) => event.kind === 'delegated')) {
+    const events = latest.research.events.filter((event) => event.task_id === task.task_id)
+    const loaded = events.findIndex(
+      (event) =>
+        event.kind === 'tool_finished' &&
+        event.tool === 'load_skill' &&
+        event.query === 'product-comparison',
+    )
+    const work = events.findIndex(
+      (event) => event.kind === 'model_started' || event.tool === 'tavily_search',
+    )
+    expect(loaded).toBeGreaterThanOrEqual(0)
+    expect(loaded).toBeLessThan(work)
+  }
+})
+
+test('default tour uses accepted DeepSeek data and resets after choosing a historical recording', async ({
+  page,
+}) => {
+  await fakeLangGraph(page)
+  await page.goto('/')
+  await page.getByRole('textbox').fill('保留默认演示之前的草稿')
+  await page.getByRole('button', { name: '全流程演示', exact: true }).click()
+  await expect(page.getByLabel('演示数据来源')).toHaveValue(latest.id)
+  await expect(page.locator('.cw-demo-report')).toHaveCount(0)
+  await page.getByRole('button', { name: '跳转：记录结束状态', exact: true }).click()
+  await page.getByText('实测配置与记录', { exact: true }).click()
+  await expect(page.locator('.cw-config-history')).toContainText('成功加载 2 次')
+  await expect(page.locator('.cw-config-history')).toContainText('128000 token')
+  await page.getByLabel('演示数据来源').selectOption('kimi-full')
+  await expect(page.locator('[data-recording="kimi-full"]')).toBeVisible()
+  await page.getByRole('button', { name: '退出', exact: true }).click()
+  await expect(page.getByRole('textbox')).toHaveValue('保留默认演示之前的草稿')
+  await page.getByRole('button', { name: '全流程演示', exact: true }).click()
+  await expect(page.getByLabel('演示数据来源')).toHaveValue(latest.id)
+})
+
+test('default recording load does not flash simulation or discard changes made while loading', async ({
+  page,
+}) => {
+  await fakeLangGraph(page)
+  let release!: () => void
+  const ready = new Promise<void>((resolve) => {
+    release = resolve
+  })
+  await page.route('**/deepseek-p0-recording.json*', async (route) => {
+    await ready
+    await route.continue()
+  })
+  await page.goto('/')
+  await page.getByRole('button', { name: '全流程演示', exact: true }).click()
+  await expect(page.getByRole('button', { name: '全流程演示', exact: true })).toBeDisabled()
+  await expect(page.locator('[data-demo]')).toHaveCount(0)
+  await page.getByRole('textbox').fill('加载期间继续编辑的草稿')
+  release()
+  await expect(page.getByLabel('演示数据来源')).toHaveValue(latest.id)
+  await page.getByRole('button', { name: '退出', exact: true }).click()
+  await expect(page.getByRole('textbox')).toHaveValue('加载期间继续编辑的草稿')
+})
+
+test('failed recording load keeps the workspace and does not substitute simulation', async ({
+  page,
+}) => {
+  await fakeLangGraph(page)
+  await page.route('**/deepseek-p0-recording.json*', (route) => route.abort())
+  await page.goto('/')
+  await page.getByRole('textbox').fill('实录加载失败时保留')
+  await page.getByRole('button', { name: '全流程演示', exact: true }).click()
+  await expect(page.getByRole('alert')).toContainText('实录暂时无法加载')
+  await expect(page.locator('[data-demo]')).toHaveCount(0)
+  await expect(page.getByRole('textbox')).toHaveValue('实录加载失败时保留')
+})
+
+test('navigating away during recording load cancels delayed playback', async ({ page }) => {
+  await fakeLangGraph(page)
+  let release!: () => void
+  const ready = new Promise<void>((resolve) => {
+    release = resolve
+  })
+  await page.route('**/deepseek-p0-recording.json*', async (route) => {
+    await ready
+    await route.continue()
+  })
+  await page.goto('/')
+  await page.getByRole('button', { name: '全流程演示', exact: true }).click()
+  await expect(page.getByRole('button', { name: '全流程演示', exact: true })).toBeDisabled()
+  await page.getByRole('button', { name: 'AI 搜索的下一站', exact: true }).click()
+  release()
+  await page.getByRole('button', { name: '全流程演示', exact: true }).click()
+  await expect(page.getByLabel('演示数据来源')).toHaveValue(latest.id)
+  await page.getByRole('button', { name: '退出', exact: true }).click()
+  await expect(page.locator('.cw-header-title h1')).toHaveText('AI 搜索的下一站')
+})
 
 for (const record of records) {
   test(`${record.id}: real playback preserves recorded outcome without execution or storage changes`, async ({
@@ -54,12 +175,15 @@ for (const record of records) {
       ).toEqual(record.research.sources.map((source) => source.url))
     }
     if (record.research.report) {
-      await expect(page.getByTestId('recorded-report')).toContainText('Free-threaded CPython 3.13')
-      await expect(page.getByRole('complementary', { name: '实录验收说明' })).toContainText(
-        '未实际加载 Skills',
+      await expect(page.getByTestId('recorded-report')).toContainText(
+        record.research.report.split('\n')[0].replace(/^#+\s*/, ''),
       )
+      for (const note of record.acceptanceNotes ?? [])
+        await expect(page.getByRole('complementary', { name: '实录验收说明' })).toContainText(note)
       await expect(page.locator('.cw-fork[data-status="failed"]')).toHaveCount(0)
-      await expect(page.locator('.cw-fork[data-status="completed"]')).toHaveCount(1)
+      await expect(page.locator('.cw-fork[data-status="completed"]')).toHaveCount(
+        record.research.events.filter((event) => event.kind === 'completed').length,
+      )
       await expect(page.locator('[data-flow-node="report"]')).toHaveAttribute(
         'data-status',
         'completed',
@@ -67,9 +191,7 @@ for (const record of records) {
       await page.getByRole('tab', { name: '输入 / 输出', exact: true }).click()
       await expect(page.getByTestId('node-output')).toHaveText(record.research.report)
       await page.getByRole('tab', { name: '执行记录', exact: true }).click()
-      await expect(page.getByRole('tabpanel').filter({ visible: true })).toContainText(
-        '响应头 3.4 s',
-      )
+      await expect(page.getByRole('tabpanel').filter({ visible: true })).toContainText('响应头')
       await page.getByRole('button', { name: '跳转：实际研究事件', exact: true }).click()
       await expect(page.getByTestId('recorded-report')).toHaveCount(0)
       await page.getByRole('button', { name: '跳转：实际报告与来源', exact: true }).click()
@@ -110,7 +232,7 @@ for (const record of records) {
   })
 }
 
-for (const record of records.filter((item) => item.id.startsWith('kimi'))) {
+for (const record of records.filter((item) => item.id !== 'backoff')) {
   for (const width of [1440, 320]) {
     test(`${record.id}: real playback fits ${width}px and reload restores the original workspace`, async ({
       page,

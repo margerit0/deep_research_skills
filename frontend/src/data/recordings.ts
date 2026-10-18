@@ -10,11 +10,22 @@ export interface PlaybackScene {
   target: 'composer' | 'message' | 'inspector' | 'graph' | 'report'
 }
 
-type RawRecording = (typeof import('./recordings.json'))[number]
-export type Recording = Omit<RawRecording, 'research'> & { research: LiveResearch }
+export const DEFAULT_RECORDING_ID = 'deepseek-p0'
+type RawRecording =
+  (typeof import('./recordings.json'))[number] | typeof import('./deepseek-p0-recording.json')
+export type Recording = Omit<RawRecording, 'research'> & {
+  research: LiveResearch
+  runtimeNotes?: string[]
+}
 export async function loadRecordings(): Promise<Recording[]> {
-  const { default: data } = await import('./recordings.json')
-  return data.map((item) => ({ ...item, research: liveResearchSchema.parse(item.research) }))
+  const [{ default: latest }, { default: history }] = await Promise.all([
+    import('./deepseek-p0-recording.json'),
+    import('./recordings.json'),
+  ])
+  return [latest, ...history].map((item) => ({
+    ...item,
+    research: liveResearchSchema.parse(item.research),
+  }))
 }
 
 export function recordingScenes(record: Recording): PlaybackScene[] {

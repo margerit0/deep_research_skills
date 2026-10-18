@@ -38,6 +38,9 @@ export function RecordedConversation({ controller }: { controller: WorkspaceCont
             整段记录：{record.runCount} 个 run · {record.modelHttpAttempts.length} 次模型 HTTP
             尝试。
           </p>
+          {record.runtimeNotes?.map((note) => (
+            <p key={note}>{note}</p>
+          ))}
         </details>
         {run.messages.map((message, index) => (
           <article key={message.id ?? index} className="cw-message-pair">

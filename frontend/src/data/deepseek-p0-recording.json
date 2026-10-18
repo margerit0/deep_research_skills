@@ -1,0 +1,1633 @@
+{
+  "id": "deepseek-p0",
+  "label": "DeepSeek · 完整成功实录",
+  "date": "2026-10-17",
+  "threadId": "e7736eca-fa76-4806-9618-b49e9cafceb0",
+  "research": {
+    "id": "3665fc72-a277-4153-ae5c-07b3c3d27e49",
+    "prompt": "请帮我做一项对比研究。",
+    "createdAt": "2026-10-16T21:01:31.105Z",
+    "config": {
+      "contract_version": 1,
+      "graph_id": "research_agent_full",
+      "model_selection": "server",
+      "skills_mode": "auto",
+      "research_events_version": 1,
+      "research_event_replay_version": 1,
+      "report_events_version": 1,
+      "report_event_replay_version": 1,
+      "submission_recovery_version": 1,
+      "configuration_version": 1,
+      "selection": {
+        "version": 1,
+        "models": {
+          "SUMMARIZATION": "8f65ff44390eb1eabfedabae512d1dae6497b4cd6a6b9bc7be4f261fbc15c42f",
+          "RESEARCHER": "8f65ff44390eb1eabfedabae512d1dae6497b4cd6a6b9bc7be4f261fbc15c42f",
+          "COMPRESSION": "a5ed944aa611648ecc210d77ff276cf80b58775283361e944de406ea34e35422",
+          "SUPERVISOR": "8f65ff44390eb1eabfedabae512d1dae6497b4cd6a6b9bc7be4f261fbc15c42f",
+          "SCOPING": "8f65ff44390eb1eabfedabae512d1dae6497b4cd6a6b9bc7be4f261fbc15c42f",
+          "FINAL_REPORT": "a5ed944aa611648ecc210d77ff276cf80b58775283361e944de406ea34e35422"
+        },
+        "skills": {
+          "mode": "auto",
+          "allowed": []
+        }
+      },
+      "skill_revisions": {
+        "academic-research": "2fb1ec459ae2f12f3d008425365045a5f420ae931c73f04aa75e00153ccc157e",
+        "news-timeline": "faa1f1b3507dffa192fca5fba749f2c8b55444c3a97c43f80acf19376d35afd0",
+        "people-research": "4a2986c532cf1fb8107f3a907e4fe3b3a37422aa43207731a90850dc2bed2549",
+        "product-comparison": "9ee33668efc4820fc924873ec11c9c0cdb916c60dcace5a6e9a2d8acfc640f19"
+      },
+      "models": [
+        {
+          "role": "SUMMARIZATION",
+          "model": "deepseek-v4.1-flash",
+          "provider": "openai",
+          "max_tokens": null,
+          "config_id": "8f65ff44390eb1eabfedabae512d1dae6497b4cd6a6b9bc7be4f261fbc15c42f"
+        },
+        {
+          "role": "RESEARCHER",
+          "model": "deepseek-v4.1-flash",
+          "provider": "openai",
+          "max_tokens": null,
+          "config_id": "8f65ff44390eb1eabfedabae512d1dae6497b4cd6a6b9bc7be4f261fbc15c42f"
+        },
+        {
+          "role": "COMPRESSION",
+          "model": "deepseek-v4.1-flash",
+          "provider": "openai",
+          "max_tokens": 32000,
+          "config_id": "a5ed944aa611648ecc210d77ff276cf80b58775283361e944de406ea34e35422"
+        },
+        {
+          "role": "SUPERVISOR",
+          "model": "deepseek-v4.1-flash",
+          "provider": "openai",
+          "max_tokens": null,
+          "config_id": "8f65ff44390eb1eabfedabae512d1dae6497b4cd6a6b9bc7be4f261fbc15c42f"
+        },
+        {
+          "role": "SCOPING",
+          "model": "deepseek-v4.1-flash",
+          "provider": "openai",
+          "max_tokens": null,
+          "config_id": "8f65ff44390eb1eabfedabae512d1dae6497b4cd6a6b9bc7be4f261fbc15c42f"
+        },
+        {
+          "role": "FINAL_REPORT",
+          "model": "deepseek-v4.1-flash",
+          "provider": "openai",
+          "max_tokens": 32000,
+          "config_id": "a5ed944aa611648ecc210d77ff276cf80b58775283361e944de406ea34e35422"
+        }
+      ]
+    },
+    "turns": [
+      {
+        "id": "f94fc211-791b-4435-8c9e-a0dcd3987ea0",
+        "text": "请帮我做一项对比研究。",
+        "submittedAt": "2026-10-16T21:01:31.105Z",
+        "runId": "14b771d3-2670-4bd5-9d30-2ce636af8d52",
+        "eventRunId": "14b771d3-2670-4bd5-9d30-2ce636af8d52",
+        "submissionVersion": 1,
+        "selection": {
+          "version": 1,
+          "models": {
+            "SUMMARIZATION": "8f65ff44390eb1eabfedabae512d1dae6497b4cd6a6b9bc7be4f261fbc15c42f",
+            "RESEARCHER": "8f65ff44390eb1eabfedabae512d1dae6497b4cd6a6b9bc7be4f261fbc15c42f",
+            "COMPRESSION": "a5ed944aa611648ecc210d77ff276cf80b58775283361e944de406ea34e35422",
+            "SUPERVISOR": "8f65ff44390eb1eabfedabae512d1dae6497b4cd6a6b9bc7be4f261fbc15c42f",
+            "SCOPING": "8f65ff44390eb1eabfedabae512d1dae6497b4cd6a6b9bc7be4f261fbc15c42f",
+            "FINAL_REPORT": "a5ed944aa611648ecc210d77ff276cf80b58775283361e944de406ea34e35422"
+          },
+          "skills": {
+            "mode": "auto",
+            "allowed": []
+          }
+        },
+        "expectedTurnId": null,
+        "transport": "accepted"
+      },
+      {
+        "id": "c6dc24a0-93c0-4058-b8ca-440f0995796f",
+        "text": "比较 Python 3.13 实验性的 free-threaded CPython 与默认 GIL 构建，帮助开发者判断是否试用。仅比较 GIL 状态、C 扩展兼容性、适用限制三个维度，给出约 500 字中文报告和编号引用。研究员必须先调用 load_skill 工具，skill_name 使用 product-comparison，再进行真实检索。资料范围固定为两篇官方指南：https://docs.python.org/3.13/howto/free-threading-python.html 和 https://docs.python.org/3.13/howto/free-threading-extensions.html；请用简单的关键词或 site: 查询检索这两页，不扩展到长篇版本更新汇总或历史提案。只依照这两页给出可核验的试用建议，说明 GIL 运行时开关及不兼容扩展的处理；证据不足时明确说明，不编造。范围已明确，不需要再次澄清。",
+        "submittedAt": "2026-10-16T21:01:35.715Z",
+        "runId": "6050cd85-85c0-4b0f-bfd5-f783c48ca65a",
+        "eventRunId": "6050cd85-85c0-4b0f-bfd5-f783c48ca65a",
+        "submissionVersion": 1,
+        "selection": {
+          "version": 1,
+          "models": {
+            "SUMMARIZATION": "8f65ff44390eb1eabfedabae512d1dae6497b4cd6a6b9bc7be4f261fbc15c42f",
+            "RESEARCHER": "8f65ff44390eb1eabfedabae512d1dae6497b4cd6a6b9bc7be4f261fbc15c42f",
+            "COMPRESSION": "a5ed944aa611648ecc210d77ff276cf80b58775283361e944de406ea34e35422",
+            "SUPERVISOR": "8f65ff44390eb1eabfedabae512d1dae6497b4cd6a6b9bc7be4f261fbc15c42f",
+            "SCOPING": "8f65ff44390eb1eabfedabae512d1dae6497b4cd6a6b9bc7be4f261fbc15c42f",
+            "FINAL_REPORT": "a5ed944aa611648ecc210d77ff276cf80b58775283361e944de406ea34e35422"
+          },
+          "skills": {
+            "mode": "auto",
+            "allowed": []
+          }
+        },
+        "expectedTurnId": "f94fc211-791b-4435-8c9e-a0dcd3987ea0",
+        "transport": "accepted"
+      }
+    ],
+    "status": "succeeded",
+    "phase": "complete",
+    "messages": [
+      {
+        "id": "f94fc211-791b-4435-8c9e-a0dcd3987ea0",
+        "type": "human",
+        "content": "请帮我做一项对比研究。"
+      },
+      {
+        "id": "5771fa9b-0fce-4497-ba4e-22d818e62839",
+        "type": "ai",
+        "content": "为了开展您所需的对比研究，请补充以下关键信息：\n\n1. **对比对象**：您希望对比哪些具体事物？（例如：两个或多个产品、公司、技术方案、政策、市场等）\n2. **对比维度**：您关注哪些方面的对比？（例如：性能、价格、市场份额、优缺点、发展趋势等）\n3. **研究目的与用途**：这项对比研究将用于什么场景？（例如：投资决策、学术论文、采购选型等）\n4. **范围与限制**：是否有特定的时间范围、地域范围或行业范围？\n5. **输出形式**：您期望的成果形式是什么？（例如：对比表格、分析报告、PPT 大纲等）\n\n请提供以上信息，以便我准确开展研究。"
+      },
+      {
+        "id": "c6dc24a0-93c0-4058-b8ca-440f0995796f",
+        "type": "human",
+        "content": "比较 Python 3.13 实验性的 free-threaded CPython 与默认 GIL 构建，帮助开发者判断是否试用。仅比较 GIL 状态、C 扩展兼容性、适用限制三个维度，给出约 500 字中文报告和编号引用。研究员必须先调用 load_skill 工具，skill_name 使用 product-comparison，再进行真实检索。资料范围固定为两篇官方指南：https://docs.python.org/3.13/howto/free-threading-python.html 和 https://docs.python.org/3.13/howto/free-threading-extensions.html；请用简单的关键词或 site: 查询检索这两页，不扩展到长篇版本更新汇总或历史提案。只依照这两页给出可核验的试用建议，说明 GIL 运行时开关及不兼容扩展的处理；证据不足时明确说明，不编造。范围已明确，不需要再次澄清。"
+      },
+      {
+        "id": "a372c17e-0b2d-4d7f-863f-f3955eecd70e",
+        "type": "ai",
+        "content": "已确认信息充足，可以开始研究。核心理解：对比 Python 3.13 实验性 free-threaded CPython 与默认 GIL 构建，仅围绕 GIL 状态、C 扩展兼容性、适用限制三个维度，基于两篇指定官方指南进行检索，输出约 500 字中文报告并附编号引用，给出可核验的试用建议，证据不足时明确说明。即将先调用 load_skill（skill_name: product-comparison），再开展真实检索并撰写报告。"
+      }
+    ],
+    "brief": "我需要对 Python 3.13 的实验性 free-threaded CPython 构建与默认 GIL 构建进行对比研究，目的是帮助开发者判断是否值得试用 free-threaded 版本。对比仅限定在三个维度：GIL 状态、C 扩展兼容性、适用限制。资料范围固定为两篇官方指南：https://docs.python.org/3.13/howto/free-threading-python.html 和 https://docs.python.org/3.13/howto/free-threading-extensions.html；检索时使用简单的关键词或 site: 查询定位这两页，不扩展到长篇版本更新汇总或历史提案。最终产出约 500 字中文报告，并附编号引用。报告需基于这两页给出可核验的试用建议，说明 GIL 运行时开关以及不兼容扩展的处理方式；证据不足时必须明确说明，不得编造。对于我未明确指定的维度，请视为开放变量，不擅自缩窄范围，也不预设偏好。",
+    "report": "Python 3.13 free-threaded 与默认 GIL 构建对比\n\nGIL 状态：默认构建始终启用 GIL；free-threaded 构建自 3.13 起实验性禁用 GIL，使线程可在多核并行。[1] 它仍可在运行时启用 GIL，使用环境变量 PYTHON_GIL 或命令行选项 -X gil；导入未显式标记支持自由线程的 C-API 扩展时，GIL 也可能自动启用并警告。[1] 检查运行进程是否实际禁用 GIL 可用 sys._is_gil_enabled()。[1] 两页未说明 PYTHON_GIL 的取值、-X gil 的参数形式、生效时机及运行中切换限制。[1]\n\nC 扩展兼容性：扩展必须显式声明支持 GIL 禁用，否则导入会警告并启用 GIL；未声明者即不兼容处理路径。[2] 多数 C API 线程安全，但直接访问可能被并发修改的结构字段、无锁访问器宏、借用引用在并发修改时并不安全。[2] free-threaded 构建当前不支持受限 C API 和稳定 ABI，需单独构建 wheel，Windows 从源码构建扩展还需手动定义 Py_GIL_DISABLED=1。[2]\n\n适用限制：free-threaded 模式是实验性的，预期有 bug 和显著单线程性能损失。[1] 相比默认 GIL 构建，3.13 在 pyperformance 套件上单线程开销约 40%，C 扩展或 I/O 为主时影响较小；最大影响来自 specializing adaptive interpreter 被禁用。[1] 3.13 使部分对象 immortal，创建大量此类对象的应用可能增加内存占用。[1] 跨线程访问 frame 对象或共享同一迭代器对象一般不安全，可能崩溃或重复、缺失元素。[1] 内置 dict、list、set 的内部锁只是当前实现描述，不是并发修改保证，建议用 threading.Lock 等同步原语。[1]\n\n试用建议（依据上述证据的推断）：若工作负载以多线程并行计算为主，且依赖扩展已显式声明支持自由线程，可在隔离环境试用，并用 sys._is_gil_enabled() 确认 GIL 实际状态；若扩展未标记，导入可能自动启用 GIL，需检查警告。试用前还应审查扩展内部共享状态是否需要加锁，不能仅凭声明支持、编译成功或性能实测判断安全。[2] 若单线程性能敏感或依赖稳定 ABI/受限 API，暂不宜作为生产默认。两页未给出完整兼容清单，需自行实测。\n\n### 来源\n[1] Python experimental support for free threading — Python 3.13.16 documentation，https://docs.python.org/3.13/howto/free-threading-python.html\n[2] C API Extension Support for Free Threading — Python 3.13.16 documentation，https://docs.python.org/3.13/howto/free-threading-extensions.html",
+    "notes": [
+      "## Python 3.13 实验性 free-threaded CPython 与默认 GIL 构建对比研究\n\n### 一、GIL 状态\n\n自 3.13 版本起，CPython 提供了一种名为 free threading 的实验性构建，其中全局解释器锁（GIL）被禁用；自由线程执行允许线程在可用的 CPU 核心上并行运行，从而充分利用处理能力 [1]。该模式为实验性，工作仍在进行中，预期会有一些 bug，并伴随显著的单线程性能损失 [1]。\n\n识别方式：`python -VV` 和 `sys.version` 会包含 \"experimental free-threading build\" 字样 [1]。新增的 `sys._is_gil_enabled()` 函数可用于检查运行进程中 GIL 是否实际被禁用 [1]。`sysconfig.get_config_var(\"Py_GIL_DISABLED\")` 配置变量可用于判断构建是否支持自由线程，若该变量为 1 则构建支持自由线程，这是与构建配置相关决策的推荐机制 [1]。从源码构建时，应使用 `--disable-gil` 配置选项来构建自由线程 Python 解释器 [1]。\n\n### 二、GIL 运行时开关\n\n自由线程构建支持在运行时通过环境变量 `PYTHON_GIL` 或命令行选项 `-X gil` 选择性地启用 GIL [1]。当导入未明确标记支持自由线程的 C-API 扩展模块时，GIL 也可能自动启用，此时会打印警告 [1]。\n\n### 三、适用限制\n\n**永生对象（Immortalization）**：3.13 自由线程构建使部分对象成为永生对象，永生对象不会被释放，其引用计数永远不会被修改，这是为了避免引用计数争用阻碍高效的多线程扩展 [1]。当主线程运行后首次启动新线程时，以下对象会被设为永生：模块级声明的函数对象、方法描述符、代码对象、模块对象及其字典、类（类型对象）[1]。由于永生对象永远不会被释放，创建大量此类对象的应用程序可能会看到内存使用增加，这预计将在 3.14 版本中得到解决 [1]。此外，代码中的数字和字符串字面量以及 `sys.intern()` 返回的字符串也会被永生化，此行为预计将在 3.14 自由线程构建中保留 [1]。\n\n**帧对象（Frame objects）**：从其他线程访问帧对象是不安全的，可能导致程序崩溃；这意味着 `sys._current_frames()` 在自由线程构建中通常不安全 [1]。只要生成的帧对象不传递给另一个线程，`inspect.currentframe()` 和 `sys._getframe()` 等函数通常是安全的 [1]。\n\n**迭代器（Iterators）**：在多个线程之间共享同一个迭代器对象通常不安全，线程在迭代时可能会看到重复或缺失的元素，或导致解释器崩溃 [1]。\n\n**单线程性能**：与默认启用 GIL 的构建相比，自由线程构建在执行 Python 代码时有额外开销；在 3.13 中，pyperformance 套件上的开销约为 40% [1]。大部分时间花在 C 扩展或 I/O 上的程序受到的影响较小 [1]。最大影响是因为专门化自适应解释器（PEP 659）在自由线程构建中被禁用，预计将在 3.14 版本中以线程安全的方式重新启用 [1]。此开销预计将在未来的 Python 版本中减少，目标是在 pyperformance 套件上相比默认启用 GIL 的构建将开销降至 10% 或更低 [1]。\n\n**线程安全**：自由线程构建旨在在 Python 层面提供与默认启用 GIL 的构建相似的线程安全行为；dict、list 和 set 等内置类型使用内部锁来防止并发修改，其行为方式与 GIL 类似 [1]。然而，Python 历史上并未保证这些内置类型并发修改的特定行为，因此这应被视为对当前实现的描述，而非对当前或未来行为的保证 [1]。建议尽可能使用 `threading.Lock` 或其他同步原语，而不是依赖内置类型的内部锁 [1]。\n\n**安装与生态**：从 Python 3.13 开始，官方 macOS 和 Windows 安装程序可选支持安装自由线程 Python 二进制文件，安装程序可在 https://www.python.org/downloads/ 获取；其他平台可参考社区维护的安装指南 [1]。以下网站跟踪流行包对自由线程的支持状态：https://py-free-threading.github.io/tracking/ 和 https://hugovk.github.io/free-threaded-wheels/ [1]。\n\n### 四、C 扩展兼容性\n\n扩展模块必须显式声明支持禁用 GIL 运行，否则导入时会发出警告并在运行时启用 GIL [2]。多阶段初始化（`PyModuleDef_Init()`）的扩展应在模块定义中加入 `Py_mod_gil` slot，值为 `Py_MOD_GIL_NOT_USED`；若需兼容旧版 CPython，用 `PY_VERSION_HEX >= 0x030D0000` 保护该 slot [2]。单阶段初始化（`PyModule_Create()`）的扩展应调用 `PyUnstable_Module_SetGIL(m, Py_MOD_GIL_NOT_USED)`，该函数仅在 free-threaded 构建中定义，需用 `#ifdef Py_GIL_DISABLED` 保护以避免常规构建编译错误 [2]。\n\nC API 暴露 `Py_GIL_DISABLED` 宏，free-threaded 构建中定义为 1，常规构建中不定义；Windows 上该宏不会自动定义，必须在编译时手动指定 [2]。直接访问可能被并发修改的结构体字段不安全；`PyList_GET_ITEM`、`PyList_SET_ITEM` 等访问宏不做错误检查或加锁，容器可能被并发修改时不安全 [2]。`PyListObject`、`PyDictObject`、`PySetObject` 等容器在 free-threaded 构建中执行内部加锁，例如 `PyList_Append()` 会先锁列表；显著例外是 `PyDict_Next()` 不加锁，若字典可能被并发修改，应使用 `Py_BEGIN_CRITICAL_SECTION` / `Py_END_CRITICAL_SECTION` 保护迭代 [2]。\n\n借用引用 API 有强引用替代：`PyList_GetItem()`/`PyList_GET_ITEM()` → `PyList_GetItemRef()`；`PyDict_GetItem()`/`PyDict_GetItemWithError()` → `PyDict_GetItemRef()`；`PyDict_GetItemString()` → `PyDict_GetItemStringRef()`；`PyDict_SetDefault()` → `PyDict_SetDefaultRef()`；`PyWeakref_GetObject()`/`PyWeakref_GET_OBJECT()` → `PyWeakref_GetRef()`；`PyImport_AddModule()` → `PyImport_AddModuleRef()` [2]。并非所有返回借用引用的 API 都有问题，如 `PyTuple_GetItem()` 因元组不可变而安全；也并非上述 API 的所有用法都有问题，如 `PyDict_GetItem()` 用于解析函数调用的关键字参数字典时，这些字典实际为私有、其他线程不可访问，此时使用借用引用是安全的 [2]。部分函数在 Python 3.13 中新增，可用 `pythoncapi-compat` 包为旧版本提供实现 [2]。\n\n内存分配方面，free-threaded 构建要求只有 Python 对象使用 object 域分配，且所有 Python 对象都必须使用该域分配，这与以往版本不同，以往这只是最佳实践而非硬性要求；建议检查扩展中 `PyObject_Malloc()` 的使用，缓冲区应改用 `PyMem_Malloc()` [2]。`PyGILState_Ensure()`/`PyGILState_Release()`、`PyEval_SaveThread()`/`PyEval_RestoreThread()`、`Py_BEGIN_ALLOW_THREADS`/`Py_END_ALLOW_THREADS` 在 free-threaded 构建中仍应使用以管理线程状态，即使 GIL 已禁用 [2]。扩展中此前由 GIL 保护的内部状态可能需要加锁，全局缓存可用锁保护或在 free-threaded 构建中禁用，全局状态可用锁保护或移至线程本地存储（C11/C++11 提供 `thread_local`/`_Thread_local`）[2]。\n\nC API 扩展需专门为 free-threaded 构建编译，wheel、共享库和二进制文件以 `t` 后缀标识；pypa/manylinux 支持该构建（如 `python3.13t`）；pypa/cibuildwheel 在设置 `CIBW_ENABLE` 为 `cpython-freethreading` 时支持 [2]。free-threaded 构建目前不支持 Limited C API 或 stable ABI；使用 setuptools 且当前设置 `py_limited_api=True` 时，可用 `py_limited_api=not sysconfig.get_config_var(\"Py_GIL_DISABLED\")` 在 free-threaded 构建中退出 limited API [2]。需为 free-threaded 构建单独构建 wheel；若当前使用 stable ABI，仍可为多个非 free-threaded Python 版本构建单个 wheel [2]。由于官方 Windows 安装程序的限制，从源码构建扩展时需手动定义 `Py_GIL_DISABLED=1` [2]。\n\n### 五、跨维度对比结论\n\n在 GIL 状态上，默认构建始终启用 GIL，而 free-threaded 构建默认禁用 GIL，但可通过 `PYTHON_GIL` 或 `-X gil` 在运行时重新启用 [1]。在 C 扩展兼容性上，未显式标记支持自由线程的扩展导入时会触发警告并自动启用 GIL，因此不兼容扩展的处理方式是：要么由扩展作者按文档声明支持（多阶段用 `Py_mod_gil` slot，单阶段用 `PyUnstable_Module_SetGIL()`），要么在运行时回退到启用 GIL [1][2]。在适用限制上，free-threaded 构建在 3.13 中 pyperformance 套件单线程开销约 40%，目标降至 10% 或更低；同时存在永生对象导致的内存增长、帧对象跨线程访问不安全、迭代器跨线程共享不安全等限制 [1]。综合来看，若程序主要耗时在 C 扩展或 I/O，性能影响较小；若依赖大量未适配的 C 扩展或对单线程性能敏感，则需谨慎试用 [1][2]。\n\n### Sources\n[1] Python experimental support for free threading — Python 3.13.16 documentation: https://docs.python.org/3.13/howto/free-threading-python.html\n[2] C API Extension Support for Free Threading — Python 3.13.16 documentation: https://docs.python.org/3.13/howto/free-threading-extensions.html",
+      "## Python 3.13 实验性 free-threaded CPython 与默认 GIL 构建对比研究\n\n### 一、GIL 状态\n\n从 Python 3.13 版本开始，CPython 提供了一种名为 free threading 的实验性构建，该构建禁用了全局解释器锁（GIL）[1]。自由线程执行允许线程在可用的 CPU 核心上并行运行，从而充分利用处理能力[1]。该模式是实验性的，仍在改进中：预计会有一些 bug，并且单线程性能会有显著下降[1]。\n\n在识别方式上，`python -VV` 和 `sys.version` 会包含 \"experimental free-threading build\"[1]。新增的 `sys._is_gil_enabled()` 函数可用于检查运行进程中 GIL 是否实际被禁用[1]。`sysconfig.get_config_var(\"Py_GIL_DISABLED\")` 配置变量可用于判断构建是否支持自由线程；若该变量为 1，则构建支持自由线程，这是与构建配置相关决策的推荐机制[1]。从源码构建 CPython 时，应使用 `--disable-gil` 配置选项来构建自由线程 Python 解释器[1]。\n\n在运行时开关方面，自由线程构建支持通过环境变量 `PYTHON_GIL` 或命令行选项 `-X gil` 在运行时选择启用 GIL[1]。当导入未明确标记支持自由线程的 C-API 扩展模块时，GIL 也可能自动启用，此时会打印警告[1]。\n\n在单线程性能开销方面，与默认启用 GIL 的构建相比，自由线程构建在执行 Python 代码时有额外开销；在 3.13 中，pyperformance 套件上的开销约为 40%[1]。大部分时间花在 C 扩展或 I/O 上的程序受到的影响较小[1]。最大影响是因为专门化自适应解释器（PEP 659）在自由线程构建中被禁用，预计将在 3.14 版本中以线程安全的方式重新启用它[1]。此开销预计将在未来的 Python 版本中减少，目标是在 pyperformance 套件上相比默认启用 GIL 的构建将开销降至 10% 或更低[1]。\n\n### 二、C 扩展兼容性\n\nC API 暴露 `Py_GIL_DISABLED` 宏：在自由线程构建中它被定义为 1，在常规构建中未定义[2]。在 Windows 上，该宏不会自动定义，必须在编译时手动指定给编译器[2]。由于官方 Windows 安装程序的限制，从源码构建扩展时需手动定义 `Py_GIL_DISABLED=1`[2]。\n\n扩展模块必须显式声明支持禁用 GIL，否则导入该扩展时会发出警告并在运行时启用 GIL[2]。声明方式有两种：使用多阶段初始化（即 `PyModuleDef_Init()`）的扩展应在模块定义中加入 `Py_mod_gil` 槽，值为 `Py_MOD_GIL_NOT_USED`，若扩展需支持旧版 CPython，应使用 `PY_VERSION_HEX` 检查保护该槽[2]；使用单阶段初始化（即 `PyModule_Create()`）的扩展应调用 `PyUnstable_Module_SetGIL()` 来声明支持禁用 GIL 运行，该函数仅在自由线程构建中定义，因此应使用 `#ifdef Py_GIL_DISABLED` 保护该调用，以避免在常规构建中出现编译错误[2]。\n\n在通用 API 准则方面，直接访问 Python C API 对象或结构体中可能被并发修改的字段不是线程安全的[2]。`PyList_GET_ITEM`、`PyList_SET_ITEM` 等访问宏不执行任何错误检查或加锁，若容器对象可能被并发修改，这些宏不是线程安全的[2]。`PyListObject`、`PyDictObject`、`PySetObject` 等容器在自由线程构建中执行内部加锁，例如 `PyList_Append()` 会在追加项之前锁定列表[2]。一个显著例外是 `PyDict_Next()`，它不加锁字典；若字典可能被并发修改，应使用 `Py_BEGIN_CRITICAL_SECTION` 在迭代时保护字典[2]。\n\n在借用引用方面，文档给出对照表：`PyList_GetItem()`/`PyList_GET_ITEM()` → `PyList_GetItemRef()`；`PyDict_GetItem()`/`PyDict_GetItemWithError()` → `PyDict_GetItemRef()`；`PyDict_GetItemString()` → `PyDict_GetItemStringRef()`；`PyDict_SetDefault()` → `PyDict_SetDefaultRef()`；`PyDict_Next()` → 无替代；`PyWeakref_GetObject()`/`PyWeakref_GET_OBJECT()` → `PyWeakref_GetRef()`；`PyImport_AddModule()` → `PyImport_AddModuleRef()`[2]。并非所有返回借用引用的 API 都有问题，例如 `PyTuple_GetItem()` 因元组不可变而安全；也并非所有用法都有问题，例如解析函数调用的关键字参数字典时，该字典实际为私有（其他线程不可访问），使用借用引用是安全的[2]。部分函数在 Python 3.13 新增，可用 `pythoncapi-compat` 包为旧版本提供实现[2]。\n\n在内存分配 API 方面，Python 内存管理 C API 分三个分配域：raw、mem、object[2]。自由线程构建要求只有 Python 对象使用 object 域分配，且所有 Python 对象都必须使用该域分配——这不同于此前版本，此前这只是最佳实践而非硬性要求[2]。建议搜索扩展中 `PyObject_Malloc()` 的使用，确认分配的内存用于 Python 对象；分配缓冲区应改用 `PyMem_Malloc()`[2]。\n\n在编译与 ABI 方面，C API 扩展需专门为自由线程构建编译，wheel、共享库和二进制文件以 `t` 后缀标识（如 `python3.13t`）[2]。pypa/manylinux 支持该构建；pypa/cibuildwheel 在设置 `CIBW_ENABLE` 为 `cpython-freethreading` 时支持[2]。自由线程构建目前不支持 Limited C API 或稳定 ABI[2]。使用 setuptools 且当前设置 `py_limited_api=True` 时，可用 `py_limited_api=not sysconfig.get_config_var(\"Py_GIL_DISABLED\")` 在自由线程构建中退出 limited API[2]。需为自由线程构建单独构建 wheel；若当前使用稳定 ABI，仍可为多个非自由线程 Python 版本构建单一 wheel[2]。\n\n### 三、适用限制\n\n在扩展内部状态保护方面，扩展中此前由 GIL 保护的内部状态可能需要加锁[2]。常见模式：全局缓存可用锁保护，或在自由线程构建中禁用（若缓存对性能不关键）；全局状态可用锁保护或移至线程本地存储（C11/C++11 提供 `thread_local`/`_Thread_local`）[2]。\n\n在线程状态与 GIL API 方面，`PyGILState_Ensure()`/`PyGILState_Release()`、`PyEval_SaveThread()`/`PyEval_RestoreThread()`、`Py_BEGIN_ALLOW_THREADS`/`Py_END_ALLOW_THREADS` 在自由线程构建中仍应使用以管理线程状态，即使 GIL 已禁用[2]。例如在 Python 之外创建线程时，调用 Python API 前必须调用 `PyGILState_Ensure()` 以确保线程有有效的 Python 线程状态[2]。在阻塞操作（如 I/O 或获取锁）前后仍应调用 `PyEval_SaveThread()` 或 `Py_BEGIN_ALLOW_THREADS`，以便其他线程运行循环垃圾回收器[2]。\n\n在 Python 层面的线程安全方面，自由线程构建旨在在 Python 层面提供与默认启用 GIL 的构建相似的线程安全行为[1]。dict、list 和 set 等内置类型使用内部锁来防止并发修改，其行为方式与 GIL 类似；然而 Python 历史上并未保证这些内置类型并发修改的特定行为，因此这应被视为对当前实现的描述，而非对当前或未来行为的保证[1]。建议尽可能使用 `threading.Lock` 或其他同步原语，而不是依赖内置类型的内部锁[1]。\n\n在已知限制方面，3.13 版本的自由线程构建使某些对象永生：永生对象不会被释放，其引用计数永远不会被修改，这是为了避免引用计数争用阻碍高效的多线程扩展[1]。当主线程运行后首次启动新线程时，对象会被设为永生[1]。以下对象会被永生化：模块级声明的函数对象、方法描述符、代码对象、模块对象及其字典、类（类型对象）[1]。由于永生对象永远不会被释放，创建大量此类对象的应用程序可能会看到内存使用增加，这预计将在 3.14 版本中得到解决[1]。此外，代码中的数字和字符串字面量以及 `sys.intern()` 返回的字符串也会被永生化，此行为预计将在 3.14 自由线程构建中保留[1]。从其他线程访问帧对象是不安全的，可能导致程序崩溃，这意味着 `sys._current_frames()` 在自由线程构建中通常不安全；只要生成的帧对象不传递给另一个线程，`inspect.currentframe()` 和 `sys._getframe()` 等函数通常是安全的[1]。在多个线程之间共享同一个迭代器对象通常不安全，线程在迭代时可能会看到重复或缺失的元素，或导致解释器崩溃[1]。\n\n### 四、跨维度对比结论\n\n在 GIL 状态维度，默认 GIL 构建始终启用 GIL，而 free-threaded 构建默认禁用 GIL，但可通过 `PYTHON_GIL` 环境变量或 `-X gil` 命令行选项在运行时重新启用，且导入未标记支持 free threading 的 C-API 扩展时会自动启用 GIL 并打印警告[1]。在 C 扩展兼容性维度，默认 GIL 构建无需扩展做任何声明，而 free-threaded 构建要求扩展显式声明支持（通过 `Py_mod_gil` 槽或 `PyUnstable_Module_SetGIL()`），且不支持 Limited C API 或稳定 ABI，需单独构建 wheel[2]。在适用限制维度，free-threaded 构建存在永生对象导致的内存增长、帧对象跨线程访问不安全、迭代器跨线程共享不安全，以及 3.13 中 pyperformance 套件约 40% 的单线程性能开销[1]。\n\n### Sources\n\n[1] Python experimental support for free threading — Python 3.13.16 documentation: https://docs.python.org/3.13/howto/free-threading-python.html\n[2] C API Extension Support for Free Threading — Python 3.13.16 documentation: https://docs.python.org/3.13/howto/free-threading-extensions.html"
+    ],
+    "sources": [
+      {
+        "title": "Python experimental support for free threading — Python 3.13.16 documentation",
+        "url": "https://docs.python.org/3.13/howto/free-threading-python.html"
+      },
+      {
+        "title": "C API Extension Support for Free Threading — Python 3.13.16 documentation",
+        "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+        "retrieval": "specified_url"
+      }
+    ],
+    "errors": [],
+    "events": [
+      {
+        "version": 1,
+        "id": "cde05ff5-cf3f-4c0f-97c7-3d4932ad88d0",
+        "research_id": "3665fc72-a277-4153-ae5c-07b3c3d27e49",
+        "turn_id": "c6dc24a0-93c0-4058-b8ca-440f0995796f",
+        "sequence": 1,
+        "at": "2026-10-16T21:01:53.387786+00:00",
+        "task_id": "b9e8ff00-878f-569a-b969-bcae9ff71e80",
+        "round": 2,
+        "kind": "delegated",
+        "elapsed_ms": 0,
+        "topic": "研究任务：从 Python 3.13 官方指南页面 https://docs.python.org/3.13/howto/free-threading-python.html 中提取信息，用于对比\"实验性 free-threaded CPython 构建\"与\"默认 GIL 构建\"。\n\n【强制前置步骤】在开始任何检索之前，你必须先调用 load_skill 工具，skill_name 使用 \"product-comparison\"。这是用户明确要求的流程，必须先执行。\n\n【来源范围（严格限定）】只允许使用以下这一页官方文档作为唯一来源：\nhttps://docs.python.org/3.13/howto/free-threading-python.html\n检索时请使用简单的关键词查询或 site: 查询来定位该页面（例如 \"free-threading-python howto\"、\"site:docs.python.org free-threading\"）。不要扩展到长篇版本更新汇总（如 What's New）、历史提案（如 PEP 703）或其他页面。若该页信息不足，必须明确说明\"证据不足\"，不得编造或从其他来源补充。\n\n【需要提取的具体信息（围绕以下维度）】\n1. GIL 状态：默认构建与 free-threaded 构建在 GIL 上的区别；free-threaded 构建是否默认禁用 GIL；如何确认当前是否启用了 GIL（例如 sys._is_gil_enabled() 之类的 API）。\n2. GIL 运行时开关：如何在运行时启用/禁用 GIL。请找出具体机制，例如命令行选项（如 -X gil=0 / -X gil=1）、环境变量（如 PYTHON_GIL=0）、以及相关 API。请给出原文中的准确表述。\n3. 适用限制：free-threaded 构建的已知限制与注意事项，例如单线程性能开销、内存开销、平台/架构支持情况、生态与第三方包支持现状、是否仍为实验性、是否适合生产环境等。请逐条列出原文提到的限制。\n\n【输出要求】\n- 用中文输出。\n- 对每一条关键信息，标注其来自该页面的出处（页面 URL，必要时附小节标题或原文英文短句作为可核验依据）。\n- 明确区分\"页面明确说明的内容\"与\"页面未提及/证据不足的内容\"。\n- 不要撰写最终报告，只提供结构化的信息提取结果与可核验引用。"
+      },
+      {
+        "version": 1,
+        "id": "2d41abb5-4d82-4129-91c0-2154fc9d034f",
+        "research_id": "3665fc72-a277-4153-ae5c-07b3c3d27e49",
+        "turn_id": "c6dc24a0-93c0-4058-b8ca-440f0995796f",
+        "sequence": 2,
+        "at": "2026-10-16T21:01:53.408653+00:00",
+        "task_id": "1cf8daf4-232b-5b82-be9e-941973d83ded",
+        "round": 2,
+        "kind": "delegated",
+        "elapsed_ms": 0,
+        "topic": "研究任务：从 Python 3.13 官方指南页面 https://docs.python.org/3.13/howto/free-threading-extensions.html 中提取信息，用于对比\"实验性 free-threaded CPython 构建\"与\"默认 GIL 构建\"在 C 扩展兼容性方面的差异。\n\n【强制前置步骤】在开始任何检索之前，你必须先调用 load_skill 工具，skill_name 使用 \"product-comparison\"。这是用户明确要求的流程，必须先执行。\n\n【来源范围（严格限定）】只允许使用以下这一页官方文档作为唯一来源：\nhttps://docs.python.org/3.13/howto/free-threading-extensions.html\n检索时请使用简单的关键词查询或 site: 查询来定位该页面（例如 \"free-threading-extensions howto\"、\"site:docs.python.org free-threading extensions\"）。不要扩展到长篇版本更新汇总（如 What's New）、历史提案（如 PEP 703）或其他页面。若该页信息不足，必须明确说明\"证据不足\"，不得编造或从其他来源补充。\n\n【需要提取的具体信息（围绕以下维度）】\n1. C 扩展兼容性：C 扩展要支持 free-threaded 构建需要做什么。请找出具体机制，例如模块槽（如 Py_mod_gil）、多阶段初始化（multi-phase initialization）、PyUnstable_Module_SetGIL() 等 API，以及扩展如何声明自己支持或不支持 free-threaded 模式。请给出原文中的准确表述。\n2. 不兼容扩展的处理方式：当加载一个不支持 free-threaded 的 C 扩展时会发生什么。请找出具体行为，例如是否会自动重新启用 GIL、是否发出运行时警告（RuntimeWarning）、警告的具体内容、以及开发者/用户应如何处理（例如如何让扩展声明支持、如何临时规避）。请给出原文中的准确表述。\n3. 与 GIL 状态相关的扩展行为：扩展如何影响 GIL 的启用状态，以及 free-threaded 构建下扩展的线程安全要求（如需要自行加锁、不能依赖 GIL 保护等）。\n\n【输出要求】\n- 用中文输出。\n- 对每一条关键信息，标注其来自该页面的出处（页面 URL，必要时附小节标题或原文英文短句作为可核验依据）。\n- 明确区分\"页面明确说明的内容\"与\"页面未提及/证据不足的内容\"。\n- 不要撰写最终报告，只提供结构化的信息提取结果与可核验引用。"
+      },
+      {
+        "version": 1,
+        "id": "e4092949-4f0e-418b-8ea7-f33529cfd395",
+        "research_id": "3665fc72-a277-4153-ae5c-07b3c3d27e49",
+        "turn_id": "c6dc24a0-93c0-4058-b8ca-440f0995796f",
+        "sequence": 3,
+        "at": "2026-10-16T21:01:53.427232+00:00",
+        "task_id": "1cf8daf4-232b-5b82-be9e-941973d83ded",
+        "round": 2,
+        "kind": "tool_started",
+        "elapsed_ms": 19,
+        "tool": "load_skill",
+        "query": "product-comparison"
+      },
+      {
+        "version": 1,
+        "id": "4773ea7f-70c5-4ecc-9ca3-8dfcb79a880b",
+        "research_id": "3665fc72-a277-4153-ae5c-07b3c3d27e49",
+        "turn_id": "c6dc24a0-93c0-4058-b8ca-440f0995796f",
+        "sequence": 4,
+        "at": "2026-10-16T21:01:53.442313+00:00",
+        "task_id": "b9e8ff00-878f-569a-b969-bcae9ff71e80",
+        "round": 2,
+        "kind": "tool_started",
+        "elapsed_ms": 55,
+        "tool": "load_skill",
+        "query": "product-comparison"
+      },
+      {
+        "version": 1,
+        "id": "4df29cc2-34ce-4737-8dfa-474585c0fd02",
+        "research_id": "3665fc72-a277-4153-ae5c-07b3c3d27e49",
+        "turn_id": "c6dc24a0-93c0-4058-b8ca-440f0995796f",
+        "sequence": 5,
+        "at": "2026-10-16T21:01:53.456959+00:00",
+        "task_id": "1cf8daf4-232b-5b82-be9e-941973d83ded",
+        "round": 2,
+        "kind": "tool_finished",
+        "elapsed_ms": 48,
+        "tool": "load_skill",
+        "query": "product-comparison"
+      },
+      {
+        "version": 1,
+        "id": "768e45ad-8e02-40cb-8df3-c6f8e954d705",
+        "research_id": "3665fc72-a277-4153-ae5c-07b3c3d27e49",
+        "turn_id": "c6dc24a0-93c0-4058-b8ca-440f0995796f",
+        "sequence": 6,
+        "at": "2026-10-16T21:01:53.472791+00:00",
+        "task_id": "b9e8ff00-878f-569a-b969-bcae9ff71e80",
+        "round": 2,
+        "kind": "tool_finished",
+        "elapsed_ms": 85,
+        "tool": "load_skill",
+        "query": "product-comparison"
+      },
+      {
+        "version": 1,
+        "id": "d2535ce5-3650-4619-a09e-e989e22fda75",
+        "research_id": "3665fc72-a277-4153-ae5c-07b3c3d27e49",
+        "turn_id": "c6dc24a0-93c0-4058-b8ca-440f0995796f",
+        "sequence": 7,
+        "at": "2026-10-16T21:01:53.488866+00:00",
+        "task_id": "1cf8daf4-232b-5b82-be9e-941973d83ded",
+        "round": 2,
+        "kind": "model_started",
+        "elapsed_ms": 80
+      },
+      {
+        "version": 1,
+        "id": "37766745-0094-4e0d-badb-0c5932b55873",
+        "research_id": "3665fc72-a277-4153-ae5c-07b3c3d27e49",
+        "turn_id": "c6dc24a0-93c0-4058-b8ca-440f0995796f",
+        "sequence": 8,
+        "at": "2026-10-16T21:01:53.503673+00:00",
+        "task_id": "b9e8ff00-878f-569a-b969-bcae9ff71e80",
+        "round": 2,
+        "kind": "model_started",
+        "elapsed_ms": 116
+      },
+      {
+        "version": 1,
+        "id": "1a816b45-94c7-4e23-a342-0aea5734e375",
+        "research_id": "3665fc72-a277-4153-ae5c-07b3c3d27e49",
+        "turn_id": "c6dc24a0-93c0-4058-b8ca-440f0995796f",
+        "sequence": 9,
+        "at": "2026-10-16T21:01:58.481230+00:00",
+        "task_id": "1cf8daf4-232b-5b82-be9e-941973d83ded",
+        "round": 2,
+        "kind": "model_finished",
+        "elapsed_ms": 5073
+      },
+      {
+        "version": 1,
+        "id": "373910a2-aa90-4f84-bb84-e4dda7313f69",
+        "research_id": "3665fc72-a277-4153-ae5c-07b3c3d27e49",
+        "turn_id": "c6dc24a0-93c0-4058-b8ca-440f0995796f",
+        "sequence": 10,
+        "at": "2026-10-16T21:01:58.497999+00:00",
+        "task_id": "1cf8daf4-232b-5b82-be9e-941973d83ded",
+        "round": 2,
+        "kind": "tool_started",
+        "elapsed_ms": 5089,
+        "tool": "tavily_search",
+        "query": "site:docs.python.org free-threading-extensions howto"
+      },
+      {
+        "version": 1,
+        "id": "639d39d3-840d-4654-ac97-aa324add9192",
+        "research_id": "3665fc72-a277-4153-ae5c-07b3c3d27e49",
+        "turn_id": "c6dc24a0-93c0-4058-b8ca-440f0995796f",
+        "sequence": 11,
+        "at": "2026-10-16T21:01:59.000028+00:00",
+        "task_id": "b9e8ff00-878f-569a-b969-bcae9ff71e80",
+        "round": 2,
+        "kind": "model_finished",
+        "elapsed_ms": 5612
+      },
+      {
+        "version": 1,
+        "id": "8056081f-0373-4ea1-93e9-aaa4ab99422a",
+        "research_id": "3665fc72-a277-4153-ae5c-07b3c3d27e49",
+        "turn_id": "c6dc24a0-93c0-4058-b8ca-440f0995796f",
+        "sequence": 12,
+        "at": "2026-10-16T21:01:59.016483+00:00",
+        "task_id": "b9e8ff00-878f-569a-b969-bcae9ff71e80",
+        "round": 2,
+        "kind": "tool_started",
+        "elapsed_ms": 5629,
+        "tool": "tavily_search",
+        "query": "site:docs.python.org free-threading-python howto"
+      },
+      {
+        "version": 1,
+        "id": "699d5a04-073d-4860-8a5a-10aeb2c06203",
+        "research_id": "3665fc72-a277-4153-ae5c-07b3c3d27e49",
+        "turn_id": "c6dc24a0-93c0-4058-b8ca-440f0995796f",
+        "sequence": 13,
+        "at": "2026-10-16T21:02:30.949149+00:00",
+        "task_id": "b9e8ff00-878f-569a-b969-bcae9ff71e80",
+        "round": 2,
+        "kind": "tool_finished",
+        "elapsed_ms": 37561,
+        "tool": "tavily_search",
+        "sources": [
+          {
+            "title": "Python experimental support for free threading — Python 3.13.16 documentation",
+            "url": "https://docs.python.org/3.13/howto/free-threading-python.html"
+          },
+          {
+            "title": "C API Extension Support for Free Threading — Python 3.13.16 documentation",
+            "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+            "retrieval": "specified_url"
+          }
+        ],
+        "source_count": 2,
+        "source_audit": [
+          {
+            "url": "https://docs.python.org/3/howto/free-threading-python.html",
+            "decision": "out_of_scope",
+            "http_status": null,
+            "retrieval": "search"
+          },
+          {
+            "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+            "decision": "accepted",
+            "http_status": 200,
+            "retrieval": "search"
+          },
+          {
+            "url": "https://docs.python.org/zh-cn/dev/howto/free-threading-python.html",
+            "decision": "out_of_scope",
+            "http_status": null,
+            "retrieval": "search"
+          },
+          {
+            "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+            "decision": "accepted",
+            "http_status": 200,
+            "retrieval": "specified_url"
+          }
+        ],
+        "source_audit_count": 4
+      },
+      {
+        "version": 1,
+        "id": "864cfa4c-a09e-42ab-ad98-6d9491b57e90",
+        "research_id": "3665fc72-a277-4153-ae5c-07b3c3d27e49",
+        "turn_id": "c6dc24a0-93c0-4058-b8ca-440f0995796f",
+        "sequence": 14,
+        "at": "2026-10-16T21:02:31.017034+00:00",
+        "task_id": "b9e8ff00-878f-569a-b969-bcae9ff71e80",
+        "round": 2,
+        "kind": "tool_started",
+        "elapsed_ms": 37629,
+        "tool": "tavily_search",
+        "query": "free-threading-python howto Python 3.13 GIL disabled"
+      },
+      {
+        "version": 1,
+        "id": "cdf7f5c8-227e-4a19-ab2c-975f3626cdd8",
+        "research_id": "3665fc72-a277-4153-ae5c-07b3c3d27e49",
+        "turn_id": "c6dc24a0-93c0-4058-b8ca-440f0995796f",
+        "sequence": 15,
+        "at": "2026-10-16T21:02:57.114674+00:00",
+        "task_id": "1cf8daf4-232b-5b82-be9e-941973d83ded",
+        "round": 2,
+        "kind": "tool_finished",
+        "elapsed_ms": 63706,
+        "tool": "tavily_search",
+        "sources": [
+          {
+            "title": "C API Extension Support for Free Threading — Python 3.13.16 documentation",
+            "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+            "retrieval": "specified_url"
+          },
+          {
+            "title": "Python experimental support for free threading — Python 3.13.16 documentation",
+            "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+            "retrieval": "specified_url"
+          }
+        ],
+        "source_count": 2,
+        "source_audit": [
+          {
+            "url": "https://docs.python.org/3/howto/free-threading-extensions.html",
+            "decision": "out_of_scope",
+            "http_status": null,
+            "retrieval": "search"
+          },
+          {
+            "url": "https://docs.python.org/3/howto/abi3t-migration.html",
+            "decision": "out_of_scope",
+            "http_status": null,
+            "retrieval": "search"
+          },
+          {
+            "url": "https://docs.python.org/3/howto/free-threading-python.html",
+            "decision": "out_of_scope",
+            "http_status": null,
+            "retrieval": "search"
+          },
+          {
+            "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+            "decision": "accepted",
+            "http_status": 200,
+            "retrieval": "specified_url"
+          },
+          {
+            "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+            "decision": "accepted",
+            "http_status": 200,
+            "retrieval": "specified_url"
+          }
+        ],
+        "source_audit_count": 5
+      },
+      {
+        "version": 1,
+        "id": "c015e5f2-2a54-4ebe-94dc-25434a476429",
+        "research_id": "3665fc72-a277-4153-ae5c-07b3c3d27e49",
+        "turn_id": "c6dc24a0-93c0-4058-b8ca-440f0995796f",
+        "sequence": 16,
+        "at": "2026-10-16T21:02:57.300266+00:00",
+        "task_id": "1cf8daf4-232b-5b82-be9e-941973d83ded",
+        "round": 2,
+        "kind": "tool_started",
+        "elapsed_ms": 63892,
+        "tool": "tavily_search",
+        "query": "free-threading-extensions howto Python 3.13 Py_mod_gil PyUnstable_Module_SetGIL"
+      },
+      {
+        "version": 1,
+        "id": "039f374d-2948-4c09-b036-6f4b0dfda62e",
+        "research_id": "3665fc72-a277-4153-ae5c-07b3c3d27e49",
+        "turn_id": "c6dc24a0-93c0-4058-b8ca-440f0995796f",
+        "sequence": 17,
+        "at": "2026-10-16T21:03:02.719905+00:00",
+        "task_id": "b9e8ff00-878f-569a-b969-bcae9ff71e80",
+        "round": 2,
+        "kind": "tool_finished",
+        "elapsed_ms": 69332,
+        "tool": "tavily_search",
+        "sources": [
+          {
+            "title": "C API Extension Support for Free Threading — Python 3.13.16 documentation",
+            "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+            "retrieval": "specified_url"
+          },
+          {
+            "title": "Python experimental support for free threading — Python 3.13.16 documentation",
+            "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+            "retrieval": "specified_url"
+          }
+        ],
+        "source_count": 2,
+        "source_audit": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Free!",
+            "decision": "out_of_scope",
+            "http_status": null,
+            "retrieval": "search"
+          },
+          {
+            "url": "https://games.usatoday.com/all-games",
+            "decision": "out_of_scope",
+            "http_status": null,
+            "retrieval": "search"
+          },
+          {
+            "url": "https://www.arkadium.com/free-online-games",
+            "decision": "out_of_scope",
+            "http_status": null,
+            "retrieval": "search"
+          },
+          {
+            "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+            "decision": "accepted",
+            "http_status": 200,
+            "retrieval": "specified_url"
+          },
+          {
+            "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+            "decision": "accepted",
+            "http_status": 200,
+            "retrieval": "specified_url"
+          }
+        ],
+        "source_audit_count": 5
+      },
+      {
+        "version": 1,
+        "id": "007092e7-643a-434f-8e1b-d8bc8cfcab96",
+        "research_id": "3665fc72-a277-4153-ae5c-07b3c3d27e49",
+        "turn_id": "c6dc24a0-93c0-4058-b8ca-440f0995796f",
+        "sequence": 18,
+        "at": "2026-10-16T21:03:02.733680+00:00",
+        "task_id": "b9e8ff00-878f-569a-b969-bcae9ff71e80",
+        "round": 2,
+        "kind": "model_started",
+        "elapsed_ms": 69346
+      },
+      {
+        "version": 1,
+        "id": "3c89c9a8-90a9-4166-870a-b88483cba37b",
+        "research_id": "3665fc72-a277-4153-ae5c-07b3c3d27e49",
+        "turn_id": "c6dc24a0-93c0-4058-b8ca-440f0995796f",
+        "sequence": 19,
+        "at": "2026-10-16T21:03:06.640680+00:00",
+        "task_id": "b9e8ff00-878f-569a-b969-bcae9ff71e80",
+        "round": 2,
+        "kind": "model_finished",
+        "elapsed_ms": 73253
+      },
+      {
+        "version": 1,
+        "id": "d5f24221-1b28-413d-94f0-471c86c15b26",
+        "research_id": "3665fc72-a277-4153-ae5c-07b3c3d27e49",
+        "turn_id": "c6dc24a0-93c0-4058-b8ca-440f0995796f",
+        "sequence": 20,
+        "at": "2026-10-16T21:03:06.657915+00:00",
+        "task_id": "b9e8ff00-878f-569a-b969-bcae9ff71e80",
+        "round": 2,
+        "kind": "tool_started",
+        "elapsed_ms": 73270,
+        "tool": "think_tool"
+      },
+      {
+        "version": 1,
+        "id": "d375edfc-5454-4940-bf3f-8d0588496066",
+        "research_id": "3665fc72-a277-4153-ae5c-07b3c3d27e49",
+        "turn_id": "c6dc24a0-93c0-4058-b8ca-440f0995796f",
+        "sequence": 21,
+        "at": "2026-10-16T21:03:06.676098+00:00",
+        "task_id": "b9e8ff00-878f-569a-b969-bcae9ff71e80",
+        "round": 2,
+        "kind": "tool_finished",
+        "elapsed_ms": 73288,
+        "tool": "think_tool"
+      },
+      {
+        "version": 1,
+        "id": "897bb6fa-90ae-4b0f-8a52-1d41f7ff8ab8",
+        "research_id": "3665fc72-a277-4153-ae5c-07b3c3d27e49",
+        "turn_id": "c6dc24a0-93c0-4058-b8ca-440f0995796f",
+        "sequence": 22,
+        "at": "2026-10-16T21:03:06.694057+00:00",
+        "task_id": "b9e8ff00-878f-569a-b969-bcae9ff71e80",
+        "round": 2,
+        "kind": "model_started",
+        "elapsed_ms": 73306
+      },
+      {
+        "version": 1,
+        "id": "9064ce85-815b-435e-a094-0a42c1b0df1b",
+        "research_id": "3665fc72-a277-4153-ae5c-07b3c3d27e49",
+        "turn_id": "c6dc24a0-93c0-4058-b8ca-440f0995796f",
+        "sequence": 23,
+        "at": "2026-10-16T21:03:16.594531+00:00",
+        "task_id": "b9e8ff00-878f-569a-b969-bcae9ff71e80",
+        "round": 2,
+        "kind": "model_finished",
+        "elapsed_ms": 83207
+      },
+      {
+        "version": 1,
+        "id": "0c56f033-31a5-4dee-9744-c59291dcf8c9",
+        "research_id": "3665fc72-a277-4153-ae5c-07b3c3d27e49",
+        "turn_id": "c6dc24a0-93c0-4058-b8ca-440f0995796f",
+        "sequence": 24,
+        "at": "2026-10-16T21:03:16.627413+00:00",
+        "task_id": "b9e8ff00-878f-569a-b969-bcae9ff71e80",
+        "round": 2,
+        "kind": "compression_started",
+        "elapsed_ms": 83240
+      },
+      {
+        "version": 1,
+        "id": "a1aa3729-e733-4de3-98cf-f928bd45fc67",
+        "research_id": "3665fc72-a277-4153-ae5c-07b3c3d27e49",
+        "turn_id": "c6dc24a0-93c0-4058-b8ca-440f0995796f",
+        "sequence": 25,
+        "at": "2026-10-16T21:03:29.911204+00:00",
+        "task_id": "1cf8daf4-232b-5b82-be9e-941973d83ded",
+        "round": 2,
+        "kind": "tool_finished",
+        "elapsed_ms": 96503,
+        "tool": "tavily_search",
+        "sources": [
+          {
+            "title": "C API Extension Support for Free Threading — Python 3.13.16 documentation",
+            "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+            "retrieval": "specified_url"
+          },
+          {
+            "title": "Python experimental support for free threading — Python 3.13.16 documentation",
+            "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+            "retrieval": "specified_url"
+          }
+        ],
+        "source_count": 2,
+        "source_audit": [
+          {
+            "url": "https://docs.python.org/3/whatsnew/3.13.html",
+            "decision": "out_of_scope",
+            "http_status": null,
+            "retrieval": "search"
+          },
+          {
+            "url": "https://landing.jobs/blog/get-ready-for-the-new-python-3-13",
+            "decision": "out_of_scope",
+            "http_status": null,
+            "retrieval": "search"
+          },
+          {
+            "url": "https://py-free-threading.github.io/porting-extensions",
+            "decision": "out_of_scope",
+            "http_status": null,
+            "retrieval": "search"
+          },
+          {
+            "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+            "decision": "accepted",
+            "http_status": 200,
+            "retrieval": "specified_url"
+          },
+          {
+            "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+            "decision": "accepted",
+            "http_status": 200,
+            "retrieval": "specified_url"
+          }
+        ],
+        "source_audit_count": 5
+      },
+      {
+        "version": 1,
+        "id": "eb75a4bb-2c55-45ad-a295-06c40f807862",
+        "research_id": "3665fc72-a277-4153-ae5c-07b3c3d27e49",
+        "turn_id": "c6dc24a0-93c0-4058-b8ca-440f0995796f",
+        "sequence": 26,
+        "at": "2026-10-16T21:03:29.930284+00:00",
+        "task_id": "b9e8ff00-878f-569a-b969-bcae9ff71e80",
+        "round": 2,
+        "kind": "compression_finished",
+        "elapsed_ms": 96543
+      },
+      {
+        "version": 1,
+        "id": "af331660-6e58-429e-ba77-92b6a6cf05a6",
+        "research_id": "3665fc72-a277-4153-ae5c-07b3c3d27e49",
+        "turn_id": "c6dc24a0-93c0-4058-b8ca-440f0995796f",
+        "sequence": 27,
+        "at": "2026-10-16T21:03:29.945965+00:00",
+        "task_id": "1cf8daf4-232b-5b82-be9e-941973d83ded",
+        "round": 2,
+        "kind": "model_started",
+        "elapsed_ms": 96537
+      },
+      {
+        "version": 1,
+        "id": "1ce7f7f4-cb64-480e-ad1f-db1991bf2b65",
+        "research_id": "3665fc72-a277-4153-ae5c-07b3c3d27e49",
+        "turn_id": "c6dc24a0-93c0-4058-b8ca-440f0995796f",
+        "sequence": 28,
+        "at": "2026-10-16T21:03:29.962069+00:00",
+        "task_id": "b9e8ff00-878f-569a-b969-bcae9ff71e80",
+        "round": 2,
+        "kind": "completed",
+        "elapsed_ms": 96574,
+        "sources": [
+          {
+            "title": "Python experimental support for free threading — Python 3.13.16 documentation",
+            "url": "https://docs.python.org/3.13/howto/free-threading-python.html"
+          },
+          {
+            "title": "C API Extension Support for Free Threading — Python 3.13.16 documentation",
+            "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+            "retrieval": "specified_url"
+          }
+        ],
+        "source_count": 2,
+        "output": "## Python 3.13 实验性 free-threaded CPython 与默认 GIL 构建对比研究\n\n### 一、GIL 状态\n\n自 3.13 版本起，CPython 提供了一种名为 free threading 的实验性构建，其中全局解释器锁（GIL）被禁用；自由线程执行允许线程在可用的 CPU 核心上并行运行，从而充分利用处理能力 [1]。该模式为实验性，工作仍在进行中，预期会有一些 bug，并伴随显著的单线程性能损失 [1]。\n\n识别方式：`python -VV` 和 `sys.version` 会包含 \"experimental free-threading build\" 字样 [1]。新增的 `sys._is_gil_enabled()` 函数可用于检查运行进程中 GIL 是否实际被禁用 [1]。`sysconfig.get_config_var(\"Py_GIL_DISABLED\")` 配置变量可用于判断构建是否支持自由线程，若该变量为 1 则构建支持自由线程，这是与构建配置相关决策的推荐机制 [1]。从源码构建时，应使用 `--disable-gil` 配置选项来构建自由线程 Python 解释器 [1]。\n\n### 二、GIL 运行时开关\n\n自由线程构建支持在运行时通过环境变量 `PYTHON_GIL` 或命令行选项 `-X gil` 选择性地启用 GIL [1]。当导入未明确标记支持自由线程的 C-API 扩展模块时，GIL 也可能自动启用，此时会打印警告 [1]。\n\n### 三、适用限制\n\n**永生对象（Immortalization）**：3.13 自由线程构建使部分对象成为永生对象，永生对象不会被释放，其引用计数永远不会被修改，这是为了避免引用计数争用阻碍高效的多线程扩展 [1]。当主线程运行后首次启动新线程时，以下对象会被设为永生：模块级声明的函数对象、方法描述符、代码对象、模块对象及其字典、类（类型对象）[1]。由于永生对象永远不会被释放，创建大量此类对象的应用程序可能会看到内存使用增加，这预计将在 3.14 版本中得到解决 [1]。此外，代码中的数字和字符串字面量以及 `sys.intern()` 返回的字符串也会被永生化，此行为预计将在 3.14 自由线程构建中保留 [1]。\n\n**帧对象（Frame objects）**：从其他线程访问帧对象是不安全的，可能导致程序崩溃；这意味着 `sys._current_frames()` 在自由线程构建中通常不安全 [1]。只要生成的帧对象不传递给另一个线程，`inspect.currentframe()` 和 `sys._getframe()` 等函数通常是安全的 [1]。\n\n**迭代器（Iterators）**：在多个线程之间共享同一个迭代器对象通常不安全，线程在迭代时可能会看到重复或缺失的元素，或导致解释器崩溃 [1]。\n\n**单线程性能**：与默认启用 GIL 的构建相比，自由线程构建在执行 Python 代码时有额外开销；在 3.13 中，pyperformance 套件上的开销约为 40% [1]。大部分时间花在 C 扩展或 I/O 上的程序受到的影响较小 [1]。最大影响是因为专门化自适应解释器（PEP 659）在自由线程构建中被禁用，预计将在 3.14 版本中以线程安全的方式重新启用 [1]。此开销预计将在未来的 Python 版本中减少，目标是在 pyperformance 套件上相比默认启用 GIL 的构建将开销降至 10% 或更低 [1]。\n\n**线程安全**：自由线程构建旨在在 Python 层面提供与默认启用 GIL 的构建相似的线程安全行为；dict、list 和 set 等内置类型使用内部锁来防止并发修改，其行为方式与 GIL 类似 [1]。然而，Python 历史上并未保证这些内置类型并发修改的特定行为，因此这应被视为对当前实现的描述，而非对当前或未来行为的保证 [1]。建议尽可能使用 `threading.Lock` 或其他同步原语，而不是依赖内置类型的内部锁 [1]。\n\n**安装与生态**：从 Python 3.13 开始，官方 macOS 和 Windows 安装程序可选支持安装自由线程 Python 二进制文件，安装程序可在 https://www.python.org/downloads/ 获取；其他平台可参考社区维护的安装指南 [1]。以下网站跟踪流行包对自由线程的支持状态：https://py-free-threading.github.io/tracking/ 和 https://hugovk.github.io/free-threaded-wheels/ [1]。\n\n### 四、C 扩展兼容性\n\n扩展模块必须显式声明支持禁用 GIL 运行，否则导入时会发出警告并在运行时启用 GIL [2]。多阶段初始化（`PyModuleDef_Init()`）的扩展应在模块定义中加入 `Py_mod_gil` slot，值为 `Py_MOD_GIL_NOT_USED`；若需兼容旧版 CPython，用 `PY_VERSION_HEX >= 0x030D0000` 保护该 slot [2]。单阶段初始化（`PyModule_Create()`）的扩展应调用 `PyUnstable_Module_SetGIL(m, Py_MOD_GIL_NOT_USED)`，该函数仅在 free-threaded 构建中定义，需用 `#ifdef Py_GIL_DISABLED` 保护以避免常规构建编译错误 [2]。\n\nC API 暴露 `Py_GIL_DISABLED` 宏，free-threaded 构建中定义为 1，常规构建中不定义；Windows 上该宏不会自动定义，必须在编译时手动指定 [2]。直接访问可能被并发修改的结构体字段不安全；`PyList_GET_ITEM`、`PyList_SET_ITEM` 等访问宏不做错误检查或加锁，容器可能被并发修改时不安全 [2]。`PyListObject`、`PyDictObject`、`PySetObject` 等容器在 free-threaded 构建中执行内部加锁，例如 `PyList_Append()` 会先锁列表；显著例外是 `PyDict_Next()` 不加锁，若字典可能被并发修改，应使用 `Py_BEGIN_CRITICAL_SECTION` / `Py_END_CRITICAL_SECTION` 保护迭代 [2]。\n\n借用引用 API 有强引用替代：`PyList_GetItem()`/`PyList_GET_ITEM()` → `PyList_GetItemRef()`；`PyDict_GetItem()`/`PyDict_GetItemWithError()` → `PyDict_GetItemRef()`；`PyDict_GetItemString()` → `PyDict_GetItemStringRef()`；`PyDict_SetDefault()` → `PyDict_SetDefaultRef()`；`PyWeakref_GetObject()`/`PyWeakref_GET_OBJECT()` → `PyWeakref_GetRef()`；`PyImport_AddModule()` → `PyImport_AddModuleRef()` [2]。并非所有返回借用引用的 API 都有问题，如 `PyTuple_GetItem()` 因元组不可变而安全；也并非上述 API 的所有用法都有问题，如 `PyDict_GetItem()` 用于解析函数调用的关键字参数字典时，这些字典实际为私有、其他线程不可访问，此时使用借用引用是安全的 [2]。部分函数在 Python 3.13 中新增，可用 `pythoncapi-compat` 包为旧版本提供实现 [2]。\n\n内存分配方面，free-threaded 构建要求只有 Python 对象使用 object 域分配，且所有 Python 对象都必须使用该域分配，这与以往版本不同，以往这只是最佳实践而非硬性要求；建议检查扩展中 `PyObject_Malloc()` 的使用，缓冲区应改用 `PyMem_Malloc()` [2]。`PyGILState_Ensure()`/`PyGILState_Release()`、`PyEval_SaveThread()`/`PyEval_RestoreThread()`、`Py_BEGIN_ALLOW_THREADS`/`Py_END_ALLOW_THREADS` 在 free-threaded 构建中仍应使用以管理线程状态，即使 GIL 已禁用 [2]。扩展中此前由 GIL 保护的内部状态可能需要加锁，全局缓存可用锁保护或在 free-threaded 构建中禁用，全局状态可用锁保护或移至线程本地存储（C11/C++11 提供 `thread_local`/`_Thread_local`）[2]。\n\nC API 扩展需专门为 free-threaded 构建编译，wheel、共享库和二进制文件以 `t` 后缀标识；pypa/manylinux 支持该构建（如 `python3.13t`）；pypa/cibuildwheel 在设置 `CIBW_ENABLE` 为 `cpython-freethreading` 时支持 [2]。free-threaded 构建目前不支持 Limited C API 或 stable ABI；使用 setuptools 且当前设置 `py_limited_api=True` 时，可用 `py_limited_api=not sysconfig.get_config_var(\"Py_GIL_DISABLED\")` 在 free-threaded 构建中退出 limited API [2]。需为 free-threaded 构建单独构建 wheel；若当前使用 stable ABI，仍可为多个非 free-threaded Python 版本构建单个 wheel [2]。由于官方 Windows 安装程序的限制，从源码构建扩展时需手动定义 `Py_GIL_DISABLED=1` [2]。\n\n### 五、跨维度对比结论\n\n在 GIL 状态上，默认构建始终启用 GIL，而 free-threaded 构建默认禁用 GIL，但可通过 `PYTHON_GIL` 或 `-X gil` 在运行时重新启用 [1]。在 C 扩展兼容性上，未显式标记支持自由线程的扩展导入时会触发警告并自动启用 GIL，因此不兼容扩展的处理方式是：要么由扩展作者按文档声明支持（多阶段用 `Py_mod_gil` slot，单阶段用 `PyUnstable_Module_SetGIL()`），要么在运行时回退到启用 GIL [1][2]。在适用限制上，free-threaded 构建在 3.13 中 pyperformance 套件单线程开销约 40%，目标降至 10% 或更低；同时存在永生对象导致的内存增长、帧对象跨线程访问不安全、迭代器跨线程共享不安全等限制 [1]。综合来看，若程序主要耗时在 C 扩展或 I/O，性能影响较小；若依赖大量未适配的 C 扩展或对单线程性能敏感，则需谨慎试用 [1][2]。\n\n### Sources\n[1] Python experimental support for free threading — Python 3.13.16 documentation: https://docs.python.org/3.13/howto/free-threading-python.html\n[2] C API Extension Support for Free Threading — Python 3.13.16 documentation: https://docs.python.org/3.13/howto/free-threading-extensions.html"
+      },
+      {
+        "version": 1,
+        "id": "51c4cf22-7a05-4bd7-985a-dfaaa94cf3a8",
+        "research_id": "3665fc72-a277-4153-ae5c-07b3c3d27e49",
+        "turn_id": "c6dc24a0-93c0-4058-b8ca-440f0995796f",
+        "sequence": 29,
+        "at": "2026-10-16T21:03:33.626122+00:00",
+        "task_id": "1cf8daf4-232b-5b82-be9e-941973d83ded",
+        "round": 2,
+        "kind": "model_finished",
+        "elapsed_ms": 100217
+      },
+      {
+        "version": 1,
+        "id": "2f20bf27-eb29-47b1-88c0-c6ee2d91a19b",
+        "research_id": "3665fc72-a277-4153-ae5c-07b3c3d27e49",
+        "turn_id": "c6dc24a0-93c0-4058-b8ca-440f0995796f",
+        "sequence": 30,
+        "at": "2026-10-16T21:03:33.641732+00:00",
+        "task_id": "1cf8daf4-232b-5b82-be9e-941973d83ded",
+        "round": 2,
+        "kind": "tool_started",
+        "elapsed_ms": 100233,
+        "tool": "think_tool"
+      },
+      {
+        "version": 1,
+        "id": "8f402476-d5fc-4e18-8fc9-9feccec09f1d",
+        "research_id": "3665fc72-a277-4153-ae5c-07b3c3d27e49",
+        "turn_id": "c6dc24a0-93c0-4058-b8ca-440f0995796f",
+        "sequence": 31,
+        "at": "2026-10-16T21:03:33.657079+00:00",
+        "task_id": "1cf8daf4-232b-5b82-be9e-941973d83ded",
+        "round": 2,
+        "kind": "tool_finished",
+        "elapsed_ms": 100249,
+        "tool": "think_tool"
+      },
+      {
+        "version": 1,
+        "id": "7731378d-a0f7-4134-969c-090d8449f823",
+        "research_id": "3665fc72-a277-4153-ae5c-07b3c3d27e49",
+        "turn_id": "c6dc24a0-93c0-4058-b8ca-440f0995796f",
+        "sequence": 32,
+        "at": "2026-10-16T21:03:33.672605+00:00",
+        "task_id": "1cf8daf4-232b-5b82-be9e-941973d83ded",
+        "round": 2,
+        "kind": "tool_started",
+        "elapsed_ms": 100264,
+        "tool": "tavily_search",
+        "query": "site:docs.python.org free-threading-extensions \"Py_mod_gil\" warning enable the GIL"
+      },
+      {
+        "version": 1,
+        "id": "3b206a13-d004-4128-8b56-380f5db272f2",
+        "research_id": "3665fc72-a277-4153-ae5c-07b3c3d27e49",
+        "turn_id": "c6dc24a0-93c0-4058-b8ca-440f0995796f",
+        "sequence": 33,
+        "at": "2026-10-16T21:04:05.043412+00:00",
+        "task_id": "1cf8daf4-232b-5b82-be9e-941973d83ded",
+        "round": 2,
+        "kind": "tool_finished",
+        "elapsed_ms": 131635,
+        "tool": "tavily_search",
+        "sources": [
+          {
+            "title": "C API Extension Support for Free Threading — Python 3.13.16 documentation",
+            "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+            "retrieval": "specified_url"
+          },
+          {
+            "title": "Python experimental support for free threading — Python 3.13.16 documentation",
+            "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+            "retrieval": "specified_url"
+          }
+        ],
+        "source_count": 2,
+        "source_audit": [
+          {
+            "url": "https://docs.python.org/3/whatsnew/3.13.html",
+            "decision": "out_of_scope",
+            "http_status": null,
+            "retrieval": "search"
+          },
+          {
+            "url": "https://docs.python.org/3/howto/free-threading-extensions.html",
+            "decision": "out_of_scope",
+            "http_status": null,
+            "retrieval": "search"
+          },
+          {
+            "url": "https://docs.python.org/zh-tw/3.13/whatsnew/3.13.html",
+            "decision": "out_of_scope",
+            "http_status": null,
+            "retrieval": "search"
+          },
+          {
+            "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+            "decision": "accepted",
+            "http_status": 200,
+            "retrieval": "specified_url"
+          },
+          {
+            "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+            "decision": "accepted",
+            "http_status": 200,
+            "retrieval": "specified_url"
+          }
+        ],
+        "source_audit_count": 5
+      },
+      {
+        "version": 1,
+        "id": "d16a44a7-0bd2-41b2-8925-7a3af33f765d",
+        "research_id": "3665fc72-a277-4153-ae5c-07b3c3d27e49",
+        "turn_id": "c6dc24a0-93c0-4058-b8ca-440f0995796f",
+        "sequence": 34,
+        "at": "2026-10-16T21:04:05.061249+00:00",
+        "task_id": "1cf8daf4-232b-5b82-be9e-941973d83ded",
+        "round": 2,
+        "kind": "model_started",
+        "elapsed_ms": 131653
+      },
+      {
+        "version": 1,
+        "id": "c63fc465-2952-4193-a644-11ff09a6fe99",
+        "research_id": "3665fc72-a277-4153-ae5c-07b3c3d27e49",
+        "turn_id": "c6dc24a0-93c0-4058-b8ca-440f0995796f",
+        "sequence": 35,
+        "at": "2026-10-16T21:04:10.197924+00:00",
+        "task_id": "1cf8daf4-232b-5b82-be9e-941973d83ded",
+        "round": 2,
+        "kind": "model_finished",
+        "elapsed_ms": 136789
+      },
+      {
+        "version": 1,
+        "id": "2ca38b81-1037-45c2-9009-a94b57a3d637",
+        "research_id": "3665fc72-a277-4153-ae5c-07b3c3d27e49",
+        "turn_id": "c6dc24a0-93c0-4058-b8ca-440f0995796f",
+        "sequence": 36,
+        "at": "2026-10-16T21:04:10.214494+00:00",
+        "task_id": "1cf8daf4-232b-5b82-be9e-941973d83ded",
+        "round": 2,
+        "kind": "tool_started",
+        "elapsed_ms": 136806,
+        "tool": "think_tool"
+      },
+      {
+        "version": 1,
+        "id": "d1ce8836-84e3-44e9-81b1-59aad4164b44",
+        "research_id": "3665fc72-a277-4153-ae5c-07b3c3d27e49",
+        "turn_id": "c6dc24a0-93c0-4058-b8ca-440f0995796f",
+        "sequence": 37,
+        "at": "2026-10-16T21:04:10.230240+00:00",
+        "task_id": "1cf8daf4-232b-5b82-be9e-941973d83ded",
+        "round": 2,
+        "kind": "tool_finished",
+        "elapsed_ms": 136822,
+        "tool": "think_tool"
+      },
+      {
+        "version": 1,
+        "id": "659fed0c-2613-4cb2-8add-e0b61865c43a",
+        "research_id": "3665fc72-a277-4153-ae5c-07b3c3d27e49",
+        "turn_id": "c6dc24a0-93c0-4058-b8ca-440f0995796f",
+        "sequence": 38,
+        "at": "2026-10-16T21:04:10.244874+00:00",
+        "task_id": "1cf8daf4-232b-5b82-be9e-941973d83ded",
+        "round": 2,
+        "kind": "model_started",
+        "elapsed_ms": 136836
+      },
+      {
+        "version": 1,
+        "id": "e0a907a2-6cf7-471f-a539-1afe634ac716",
+        "research_id": "3665fc72-a277-4153-ae5c-07b3c3d27e49",
+        "turn_id": "c6dc24a0-93c0-4058-b8ca-440f0995796f",
+        "sequence": 39,
+        "at": "2026-10-16T21:04:20.196632+00:00",
+        "task_id": "1cf8daf4-232b-5b82-be9e-941973d83ded",
+        "round": 2,
+        "kind": "model_finished",
+        "elapsed_ms": 146788
+      },
+      {
+        "version": 1,
+        "id": "2ab9adf9-7b32-40f4-9412-b39cf4ef7559",
+        "research_id": "3665fc72-a277-4153-ae5c-07b3c3d27e49",
+        "turn_id": "c6dc24a0-93c0-4058-b8ca-440f0995796f",
+        "sequence": 40,
+        "at": "2026-10-16T21:04:20.218165+00:00",
+        "task_id": "1cf8daf4-232b-5b82-be9e-941973d83ded",
+        "round": 2,
+        "kind": "compression_started",
+        "elapsed_ms": 146810
+      },
+      {
+        "version": 1,
+        "id": "d6e24811-f421-4cea-a1bf-dca67f95449e",
+        "research_id": "3665fc72-a277-4153-ae5c-07b3c3d27e49",
+        "turn_id": "c6dc24a0-93c0-4058-b8ca-440f0995796f",
+        "sequence": 41,
+        "at": "2026-10-16T21:04:31.652760+00:00",
+        "task_id": "1cf8daf4-232b-5b82-be9e-941973d83ded",
+        "round": 2,
+        "kind": "compression_finished",
+        "elapsed_ms": 158244
+      },
+      {
+        "version": 1,
+        "id": "6a8ebb05-cbfa-4854-9f61-e0808b07a6de",
+        "research_id": "3665fc72-a277-4153-ae5c-07b3c3d27e49",
+        "turn_id": "c6dc24a0-93c0-4058-b8ca-440f0995796f",
+        "sequence": 42,
+        "at": "2026-10-16T21:04:31.669644+00:00",
+        "task_id": "1cf8daf4-232b-5b82-be9e-941973d83ded",
+        "round": 2,
+        "kind": "completed",
+        "elapsed_ms": 158261,
+        "sources": [
+          {
+            "title": "C API Extension Support for Free Threading — Python 3.13.16 documentation",
+            "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+            "retrieval": "specified_url"
+          },
+          {
+            "title": "Python experimental support for free threading — Python 3.13.16 documentation",
+            "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+            "retrieval": "specified_url"
+          }
+        ],
+        "source_count": 2,
+        "output": "## Python 3.13 实验性 free-threaded CPython 与默认 GIL 构建对比研究\n\n### 一、GIL 状态\n\n从 Python 3.13 版本开始，CPython 提供了一种名为 free threading 的实验性构建，该构建禁用了全局解释器锁（GIL）[1]。自由线程执行允许线程在可用的 CPU 核心上并行运行，从而充分利用处理能力[1]。该模式是实验性的，仍在改进中：预计会有一些 bug，并且单线程性能会有显著下降[1]。\n\n在识别方式上，`python -VV` 和 `sys.version` 会包含 \"experimental free-threading build\"[1]。新增的 `sys._is_gil_enabled()` 函数可用于检查运行进程中 GIL 是否实际被禁用[1]。`sysconfig.get_config_var(\"Py_GIL_DISABLED\")` 配置变量可用于判断构建是否支持自由线程；若该变量为 1，则构建支持自由线程，这是与构建配置相关决策的推荐机制[1]。从源码构建 CPython 时，应使用 `--disable-gil` 配置选项来构建自由线程 Python 解释器[1]。\n\n在运行时开关方面，自由线程构建支持通过环境变量 `PYTHON_GIL` 或命令行选项 `-X gil` 在运行时选择启用 GIL[1]。当导入未明确标记支持自由线程的 C-API 扩展模块时，GIL 也可能自动启用，此时会打印警告[1]。\n\n在单线程性能开销方面，与默认启用 GIL 的构建相比，自由线程构建在执行 Python 代码时有额外开销；在 3.13 中，pyperformance 套件上的开销约为 40%[1]。大部分时间花在 C 扩展或 I/O 上的程序受到的影响较小[1]。最大影响是因为专门化自适应解释器（PEP 659）在自由线程构建中被禁用，预计将在 3.14 版本中以线程安全的方式重新启用它[1]。此开销预计将在未来的 Python 版本中减少，目标是在 pyperformance 套件上相比默认启用 GIL 的构建将开销降至 10% 或更低[1]。\n\n### 二、C 扩展兼容性\n\nC API 暴露 `Py_GIL_DISABLED` 宏：在自由线程构建中它被定义为 1，在常规构建中未定义[2]。在 Windows 上，该宏不会自动定义，必须在编译时手动指定给编译器[2]。由于官方 Windows 安装程序的限制，从源码构建扩展时需手动定义 `Py_GIL_DISABLED=1`[2]。\n\n扩展模块必须显式声明支持禁用 GIL，否则导入该扩展时会发出警告并在运行时启用 GIL[2]。声明方式有两种：使用多阶段初始化（即 `PyModuleDef_Init()`）的扩展应在模块定义中加入 `Py_mod_gil` 槽，值为 `Py_MOD_GIL_NOT_USED`，若扩展需支持旧版 CPython，应使用 `PY_VERSION_HEX` 检查保护该槽[2]；使用单阶段初始化（即 `PyModule_Create()`）的扩展应调用 `PyUnstable_Module_SetGIL()` 来声明支持禁用 GIL 运行，该函数仅在自由线程构建中定义，因此应使用 `#ifdef Py_GIL_DISABLED` 保护该调用，以避免在常规构建中出现编译错误[2]。\n\n在通用 API 准则方面，直接访问 Python C API 对象或结构体中可能被并发修改的字段不是线程安全的[2]。`PyList_GET_ITEM`、`PyList_SET_ITEM` 等访问宏不执行任何错误检查或加锁，若容器对象可能被并发修改，这些宏不是线程安全的[2]。`PyListObject`、`PyDictObject`、`PySetObject` 等容器在自由线程构建中执行内部加锁，例如 `PyList_Append()` 会在追加项之前锁定列表[2]。一个显著例外是 `PyDict_Next()`，它不加锁字典；若字典可能被并发修改，应使用 `Py_BEGIN_CRITICAL_SECTION` 在迭代时保护字典[2]。\n\n在借用引用方面，文档给出对照表：`PyList_GetItem()`/`PyList_GET_ITEM()` → `PyList_GetItemRef()`；`PyDict_GetItem()`/`PyDict_GetItemWithError()` → `PyDict_GetItemRef()`；`PyDict_GetItemString()` → `PyDict_GetItemStringRef()`；`PyDict_SetDefault()` → `PyDict_SetDefaultRef()`；`PyDict_Next()` → 无替代；`PyWeakref_GetObject()`/`PyWeakref_GET_OBJECT()` → `PyWeakref_GetRef()`；`PyImport_AddModule()` → `PyImport_AddModuleRef()`[2]。并非所有返回借用引用的 API 都有问题，例如 `PyTuple_GetItem()` 因元组不可变而安全；也并非所有用法都有问题，例如解析函数调用的关键字参数字典时，该字典实际为私有（其他线程不可访问），使用借用引用是安全的[2]。部分函数在 Python 3.13 新增，可用 `pythoncapi-compat` 包为旧版本提供实现[2]。\n\n在内存分配 API 方面，Python 内存管理 C API 分三个分配域：raw、mem、object[2]。自由线程构建要求只有 Python 对象使用 object 域分配，且所有 Python 对象都必须使用该域分配——这不同于此前版本，此前这只是最佳实践而非硬性要求[2]。建议搜索扩展中 `PyObject_Malloc()` 的使用，确认分配的内存用于 Python 对象；分配缓冲区应改用 `PyMem_Malloc()`[2]。\n\n在编译与 ABI 方面，C API 扩展需专门为自由线程构建编译，wheel、共享库和二进制文件以 `t` 后缀标识（如 `python3.13t`）[2]。pypa/manylinux 支持该构建；pypa/cibuildwheel 在设置 `CIBW_ENABLE` 为 `cpython-freethreading` 时支持[2]。自由线程构建目前不支持 Limited C API 或稳定 ABI[2]。使用 setuptools 且当前设置 `py_limited_api=True` 时，可用 `py_limited_api=not sysconfig.get_config_var(\"Py_GIL_DISABLED\")` 在自由线程构建中退出 limited API[2]。需为自由线程构建单独构建 wheel；若当前使用稳定 ABI，仍可为多个非自由线程 Python 版本构建单一 wheel[2]。\n\n### 三、适用限制\n\n在扩展内部状态保护方面，扩展中此前由 GIL 保护的内部状态可能需要加锁[2]。常见模式：全局缓存可用锁保护，或在自由线程构建中禁用（若缓存对性能不关键）；全局状态可用锁保护或移至线程本地存储（C11/C++11 提供 `thread_local`/`_Thread_local`）[2]。\n\n在线程状态与 GIL API 方面，`PyGILState_Ensure()`/`PyGILState_Release()`、`PyEval_SaveThread()`/`PyEval_RestoreThread()`、`Py_BEGIN_ALLOW_THREADS`/`Py_END_ALLOW_THREADS` 在自由线程构建中仍应使用以管理线程状态，即使 GIL 已禁用[2]。例如在 Python 之外创建线程时，调用 Python API 前必须调用 `PyGILState_Ensure()` 以确保线程有有效的 Python 线程状态[2]。在阻塞操作（如 I/O 或获取锁）前后仍应调用 `PyEval_SaveThread()` 或 `Py_BEGIN_ALLOW_THREADS`，以便其他线程运行循环垃圾回收器[2]。\n\n在 Python 层面的线程安全方面，自由线程构建旨在在 Python 层面提供与默认启用 GIL 的构建相似的线程安全行为[1]。dict、list 和 set 等内置类型使用内部锁来防止并发修改，其行为方式与 GIL 类似；然而 Python 历史上并未保证这些内置类型并发修改的特定行为，因此这应被视为对当前实现的描述，而非对当前或未来行为的保证[1]。建议尽可能使用 `threading.Lock` 或其他同步原语，而不是依赖内置类型的内部锁[1]。\n\n在已知限制方面，3.13 版本的自由线程构建使某些对象永生：永生对象不会被释放，其引用计数永远不会被修改，这是为了避免引用计数争用阻碍高效的多线程扩展[1]。当主线程运行后首次启动新线程时，对象会被设为永生[1]。以下对象会被永生化：模块级声明的函数对象、方法描述符、代码对象、模块对象及其字典、类（类型对象）[1]。由于永生对象永远不会被释放，创建大量此类对象的应用程序可能会看到内存使用增加，这预计将在 3.14 版本中得到解决[1]。此外，代码中的数字和字符串字面量以及 `sys.intern()` 返回的字符串也会被永生化，此行为预计将在 3.14 自由线程构建中保留[1]。从其他线程访问帧对象是不安全的，可能导致程序崩溃，这意味着 `sys._current_frames()` 在自由线程构建中通常不安全；只要生成的帧对象不传递给另一个线程，`inspect.currentframe()` 和 `sys._getframe()` 等函数通常是安全的[1]。在多个线程之间共享同一个迭代器对象通常不安全，线程在迭代时可能会看到重复或缺失的元素，或导致解释器崩溃[1]。\n\n### 四、跨维度对比结论\n\n在 GIL 状态维度，默认 GIL 构建始终启用 GIL，而 free-threaded 构建默认禁用 GIL，但可通过 `PYTHON_GIL` 环境变量或 `-X gil` 命令行选项在运行时重新启用，且导入未标记支持 free threading 的 C-API 扩展时会自动启用 GIL 并打印警告[1]。在 C 扩展兼容性维度，默认 GIL 构建无需扩展做任何声明，而 free-threaded 构建要求扩展显式声明支持（通过 `Py_mod_gil` 槽或 `PyUnstable_Module_SetGIL()`），且不支持 Limited C API 或稳定 ABI，需单独构建 wheel[2]。在适用限制维度，free-threaded 构建存在永生对象导致的内存增长、帧对象跨线程访问不安全、迭代器跨线程共享不安全，以及 3.13 中 pyperformance 套件约 40% 的单线程性能开销[1]。\n\n### Sources\n\n[1] Python experimental support for free threading — Python 3.13.16 documentation: https://docs.python.org/3.13/howto/free-threading-python.html\n[2] C API Extension Support for Free Threading — Python 3.13.16 documentation: https://docs.python.org/3.13/howto/free-threading-extensions.html"
+      }
+    ],
+    "observations": [
+      {
+        "at": "2026-10-16T21:01:31.332Z",
+        "phase": "clarify",
+        "status": "running"
+      },
+      {
+        "at": "2026-10-16T21:01:34.754Z",
+        "phase": "clarify",
+        "status": "awaiting_input"
+      },
+      {
+        "at": "2026-10-16T21:01:35.852Z",
+        "phase": "clarify",
+        "status": "running"
+      },
+      {
+        "at": "2026-10-16T21:01:39.662Z",
+        "phase": "brief",
+        "status": "running"
+      },
+      {
+        "at": "2026-10-16T21:01:41.660Z",
+        "phase": "research",
+        "status": "running"
+      },
+      {
+        "at": "2026-10-16T21:04:37.701Z",
+        "phase": "writing",
+        "status": "running"
+      },
+      {
+        "at": "2026-10-16T21:07:17.373Z",
+        "phase": "complete",
+        "status": "succeeded"
+      }
+    ],
+    "reportIdentity": {
+      "runId": "6050cd85-85c0-4b0f-bfd5-f783c48ca65a",
+      "turnId": "c6dc24a0-93c0-4058-b8ca-440f0995796f",
+      "attemptId": "c6dc24a0-93c0-4058-b8ca-440f0995796f",
+      "writingAttemptId": "6ab765cf-fabb-48f2-9167-2de7e04ef7a8"
+    }
+  },
+  "runCount": 2,
+  "modelHttpAttempts": [
+    {
+      "id": "d11a3506-569a-4a0b-83b5-cb4204d0f0c2",
+      "node": "clarify_with_user",
+      "model": "deepseek-v4.1-flash",
+      "threadId": "e7736eca-fa76-4806-9618-b49e9cafceb0",
+      "runId": "14b771d3-2670-4bd5-9d30-2ce636af8d52",
+      "responseFormat": "json_schema",
+      "sdkRetryCount": "0",
+      "stream": false,
+      "tools": [],
+      "startedAt": "2026-10-16T21:01:31.943936+00:00",
+      "endedAt": "2026-10-16T21:01:34.631022+00:00",
+      "seconds": null,
+      "headersSeconds": 2.687,
+      "httpStatus": 200,
+      "outcome": "response",
+      "toolCalls": []
+    },
+    {
+      "id": "1de55a98-5bab-4508-9bbf-3cbd5af3d9be",
+      "node": "clarify_with_user",
+      "model": "deepseek-v4.1-flash",
+      "threadId": "e7736eca-fa76-4806-9618-b49e9cafceb0",
+      "runId": "6050cd85-85c0-4b0f-bfd5-f783c48ca65a",
+      "responseFormat": "json_schema",
+      "sdkRetryCount": "0",
+      "stream": false,
+      "tools": [],
+      "startedAt": "2026-10-16T21:01:36.765563+00:00",
+      "endedAt": "2026-10-16T21:01:38.122462+00:00",
+      "seconds": null,
+      "headersSeconds": 1.356,
+      "httpStatus": 200,
+      "outcome": "response",
+      "toolCalls": []
+    },
+    {
+      "id": "9e9f1dcd-c750-4e20-89d3-5687e1557cf3",
+      "node": "write_research_brief",
+      "model": "deepseek-v4.1-flash",
+      "threadId": "e7736eca-fa76-4806-9618-b49e9cafceb0",
+      "runId": "6050cd85-85c0-4b0f-bfd5-f783c48ca65a",
+      "responseFormat": "json_schema",
+      "sdkRetryCount": "0",
+      "stream": false,
+      "tools": [],
+      "startedAt": "2026-10-16T21:01:38.174825+00:00",
+      "endedAt": "2026-10-16T21:01:40.289577+00:00",
+      "seconds": null,
+      "headersSeconds": 2.114,
+      "httpStatus": 200,
+      "outcome": "response",
+      "toolCalls": []
+    },
+    {
+      "id": "03146973-ff65-4ded-bb1f-d4742078589a",
+      "node": "supervisor",
+      "model": "deepseek-v4.1-flash",
+      "threadId": "e7736eca-fa76-4806-9618-b49e9cafceb0",
+      "runId": "6050cd85-85c0-4b0f-bfd5-f783c48ca65a",
+      "responseFormat": null,
+      "sdkRetryCount": "0",
+      "stream": true,
+      "tools": ["ConductResearch", "ResearchComplete", "think_tool"],
+      "startedAt": "2026-10-16T21:01:40.368309+00:00",
+      "endedAt": "2026-10-16T21:01:41.680527+00:00",
+      "seconds": null,
+      "headersSeconds": 1.312,
+      "httpStatus": 200,
+      "outcome": "response",
+      "toolCalls": []
+    },
+    {
+      "id": "c43ca3d0-e96d-4e24-8e05-50420b0c0356",
+      "node": "supervisor",
+      "model": "deepseek-v4.1-flash",
+      "threadId": "e7736eca-fa76-4806-9618-b49e9cafceb0",
+      "runId": "6050cd85-85c0-4b0f-bfd5-f783c48ca65a",
+      "responseFormat": null,
+      "sdkRetryCount": "0",
+      "stream": true,
+      "tools": ["ConductResearch", "ResearchComplete", "think_tool"],
+      "startedAt": "2026-10-16T21:01:45.614023+00:00",
+      "endedAt": "2026-10-16T21:01:46.710340+00:00",
+      "seconds": null,
+      "headersSeconds": 1.096,
+      "httpStatus": 200,
+      "outcome": "response",
+      "toolCalls": []
+    },
+    {
+      "id": "3690062f-3aa2-40b9-a666-d81c6667270a",
+      "node": "llm_call",
+      "model": "deepseek-v4.1-flash",
+      "threadId": "e7736eca-fa76-4806-9618-b49e9cafceb0",
+      "runId": "6050cd85-85c0-4b0f-bfd5-f783c48ca65a",
+      "responseFormat": null,
+      "sdkRetryCount": "0",
+      "stream": true,
+      "tools": ["tavily_search", "think_tool", "load_skill"],
+      "startedAt": "2026-10-16T21:01:55.518221+00:00",
+      "endedAt": "2026-10-16T21:01:57.955031+00:00",
+      "seconds": null,
+      "headersSeconds": 2.436,
+      "httpStatus": 200,
+      "outcome": "response",
+      "toolCalls": []
+    },
+    {
+      "id": "1d5b4183-bfa8-483c-97c4-6d9858dbe5c8",
+      "node": "llm_call",
+      "model": "deepseek-v4.1-flash",
+      "threadId": "e7736eca-fa76-4806-9618-b49e9cafceb0",
+      "runId": "6050cd85-85c0-4b0f-bfd5-f783c48ca65a",
+      "responseFormat": null,
+      "sdkRetryCount": "0",
+      "stream": true,
+      "tools": ["tavily_search", "think_tool", "load_skill"],
+      "startedAt": "2026-10-16T21:01:57.538978+00:00",
+      "endedAt": "2026-10-16T21:01:58.606987+00:00",
+      "seconds": null,
+      "headersSeconds": 1.068,
+      "httpStatus": 200,
+      "outcome": "response",
+      "toolCalls": []
+    },
+    {
+      "id": "51f5a24d-128a-4b13-bf91-3aae2f336f14",
+      "node": "tool_node",
+      "model": "deepseek-v4.1-flash",
+      "threadId": "e7736eca-fa76-4806-9618-b49e9cafceb0",
+      "runId": "6050cd85-85c0-4b0f-bfd5-f783c48ca65a",
+      "responseFormat": null,
+      "sdkRetryCount": "0",
+      "stream": true,
+      "tools": ["Summary"],
+      "startedAt": "2026-10-16T21:02:08.628837+00:00",
+      "endedAt": "2026-10-16T21:02:10.624693+00:00",
+      "seconds": null,
+      "headersSeconds": 1.995,
+      "httpStatus": 200,
+      "outcome": "response",
+      "toolCalls": []
+    },
+    {
+      "id": "95730413-9f79-484b-91b3-67fd3830e5e7",
+      "node": "tool_node",
+      "model": "deepseek-v4.1-flash",
+      "threadId": "e7736eca-fa76-4806-9618-b49e9cafceb0",
+      "runId": "6050cd85-85c0-4b0f-bfd5-f783c48ca65a",
+      "responseFormat": null,
+      "sdkRetryCount": "0",
+      "stream": true,
+      "tools": ["Summary"],
+      "startedAt": "2026-10-16T21:02:10.638105+00:00",
+      "endedAt": "2026-10-16T21:02:11.961609+00:00",
+      "seconds": null,
+      "headersSeconds": 1.323,
+      "httpStatus": 200,
+      "outcome": "response",
+      "toolCalls": []
+    },
+    {
+      "id": "2c29a07f-4b08-4a50-b230-fb735bb711f7",
+      "node": "tool_node",
+      "model": "deepseek-v4.1-flash",
+      "threadId": "e7736eca-fa76-4806-9618-b49e9cafceb0",
+      "runId": "6050cd85-85c0-4b0f-bfd5-f783c48ca65a",
+      "responseFormat": null,
+      "sdkRetryCount": "0",
+      "stream": true,
+      "tools": ["Summary"],
+      "startedAt": "2026-10-16T21:02:14.191562+00:00",
+      "endedAt": "2026-10-16T21:02:15.514097+00:00",
+      "seconds": null,
+      "headersSeconds": 1.318,
+      "httpStatus": 200,
+      "outcome": "response",
+      "toolCalls": []
+    },
+    {
+      "id": "555a354a-6500-482f-9bf2-a231385f6654",
+      "node": "tool_node",
+      "model": "deepseek-v4.1-flash",
+      "threadId": "e7736eca-fa76-4806-9618-b49e9cafceb0",
+      "runId": "6050cd85-85c0-4b0f-bfd5-f783c48ca65a",
+      "responseFormat": null,
+      "sdkRetryCount": "0",
+      "stream": true,
+      "tools": ["Summary"],
+      "startedAt": "2026-10-16T21:02:16.208404+00:00",
+      "endedAt": "2026-10-16T21:02:16.828756+00:00",
+      "seconds": null,
+      "headersSeconds": 0.62,
+      "httpStatus": 429,
+      "outcome": "response",
+      "toolCalls": []
+    },
+    {
+      "id": "4ae5af92-029a-4c2d-8092-f0e2f21c6650",
+      "node": "tool_node",
+      "model": "deepseek-v4.1-flash",
+      "threadId": "e7736eca-fa76-4806-9618-b49e9cafceb0",
+      "runId": "6050cd85-85c0-4b0f-bfd5-f783c48ca65a",
+      "responseFormat": null,
+      "sdkRetryCount": "1",
+      "stream": true,
+      "tools": ["Summary"],
+      "startedAt": "2026-10-16T21:02:19.849860+00:00",
+      "endedAt": "2026-10-16T21:02:20.629880+00:00",
+      "seconds": null,
+      "headersSeconds": 0.771,
+      "httpStatus": 429,
+      "outcome": "response",
+      "toolCalls": []
+    },
+    {
+      "id": "a986cf86-98d2-4952-8586-cc26769fa176",
+      "node": "tool_node",
+      "model": "deepseek-v4.1-flash",
+      "threadId": "e7736eca-fa76-4806-9618-b49e9cafceb0",
+      "runId": "6050cd85-85c0-4b0f-bfd5-f783c48ca65a",
+      "responseFormat": null,
+      "sdkRetryCount": "2",
+      "stream": true,
+      "tools": ["Summary"],
+      "startedAt": "2026-10-16T21:02:26.633221+00:00",
+      "endedAt": "2026-10-16T21:02:27.534823+00:00",
+      "seconds": null,
+      "headersSeconds": 0.889,
+      "httpStatus": 429,
+      "outcome": "response",
+      "toolCalls": []
+    },
+    {
+      "id": "06009985-b48a-4570-a85a-7276ccbf9807",
+      "node": "tool_node",
+      "model": "deepseek-v4.1-flash",
+      "threadId": "e7736eca-fa76-4806-9618-b49e9cafceb0",
+      "runId": "6050cd85-85c0-4b0f-bfd5-f783c48ca65a",
+      "responseFormat": null,
+      "sdkRetryCount": "3",
+      "stream": true,
+      "tools": ["Summary"],
+      "startedAt": "2026-10-16T21:02:39.637129+00:00",
+      "endedAt": "2026-10-16T21:02:40.837350+00:00",
+      "seconds": null,
+      "headersSeconds": 1.2,
+      "httpStatus": 200,
+      "outcome": "response",
+      "toolCalls": []
+    },
+    {
+      "id": "12f92c53-b542-422f-ba70-ae486b53f643",
+      "node": "tool_node",
+      "model": "deepseek-v4.1-flash",
+      "threadId": "e7736eca-fa76-4806-9618-b49e9cafceb0",
+      "runId": "6050cd85-85c0-4b0f-bfd5-f783c48ca65a",
+      "responseFormat": null,
+      "sdkRetryCount": "0",
+      "stream": true,
+      "tools": ["Summary"],
+      "startedAt": "2026-10-16T21:02:40.487853+00:00",
+      "endedAt": "2026-10-16T21:02:42.205212+00:00",
+      "seconds": null,
+      "headersSeconds": 1.717,
+      "httpStatus": 200,
+      "outcome": "response",
+      "toolCalls": []
+    },
+    {
+      "id": "0d8879c2-3679-40f8-8548-37db5588e0ba",
+      "node": "tool_node",
+      "model": "deepseek-v4.1-flash",
+      "threadId": "e7736eca-fa76-4806-9618-b49e9cafceb0",
+      "runId": "6050cd85-85c0-4b0f-bfd5-f783c48ca65a",
+      "responseFormat": null,
+      "sdkRetryCount": "0",
+      "stream": true,
+      "tools": ["Summary"],
+      "startedAt": "2026-10-16T21:02:42.499479+00:00",
+      "endedAt": "2026-10-16T21:02:43.552629+00:00",
+      "seconds": null,
+      "headersSeconds": 1.05,
+      "httpStatus": 200,
+      "outcome": "response",
+      "toolCalls": []
+    },
+    {
+      "id": "2665ee45-4813-418c-acf1-567be6e3e6a6",
+      "node": "llm_call",
+      "model": "deepseek-v4.1-flash",
+      "threadId": "e7736eca-fa76-4806-9618-b49e9cafceb0",
+      "runId": "6050cd85-85c0-4b0f-bfd5-f783c48ca65a",
+      "responseFormat": null,
+      "sdkRetryCount": "0",
+      "stream": true,
+      "tools": ["tavily_search", "think_tool", "load_skill"],
+      "startedAt": "2026-10-16T21:03:02.769817+00:00",
+      "endedAt": "2026-10-16T21:03:06.637992+00:00",
+      "seconds": null,
+      "headersSeconds": 3.867,
+      "httpStatus": 200,
+      "outcome": "response",
+      "toolCalls": []
+    },
+    {
+      "id": "881817f6-1632-41c9-abdb-b24f15c1189f",
+      "node": "llm_call",
+      "model": "deepseek-v4.1-flash",
+      "threadId": "e7736eca-fa76-4806-9618-b49e9cafceb0",
+      "runId": "6050cd85-85c0-4b0f-bfd5-f783c48ca65a",
+      "responseFormat": null,
+      "sdkRetryCount": "0",
+      "stream": true,
+      "tools": ["tavily_search", "think_tool", "load_skill"],
+      "startedAt": "2026-10-16T21:03:06.716904+00:00",
+      "endedAt": "2026-10-16T21:03:08.343059+00:00",
+      "seconds": null,
+      "headersSeconds": 1.626,
+      "httpStatus": 200,
+      "outcome": "response",
+      "toolCalls": []
+    },
+    {
+      "id": "747b0a3d-b529-476a-8642-fd0878026d84",
+      "node": "tool_node",
+      "model": "deepseek-v4.1-flash",
+      "threadId": "e7736eca-fa76-4806-9618-b49e9cafceb0",
+      "runId": "6050cd85-85c0-4b0f-bfd5-f783c48ca65a",
+      "responseFormat": null,
+      "sdkRetryCount": "0",
+      "stream": true,
+      "tools": ["Summary"],
+      "startedAt": "2026-10-16T21:03:08.717187+00:00",
+      "endedAt": "2026-10-16T21:03:09.867379+00:00",
+      "seconds": null,
+      "headersSeconds": 1.149,
+      "httpStatus": 200,
+      "outcome": "response",
+      "toolCalls": []
+    },
+    {
+      "id": "c7911c28-fe4f-439f-b5da-791c9e47ab70",
+      "node": "tool_node",
+      "model": "deepseek-v4.1-flash",
+      "threadId": "e7736eca-fa76-4806-9618-b49e9cafceb0",
+      "runId": "6050cd85-85c0-4b0f-bfd5-f783c48ca65a",
+      "responseFormat": null,
+      "sdkRetryCount": "0",
+      "stream": true,
+      "tools": ["Summary"],
+      "startedAt": "2026-10-16T21:03:10.726105+00:00",
+      "endedAt": "2026-10-16T21:03:11.769273+00:00",
+      "seconds": null,
+      "headersSeconds": 1.043,
+      "httpStatus": 200,
+      "outcome": "response",
+      "toolCalls": []
+    },
+    {
+      "id": "2c40ac4d-af60-490f-8596-db63945cecec",
+      "node": "compress_research",
+      "model": "deepseek-v4.1-flash",
+      "threadId": "e7736eca-fa76-4806-9618-b49e9cafceb0",
+      "runId": "6050cd85-85c0-4b0f-bfd5-f783c48ca65a",
+      "responseFormat": null,
+      "sdkRetryCount": "0",
+      "stream": true,
+      "tools": [],
+      "startedAt": "2026-10-16T21:03:16.651471+00:00",
+      "endedAt": "2026-10-16T21:03:18.183629+00:00",
+      "seconds": null,
+      "headersSeconds": 1.532,
+      "httpStatus": 200,
+      "outcome": "response",
+      "toolCalls": []
+    },
+    {
+      "id": "7f29b649-8791-4057-9a7e-ac5cea4e4049",
+      "node": "llm_call",
+      "model": "deepseek-v4.1-flash",
+      "threadId": "e7736eca-fa76-4806-9618-b49e9cafceb0",
+      "runId": "6050cd85-85c0-4b0f-bfd5-f783c48ca65a",
+      "responseFormat": null,
+      "sdkRetryCount": "0",
+      "stream": true,
+      "tools": ["tavily_search", "think_tool", "load_skill"],
+      "startedAt": "2026-10-16T21:03:29.970326+00:00",
+      "endedAt": "2026-10-16T21:03:31.485645+00:00",
+      "seconds": null,
+      "headersSeconds": 1.515,
+      "httpStatus": 200,
+      "outcome": "response",
+      "toolCalls": []
+    },
+    {
+      "id": "dfbab126-bded-44d4-822b-2b53836b0453",
+      "node": "tool_node",
+      "model": "deepseek-v4.1-flash",
+      "threadId": "e7736eca-fa76-4806-9618-b49e9cafceb0",
+      "runId": "6050cd85-85c0-4b0f-bfd5-f783c48ca65a",
+      "responseFormat": null,
+      "sdkRetryCount": "0",
+      "stream": true,
+      "tools": ["Summary"],
+      "startedAt": "2026-10-16T21:03:44.021323+00:00",
+      "endedAt": "2026-10-16T21:03:45.369283+00:00",
+      "seconds": null,
+      "headersSeconds": 1.346,
+      "httpStatus": 200,
+      "outcome": "response",
+      "toolCalls": []
+    },
+    {
+      "id": "6444b109-561f-4fd8-b3ed-1129465eef8e",
+      "node": "tool_node",
+      "model": "deepseek-v4.1-flash",
+      "threadId": "e7736eca-fa76-4806-9618-b49e9cafceb0",
+      "runId": "6050cd85-85c0-4b0f-bfd5-f783c48ca65a",
+      "responseFormat": null,
+      "sdkRetryCount": "0",
+      "stream": true,
+      "tools": ["Summary"],
+      "startedAt": "2026-10-16T21:03:46.032047+00:00",
+      "endedAt": "2026-10-16T21:03:47.041931+00:00",
+      "seconds": null,
+      "headersSeconds": 1.009,
+      "httpStatus": 200,
+      "outcome": "response",
+      "toolCalls": []
+    },
+    {
+      "id": "669aa825-123a-4572-ba58-d695e9d0e0b9",
+      "node": "llm_call",
+      "model": "deepseek-v4.1-flash",
+      "threadId": "e7736eca-fa76-4806-9618-b49e9cafceb0",
+      "runId": "6050cd85-85c0-4b0f-bfd5-f783c48ca65a",
+      "responseFormat": null,
+      "sdkRetryCount": "0",
+      "stream": true,
+      "tools": ["tavily_search", "think_tool", "load_skill"],
+      "startedAt": "2026-10-16T21:04:05.088159+00:00",
+      "endedAt": "2026-10-16T21:04:10.195316+00:00",
+      "seconds": null,
+      "headersSeconds": 5.107,
+      "httpStatus": 200,
+      "outcome": "response",
+      "toolCalls": []
+    },
+    {
+      "id": "f0b0e2fe-5b4c-4973-a46f-17e0d72c4fed",
+      "node": "llm_call",
+      "model": "deepseek-v4.1-flash",
+      "threadId": "e7736eca-fa76-4806-9618-b49e9cafceb0",
+      "runId": "6050cd85-85c0-4b0f-bfd5-f783c48ca65a",
+      "responseFormat": null,
+      "sdkRetryCount": "0",
+      "stream": true,
+      "tools": ["tavily_search", "think_tool", "load_skill"],
+      "startedAt": "2026-10-16T21:04:10.266529+00:00",
+      "endedAt": "2026-10-16T21:04:12.226664+00:00",
+      "seconds": null,
+      "headersSeconds": 1.96,
+      "httpStatus": 200,
+      "outcome": "response",
+      "toolCalls": []
+    },
+    {
+      "id": "d37d8faf-6496-4632-871a-515453f454d5",
+      "node": "compress_research",
+      "model": "deepseek-v4.1-flash",
+      "threadId": "e7736eca-fa76-4806-9618-b49e9cafceb0",
+      "runId": "6050cd85-85c0-4b0f-bfd5-f783c48ca65a",
+      "responseFormat": null,
+      "sdkRetryCount": "0",
+      "stream": true,
+      "tools": [],
+      "startedAt": "2026-10-16T21:04:20.242791+00:00",
+      "endedAt": "2026-10-16T21:04:22.044736+00:00",
+      "seconds": null,
+      "headersSeconds": 1.801,
+      "httpStatus": 200,
+      "outcome": "response",
+      "toolCalls": []
+    },
+    {
+      "id": "a15ea74d-9dec-49fe-9c14-75bd6a882b1a",
+      "node": "supervisor",
+      "model": "deepseek-v4.1-flash",
+      "threadId": "e7736eca-fa76-4806-9618-b49e9cafceb0",
+      "runId": "6050cd85-85c0-4b0f-bfd5-f783c48ca65a",
+      "responseFormat": null,
+      "sdkRetryCount": "0",
+      "stream": true,
+      "tools": ["ConductResearch", "ResearchComplete", "think_tool"],
+      "startedAt": "2026-10-16T21:04:31.689005+00:00",
+      "endedAt": "2026-10-16T21:04:33.004255+00:00",
+      "seconds": null,
+      "headersSeconds": 1.315,
+      "httpStatus": 200,
+      "outcome": "response",
+      "toolCalls": []
+    },
+    {
+      "id": "1e57fa06-1be4-43ae-83f3-c04d3c1bcc0a",
+      "node": "supervisor",
+      "model": "deepseek-v4.1-flash",
+      "threadId": "e7736eca-fa76-4806-9618-b49e9cafceb0",
+      "runId": "6050cd85-85c0-4b0f-bfd5-f783c48ca65a",
+      "responseFormat": null,
+      "sdkRetryCount": "0",
+      "stream": true,
+      "tools": ["ConductResearch", "ResearchComplete", "think_tool"],
+      "startedAt": "2026-10-16T21:04:35.820425+00:00",
+      "endedAt": "2026-10-16T21:04:37.285989+00:00",
+      "seconds": null,
+      "headersSeconds": 1.465,
+      "httpStatus": 200,
+      "outcome": "response",
+      "toolCalls": []
+    },
+    {
+      "id": "19a4cd41-834e-4635-8b04-7feb57a25e1f",
+      "node": "final_report_generation",
+      "model": "deepseek-v4.1-flash",
+      "threadId": "e7736eca-fa76-4806-9618-b49e9cafceb0",
+      "runId": "6050cd85-85c0-4b0f-bfd5-f783c48ca65a",
+      "responseFormat": null,
+      "sdkRetryCount": "0",
+      "stream": true,
+      "tools": [],
+      "startedAt": "2026-10-16T21:04:37.579754+00:00",
+      "endedAt": "2026-10-16T21:04:39.318265+00:00",
+      "seconds": null,
+      "headersSeconds": 1.738,
+      "httpStatus": 200,
+      "outcome": "response",
+      "toolCalls": []
+    },
+    {
+      "id": "29c8e229-14f0-4c50-933d-0347d1e25a51",
+      "node": "final_report_generation",
+      "model": "deepseek-v4.1-flash",
+      "threadId": "e7736eca-fa76-4806-9618-b49e9cafceb0",
+      "runId": "6050cd85-85c0-4b0f-bfd5-f783c48ca65a",
+      "responseFormat": "json_object",
+      "sdkRetryCount": "0",
+      "stream": true,
+      "tools": [],
+      "startedAt": "2026-10-16T21:05:29.470559+00:00",
+      "endedAt": "2026-10-16T21:05:31.194436+00:00",
+      "seconds": null,
+      "headersSeconds": 1.723,
+      "httpStatus": 200,
+      "outcome": "response",
+      "toolCalls": []
+    },
+    {
+      "id": "bcf5c600-110b-4e99-8726-cd84ac541a51",
+      "node": "final_report_generation",
+      "model": "deepseek-v4.1-flash",
+      "threadId": "e7736eca-fa76-4806-9618-b49e9cafceb0",
+      "runId": "6050cd85-85c0-4b0f-bfd5-f783c48ca65a",
+      "responseFormat": "json_object",
+      "sdkRetryCount": "0",
+      "stream": true,
+      "tools": [],
+      "startedAt": "2026-10-16T21:06:40.503279+00:00",
+      "endedAt": "2026-10-16T21:06:42.929619+00:00",
+      "seconds": null,
+      "headersSeconds": 2.426,
+      "httpStatus": 200,
+      "outcome": "response",
+      "toolCalls": []
+    }
+  ],
+  "retrySchedules": [
+    {
+      "at": "2026-10-16T21:02:16.830579+00:00",
+      "kind": "retry_scheduled",
+      "retryNumber": 1,
+      "delaySeconds": 3
+    },
+    {
+      "at": "2026-10-16T21:02:20.631557+00:00",
+      "kind": "retry_scheduled",
+      "retryNumber": 2,
+      "delaySeconds": 6
+    },
+    {
+      "at": "2026-10-16T21:02:27.588928+00:00",
+      "kind": "retry_scheduled",
+      "retryNumber": 3,
+      "delaySeconds": 12
+    }
+  ],
+  "nativeCompletions": [
+    {
+      "runId": "14b771d3-2670-4bd5-9d30-2ce636af8d52",
+      "executionSeconds": 2.833,
+      "status": "success"
+    },
+    {
+      "runId": "6050cd85-85c0-4b0f-bfd5-f783c48ca65a",
+      "executionSeconds": 340.551,
+      "status": "success"
+    }
+  ],
+  "evidenceFile": "provider-2026-10-17-deepseek-p0-evidence.json",
+  "observationEnded": false,
+  "acceptanceNotes": [
+    "本轮已完成澄清、研究与报告交付；检索前实际加载 product-comparison，最终采用两篇指定来源。",
+    "541 汉字原生报告的 16 条断言已通过独立来源核对；保留原文，未人工改稿。一次通过不代表重复运行稳定性。"
+  ],
+  "runtimeNotes": [
+    "本次实测模型直连；写作采用 high 思考／32000 token，核验采用 high 思考／128000 token。",
+    "思考与核验上限为本次实验覆盖，未写入生产默认配置；本回放不重新调用模型。"
+  ]
+}

@@ -304,6 +304,7 @@ export function useWorkspace() {
   const demo = useDemo(savedState)
   const state = demo.state ?? savedState
   const dispatch = (action: Action) => {
+    if (demo.loadingRecording && (action.type === 'new' || action.type === 'switch')) demo.exit()
     if (!demo.active && action.type === 'send') {
       const active = savedRef.current.threads.find((t) => t.id === savedRef.current.activeThreadId)!
       if (active.source === 'live') {
