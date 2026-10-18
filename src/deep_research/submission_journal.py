@@ -76,8 +76,8 @@ def state_digest(state) -> str:
                 )
             },
             "messages": messages,
-            # Legacy checkpoints have neither field and keep their old digest.
-            **{key: state[key] for key in ("user_requirements", "research_constraints") if key in state},
+            # Missing optional fields preserve legacy checkpoint digests.
+            **{key: state[key] for key in ("user_requirements", "research_constraints", "source_evidence", "report_reviews") if key in state},
         }
     )
 

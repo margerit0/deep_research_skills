@@ -290,3 +290,39 @@ def test_two_concurrent_writers_keep_distinct_identities(capture, monkeypatch):
         )
 
     asyncio.run(check())
+
+
+@pytest.mark.parametrize("mode", ["pass", "reject", "unavailable", "transport"])
+def test_review_preserves_drafts_and_shares_generation_budget(capture, mode):
+    calls, decisions = [], []
+
+    async def stream(messages):
+        calls.append(messages)
+        if mode == "transport" and len(calls) == 1:
+            yield AIMessageChunk(content="中断草稿")
+            raise ConnectionError("interrupted")
+        yield AIMessageChunk(content="原稿" if not messages else "修订稿")
+
+    async def review(report, attempt_id):
+        decisions.append((report, attempt_id))
+        if mode == "unavailable":
+            raise RuntimeError("review unavailable")
+        if len(decisions) == 1 or mode == "reject":
+            return ["Revise using source conditions"]
+        return None
+
+    async def run():
+        return await reports.stream_final_report(SimpleNamespace(astream=stream), [], capture.state, review=review)
+
+    if mode in {"reject", "unavailable"}:
+        with pytest.raises((ValueError, RuntimeError)):
+            asyncio.run(run())
+    else:
+        report, owner = asyncio.run(run())
+        assert report == "修订稿"
+        assert owner["report_writing_attempt_id"] == decisions[-1][1]
+    assert len(calls) == (3 if mode == "transport" else 1 if mode == "unavailable" else 2)
+    assert len(decisions) <= 2
+    assert len({item["writing_attempt_id"] for item in capture.events if item["kind"] == "started"}) == len(calls)
+    assert any(item.get("text") == "原稿" for item in capture.events)
+    assert capture.journal.read(capture.identity)["sealed"]

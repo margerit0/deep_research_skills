@@ -45,6 +45,7 @@ from deep_research.utils import (
     think_tool,
 )
 from deep_research.workflow_contract import extract_search_sources, merge_sources, message_text, research_error
+from deep_research.source_evidence import capture_source_evidence, merge_source_evidence
 
 # ===== 配置 (CONFIGURATION) =====
 
@@ -180,6 +181,7 @@ def tool_node(state: ResearcherState):
     tool_calls = state["researcher_messages"][-1].tool_calls
 
     observations = []
+    evidence = []
     for tc in tool_calls:
         name = tc["name"]
         constraints = constraints_for(state)
@@ -187,7 +189,9 @@ def tool_node(state: ResearcherState):
             state.get("loaded_required_skills", [])
         ):
             raise ValueError("Required Skills were not loaded before search")
-        observation = _invoke_tool(name, tc["args"], constraints)
+        with capture_source_evidence() as captured:
+            observation = _invoke_tool(name, tc["args"], constraints)
+        evidence.extend(captured)
         observations.append(observation)
 
     tool_outputs = [
@@ -198,15 +202,22 @@ def tool_node(state: ResearcherState):
         )
         for observation, tc in zip(observations, tool_calls)
     ]
-    return {"researcher_messages": tool_outputs}
+    sources = merge_sources(state.get("sources", []), *[
+        extract_search_sources(message_text(message.content))
+        for message in tool_outputs if message.name == "tavily_search"
+    ])
+    sources = allowed_sources(sources, constraints_for(state))
+    return {"researcher_messages": tool_outputs, "sources": sources,
+            "source_evidence": merge_source_evidence(
+                state.get("source_evidence", []), evidence, sources=sources)}
 
 
 def compress_research(state: ResearcherState) -> dict:
     """将研究发现压缩为一份简明的总结。
 
-    raw_notes 采用白名单机制：仅保留 AIMessage 与 tavily_search 的
-    ToolMessage。load_skill / think_tool 的输出会被排除，以免混入
-    最终报告。当没有任何有效搜索结果, 或 compress 模型返回空时,
+    raw_notes 保留 AIMessage 与检索 ToolMessage 供追溯；压缩模型本身只读
+    检索正文、用户要求和子任务，不读模型自述或方法论。实际来源正文独立
+    传给最终写作。当没有任何有效搜索结果, 或 compress 模型返回空时,
     落明确失败标记而不是伪装成完整报告。
     """
     researcher_messages = state.get("researcher_messages", [])
@@ -231,12 +242,16 @@ def compress_research(state: ResearcherState) -> dict:
             "compressed_research": _RESEARCH_FAILED_MARKER,
             "raw_notes": ["\n".join(raw_notes)],
             "sources": sources,
+            "source_evidence": [],
         }
 
     system_message = compress_research_system_prompt.format(date=get_today_str()) + requirements_context(state)
     messages = (
         [SystemMessage(content=system_message)]
-        + list(researcher_messages)
+        + [HumanMessage(content="研究子任务：" + state.get("research_topic", ""))]
+        + [HumanMessage(content=message_text(message.content))
+           for message in researcher_messages
+           if isinstance(message, ToolMessage) and message.name in RESEARCH_TOOL_WHITELIST]
         + [HumanMessage(content=compress_research_human_message)]
     )
     emit_research_event("compression_started")
@@ -257,6 +272,7 @@ def compress_research(state: ResearcherState) -> dict:
         "compressed_research": compressed,
         "raw_notes": ["\n".join(raw_notes)],
         "sources": sources,
+        "source_evidence": merge_source_evidence(state.get("source_evidence", []), sources=sources),
     }
 
 

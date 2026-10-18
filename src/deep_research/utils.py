@@ -30,6 +30,7 @@ from deep_research.structured_output_fallback import (
     should_disable_thinking_for_json_fallback,
 )
 from deep_research.state_research import Summary
+from deep_research.source_evidence import record_source_evidence
 from deep_research.prompts import summarize_webpage_prompt
 from deep_research.research_requirements import filter_search_results, has_source_restriction, retrieve_specified_sources
 from deep_research.workflow_contract import log_node_failure
@@ -231,6 +232,7 @@ def process_search_results(unique_results: dict) -> dict:
     """
     def _process_one(item: tuple) -> tuple:
         url, result = item
+        record_source_evidence(url, result)
         if not result.get("raw_content"):
             content = result["content"]
         else:

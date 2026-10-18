@@ -1,0 +1,322 @@
+{
+  "schema_version": 1,
+  "verified_at": "2026-10-18T16:10:26.247142+00:00",
+  "acceptance_date": "2026-10-17",
+  "closeout_date": "2026-10-19",
+  "date_timezone": "Asia/Shanghai",
+  "scope": "One fixed-input native scenario; not a repeated-run reliability guarantee",
+  "p0_complete": true,
+  "head": "67ed6f619d80e395be6b5d74e65887c05a0c1f7b",
+  "changes_committed": false,
+  "completion_gates": {
+    "independent_content": true,
+    "final_attempt_in_inventory": true,
+    "production_code_matches_final_attempt": true,
+    "native_real_workflow": true,
+    "real_services_cleaned": true,
+    "review_matches_report_bytes": true,
+    "mechanical": true,
+    "backend_tests": true,
+    "native_tests": true,
+    "native_services_cleaned": true,
+    "protected_files_unchanged": true
+  },
+  "closeout_checks": {
+    "inventory_complete": true,
+    "mechanical_pass": true,
+    "saved_mechanical_result_unchanged": true,
+    "report_matches_checkpoint_and_audit": true,
+    "body_han_count": true,
+    "claim_ids_complete": true,
+    "saved_claims_and_source_anchors_valid": true,
+    "public_artifacts_match_originals": true,
+    "production_matches_launch": true,
+    "source_and_tests_match_prior_test_inventory": true,
+    "protected_files_unchanged": true,
+    "dedicated_ports_free": true
+  },
+  "native_attempt": {
+    "thread_id": "e7736eca-fa76-4806-9618-b49e9cafceb0",
+    "research_id": "3665fc72-a277-4153-ae5c-07b3c3d27e49",
+    "research_run_id": "6050cd85-85c0-4b0f-bfd5-f783c48ca65a",
+    "writing_attempt_id": "6ab765cf-fabb-48f2-9167-2de7e04ef7a8",
+    "report_sha256": "1d9a3a239542026331ead36ba0b8986d0c9c94f44be601f1872457831ec97cc2",
+    "body_han": 541,
+    "business_status": "succeeded",
+    "model_transport": "direct",
+    "thinking": {
+      "writer": "enabled/high, 32000",
+      "review": "enabled/high, 128000"
+    }
+  },
+  "run_count": 2,
+  "submission_count": 2,
+  "report_event_count": 15,
+  "mechanical_checks": {
+    "requiredSkillPerTaskBeforeSearch": true,
+    "exactRequestedSourceSet": true,
+    "persistedConstraints": true,
+    "searchesHaveScopeAudit": true,
+    "reportMatchesRefresh": true,
+    "sourcesMatchRefresh": true,
+    "configMatchesReceipts": true,
+    "nativeRunsSucceeded": true,
+    "refreshCreatesNoRun": true,
+    "approximately500ChineseCharacters": true,
+    "durableWritingComplete": true,
+    "replayDiagnosticsCaptured": true,
+    "noPrematureWritingReplay": true,
+    "unique_event_ids": true,
+    "continuous_sequence": true,
+    "active_identity_matches_checkpoint": true,
+    "utf8_offsets_contiguous": true,
+    "stream_bytes_equal_report_and_disk": true,
+    "finish_hash_matches": true,
+    "screenshot_before_active_finish": true,
+    "screenshot_matches_active_attempt": true,
+    "no_browser_errors": true,
+    "no_recovery_notice": true,
+    "complete_body_paragraph_before_finish": true,
+    "first_body_paragraph_is_substantive": true,
+    "successful_business_with_no_errors": true,
+    "models_used_verified_direct_transport": true,
+    "production_code_matches_launch": true,
+    "evidence_anchors_match_consumed_body": true,
+    "writer_received_source_hashes": true,
+    "final_review_passed_and_bound": true,
+    "grounded_claims_cover_report": true,
+    "grounded_support_covers_claims": true,
+    "grounded_passages_match_consumed_body": true,
+    "source_prerequisite_selection_recorded": true,
+    "source_conditions_match_consumed_body": true,
+    "condition_input_excerpts_match_consumed_body": true,
+    "source_condition_coverage_complete": true,
+    "source_condition_selection_excludes_candidate": true,
+    "review_model_reads_within_shared_budget": true
+  },
+  "independent_review": {
+    "passed": true,
+    "claims": 16,
+    "basis": "Saved independent sentence judgments, verified against consumed source bytes",
+    "source_anchors": {
+      "overview": {
+        "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+        "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+        "start": 293,
+        "end": 1214,
+        "quote_sha256": "af0d405cfd8564f657f9d296edd3b478ba7af0db537c36543e07c752162d22e1"
+      },
+      "identification": {
+        "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+        "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+        "start": 1714,
+        "end": 2296,
+        "quote_sha256": "4492d528ff537667b7371df2dbe0f20a7360ceab8ec20ec8bc95b43208ce73a8"
+      },
+      "runtime": {
+        "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+        "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+        "start": 2296,
+        "end": 2930,
+        "quote_sha256": "e2b981e12fd7e4a8574ab9b4fc506695e099137573789de6cf636c522da850a2"
+      },
+      "thread_safety": {
+        "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+        "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+        "start": 2930,
+        "end": 3628,
+        "quote_sha256": "9090d606123dda62d7d9408a51648036c9a86cb6b7251b5fa2a854e94647e7c5"
+      },
+      "memory": {
+        "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+        "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+        "start": 3724,
+        "end": 4678,
+        "quote_sha256": "40b97a22f26e26a02aaa510c866cc8e6619571a802a0d9276d7d02c1882a1299"
+      },
+      "frame_iterator": {
+        "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+        "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+        "start": 4678,
+        "end": 5223,
+        "quote_sha256": "ebc8f17d53e6c6f91be92498f312cd442d5821aed2d82ad2fea5ef5f6da4fa72"
+      },
+      "performance": {
+        "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+        "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+        "start": 5223,
+        "end": 5899,
+        "quote_sha256": "675d6f032dde812d22b861e40a5569ac0922b0aa42a2c725760238154ba224a9"
+      },
+      "initialization": {
+        "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+        "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+        "start": 1112,
+        "end": 1495,
+        "quote_sha256": "5be31fae29c695eb740a42cceb031cb007625a0365d5edff39cda6886118ebee"
+      },
+      "api_safety": {
+        "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+        "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+        "start": 2643,
+        "end": 5301,
+        "quote_sha256": "cc9ab13a5061a88e60895bcd8d4a75a6cde2c94884600ec83685a209d61cd3ed"
+      },
+      "internal_state": {
+        "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+        "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+        "start": 6679,
+        "end": 7298,
+        "quote_sha256": "0238226c06656ee32f25a546e79acaf4e98098310abe860bbaa4056c881cc9c4"
+      },
+      "build": {
+        "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+        "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+        "start": 7298,
+        "end": 8402,
+        "quote_sha256": "8b4632da61589ff4f6e564044501cb54207c322aa9f2385f70559ca76e9e2394"
+      }
+    },
+    "annotation_limit": "Native condition selection also included allocation-domain and thread-state implementation details. Its broad links to claim 14 do not establish literal coverage of those tutorials. They are not independent requirements of this short comparison; this decision rests on the source-backed report claims and the user's substantive safety/internal-state prerequisites, not on model annotation alone."
+  },
+  "screenshots": {
+    "complete_body_paragraph": true,
+    "mobile_report_and_flow": true,
+    "early_seconds": 1.218306,
+    "writing_attempt_matches": true
+  },
+  "artifacts": {
+    "frontend/docs/provider-2026-10-17-deepseek-p0-report.md": {
+      "sha256": "1d9a3a239542026331ead36ba0b8986d0c9c94f44be601f1872457831ec97cc2",
+      "bytes": 2558
+    },
+    "frontend/docs/screenshots/report-deepseek-p0-first-paragraph-1440.png": {
+      "sha256": "7930eb969ff28e13611b1d2a676f9d20bf99f9aaff2f3e16a57d0e4d7cf136a7",
+      "bytes": 633833
+    },
+    "frontend/docs/screenshots/report-deepseek-p0-final-1440.png": {
+      "sha256": "f2872b34f7fc6fa2f18f57f65da197d2a04f82de488529395f218dfdb89a7278",
+      "bytes": 704121
+    },
+    "frontend/docs/screenshots/report-deepseek-p0-final-320.png": {
+      "sha256": "c29f8100d6d669836ae1240005688976bb08980fb119b7cd0b4b517159e5f31a",
+      "bytes": 1178944
+    },
+    "frontend/docs/provider-2026-10-17-deepseek-p0-citation-review.md": {
+      "sha256": "7c057d56253b92f6bf16a0a720730e93b9faa8e7b19a300a1f9105e442e1d1c5",
+      "bytes": 3820
+    }
+  },
+  "model_http": {
+    "requests": 32,
+    "statuses": {
+      "200": 29,
+      "429": 3
+    },
+    "transport_failures": [],
+    "retry_schedules": 3
+  },
+  "search_http": {
+    "requests": 5,
+    "statuses": {
+      "200": 5
+    },
+    "transport_failures": [],
+    "retry_schedules": 0
+  },
+  "http_count_scope": "HTTP status counters measure response headers, not successful complete streaming bodies. Node failures and review status must also be checked.",
+  "recorded_attempt_count": 33,
+  "backend_tests": {
+    "tests": "222",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "26.270"
+  },
+  "backend_tests_file": ".local/p0-fact-fidelity-20261015/pytest-p0-local-revision-20261017ac/junit.xml",
+  "native_tests": {
+    "results": [
+      {
+        "name": "submission",
+        "code": 0
+      },
+      {
+        "name": "live",
+        "code": 0
+      },
+      {
+        "name": "recovery",
+        "code": 0
+      }
+    ],
+    "cleanup": {
+      "backendPortFree": true,
+      "frontendPortFree": true
+    },
+    "modelAndSearchSubstitutes": true
+  },
+  "native_tests_file": ".local/p0-fidelity-20261017/native-revision-context/result.json",
+  "test_scope": "Saved 222-test backend suite and 13+1+1 native substitute tests; no suite rerun at closeout. Later source-excerpt/local-revision changes are covered by the backend suite.",
+  "preservation": {
+    "protected_files": 436,
+    "changed": []
+  },
+  "ports_free": {
+    "2090": true,
+    "5248": true
+  },
+  "source_hashes": {
+    "src/deep_research/__init__.py": "caca085c5005b28bc2e9e7285870f5267519ffb1891a291c457c297187c98c87",
+    "src/deep_research/atlas_api.py": "7560b92784971f60b80e076f45900a0d496b9d79419f4e2734edb56c68125036",
+    "src/deep_research/atlas_runtime.py": "0f98b5551d4ab0263d510c3c40291e6daca8797dec3374dd05bb0744a611adda",
+    "src/deep_research/event_journal.py": "ab893c46e9383efe3f91619f9a754c6b044faa782274eb4df9b6c9f0e0653997",
+    "src/deep_research/model_config.py": "4409ffff447bd3bf3379a11174afe862f4b52c595a8a4da5e0278f52529bff5c",
+    "src/deep_research/model_transport.py": "e76237be52347a51f1212ec9e6b6b5fca08a994ada72f9fbc85c0fc5ce296bfc",
+    "src/deep_research/multi_agent_supervisor.py": "4f9e035771b374c3de718862d30b02ac207b4fe9e10410da867b11ea46124717",
+    "src/deep_research/prompts.py": "51d01671f2f77b03ce4ce275e788bfcd96e1502df4100cfa4027821d105b01c6",
+    "src/deep_research/report_review.py": "f0cff1658af30486d5c5deb64263c74e124873edfd9ec3aac891abd5d20bc0e1",
+    "src/deep_research/report_streaming.py": "537916c37237d9bbe88881c28681b6c6038c594eab1360dfff1f89c35926eba8",
+    "src/deep_research/research_agent_full.py": "2aeacfc1804f1b8e8446d38d46d1431ae043649ec6b7f4580b75a81dece52d49",
+    "src/deep_research/research_agent_scope.py": "a9d009bff7158b5e6269b0b888249a083b2badfad7cd4098330e1c320dcb10f2",
+    "src/deep_research/research_agent_skills.py": "1d03f94118c5036b2ba8910f3efa683e2c3fd01a9b195d1c589db4e1b618edfd",
+    "src/deep_research/research_events.py": "4794267e19a5b1ba54170290c97770e3865a3adfd22d9a1e8cf418322173161d",
+    "src/deep_research/research_requirements.py": "28fa60c727e0433c2e576aea8992d7a6d29335dff819e99ab4b2b027a97f873e",
+    "src/deep_research/run_configuration.py": "d7c8292708b9ff823b7efe53957c5cdb6b42a79680c2504f8dd0da1be3aba075",
+    "src/deep_research/skills_loader.py": "03273e44782ae4bc58e66571492e6d1c3b7e8c6be0d4e6a7e1143d961a140294",
+    "src/deep_research/source_evidence.py": "681c1ea4a2c1a54c4d872fc667e6d740b50e79b55683c75e34052bda8aa0166e",
+    "src/deep_research/state_multi_agent_supervisor.py": "6aea595bf3a9fb852ae3018d7d2d998a6edee6784a8af6dd4ae760ca3eb08463",
+    "src/deep_research/state_research.py": "684b90a0c6b8aa3184935c80f6bc6347751df1e9ed8a37d0f60c6e0fbeeae57c",
+    "src/deep_research/state_scope.py": "98b26a10d8b1bd5840437f7ba27ef28215064a70316f47f31bf8a003bf75cac4",
+    "src/deep_research/structured_output_fallback.py": "bca870392d36eae256d042c34afe3660d06a7b3a021da655738bb3d317fb8974",
+    "src/deep_research/submission_api.py": "1e9a65f79a1688b3235424764f9486c574340cbfcacb1c3ca90ee91411a40c2c",
+    "src/deep_research/submission_journal.py": "4222f1660fef548a0e407db729617cddd489a70f5d27d860045d5794eabe97a9",
+    "src/deep_research/utils.py": "54ba54172ebe07f52d23581eb82f82f06aa54b2b663bf8f4e16487cadfd47732",
+    "src/deep_research/workflow_contract.py": "e0773d26d0ecb45c094aa85df8ad97ff9f4072bf17c5287f0068947607abb3b3"
+  },
+  "test_hashes": {
+    "tests/test_eval_retry.py": "044a099a200e9ba9eb71f9cde444875ad6ad91e9a482578c0aa48dac5acaaf8b",
+    "tests/test_event_journal.py": "4ac6fde6458d0c39037a9f4db9425dcbcaa06d19dac62bc17d4799f0f9f2e3d9",
+    "tests/test_full_workflow.py": "9e2643d9e884e72477a6596e076b8bf6a34946318fc1e030128f4825d1b21ee3",
+    "tests/test_model_transport.py": "9aafa31542a9fac018f9f98bf6face073206fad7eafa2e3e9ccccae1fe9c9a07",
+    "tests/test_prompts_encoding.py": "344d3e37e86694d06117f4019679a7b865bb56b37cb35ff91213948f44a57781",
+    "tests/test_report_review.py": "7aab31a6bc1eb753950520552e6edc490a644ccdd417be7cd9918311f3dda5c1",
+    "tests/test_report_review_support.py": "e3eee36bc008ae340f4c25d7d9eea801ca0a3ada0f49ae560bd5bc650ba29160",
+    "tests/test_report_streaming.py": "69c25ad5ef1d4c1480cefb40901b1443af859d68aad24d7effe1c842143bd55e",
+    "tests/test_research_agent_scope.py": "ac3792481e32ae8a1acb0f592246447e62fda1797d4dd844f1a59554efe59b51",
+    "tests/test_research_agent_skills.py": "bd9081bb692f2ebba4c6c2c90cda6529ee5ebce12bd440d13bb495b84ec66c7f",
+    "tests/test_research_requirements.py": "e4692c27fcb8c042e5fd8c7c301ed5fdf1fbeacfe761e2f3892909e77918cac4",
+    "tests/test_run_configuration.py": "e42b82bace5b55fc0b85db658cc7b837cfc70ab9ee1f5ac918511c8a94910b3a",
+    "tests/test_skills_loader.py": "3f7b189798ddc1a17737fe841dbc3563ac2666812198646fc5d6ee6f734271e9",
+    "tests/test_source_evidence.py": "d41da4fb39e5383a1820dd2c9466ea1efef9891034477fa007fc8e0c1cbe1b30",
+    "tests/test_submission_journal.py": "e3fa7fc77ac56965df40957dd5a27a7c893606f11eeb554d8c37c1a9ef2b9aaa",
+    "tests/test_utils.py": "b7cb2f401e52eb689647315c04c454dd2214c8f39e66929684de102ab879715c"
+  },
+  "limitations": [
+    "One fixed-input run passed; repeated-run reliability is not established.",
+    "Thinking and token settings are isolated process overrides, not production defaults.",
+    "P1 comparison and P3 new recordings remain outside this P0 acceptance."
+  ],
+  "raw_evidence_directory": ".local/p0-fidelity-20261015-local-revision-high128-direct-deepseek-20261017af",
+  "local_inventory": ".local/p0-fidelity-20261016/evidence.json",
+  "local_materials_tracked_by_git": false
+}

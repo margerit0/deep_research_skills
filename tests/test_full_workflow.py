@@ -1,6 +1,7 @@
 """Checkpointed full-graph tests. All model/search calls are substitutes."""
 
 import asyncio
+import hashlib
 import json
 import os
 import threading
@@ -101,6 +102,7 @@ def harness():
             supervisor, "researcher_agent", SimpleNamespace(ainvoke=researcher)
         ),
         patch.object(full, "writer_model", SimpleNamespace(ainvoke=writer)),
+        patch.object(full, "review_report", AsyncMock(return_value={"passed": True, "issues": []})),
     ):
         yield SimpleNamespace(
             graph=full.deep_researcher_builder.compile(checkpointer=InMemorySaver()),
@@ -145,10 +147,15 @@ def test_clarification_continues_same_thread_and_duplicate_input_is_a_noop(harne
 
 def test_new_research_clears_all_reduced_channels_and_report(harness):
     h = harness
+    from deep_research.source_evidence import capture_source_evidence, record_source_evidence
+    with capture_source_evidence() as evidence:
+        record_source_evidence(SOURCE["url"], {"raw_content": "FIRST SOURCE SECRET"})
+    h.researcher.return_value["source_evidence"] = evidence
     first = invoke(
         h.graph.ainvoke(request("FIRST SECRET TOPIC", "research-a", "turn-a"), h.config)
     )
     assert first["research_status"] == "succeeded"
+    assert first["source_evidence"] == evidence
     h.history.clear()
     h.researcher.return_value = {
         "compressed_research": "New finding",
@@ -162,6 +169,7 @@ def test_new_research_clears_all_reduced_channels_and_report(harness):
     assert second["report_research_id"] == "research-b"
     assert second["notes"] == ["New finding"]
     assert second["raw_notes"] == ["Raw B"]
+    assert second["source_evidence"] == []
     assert second["research_iterations"] == 2
     assert not any("FIRST SECRET TOPIC" in prompt for prompt in h.history)
     assert "Valid finding" not in str(second["supervisor_messages"])
@@ -176,6 +184,7 @@ def test_new_research_clears_all_reduced_channels_and_report(harness):
     assert third["final_report"] == third["report_research_id"] == ""
     assert third["notes"] == third["raw_notes"] == third["supervisor_messages"] == []
     assert third["research_events"] == []
+    assert third["source_evidence"] == []
     assert {event["research_id"] for event in second["research_events"]} == {
         "research-b"
     }
@@ -204,6 +213,154 @@ def test_failed_research_never_calls_writer(harness, failure):
     assert result["research_errors"]
     assert "PRIVATE PROVIDER PAYLOAD" not in json.dumps(result["research_errors"])
     h.writer.assert_not_awaited()
+
+
+@pytest.mark.parametrize("summary_interrupted", [False, True])
+def test_source_conditions_and_conflicts_reach_writer_through_real_nodes(
+    harness, monkeypatch, summary_interrupted
+):
+    """Verify transport, not model semantics, with non-Python evidence."""
+    from deep_research import utils
+    from deep_research.state_research import Summary
+
+    h = harness
+    evidence = {
+        "https://example.com/v1/pump": {
+            "title": "Pump trial A",
+            "raw_content": (
+                "In the 2021 trial, flow improved by 12% only with clean water at 20 C. "
+                "Saline workloads saw no improvement. Certification does not replace "
+                "inspection of shared seals. A 20% gain was a future target, not a result."
+            ),
+        },
+        "https://example.com/v2/pump": {
+            "title": "Pump trial B",
+            "raw_content": (
+                "The 2024 saline trial found 8% improvement; its baseline differs "
+                "from the 2021 trial, so the results cannot be directly combined. "
+                "Pressure above 4 bar can damage the seal; this does not establish "
+                "that lower pressures are always safe."
+            ),
+        },
+    }
+
+    def summarize(messages):
+        prompt = messages[0].content
+        body = next(item["raw_content"] for item in evidence.values()
+                    if item["raw_content"] in prompt)
+        if summary_interrupted:
+            yield Summary(summary="Unfinished and unqualified claim", key_excerpts="")
+            raise RuntimeError("stream interrupted")
+        yield Summary(summary=body, key_excerpts=body)
+
+    summary_model = SimpleNamespace(with_structured_output=lambda *a, **kw:
+                                    SimpleNamespace(stream=summarize))
+    monkeypatch.setattr(utils, "selected_model", lambda *a: summary_model)
+
+    def compress(messages, **kwargs):
+        tool = next(message for message in messages if message.content.startswith("Search results:"))
+        assert "UNTRUSTED_INTERNAL" not in str(messages)
+        assert "Unfinished and unqualified claim" not in tool.content
+        for url, item in evidence.items():
+            # A qualifier must still be attached to its original versioned URL.
+            section = tool.content.split(f"URL: {url}\n", 1)[1].split("--- SOURCE", 1)[0]
+            assert item["raw_content"] in section
+        # Simulate lossy compression: source text must reach writing separately.
+        return AIMessage(content="The trials were successful [1][2].")
+
+    monkeypatch.setattr(worker, "selected_model", lambda *a, **kw:
+                        SimpleNamespace(invoke=compress))
+
+    async def research(state):
+        call = AIMessage(content="UNTRUSTED_INTERNAL", tool_calls=[{
+            "id": "pump-search", "name": "tavily_search", "args": {"query": "pump"},
+        }])
+        update = worker.tool_node({**state, "researcher_messages": [call]})
+        return worker.compress_research({**state, **update, "researcher_messages": [
+            HumanMessage(content="UNTRUSTED_INTERNAL", name="loaded_methodology"),
+            call, *update["researcher_messages"],
+        ]})
+
+    monkeypatch.setitem(worker.tools_by_name, "tavily_search", SimpleNamespace(
+        invoke=lambda args: utils.format_search_output(utils.process_search_results(evidence))))
+
+    async def write(messages):
+        for url, item in evidence.items():
+            assert url in messages[-1].content
+            assert item["raw_content"] in messages[-1].content
+        return AIMessage(content="Comparison [1][2].\n" + "\n".join(
+            f"[{index}] {url}" for index, url in enumerate(evidence, 1)))
+
+    h.researcher.side_effect = research
+    h.writer.side_effect = write
+    final = invoke(h.graph.ainvoke(request("Compare pump trials", "pump", "turn"), h.config))
+    assert final["research_status"] == "succeeded"
+    assert {source["url"] for source in final["sources"]} == set(evidence)
+    assert {item["text"] for item in final["source_evidence"]} == {
+        item["raw_content"] for item in evidence.values()}
+    h.writer.assert_awaited_once()
+
+
+@pytest.mark.parametrize("accepted", [True, False])
+def test_review_outcome_is_checkpointed_and_duplicate_turn_never_rewrites(harness, accepted):
+    from deep_research.source_evidence import capture_source_evidence, record_source_evidence
+    h = harness
+    with capture_source_evidence() as evidence:
+        record_source_evidence(SOURCE["url"], {"raw_content": "Only measured under condition A."})
+    h.researcher.return_value["source_evidence"] = evidence
+    conditions = [{"condition_id": 1, "condition": "The measurement requires condition A.",
+                   "kind": "substantive_prerequisite", "source": {"url": SOURCE["url"],
+                   "body_sha256": evidence[0]["body_sha256"], "start": 0, "end": len(evidence[0]["text"]),
+                   "quote_sha256": hashlib.sha256(evidence[0]["text"].encode()).hexdigest()}}]
+    full.review_report.side_effect = [
+        {"passed": False, "issues": ["Missing condition A"], "body_han_count": 0,
+         "body_han_bounds": [400, 650], "source_conditions": conditions},
+        {"passed": accepted, "issues": [] if accepted else ["Still missing condition A"]},
+    ]
+    payload = request("Report the measured outcome，约 500 字中文", "review-study", "review-turn")
+    result = invoke(h.graph.ainvoke(payload, h.config))
+    assert result["research_status"] == ("succeeded" if accepted else "partial")
+    assert bool(result["final_report"]) == accepted
+    assert len(result["report_reviews"]) == 2
+    assert len({item["writing_attempt_id"] for item in result["report_reviews"]}) == 2
+    if accepted:
+        assert result["report_writing_attempt_id"] == result["report_reviews"][-1]["writing_attempt_id"]
+    assert full.review_report.await_count == h.writer.await_count == 2
+    original_messages = h.writer.await_args_list[0].args[0]
+    revised_messages = h.writer.await_args_list[1].args[0]
+    assert revised_messages[:-1] == original_messages
+    content = revised_messages[-1].content
+    feedback, _ = json.JSONDecoder().raw_decode(content[content.index('{"candidate":'):])
+    assert feedback["body_han_count"] == 0 and feedback["body_han_bounds"] == [400, 650]
+    assert feedback["target_body_han_count"] == 500 and feedback["preferred_net_change_han"] == 500
+    assert [{key: value for key, value in item.items() if key != "source_excerpt"}
+            for item in feedback["source_conditions"]] == conditions
+    assert feedback["source_conditions"][0]["source_excerpt"] == evidence[0]["text"]
+    assert result["report_reviews"][0]["source_conditions"] == conditions
+    assert feedback["issues"] == ["Missing condition A"]
+    again = invoke(h.graph.ainvoke(payload, h.config))
+    assert again["report_reviews"] == result["report_reviews"]
+    assert full.review_report.await_count == h.writer.await_count == 2
+
+
+def test_invalid_review_persists_safe_diagnostics_without_committing_or_regenerating(harness):
+    from deep_research.report_review import ReportReviewFormatError
+    from deep_research.source_evidence import capture_source_evidence, record_source_evidence
+    h = harness
+    with capture_source_evidence() as evidence:
+        record_source_evidence(SOURCE["url"], {"raw_content": "Measured under condition A."})
+    h.researcher.return_value["source_evidence"] = evidence
+    error = ReportReviewFormatError('PRIVATE_RESPONSE', 'length', ['incomplete_response'])
+    full.review_report.side_effect = error
+    payload = request("Report measured outcome", "invalid-review", "invalid-review-turn")
+    result = invoke(h.graph.ainvoke(payload, h.config))
+    assert result["research_status"] == "partial" and result["final_report"] == ""
+    assert result["report_reviews"][0]["diagnostics"] == error.diagnostics
+    assert 'PRIVATE_RESPONSE' not in json.dumps(result["report_reviews"])
+    assert result["source_evidence"] == evidence
+    again = invoke(h.graph.ainvoke(payload, h.config))
+    assert again["report_reviews"] == result["report_reviews"]
+    assert full.review_report.await_count == h.writer.await_count == 1
 
 
 def test_partial_parallel_failure_preserves_successful_sibling(harness):

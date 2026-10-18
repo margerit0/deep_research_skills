@@ -15,6 +15,7 @@ from pydantic import BaseModel, Field
 from deep_research.workflow_contract import ResearchError, ResearchPhase, ResearchSource, ResearchStatus
 from deep_research.research_events import ResearchEvent
 from deep_research.research_requirements import ResearchConstraints
+from deep_research.source_evidence import SourceEvidence
 
 # ===== 状态定义 (STATE DEFINITIONS) =====
 
@@ -59,6 +60,8 @@ class AgentState(MessagesState):
     supervisor_status: str
     research_errors: list[ResearchError]
     sources: list[ResearchSource]
+    source_evidence: list[SourceEvidence]
+    report_reviews: list[dict]
     effective_config: dict
     research_events: list[ResearchEvent]
 

@@ -4,9 +4,12 @@ import asyncio
 import json
 
 import httpx
+import pytest
+from unittest.mock import AsyncMock
+from openai import PermissionDeniedError
 from langchain_openai import ChatOpenAI
 
-from deep_research.model_transport import streaming_options
+from deep_research.model_transport import streaming_options, ainvoke_with_stream_retry
 
 
 TOOL = {"type": "function", "function": {
@@ -82,3 +85,41 @@ def test_stream_option_preserves_whole_invoke_retry(monkeypatch):
 
 def test_other_callables_are_unchanged():
     assert streaming_options(object()) == {}
+
+
+@pytest.mark.parametrize("mode,expected_requests", [("recover", 2), ("exhaust", 2), ("forbidden", 1)])
+def test_interrupted_buffered_tool_response_retries_once_before_dispatch(monkeypatch, mode, expected_requests):
+    monkeypatch.setenv("LANGSMITH_TRACING", "false")
+    monkeypatch.setattr("deep_research.model_transport.asyncio.sleep", AsyncMock())
+    requests = []
+
+    class InterruptedStream(httpx.AsyncByteStream):
+        async def __aiter__(self):
+            yield event({"role": "assistant", "tool_calls": [{
+                "index": 0, "id": "discard-partial", "type": "function",
+                "function": {"name": "lookup", "arguments": '{"query":"unfinished'},
+            }]}).encode()
+            raise httpx.RemoteProtocolError("response body disconnected")
+
+    def handler(request):
+        requests.append(json.loads(request.content))
+        if mode == "forbidden":
+            return httpx.Response(403, json={"error": {"message": "blocked"}})
+        if mode == "exhaust" or len(requests) == 1:
+            return httpx.Response(200, headers={"Content-Type": "text/event-stream"}, stream=InterruptedStream())
+        return tool_response()
+
+    async def run():
+        async with httpx.AsyncClient(transport=httpx.MockTransport(handler)) as client:
+            model = ChatOpenAI(model="test/model", api_key="test-key", base_url="https://test.invalid/v1",
+                               http_async_client=client, max_retries=0).bind_tools([TOOL])
+            return await ainvoke_with_stream_retry(model, "Read evidence")
+
+    if mode == "recover":
+        response = asyncio.run(run())
+        assert response.tool_calls == [{"name": "lookup", "args": {"query": "allowed page"},
+                                        "id": "call-1", "type": "tool_call"}]
+    else:
+        with pytest.raises(PermissionDeniedError if mode == "forbidden" else httpx.RemoteProtocolError):
+            asyncio.run(run())
+    assert len(requests) == expected_requests

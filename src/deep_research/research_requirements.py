@@ -119,6 +119,34 @@ def requirements_context(state) -> str:
     ) if brief or original else ""
 
 
+def approximate_report_length(state) -> int | None:
+    """Recognize only an explicit approximate Chinese length in user text."""
+    text = state.get("user_requirements", "")
+    matches = list(re.finditer(r"(?:大约|约为|约)\s*(\d{2,5})\s*(?:个)?(?:汉字|字)(?!节)", text))
+    return int(matches[-1][1]) if matches else None
+
+
+def report_length_guidance(state) -> str:
+    """Restate an explicit approximate Chinese length, never infer from notes."""
+    target = approximate_report_length(state)
+    if target is None:
+        return ""
+    return (
+        f"\n<Short report delivery>\n用户给出的全文篇幅目标是约 {target} 个汉字。请瞄准 {target} 个汉字，"
+        f"写作预算为 {round(target * 0.9)}–{round(target * 1.1)} 个汉字；"
+        "这是全文总预算，不是每节预算。计入标题和建议，不计末尾来源列表；"
+        "只统计中文汉字，英文字母、数字、标点、代码名和引用编号不计入，不能靠英文标识符凑篇幅。"
+        "先在预算内保留改变结论的限定。用自然的中文短句回答比较问题，不按来源目录逐项复述。"
+        "用户未要求实现教程时，不列初始化 API、宏、代码或平台构建步骤；"
+        "只保留回答问题必需的操作名称和实质约束，不堆叠英文标识符。"
+        "次要事实写不全对象范围、条件和例外时，删去整项，不把具体类别泛化；"
+        "即使写‘可能有风险’，也要交代来源限定的对象、使用规模或其他触发条件，不能只保留‘可能’二字。"
+        "不要把不同规则的适用条件或解决办法合并成一句笼统结论。"
+        "未知参数与行为说明须覆盖报告提到的各个选项。"
+        "删除重复概览、重复结论和未要求的未来计划。不要输出字数说明。\n</Short report delivery>\n"
+    )
+
+
 class _SourceScope:
     def __init__(self, constraints):
         urls = constraints.get("allowed_source_urls")

@@ -13,6 +13,7 @@ from langchain_core.messages import BaseMessage
 from langgraph.graph.message import add_messages
 from deep_research.workflow_contract import ResearchError, ResearchSource
 from deep_research.research_requirements import ResearchConstraints
+from deep_research.source_evidence import SourceEvidence
 
 # ===== 状态定义 (STATE DEFINITIONS) =====
 
@@ -35,6 +36,7 @@ class ResearcherState(TypedDict):
     compressed_research: str
     raw_notes: Annotated[List[str], operator.add]
     sources: list[ResearchSource]
+    source_evidence: list[SourceEvidence]
 
 class ResearcherOutputState(TypedDict):
     """
@@ -47,6 +49,7 @@ class ResearcherOutputState(TypedDict):
     raw_notes: Annotated[List[str], operator.add]
     researcher_messages: Annotated[Sequence[BaseMessage], add_messages]
     sources: list[ResearchSource]
+    source_evidence: list[SourceEvidence]
     research_errors: list[ResearchError]
 
 # ===== 结构化输出模式 (STRUCTURED OUTPUT SCHEMAS) =====

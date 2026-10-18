@@ -15,6 +15,7 @@ from langgraph.graph.message import add_messages
 from pydantic import BaseModel, Field
 from deep_research.workflow_contract import ResearchError, ResearchSource
 from deep_research.research_requirements import ResearchConstraints
+from deep_research.source_evidence import SourceEvidence
 
 class SupervisorState(TypedDict):
     """
@@ -39,6 +40,7 @@ class SupervisorState(TypedDict):
     supervisor_status: str
     research_errors: list[ResearchError]
     sources: list[ResearchSource]
+    source_evidence: list[SourceEvidence]
 
 @tool
 class ConductResearch(BaseModel):

@@ -26,9 +26,10 @@ from langgraph.graph import StateGraph, START, END
 from langgraph.types import Command
 
 from deep_research.model_config import get_chat_model
-from deep_research.model_transport import streaming_options
+from deep_research.model_transport import ainvoke_with_stream_retry
 from deep_research.run_configuration import selected_model
 from deep_research.research_requirements import allowed_sources, constraints_for, requirements_context
+from deep_research.source_evidence import merge_source_evidence
 from deep_research.prompts import lead_researcher_prompt
 from deep_research.research_events import emit_research_event, researcher_task
 from deep_research.research_agent_skills import researcher_agent_skills as researcher_agent
@@ -120,7 +121,7 @@ async def supervisor(state: SupervisorState) -> Command[Literal["supervisor_tool
     # 对下一步研究行动做出决策
     try:
         selected = selected_model("SUPERVISOR", supervisor_model_with_tools, tools=supervisor_tool_definitions)
-        response = await selected.ainvoke(messages, **streaming_options(selected))
+        response = await ainvoke_with_stream_retry(selected, messages)
     except Exception as exc:
         log_node_failure(logger, "supervisor", exc)
         errors = [*state.get("research_errors", []), research_error(
@@ -154,6 +155,7 @@ async def supervisor_tools(state: SupervisorState) -> Command[Literal["superviso
     tool_messages = []
     all_raw_notes = []
     sources = state.get("sources", [])
+    evidence = state.get("source_evidence", [])
     try:
         unknown = [call for call in calls if call["name"] not in {"think_tool", "ConductResearch"}]
         if unknown:
@@ -196,6 +198,7 @@ async def supervisor_tools(state: SupervisorState) -> Command[Literal["superviso
                 all_raw_notes.extend(result.get("raw_notes", []))
                 errors.extend(result.get("research_errors", []))
                 sources = merge_sources(sources, allowed_sources(result.get("sources", []), constraints_for(state)))
+                evidence = merge_source_evidence(evidence, result.get("source_evidence", []), sources=sources)
             if not is_research_note(content):
                 if isinstance(result, Exception):
                     log_node_failure(logger, "researcher", result)
@@ -208,13 +211,15 @@ async def supervisor_tools(state: SupervisorState) -> Command[Literal["superviso
         log_node_failure(logger, "supervisor_tools", exc)
         errors.append(research_error("supervisor_tools_failed", "研究工具执行失败。", "supervisor_subgraph"))
         result = _finish(state, [*supervisor_messages, *tool_messages], errors)
-        result.update.update({"supervisor_messages": tool_messages, "raw_notes": all_raw_notes, "sources": sources})
+        result.update.update({"supervisor_messages": tool_messages, "raw_notes": all_raw_notes,
+                              "sources": sources, "source_evidence": evidence})
         return result
 
     return Command(goto="supervisor", update={
         "supervisor_messages": tool_messages,
         "raw_notes": all_raw_notes,
         "sources": sources,
+        "source_evidence": evidence,
         "research_errors": errors,
     })
 

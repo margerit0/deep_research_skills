@@ -258,35 +258,49 @@ async def _write_attempt(model, messages, recorder):
             recorder.delta(pending)
 
 
-async def stream_final_report(model, messages, state):
+async def stream_final_report(model, messages, state, *, review=None):
     """Three application attempts; SDK retries remain bounded and separate.
 
     RunnableRetry deliberately does not retry streams. Each replay of the
     generation therefore gets its own UUID here, including midstream failures.
     """
     recorder = ReportRecorder.create(state)
+    generated = 0
     try:
-        async for attempt in AsyncRetrying(
-            stop=stop_after_attempt(MAX_WRITING_ATTEMPTS),
-            wait=wait_exponential_jitter(),
-            retry=retry_if_exception(retryable_writer_error),
-            reraise=True,
-        ):
-            with attempt:
-                recorder.start()
-                try:
-                    report = await _write_attempt(model, messages, recorder)
-                except BaseException:
-                    recorder.emit("failed")
-                    raise
-                recorder.emit(
-                    "finished", sha256=hashlib.sha256(report.encode()).hexdigest()
-                )
+        for revision in range(2):
+            if generated >= MAX_WRITING_ATTEMPTS:
+                raise ValueError("Writing budget exhausted before revision")
+            async for attempt in AsyncRetrying(
+                stop=stop_after_attempt(MAX_WRITING_ATTEMPTS - generated),
+                wait=wait_exponential_jitter(),
+                retry=retry_if_exception(retryable_writer_error),
+                reraise=True,
+            ):
+                with attempt:
+                    generated += 1
+                    recorder.start()
+                    try:
+                        report = await _write_attempt(model, messages, recorder)
+                    except BaseException:
+                        recorder.emit("failed")
+                        raise
+                    recorder.emit("finished", sha256=hashlib.sha256(report.encode()).hexdigest())
+                if not attempt.retry_state.outcome.failed:
+                    break
+            try:
+                revised_messages = await review(report, recorder.writing_attempt_id) if review else None
+                if revised_messages is not None and revision:
+                    raise ValueError("Report failed review after the single revision")
+            except BaseException:
+                recorder.emit("failed")
+                raise
+            if revised_messages is None:
                 return report, {
                     "report_run_id": recorder.identity.run_id,
                     "report_turn_id": recorder.identity.turn_id,
                     "report_attempt_id": recorder.attempt_id,
                     "report_writing_attempt_id": recorder.writing_attempt_id,
                 }
+            messages = revised_messages
     finally:
         recorder.close()

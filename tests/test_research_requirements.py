@@ -220,6 +220,18 @@ def test_report_urls_must_come_from_consumed_sources():
     assert not requirements.report_citations_within_sources(f"[1] Source: {OTHER}", sources)
 
 
+def test_writer_length_budget_comes_from_latest_explicit_original_target():
+    guidance = requirements.report_length_guidance({
+        "user_requirements": "先写约 900 字。更正：给出约 500 字中文报告。",
+        "research_brief": "Write a 2000 word report",
+    })
+    assert "450–550" in guidance and "约 500" in guidance
+    assert "900" not in guidance and "2000" not in guidance
+    assert requirements.report_length_guidance({"research_brief": "约 500 字"}) == ""
+    assert requirements.report_length_guidance({"user_requirements": "对比约 500 字节的报文"}) == ""
+    assert requirements.report_length_guidance({"user_requirements": "比较 500 人的样本"}) == ""
+
+
 def test_summary_outage_keeps_short_source_qualifiers_and_safe_diagnostics(monkeypatch, caplog):
     model = SimpleNamespace(with_structured_output=Mock(side_effect=RuntimeError("PRIVATE PROVIDER BODY")))
     monkeypatch.setattr(utils, "selected_model", lambda *a: model)
