@@ -1,0 +1,731 @@
+{
+  "version": "2026-10-25-v3",
+  "stage": "preview",
+  "approval": {
+    "status": "pending",
+    "revision_request": "完整ui展示两秒，然后开始任务前展示一下选择skills的功能，时长可超过12秒",
+    "parent_version": "2026-10-25-v2",
+    "scope": "完整 UI 停留 2 秒，增加原生 Skills 选择；18 秒修订方案等待预览确认"
+  },
+  "sample_sha256": "3df11059f4ccf05c7fec9751f2b93fa8492ea1ea595b4cc3b21c0648d7995305",
+  "sample": {
+    "sample_sha256": "3df11059f4ccf05c7fec9751f2b93fa8492ea1ea595b4cc3b21c0648d7995305",
+    "sample_frame_range": [
+      0,
+      419
+    ],
+    "sample_frame_count": 420,
+    "sample_duration_seconds": 14.0,
+    "audio": "not produced at preview stage",
+    "video_stream": {
+      "index": 0,
+      "codec_name": "h264",
+      "codec_long_name": "H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10",
+      "profile": "High",
+      "codec_type": "video",
+      "codec_tag_string": "avc1",
+      "codec_tag": "0x31637661",
+      "width": 1920,
+      "height": 1080,
+      "coded_width": 1920,
+      "coded_height": 1088,
+      "closed_captions": 0,
+      "film_grain": 0,
+      "has_b_frames": 2,
+      "pix_fmt": "yuv420p",
+      "level": 40,
+      "chroma_location": "left",
+      "field_order": "progressive",
+      "refs": 4,
+      "is_avc": "true",
+      "nal_length_size": "4",
+      "id": "0x1",
+      "r_frame_rate": "30/1",
+      "avg_frame_rate": "30/1",
+      "time_base": "1/15360",
+      "start_pts": 0,
+      "start_time": "0.000000",
+      "duration_ts": 215040,
+      "duration": "14.000000",
+      "bit_rate": "1124902",
+      "bits_per_raw_sample": "8",
+      "nb_frames": "420",
+      "nb_read_frames": "420",
+      "extradata_size": 47,
+      "disposition": {
+        "default": 1,
+        "dub": 0,
+        "original": 0,
+        "comment": 0,
+        "lyrics": 0,
+        "karaoke": 0,
+        "forced": 0,
+        "hearing_impaired": 0,
+        "visual_impaired": 0,
+        "clean_effects": 0,
+        "attached_pic": 0,
+        "timed_thumbnails": 0,
+        "non_diegetic": 0,
+        "captions": 0,
+        "descriptions": 0,
+        "metadata": 0,
+        "dependent": 0,
+        "still_image": 0,
+        "multilayer": 0
+      },
+      "tags": {
+        "language": "und",
+        "handler_name": "VideoHandler",
+        "vendor_id": "[0][0][0][0]",
+        "encoder": "Lavc61.19.101 libx264"
+      }
+    },
+    "constant_frame_timestamps": true,
+    "decoded_running_motion": {
+      "pixels_over_8": 1271,
+      "fraction_over_8": 0.0042239946826188104,
+      "mean_absolute_channel_error": 0.2204475462501385
+    },
+    "decoded_stable_report": {
+      "pixels_over_8": 36,
+      "fraction_over_8": 1.736111111111111e-05,
+      "mean_absolute_channel_error": 0.009425475823045268
+    },
+    "random_access_pixels": {
+      "435": {
+        "pixels_over_8": 8582,
+        "fraction_over_8": 0.004138695987654321,
+        "mean_absolute_channel_error": 0.09922823431069959
+      },
+      "45": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 3.054269547325103e-06
+      },
+      "150": {
+        "pixels_over_8": 1,
+        "fraction_over_8": 4.822530864197531e-07,
+        "mean_absolute_channel_error": 0.0011754115226337448
+      },
+      "210": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 0.0011625514403292181
+      },
+      "105": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 0.0011591756687242799
+      },
+      "375": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 3.777649176954733e-05
+      },
+      "285": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 5.3208590534979426e-05
+      },
+      "525": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 0.0002292309670781893
+      },
+      "0": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 0.0
+      },
+      "59": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 2.4112654320987654e-06
+      },
+      "60": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 0.0
+      },
+      "89": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 0.0011511381172839505
+      },
+      "119": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 0.0011532278806584363
+      },
+      "120": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 0.001160300925925926
+      },
+      "123": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 0.0011511381172839505
+      },
+      "179": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 0.0011511381172839505
+      },
+      "180": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 0.0011504951131687243
+      },
+      "181": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 0.001161104681069959
+      },
+      "275": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 5.9799382716049385e-05
+      },
+      "295": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 5.3047839506172846e-05
+      },
+      "330": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 0.0
+      },
+      "345": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 0.001369920267489712
+      },
+      "419": {
+        "pixels_over_8": 6,
+        "fraction_over_8": 2.8935185185185184e-06,
+        "mean_absolute_channel_error": 8.439429012345679e-05
+      },
+      "405": {
+        "pixels_over_8": 6,
+        "fraction_over_8": 2.8935185185185184e-06,
+        "mean_absolute_channel_error": 7.764274691358025e-05
+      }
+    },
+    "encoding_command": [
+      "ffmpeg",
+      "-hide_banner",
+      "-loglevel",
+      "error",
+      "-y",
+      "-framerate",
+      "30",
+      "-start_number",
+      "0",
+      "-i",
+      "D:\\deep_research_public_preview\\product-video\\2026-10-25-v3\\cache\\frames\\frame-%03d.png",
+      "-frames:v",
+      "420",
+      "-an",
+      "-c:v",
+      "libx264",
+      "-preset",
+      "medium",
+      "-crf",
+      "18",
+      "-pix_fmt",
+      "yuv420p",
+      "-r",
+      "30",
+      "-movflags",
+      "+faststart",
+      "D:\\deep_research_public_preview\\product-video\\2026-10-25-v3\\preview\\motion-sample.mp4"
+    ]
+  },
+  "playback": {
+    "sample_sha256": "3df11059f4ccf05c7fec9751f2b93fa8492ea1ea595b4cc3b21c0648d7995305",
+    "ended": true,
+    "duration": 14,
+    "resolution": [
+      1920,
+      1080
+    ],
+    "playbackRate": 1,
+    "wallTimeMs": 14001.199999988079,
+    "fullyBuffered": false,
+    "totalVideoFrames": 420,
+    "droppedDuringPlayback": 0,
+    "presentedCallbacks": 419,
+    "frameCallbackGaps": 0,
+    "firstCallback": {
+      "mediaTime": 0.033333,
+      "presentedFrames": 2
+    },
+    "lastCallback": {
+      "mediaTime": 13.966667,
+      "presentedFrames": 420
+    },
+    "error": null
+  },
+  "native_opening_layout": {
+    "nativeViewport": [
+      1920,
+      1032
+    ],
+    "videoWindow": {
+      "x": 0,
+      "y": 0,
+      "width": 1920,
+      "height": 1080,
+      "top": 0,
+      "right": 1920,
+      "bottom": 1080,
+      "left": 0
+    },
+    "nativeElements": [
+      {
+        "selector": ".cw-sidebar",
+        "rect": {
+          "x": 11,
+          "y": 11,
+          "width": 146,
+          "height": 1010,
+          "top": 11,
+          "right": 157,
+          "bottom": 1021,
+          "left": 11
+        },
+        "opacity": 1,
+        "insideViewport": true
+      },
+      {
+        "selector": ".cw-header",
+        "rect": {
+          "x": 167,
+          "y": 11,
+          "width": 1742,
+          "height": 68,
+          "top": 11,
+          "right": 1909,
+          "bottom": 79,
+          "left": 167
+        },
+        "opacity": 1,
+        "insideViewport": true
+      },
+      {
+        "selector": ".cw-composer-wrap",
+        "rect": {
+          "x": 496,
+          "y": 796.640625,
+          "width": 720,
+          "height": 224.359375,
+          "top": 796.640625,
+          "right": 1216,
+          "bottom": 1021,
+          "left": 496
+        },
+        "opacity": 1,
+        "insideViewport": true
+      },
+      {
+        "selector": ".cw-graph-panel",
+        "rect": {
+          "x": 1559,
+          "y": 79,
+          "width": 350,
+          "height": 942,
+          "top": 79,
+          "right": 1909,
+          "bottom": 1021,
+          "left": 1559
+        },
+        "opacity": 1,
+        "insideViewport": true
+      }
+    ],
+    "pendingResearcherPlaceholder": true
+  },
+  "capture": {
+    "allFramesChecked": 540,
+    "clicks": [
+      {
+        "target": "#cw-skill",
+        "bounds": {
+          "x": 599.328125,
+          "y": 941.40625,
+          "width": 74.15625,
+          "height": 28,
+          "top": 941.40625,
+          "right": 673.484375,
+          "bottom": 969.40625,
+          "left": 599.328125
+        },
+        "nativeTip": [
+          640.1140625,
+          955.40625
+        ],
+        "hit": true,
+        "visible": true,
+        "text": "Skills",
+        "callbacks": [
+          {
+            "type": "menu",
+            "value": "skill"
+          }
+        ],
+        "phase": "before-native-handler",
+        "frame": 120,
+        "id": "open-skills",
+        "tip": [
+          285.26478125000017,
+          516.9790625
+        ],
+        "callbackMatches": true,
+        "insideViewport": true
+      },
+      {
+        "target": "[data-skill-option='product-comparison']",
+        "bounds": {
+          "x": 606.328125,
+          "y": 800.40625,
+          "width": 220,
+          "height": 32,
+          "top": 800.40625,
+          "right": 826.328125,
+          "bottom": 832.40625,
+          "left": 606.328125
+        },
+        "nativeTip": [
+          727.328125,
+          816.40625
+        ],
+        "hit": true,
+        "visible": true,
+        "text": "产品对比",
+        "callbacks": [
+          {
+            "type": "config",
+            "config": {
+              "skill": "product-comparison"
+            }
+          },
+          {
+            "type": "menu",
+            "value": null
+          }
+        ],
+        "phase": "before-native-handler",
+        "frame": 180,
+        "id": "choose-skill",
+        "tip": [
+          426.55156250000005,
+          291.7990625
+        ],
+        "callbackMatches": true,
+        "insideViewport": true
+      },
+      {
+        "target": "[data-flow-node='b']",
+        "bounds": {
+          "x": 1685.65625,
+          "y": 354.15625,
+          "width": 96.671875,
+          "height": 81.375,
+          "top": 354.15625,
+          "right": 1782.328125,
+          "bottom": 435.53125,
+          "left": 1685.65625
+        },
+        "nativeTip": [
+          1738.82578125,
+          394.84375
+        ],
+        "hit": true,
+        "visible": true,
+        "text": "研究员 02\n●\n商业\n检索中",
+        "callbacks": [
+          {
+            "type": "inspect",
+            "id": "b"
+          }
+        ],
+        "phase": "before-native-handler",
+        "frame": 330,
+        "id": "inspect-node",
+        "tip": [
+          642.1911926605503,
+          485.65814615627966
+        ],
+        "callbackMatches": true,
+        "insideViewport": true
+      },
+      {
+        "target": "#cw-tab-events",
+        "bounds": {
+          "x": 1782.625,
+          "y": 715.09375,
+          "width": 100.375,
+          "height": 27,
+          "top": 715.09375,
+          "right": 1883,
+          "bottom": 742.09375,
+          "left": 1782.625
+        },
+        "nativeTip": [
+          1837.83125,
+          728.59375
+        ],
+        "hit": true,
+        "visible": true,
+        "text": "执行记录",
+        "callbacks": [
+          {
+            "type": "tab",
+            "tab": "events"
+          }
+        ],
+        "phase": "before-native-handler",
+        "frame": 345,
+        "id": "inspect-events",
+        "tip": [
+          827.7393340354856,
+          240.50190391314914
+        ],
+        "callbackMatches": true,
+        "insideViewport": true
+      }
+    ],
+    "graph": [
+      {
+        "pair": [
+          "clarify",
+          "brief"
+        ],
+        "maxError": 0,
+        "arrow": "url(#cw-arrow-base)",
+        "loop": false
+      },
+      {
+        "pair": [
+          "brief",
+          "supervisor"
+        ],
+        "maxError": 0,
+        "arrow": "url(#cw-arrow-base)",
+        "loop": false
+      },
+      {
+        "pair": [
+          "supervisor",
+          "a"
+        ],
+        "maxError": 0,
+        "arrow": "url(#cw-arrow-active)",
+        "loop": false
+      },
+      {
+        "pair": [
+          "a",
+          "join"
+        ],
+        "maxError": 0,
+        "arrow": "url(#cw-arrow-base)",
+        "loop": false
+      },
+      {
+        "pair": [
+          "supervisor",
+          "b"
+        ],
+        "maxError": 0,
+        "arrow": "url(#cw-arrow-base)",
+        "loop": false
+      },
+      {
+        "pair": [
+          "b",
+          "join"
+        ],
+        "maxError": 0,
+        "arrow": "url(#cw-arrow-base)",
+        "loop": false
+      },
+      {
+        "pair": [
+          "supervisor",
+          "c"
+        ],
+        "maxError": 0,
+        "arrow": "url(#cw-arrow-base)",
+        "loop": false
+      },
+      {
+        "pair": [
+          "c",
+          "join"
+        ],
+        "maxError": 0,
+        "arrow": "url(#cw-arrow-base)",
+        "loop": false
+      },
+      {
+        "pair": [
+          "join",
+          "report"
+        ],
+        "maxError": 0,
+        "arrow": "url(#cw-arrow-base)",
+        "loop": false
+      },
+      {
+        "pair": [
+          "join",
+          "supervisor"
+        ],
+        "maxError": 0,
+        "arrow": "url(#cw-arrow-base)",
+        "loop": true
+      }
+    ],
+    "randomAccess": [
+      {
+        "frame": 435,
+        "equal": true
+      },
+      {
+        "frame": 45,
+        "equal": true
+      },
+      {
+        "frame": 150,
+        "equal": true
+      },
+      {
+        "frame": 210,
+        "equal": true
+      },
+      {
+        "frame": 105,
+        "equal": true
+      },
+      {
+        "frame": 375,
+        "equal": true
+      },
+      {
+        "frame": 285,
+        "equal": true
+      },
+      {
+        "frame": 525,
+        "equal": true
+      },
+      {
+        "frame": 0,
+        "equal": true
+      },
+      {
+        "frame": 59,
+        "equal": true
+      },
+      {
+        "frame": 60,
+        "equal": true
+      },
+      {
+        "frame": 89,
+        "equal": true
+      },
+      {
+        "frame": 119,
+        "equal": true
+      },
+      {
+        "frame": 120,
+        "equal": true
+      },
+      {
+        "frame": 123,
+        "equal": true
+      },
+      {
+        "frame": 179,
+        "equal": true
+      },
+      {
+        "frame": 180,
+        "equal": true
+      },
+      {
+        "frame": 181,
+        "equal": true
+      },
+      {
+        "frame": 275,
+        "equal": true
+      },
+      {
+        "frame": 295,
+        "equal": true
+      },
+      {
+        "frame": 330,
+        "equal": true
+      },
+      {
+        "frame": 345,
+        "equal": true
+      },
+      {
+        "frame": 419,
+        "equal": true
+      },
+      {
+        "frame": 405,
+        "equal": true
+      }
+    ],
+    "errors": [],
+    "blocked": [],
+    "cameras": {
+      "workspace": {
+        "scale": 1,
+        "x": 0,
+        "y": 0
+      },
+      "input": {
+        "scale": 1.62,
+        "x": -751.72,
+        "y": -1030.7790625
+      },
+      "graph": {
+        "scale": 1.4901613413476749,
+        "x": -1948.9397658968683,
+        "y": -102.72274596646633
+      },
+      "inspectorInput": {
+        "scale": 1.8562748116341246,
+        "x": -2583.780523373572,
+        "y": -1111.9683221259013
+      },
+      "inspector": {
+        "scale": 2.0071835304424,
+        "x": -2845.456241787122,
+        "y": -1204.39991239597
+      },
+      "report": {
+        "scale": 1.7924258249197322,
+        "x": -931.5801709798459,
+        "y": -524.9056903021159
+      }
+    }
+  },
+  "visual_review": {
+    "sample_sha256": "3df11059f4ccf05c7fec9751f2b93fa8492ea1ea595b4cc3b21c0648d7995305",
+    "storyboard_sha256": "dc7e2bc199380d507d7c380452664d2ca273ca385deb830fd3213a165e05a1e7",
+    "method": "目视检查八帧实渲总览、MP4 解码菜单帧以及开场与 Skills 连续抽帧；另以正常速度程序播放。程序播放结束不等同于人工连续观看。",
+    "result": "完整 UI 保持两秒后连续聚焦输入框；原生 Skills 菜单五项完整可读，点击产品对比前光标落在该选项内，点击后菜单关闭、原生选中标签与说明出现。其后研究流程、检查器、报告及品牌的排版清楚，未发现意外裁切、错字或缺字。"
+  }
+}

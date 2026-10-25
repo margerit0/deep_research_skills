@@ -1,0 +1,993 @@
+{
+  "version": "2026-10-25-v3",
+  "approval": {
+    "status": "approved",
+    "approved_version": "2026-10-25-v3",
+    "approved_date": "2026-10-25",
+    "timezone": "Europe/Amsterdam",
+    "user_message": "确认",
+    "preview_manifest_sha256": "35aa10b608fb44c59a2fc0b34bef629a3a4d8c85e71e7ce229217298cd3f6bd2",
+    "approved_timeline_sha256": "af768795c9d32d18e05105c4945dd30badd439301d0f0ce2cbafbe8d03dfc567",
+    "approved_sample_sha256": "3df11059f4ccf05c7fec9751f2b93fa8492ea1ea595b4cc3b21c0648d7995305",
+    "scope": "按 v3 预览生成 18 秒、1920×1080、30 fps、含原创代码配乐的完整 MP4；完整 UI 停留 2 秒，先选择 Skills 再开始研究。"
+  },
+  "movie_sha256": "923607317d3270e03d6a2d9d6d2bc11fe34c313a0fbd88d87a91f53451576e04",
+  "video": {
+    "movie_sha256": "923607317d3270e03d6a2d9d6d2bc11fe34c313a0fbd88d87a91f53451576e04",
+    "video": {
+      "index": 0,
+      "codec_name": "h264",
+      "codec_long_name": "H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10",
+      "profile": "High",
+      "codec_type": "video",
+      "codec_tag_string": "avc1",
+      "codec_tag": "0x31637661",
+      "width": 1920,
+      "height": 1080,
+      "coded_width": 1920,
+      "coded_height": 1088,
+      "closed_captions": 0,
+      "film_grain": 0,
+      "has_b_frames": 2,
+      "pix_fmt": "yuv420p",
+      "level": 41,
+      "chroma_location": "left",
+      "field_order": "progressive",
+      "refs": 4,
+      "is_avc": "true",
+      "nal_length_size": "4",
+      "id": "0x1",
+      "r_frame_rate": "30/1",
+      "avg_frame_rate": "30/1",
+      "time_base": "1/15360",
+      "start_pts": 0,
+      "start_time": "0.000000",
+      "duration_ts": 276480,
+      "duration": "18.000000",
+      "bit_rate": "1224904",
+      "bits_per_raw_sample": "8",
+      "nb_frames": "540",
+      "nb_read_frames": "540",
+      "extradata_size": 47,
+      "disposition": {
+        "default": 1,
+        "dub": 0,
+        "original": 0,
+        "comment": 0,
+        "lyrics": 0,
+        "karaoke": 0,
+        "forced": 0,
+        "hearing_impaired": 0,
+        "visual_impaired": 0,
+        "clean_effects": 0,
+        "attached_pic": 0,
+        "timed_thumbnails": 0,
+        "non_diegetic": 0,
+        "captions": 0,
+        "descriptions": 0,
+        "metadata": 0,
+        "dependent": 0,
+        "still_image": 0,
+        "multilayer": 0
+      },
+      "tags": {
+        "language": "und",
+        "handler_name": "VideoHandler",
+        "vendor_id": "[0][0][0][0]",
+        "encoder": "Lavc61.19.101 libx264"
+      }
+    },
+    "audio": {
+      "index": 1,
+      "codec_name": "aac",
+      "codec_long_name": "AAC (Advanced Audio Coding)",
+      "profile": "LC",
+      "codec_type": "audio",
+      "codec_tag_string": "mp4a",
+      "codec_tag": "0x6134706d",
+      "sample_fmt": "fltp",
+      "sample_rate": "48000",
+      "channels": 2,
+      "channel_layout": "stereo",
+      "bits_per_sample": 0,
+      "initial_padding": 0,
+      "id": "0x2",
+      "r_frame_rate": "0/0",
+      "avg_frame_rate": "0/0",
+      "time_base": "1/48000",
+      "start_pts": 0,
+      "start_time": "0.000000",
+      "duration_ts": 864000,
+      "duration": "18.000000",
+      "bit_rate": "198812",
+      "nb_frames": "845",
+      "nb_read_frames": "844",
+      "extradata_size": 5,
+      "disposition": {
+        "default": 1,
+        "dub": 0,
+        "original": 0,
+        "comment": 0,
+        "lyrics": 0,
+        "karaoke": 0,
+        "forced": 0,
+        "hearing_impaired": 0,
+        "visual_impaired": 0,
+        "clean_effects": 0,
+        "attached_pic": 0,
+        "timed_thumbnails": 0,
+        "non_diegetic": 0,
+        "captions": 0,
+        "descriptions": 0,
+        "metadata": 0,
+        "dependent": 0,
+        "still_image": 0,
+        "multilayer": 0
+      },
+      "tags": {
+        "language": "und",
+        "handler_name": "SoundHandler",
+        "vendor_id": "[0][0][0][0]"
+      }
+    },
+    "container_duration": "18.000000",
+    "video_frames": 540,
+    "video_pts_first": 0.0,
+    "video_pts_last": 17.966667,
+    "constant_frame_timestamps": true,
+    "decoded_running_motion": {
+      "pixels_over_8": 1242,
+      "fraction_over_8": 0.004127617148554337,
+      "mean_absolute_channel_error": 0.2197130829733023
+    },
+    "decoded_report_hold": {
+      "pixels_over_8": 55,
+      "fraction_over_8": 2.652391975308642e-05,
+      "mean_absolute_channel_error": 0.016906667952674898
+    },
+    "decoded_brand_hold": {
+      "pixels_over_8": 19,
+      "fraction_over_8": 9.162808641975309e-06,
+      "mean_absolute_channel_error": 0.011455922067901234
+    },
+    "random_access_pixels": {
+      "435": {
+        "pixels_over_8": 8582,
+        "fraction_over_8": 0.004138695987654321,
+        "mean_absolute_channel_error": 0.09922823431069959
+      },
+      "45": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 3.054269547325103e-06
+      },
+      "150": {
+        "pixels_over_8": 1,
+        "fraction_over_8": 4.822530864197531e-07,
+        "mean_absolute_channel_error": 0.0011754115226337448
+      },
+      "210": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 0.0011625514403292181
+      },
+      "105": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 0.0011609439300411522
+      },
+      "375": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 3.777649176954733e-05
+      },
+      "285": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 5.3208590534979426e-05
+      },
+      "525": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 0.0002292309670781893
+      },
+      "0": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 0.0
+      },
+      "59": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 2.4112654320987654e-06
+      },
+      "60": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 0.0
+      },
+      "89": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 0.0011511381172839505
+      },
+      "119": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 0.0011532278806584363
+      },
+      "120": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 0.001160300925925926
+      },
+      "123": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 0.0011582111625514403
+      },
+      "179": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 0.0011511381172839505
+      },
+      "180": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 0.0011504951131687243
+      },
+      "181": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 0.0011504951131687243
+      },
+      "275": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 5.9799382716049385e-05
+      },
+      "295": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 5.3047839506172846e-05
+      },
+      "330": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 0.0
+      },
+      "345": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 0.001369920267489712
+      },
+      "419": {
+        "pixels_over_8": 6,
+        "fraction_over_8": 2.8935185185185184e-06,
+        "mean_absolute_channel_error": 8.439429012345679e-05
+      },
+      "405": {
+        "pixels_over_8": 6,
+        "fraction_over_8": 2.8935185185185184e-06,
+        "mean_absolute_channel_error": 7.764274691358025e-05
+      }
+    },
+    "approved_keyframe_match": {
+      "45": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 0.0
+      },
+      "105": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 0.0
+      },
+      "150": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 0.0
+      },
+      "210": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 0.0
+      },
+      "285": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 0.0
+      },
+      "375": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 0.0
+      },
+      "435": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 0.0
+      },
+      "525": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 0.0
+      }
+    },
+    "loudness": {
+      "integratedLUFS": -19.3,
+      "truePeakDbfs": -3.5
+    },
+    "encoding_command": [
+      "ffmpeg",
+      "-hide_banner",
+      "-loglevel",
+      "error",
+      "-y",
+      "-framerate",
+      "30",
+      "-start_number",
+      "0",
+      "-i",
+      "D:\\deep_research_public_preview\\product-video\\2026-10-25-v3\\cache\\final\\frames\\frame-%03d.png",
+      "-i",
+      "D:\\deep_research_public_preview\\product-video\\2026-10-25-v3\\cache\\final\\music.wav",
+      "-map",
+      "0:v:0",
+      "-map",
+      "1:a:0",
+      "-c:v",
+      "libx264",
+      "-preset",
+      "medium",
+      "-crf",
+      "17",
+      "-profile:v",
+      "high",
+      "-level:v",
+      "4.1",
+      "-pix_fmt",
+      "yuv420p",
+      "-r",
+      "30",
+      "-c:a",
+      "aac",
+      "-b:a",
+      "192k",
+      "-ar",
+      "48000",
+      "-ac",
+      "2",
+      "-t",
+      "18",
+      "-movflags",
+      "+faststart",
+      "D:\\deep_research_public_preview\\product-video\\2026-10-25-v3\\final\\product-demo.mp4"
+    ],
+    "check_sheet_source": "decoded frames of this exact product-demo.mp4"
+  },
+  "audio_source": {
+    "description": "Original 120 BPM score: warm pads, sine/FM plucks, bass, restrained percussion and event-derived UI cues; no voices or external samples.",
+    "sampleRate": 48000,
+    "channels": 2,
+    "samplesPerChannel": 864000,
+    "seconds": 18,
+    "bpm": 120,
+    "beats": 36,
+    "peak": 0.67,
+    "peakDbfs": -3.4785039459834706,
+    "rmsDbfs": -21.086445053727296,
+    "clippingSamples": 0,
+    "seed": "0x41544c41",
+    "fadeInSeconds": 0.025,
+    "fadeOutSeconds": 0.52,
+    "cues": [
+      {
+        "frame": 60,
+        "seconds": 2,
+        "sample": 96000,
+        "kind": "camera",
+        "target": "聚焦原生输入框"
+      },
+      {
+        "frame": 120,
+        "seconds": 4,
+        "sample": 192000,
+        "kind": "click",
+        "target": "#cw-skill"
+      },
+      {
+        "frame": 180,
+        "seconds": 6,
+        "sample": 288000,
+        "kind": "click",
+        "target": "[data-skill-option='product-comparison']"
+      },
+      {
+        "frame": 240,
+        "seconds": 8,
+        "sample": 384000,
+        "kind": "automatic",
+        "target": "研究简报"
+      },
+      {
+        "frame": 255,
+        "seconds": 8.5,
+        "sample": 408000,
+        "kind": "automatic",
+        "target": "派发三路研究"
+      },
+      {
+        "frame": 270,
+        "seconds": 9,
+        "sample": 432000,
+        "kind": "automatic",
+        "target": "并行检索资料"
+      },
+      {
+        "frame": 330,
+        "seconds": 11,
+        "sample": 528000,
+        "kind": "click",
+        "target": "[data-flow-node='b']"
+      },
+      {
+        "frame": 345,
+        "seconds": 11.5,
+        "sample": 552000,
+        "kind": "click",
+        "target": "#cw-tab-events"
+      },
+      {
+        "frame": 360,
+        "seconds": 12,
+        "sample": 576000,
+        "kind": "automatic",
+        "target": "汇总笔记"
+      },
+      {
+        "frame": 375,
+        "seconds": 12.5,
+        "sample": 600000,
+        "kind": "automatic",
+        "target": "撰写报告"
+      },
+      {
+        "frame": 390,
+        "seconds": 13,
+        "sample": 624000,
+        "kind": "automatic",
+        "target": "报告完成"
+      },
+      {
+        "frame": 480,
+        "seconds": 16,
+        "sample": 768000,
+        "kind": "brand",
+        "target": "星图工作台"
+      }
+    ],
+    "sourceSha256": "dbde52d1e89c0317310b50f1763070bb2031d2e2870db1b90ffa7d231a372ced",
+    "timelineSha256": "3e5eb15d82981f8e0ab563219638fc975aa72146bf7f4913b98181b5bca8f3be"
+  },
+  "audio_decoded": {
+    "sampleRate": 48000,
+    "decodedSamplesPerChannel": 864256,
+    "decodedSeconds": 18.005333333333333,
+    "playableSamplesPerChannel": 864000,
+    "playableSeconds": 18,
+    "aacTrailingPaddingSamples": 256,
+    "paddingPeak": 1.213082668982679e-06,
+    "peak": 0.6689273118972778,
+    "peakDbfs": -3.4924214340904713,
+    "rmsDbfs": -21.101802745269225,
+    "clippedSamples": 0,
+    "startRms": 0.040574462910900125,
+    "endRms": 7.625615270075225e-07,
+    "eventAlignment": [
+      {
+        "frame": 60,
+        "seconds": 2,
+        "sampleLag": 0,
+        "lagMilliseconds": 0,
+        "correlation": 0.9999974804153225
+      },
+      {
+        "frame": 120,
+        "seconds": 4,
+        "sampleLag": 0,
+        "lagMilliseconds": 0,
+        "correlation": 0.9998293922478825
+      },
+      {
+        "frame": 180,
+        "seconds": 6,
+        "sampleLag": 0,
+        "lagMilliseconds": 0,
+        "correlation": 0.9999790886001373
+      },
+      {
+        "frame": 240,
+        "seconds": 8,
+        "sampleLag": 0,
+        "lagMilliseconds": 0,
+        "correlation": 0.9999970218384385
+      },
+      {
+        "frame": 255,
+        "seconds": 8.5,
+        "sampleLag": 0,
+        "lagMilliseconds": 0,
+        "correlation": 0.9998021149331972
+      },
+      {
+        "frame": 270,
+        "seconds": 9,
+        "sampleLag": 0,
+        "lagMilliseconds": 0,
+        "correlation": 0.9999982418685264
+      },
+      {
+        "frame": 330,
+        "seconds": 11,
+        "sampleLag": 0,
+        "lagMilliseconds": 0,
+        "correlation": 0.9998696418233819
+      },
+      {
+        "frame": 345,
+        "seconds": 11.5,
+        "sampleLag": 0,
+        "lagMilliseconds": 0,
+        "correlation": 0.9995411255037039
+      },
+      {
+        "frame": 360,
+        "seconds": 12,
+        "sampleLag": 0,
+        "lagMilliseconds": 0,
+        "correlation": 0.999998743887734
+      },
+      {
+        "frame": 375,
+        "seconds": 12.5,
+        "sampleLag": 0,
+        "lagMilliseconds": 0,
+        "correlation": 0.9997867523253907
+      },
+      {
+        "frame": 390,
+        "seconds": 13,
+        "sampleLag": 0,
+        "lagMilliseconds": 0,
+        "correlation": 0.9999985174854348
+      },
+      {
+        "frame": 480,
+        "seconds": 16,
+        "sampleLag": 0,
+        "lagMilliseconds": 0,
+        "correlation": 0.9999975241804427
+      }
+    ],
+    "scope": "Numerical decoding, peak, clipping and timing validation; this does not claim subjective listening."
+  },
+  "browser_playback": {
+    "movieSha256": "923607317d3270e03d6a2d9d6d2bc11fe34c313a0fbd88d87a91f53451576e04",
+    "servedSha256": "923607317d3270e03d6a2d9d6d2bc11fe34c313a0fbd88d87a91f53451576e04",
+    "transport": "local Blob",
+    "bufferedAtStart": true,
+    "fallbackReason": null,
+    "duration": 18,
+    "ended": true,
+    "playbackRate": 1,
+    "wallTimeMs": 18085.30000001192,
+    "muted": false,
+    "volume": 1,
+    "audioContextState": "running",
+    "audioDecodedBytes": 453755,
+    "audioMeter": {
+      "measuredFrames": 540,
+      "activeFrames": 538,
+      "maxRms": 0.23787699310776053
+    },
+    "cumulativeVideoFramesBefore": 4,
+    "totalVideoFrames": 544,
+    "presentationCoverage": {
+      "complete": true,
+      "uniqueFrames": 540,
+      "firstFrame": 0,
+      "lastFrame": 539,
+      "preloadedFirstFrame": true
+    },
+    "droppedDuringPlayback": 0,
+    "presentedCallbacks": 540,
+    "frameCallbackGaps": 0,
+    "firstCallback": {
+      "mediaTime": 0,
+      "presentedFrames": 2
+    },
+    "lastCallback": {
+      "mediaTime": 17.966667,
+      "presentedFrames": 541
+    },
+    "scope": "Full-speed program playback with audio enabled, signal metering and decoded-frame visual inspection; subjective listening is not claimed.",
+    "pageErrors": []
+  },
+  "visual_review": {
+    "movie_sha256": "923607317d3270e03d6a2d9d6d2bc11fe34c313a0fbd88d87a91f53451576e04",
+    "check_sheet_sha256": "9019eb4c98534a5e220ee531e65f9e1f4eacff1b860e1483cc40a58a9d4f38e1",
+    "visual_result": "已检查从同一最终 MP4 解码的八帧检查图、开场与 Skills 操作连续抽帧、执行与品牌收尾抽帧，以及菜单和报告的完整画面。完整 UI 保持两秒，菜单五项完整可读，选择后原生标签和说明清楚；节点、检查器、报告与品牌未发现意外裁切、缺字或乱码，镜头顺序符合已确认版本。",
+    "method": "编码后抽帧目视检查，加启用音轨的正常速度程序播放；不宣称人工连续观看或主观听音已经完成。",
+    "subjective_listening": false
+  },
+  "approved_visual_sources": [
+    {
+      "path": "source/app.tsx",
+      "sha256": "4753d85a281f5b27d5616cdd7cf7b27033e5dfa600fa3d2bd5cdaf84ae1bbb6b",
+      "unchanged": true
+    },
+    {
+      "path": "source/scene.js",
+      "sha256": "8daecf6c298f1befe4b8553448a1ddbc460911e7262f85d65de4f69cdb1fe1eb",
+      "unchanged": true
+    },
+    {
+      "path": "source/scene.css",
+      "sha256": "1c6d08206d71cbd44acc261b9e6ebb394a2d8bcac728d729ca5e5fcf75bbfba5",
+      "unchanged": true
+    },
+    {
+      "path": "source/index.html",
+      "sha256": "5c830e3a830724b27134500e659ba6a892c691b85dbb887db1cff23826fac4cb",
+      "unchanged": true
+    }
+  ],
+  "semantic_capture": {
+    "allFramesChecked": 540,
+    "clicks": [
+      {
+        "target": "#cw-skill",
+        "bounds": {
+          "x": 599.328125,
+          "y": 941.40625,
+          "width": 74.15625,
+          "height": 28,
+          "top": 941.40625,
+          "right": 673.484375,
+          "bottom": 969.40625,
+          "left": 599.328125
+        },
+        "nativeTip": [
+          640.1140625,
+          955.40625
+        ],
+        "hit": true,
+        "visible": true,
+        "text": "Skills",
+        "callbacks": [
+          {
+            "type": "menu",
+            "value": "skill"
+          }
+        ],
+        "phase": "before-native-handler",
+        "frame": 120,
+        "id": "open-skills",
+        "tip": [
+          285.26478125000017,
+          516.9790625
+        ],
+        "callbackMatches": true,
+        "insideViewport": true
+      },
+      {
+        "target": "[data-skill-option='product-comparison']",
+        "bounds": {
+          "x": 606.328125,
+          "y": 800.40625,
+          "width": 220,
+          "height": 32,
+          "top": 800.40625,
+          "right": 826.328125,
+          "bottom": 832.40625,
+          "left": 606.328125
+        },
+        "nativeTip": [
+          727.328125,
+          816.40625
+        ],
+        "hit": true,
+        "visible": true,
+        "text": "产品对比",
+        "callbacks": [
+          {
+            "type": "config",
+            "config": {
+              "skill": "product-comparison"
+            }
+          },
+          {
+            "type": "menu",
+            "value": null
+          }
+        ],
+        "phase": "before-native-handler",
+        "frame": 180,
+        "id": "choose-skill",
+        "tip": [
+          426.55156250000005,
+          291.7990625
+        ],
+        "callbackMatches": true,
+        "insideViewport": true
+      },
+      {
+        "target": "[data-flow-node='b']",
+        "bounds": {
+          "x": 1685.65625,
+          "y": 354.15625,
+          "width": 96.671875,
+          "height": 81.375,
+          "top": 354.15625,
+          "right": 1782.328125,
+          "bottom": 435.53125,
+          "left": 1685.65625
+        },
+        "nativeTip": [
+          1738.82578125,
+          394.84375
+        ],
+        "hit": true,
+        "visible": true,
+        "text": "研究员 02\n●\n商业\n检索中",
+        "callbacks": [
+          {
+            "type": "inspect",
+            "id": "b"
+          }
+        ],
+        "phase": "before-native-handler",
+        "frame": 330,
+        "id": "inspect-node",
+        "tip": [
+          642.1911926605503,
+          485.65814615627966
+        ],
+        "callbackMatches": true,
+        "insideViewport": true
+      },
+      {
+        "target": "#cw-tab-events",
+        "bounds": {
+          "x": 1782.625,
+          "y": 715.09375,
+          "width": 100.375,
+          "height": 27,
+          "top": 715.09375,
+          "right": 1883,
+          "bottom": 742.09375,
+          "left": 1782.625
+        },
+        "nativeTip": [
+          1837.83125,
+          728.59375
+        ],
+        "hit": true,
+        "visible": true,
+        "text": "执行记录",
+        "callbacks": [
+          {
+            "type": "tab",
+            "tab": "events"
+          }
+        ],
+        "phase": "before-native-handler",
+        "frame": 345,
+        "id": "inspect-events",
+        "tip": [
+          827.7393340354856,
+          240.50190391314914
+        ],
+        "callbackMatches": true,
+        "insideViewport": true
+      }
+    ],
+    "graph": [
+      {
+        "pair": [
+          "clarify",
+          "brief"
+        ],
+        "maxError": 0,
+        "arrow": "url(#cw-arrow-base)",
+        "loop": false
+      },
+      {
+        "pair": [
+          "brief",
+          "supervisor"
+        ],
+        "maxError": 0,
+        "arrow": "url(#cw-arrow-base)",
+        "loop": false
+      },
+      {
+        "pair": [
+          "supervisor",
+          "a"
+        ],
+        "maxError": 0,
+        "arrow": "url(#cw-arrow-active)",
+        "loop": false
+      },
+      {
+        "pair": [
+          "a",
+          "join"
+        ],
+        "maxError": 0,
+        "arrow": "url(#cw-arrow-base)",
+        "loop": false
+      },
+      {
+        "pair": [
+          "supervisor",
+          "b"
+        ],
+        "maxError": 0,
+        "arrow": "url(#cw-arrow-base)",
+        "loop": false
+      },
+      {
+        "pair": [
+          "b",
+          "join"
+        ],
+        "maxError": 0,
+        "arrow": "url(#cw-arrow-base)",
+        "loop": false
+      },
+      {
+        "pair": [
+          "supervisor",
+          "c"
+        ],
+        "maxError": 0,
+        "arrow": "url(#cw-arrow-base)",
+        "loop": false
+      },
+      {
+        "pair": [
+          "c",
+          "join"
+        ],
+        "maxError": 0,
+        "arrow": "url(#cw-arrow-base)",
+        "loop": false
+      },
+      {
+        "pair": [
+          "join",
+          "report"
+        ],
+        "maxError": 0,
+        "arrow": "url(#cw-arrow-base)",
+        "loop": false
+      },
+      {
+        "pair": [
+          "join",
+          "supervisor"
+        ],
+        "maxError": 0,
+        "arrow": "url(#cw-arrow-base)",
+        "loop": true
+      }
+    ],
+    "randomAccess": [
+      {
+        "frame": 435,
+        "equal": true
+      },
+      {
+        "frame": 45,
+        "equal": true
+      },
+      {
+        "frame": 150,
+        "equal": true
+      },
+      {
+        "frame": 210,
+        "equal": true
+      },
+      {
+        "frame": 105,
+        "equal": true
+      },
+      {
+        "frame": 375,
+        "equal": true
+      },
+      {
+        "frame": 285,
+        "equal": true
+      },
+      {
+        "frame": 525,
+        "equal": true
+      },
+      {
+        "frame": 0,
+        "equal": true
+      },
+      {
+        "frame": 59,
+        "equal": true
+      },
+      {
+        "frame": 60,
+        "equal": true
+      },
+      {
+        "frame": 89,
+        "equal": true
+      },
+      {
+        "frame": 119,
+        "equal": true
+      },
+      {
+        "frame": 120,
+        "equal": true
+      },
+      {
+        "frame": 123,
+        "equal": true
+      },
+      {
+        "frame": 179,
+        "equal": true
+      },
+      {
+        "frame": 180,
+        "equal": true
+      },
+      {
+        "frame": 181,
+        "equal": true
+      },
+      {
+        "frame": 275,
+        "equal": true
+      },
+      {
+        "frame": 295,
+        "equal": true
+      },
+      {
+        "frame": 330,
+        "equal": true
+      },
+      {
+        "frame": 345,
+        "equal": true
+      },
+      {
+        "frame": 419,
+        "equal": true
+      },
+      {
+        "frame": 405,
+        "equal": true
+      }
+    ],
+    "errors": [],
+    "blocked": []
+  },
+  "formatting_changes_from_preview": [
+    "页脚“产品演示 / 预览 v3”改为“产品演示 / v3”，画面、交互及时间轴保持已确认版本。"
+  ],
+  "subjective_listening": "not_performed"
+}

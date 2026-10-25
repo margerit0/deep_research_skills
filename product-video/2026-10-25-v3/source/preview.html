@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>星图工作台 · 视频预览 v3</title>
+<style>body{margin:40px auto;max-width:1200px;padding:0 24px;background:#f5f5f7;color:#202126;font:16px/1.8 "Segoe UI","Microsoft YaHei",sans-serif}h1{font-size:34px}p{color:#626670}video{width:100%;border-radius:18px;background:#eee}section{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:32px}a{color:#005bbb;text-decoration:none}img{width:100%;border-radius:12px;border:1px solid #ddd}span{display:block}footer{margin:35px 0;padding:18px;border-top:1px solid #ddd}@media(max-width:700px){section{grid-template-columns:1fr}}</style></head>
+<body><h1>星图工作台 · 产品演示预览 v3</h1>
+<p>完整 UI 展示 2 秒 → 平滑聚焦输入框 → 展开 Skills → 选择「产品对比」→ 开始研究。新版方案延长至 18 秒。</p>
+<video id="motion" preload="auto" poster="frame-045.png"></video><p id="playback-status">正在准备播放…</p>
+<p>下方是前 14 秒的无声动效小样，包含开场、Skills 选择、图谱运行、节点交互和完成状态。</p>
+<p><a href="../source/index.html">完整交互分镜 / 逐帧检查</a> · <a href="storyboard-overview.png">分镜总览</a> · <a href="verification.md">检查记录</a></p>
+<section>{{cards}}</section>
+<footer>合成演示 · 流程已压缩。仅使用仓库内置原创合成数据。<br>v3 等待预览确认；完整带配乐成片尚未生成。</footer>
+<script type="module">
+const video=document.getElementById('motion'),status=document.getElementById('playback-status');
+try{
+  const response=await fetch('./motion-sample.mp4');if(!response.ok)throw Error(response.status);
+  video.src=URL.createObjectURL(await response.blob());
+  await new Promise((resolve,reject)=>{video.addEventListener('loadeddata',resolve,{once:true});video.addEventListener('error',reject,{once:true});video.load()});
+  video.controls=true;status.textContent='已就绪 · 点击播放查看 Skills 选择（无声）';
+}catch{video.src='./motion-sample.mp4';video.controls=true;status.textContent='点击播放查看 Skills 选择（无声）'}
+</script></body></html>

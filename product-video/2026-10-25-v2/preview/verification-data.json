@@ -1,0 +1,568 @@
+{
+  "version": "2026-10-25-v2",
+  "stage": "preview",
+  "approval": {
+    "status": "pending",
+    "revision_request": "画面一开始需要添加一个浏览器全屏的完整ui预览，然后再聚焦于输入框",
+    "parent_version": "2026-10-25-v1",
+    "scope": "新增全屏工作台开场及聚焦输入框镜头；等待本版实渲预览确认"
+  },
+  "sample_sha256": "610235bc10248dca5c7567f9c285ec2348603abc576dd9b00be1bcd1bb866a1c",
+  "sample": {
+    "sample_sha256": "610235bc10248dca5c7567f9c285ec2348603abc576dd9b00be1bcd1bb866a1c",
+    "sample_frame_range": [
+      0,
+      239
+    ],
+    "sample_frame_count": 240,
+    "sample_duration_seconds": 8.0,
+    "audio": "not produced at preview stage",
+    "video_stream": {
+      "index": 0,
+      "codec_name": "h264",
+      "codec_long_name": "H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10",
+      "profile": "High",
+      "codec_type": "video",
+      "codec_tag_string": "avc1",
+      "codec_tag": "0x31637661",
+      "width": 1920,
+      "height": 1080,
+      "coded_width": 1920,
+      "coded_height": 1088,
+      "closed_captions": 0,
+      "film_grain": 0,
+      "has_b_frames": 2,
+      "pix_fmt": "yuv420p",
+      "level": 40,
+      "chroma_location": "left",
+      "field_order": "progressive",
+      "refs": 4,
+      "is_avc": "true",
+      "nal_length_size": "4",
+      "id": "0x1",
+      "r_frame_rate": "30/1",
+      "avg_frame_rate": "30/1",
+      "time_base": "1/15360",
+      "start_pts": 0,
+      "start_time": "0.000000",
+      "duration_ts": 122880,
+      "duration": "8.000000",
+      "bit_rate": "1897327",
+      "bits_per_raw_sample": "8",
+      "nb_frames": "240",
+      "nb_read_frames": "240",
+      "extradata_size": 47,
+      "disposition": {
+        "default": 1,
+        "dub": 0,
+        "original": 0,
+        "comment": 0,
+        "lyrics": 0,
+        "karaoke": 0,
+        "forced": 0,
+        "hearing_impaired": 0,
+        "visual_impaired": 0,
+        "clean_effects": 0,
+        "attached_pic": 0,
+        "timed_thumbnails": 0,
+        "non_diegetic": 0,
+        "captions": 0,
+        "descriptions": 0,
+        "metadata": 0,
+        "dependent": 0,
+        "still_image": 0,
+        "multilayer": 0
+      },
+      "tags": {
+        "language": "und",
+        "handler_name": "VideoHandler",
+        "vendor_id": "[0][0][0][0]",
+        "encoder": "Lavc61.19.101 libx264"
+      }
+    },
+    "decoded_running_motion": {
+      "pixels_over_8": 1880,
+      "fraction_over_8": 0.006247922897972749,
+      "mean_absolute_channel_error": 0.4371496621247369
+    },
+    "decoded_stable_report": {
+      "pixels_over_8": 56,
+      "fraction_over_8": 2.7006172839506174e-05,
+      "mean_absolute_channel_error": 0.01589570473251029
+    },
+    "random_access_pixels": {
+      "255": {
+        "pixels_over_8": 8572,
+        "fraction_over_8": 0.004133873456790124,
+        "mean_absolute_channel_error": 0.09935378086419754
+      },
+      "15": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 3.858024691358025e-06
+      },
+      "75": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 0.0011585326646090536
+      },
+      "45": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 0.0
+      },
+      "195": {
+        "pixels_over_8": 1,
+        "fraction_over_8": 4.822530864197531e-07,
+        "mean_absolute_channel_error": 5.819187242798354e-05
+      },
+      "105": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 0.0005819187242798354
+      },
+      "345": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 0.0002292309670781893
+      },
+      "0": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 0.0
+      },
+      "30": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 0.0
+      },
+      "59": {
+        "pixels_over_8": 1,
+        "fraction_over_8": 4.822530864197531e-07,
+        "mean_absolute_channel_error": 0.0011609439300411522
+      },
+      "125": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 5.3047839506172846e-05
+      },
+      "145": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 5.3047839506172846e-05
+      },
+      "135": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 4.372427983539095e-05
+      },
+      "150": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 0.0
+      },
+      "165": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 0.001369920267489712
+      },
+      "239": {
+        "pixels_over_8": 6,
+        "fraction_over_8": 2.8935185185185184e-06,
+        "mean_absolute_channel_error": 8.439429012345679e-05
+      },
+      "225": {
+        "pixels_over_8": 6,
+        "fraction_over_8": 2.8935185185185184e-06,
+        "mean_absolute_channel_error": 7.764274691358025e-05
+      }
+    },
+    "encoding_command": [
+      "ffmpeg",
+      "-hide_banner",
+      "-loglevel",
+      "error",
+      "-y",
+      "-framerate",
+      "30",
+      "-start_number",
+      "0",
+      "-i",
+      "D:\\deep_research_public_preview\\product-video\\2026-10-25-v2\\cache\\frames\\frame-%03d.png",
+      "-frames:v",
+      "240",
+      "-an",
+      "-c:v",
+      "libx264",
+      "-preset",
+      "medium",
+      "-crf",
+      "18",
+      "-pix_fmt",
+      "yuv420p",
+      "-r",
+      "30",
+      "-movflags",
+      "+faststart",
+      "D:\\deep_research_public_preview\\product-video\\2026-10-25-v2\\preview\\motion-sample.mp4"
+    ]
+  },
+  "playback": {
+    "ended": true,
+    "duration": 8,
+    "resolution": [
+      1920,
+      1080
+    ],
+    "playbackRate": 1,
+    "wallTimeMs": 8003.699999988079,
+    "fullyBuffered": true,
+    "totalVideoFrames": 240,
+    "droppedDuringPlayback": 0,
+    "presentedCallbacks": 239,
+    "frameCallbackGaps": 0,
+    "firstCallback": {
+      "mediaTime": 0.033333,
+      "presentedFrames": 2
+    },
+    "lastCallback": {
+      "mediaTime": 7.966667,
+      "presentedFrames": 240
+    },
+    "error": null,
+    "sample_sha256": "610235bc10248dca5c7567f9c285ec2348603abc576dd9b00be1bcd1bb866a1c"
+  },
+  "native_opening_layout": {
+    "nativeViewport": [
+      1920,
+      1032
+    ],
+    "videoWindow": {
+      "x": 0,
+      "y": 0,
+      "width": 1920,
+      "height": 1080,
+      "top": 0,
+      "right": 1920,
+      "bottom": 1080,
+      "left": 0
+    },
+    "nativeElements": [
+      {
+        "selector": ".cw-sidebar",
+        "rect": {
+          "x": 11,
+          "y": 11,
+          "width": 146,
+          "height": 1010,
+          "top": 11,
+          "right": 157,
+          "bottom": 1021,
+          "left": 11
+        },
+        "opacity": 1,
+        "insideViewport": true
+      },
+      {
+        "selector": ".cw-header",
+        "rect": {
+          "x": 167,
+          "y": 11,
+          "width": 1742,
+          "height": 68,
+          "top": 11,
+          "right": 1909,
+          "bottom": 79,
+          "left": 167
+        },
+        "opacity": 1,
+        "insideViewport": true
+      },
+      {
+        "selector": ".cw-composer-wrap",
+        "rect": {
+          "x": 496,
+          "y": 762.640625,
+          "width": 720,
+          "height": 258.359375,
+          "top": 762.640625,
+          "right": 1216,
+          "bottom": 1021,
+          "left": 496
+        },
+        "opacity": 1,
+        "insideViewport": true
+      },
+      {
+        "selector": ".cw-graph-panel",
+        "rect": {
+          "x": 1559,
+          "y": 79,
+          "width": 350,
+          "height": 942,
+          "top": 79,
+          "right": 1909,
+          "bottom": 1021,
+          "left": 1559
+        },
+        "opacity": 1,
+        "insideViewport": true
+      }
+    ],
+    "pendingResearcherPlaceholder": true
+  },
+  "capture": {
+    "allFramesChecked": 360,
+    "clicks": [
+      {
+        "frame": 150,
+        "target": "[data-flow-node='b']",
+        "tip": [
+          642.1911926605503,
+          485.65814615627966
+        ],
+        "nativeTip": [
+          1738.8257812499999,
+          394.84375
+        ],
+        "bounds": {
+          "x": 1685.65625,
+          "y": 354.15625,
+          "width": 96.671875,
+          "height": 81.375,
+          "right": 1782.328125,
+          "bottom": 435.53125
+        },
+        "hit": true,
+        "insideViewport": true,
+        "topElement": "<span class=\"cw-node-name\">商业</span>"
+      },
+      {
+        "frame": 165,
+        "target": "#cw-tab-events",
+        "tip": [
+          827.7393340354856,
+          240.50190391314914
+        ],
+        "nativeTip": [
+          1837.83125,
+          728.59375
+        ],
+        "bounds": {
+          "x": 1782.625,
+          "y": 715.09375,
+          "width": 100.375,
+          "height": 27,
+          "right": 1883,
+          "bottom": 742.09375
+        },
+        "hit": true,
+        "insideViewport": true,
+        "topElement": "<button type=\"button\" role=\"tab\" id=\"cw-tab-events\" class=\"cw-inspector-tab\" aria-selected=\"true\" aria-controls=\"cw-pane-events\" tabindex=\"0\">执行记录</button>"
+      }
+    ],
+    "graph": [
+      {
+        "pair": [
+          "clarify",
+          "brief"
+        ],
+        "maxError": 0,
+        "arrow": "url(#cw-arrow-base)",
+        "loop": false
+      },
+      {
+        "pair": [
+          "brief",
+          "supervisor"
+        ],
+        "maxError": 0,
+        "arrow": "url(#cw-arrow-base)",
+        "loop": false
+      },
+      {
+        "pair": [
+          "supervisor",
+          "a"
+        ],
+        "maxError": 0,
+        "arrow": "url(#cw-arrow-active)",
+        "loop": false
+      },
+      {
+        "pair": [
+          "a",
+          "join"
+        ],
+        "maxError": 0,
+        "arrow": "url(#cw-arrow-base)",
+        "loop": false
+      },
+      {
+        "pair": [
+          "supervisor",
+          "b"
+        ],
+        "maxError": 0,
+        "arrow": "url(#cw-arrow-base)",
+        "loop": false
+      },
+      {
+        "pair": [
+          "b",
+          "join"
+        ],
+        "maxError": 0,
+        "arrow": "url(#cw-arrow-base)",
+        "loop": false
+      },
+      {
+        "pair": [
+          "supervisor",
+          "c"
+        ],
+        "maxError": 0,
+        "arrow": "url(#cw-arrow-base)",
+        "loop": false
+      },
+      {
+        "pair": [
+          "c",
+          "join"
+        ],
+        "maxError": 0,
+        "arrow": "url(#cw-arrow-base)",
+        "loop": false
+      },
+      {
+        "pair": [
+          "join",
+          "report"
+        ],
+        "maxError": 0,
+        "arrow": "url(#cw-arrow-base)",
+        "loop": false
+      },
+      {
+        "pair": [
+          "join",
+          "supervisor"
+        ],
+        "maxError": 0,
+        "arrow": "url(#cw-arrow-base)",
+        "loop": true
+      }
+    ],
+    "randomAccess": [
+      {
+        "frame": 255,
+        "equal": true
+      },
+      {
+        "frame": 15,
+        "equal": true
+      },
+      {
+        "frame": 75,
+        "equal": true
+      },
+      {
+        "frame": 45,
+        "equal": true
+      },
+      {
+        "frame": 195,
+        "equal": true
+      },
+      {
+        "frame": 105,
+        "equal": true
+      },
+      {
+        "frame": 345,
+        "equal": true
+      },
+      {
+        "frame": 0,
+        "equal": true
+      },
+      {
+        "frame": 30,
+        "equal": true
+      },
+      {
+        "frame": 59,
+        "equal": true
+      },
+      {
+        "frame": 125,
+        "equal": true
+      },
+      {
+        "frame": 145,
+        "equal": true
+      },
+      {
+        "frame": 135,
+        "equal": true
+      },
+      {
+        "frame": 150,
+        "equal": true
+      },
+      {
+        "frame": 165,
+        "equal": true
+      },
+      {
+        "frame": 239,
+        "equal": true
+      },
+      {
+        "frame": 225,
+        "equal": true
+      }
+    ],
+    "errors": [],
+    "blocked": [],
+    "cameras": {
+      "workspace": {
+        "scale": 1,
+        "x": 0,
+        "y": 0
+      },
+      "input": {
+        "scale": 1.62,
+        "x": -751.72,
+        "y": -1061.7489062500001
+      },
+      "graph": {
+        "scale": 1.4901613413476749,
+        "x": -1948.9397658968683,
+        "y": -102.72274596646633
+      },
+      "inspectorInput": {
+        "scale": 1.8562748116341246,
+        "x": -2583.780523373572,
+        "y": -1111.9683221259013
+      },
+      "inspector": {
+        "scale": 2.0071835304424,
+        "x": -2845.456241787122,
+        "y": -1204.39991239597
+      },
+      "report": {
+        "scale": 1.7924258249197322,
+        "x": -931.5801709798459,
+        "y": -524.9056903021159
+      }
+    }
+  },
+  "visual_review": {
+    "sample_sha256": "610235bc10248dca5c7567f9c285ec2348603abc576dd9b00be1bcd1bb866a1c",
+    "storyboard_sha256": "6c395b126f7455089cd40000726a8b3163764773ad7785e51f7df5891a936fc8",
+    "method": "目视检查实渲总览和 MP4 解码抽帧，另做正常速度的程序播放；未将程序结束等同于人工连续观看。",
+    "result": "完整工作台在初始视口内，转场连续聚焦同一输入框；说明文案在窗口落位后出现，避免被窗口遮挡；问题、流程图、检查器及报告中文可读，未发现意外文字裁切或缺字。",
+    "audio": "本阶段为无声小样；完整配乐与音画验收在 v2 确认后进行。"
+  }
+}

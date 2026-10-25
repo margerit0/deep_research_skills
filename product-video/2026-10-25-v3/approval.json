@@ -1,0 +1,11 @@
+{
+  "status": "approved",
+  "approved_version": "2026-10-25-v3",
+  "approved_date": "2026-10-25",
+  "timezone": "Europe/Amsterdam",
+  "user_message": "确认",
+  "preview_manifest_sha256": "35aa10b608fb44c59a2fc0b34bef629a3a4d8c85e71e7ce229217298cd3f6bd2",
+  "approved_timeline_sha256": "af768795c9d32d18e05105c4945dd30badd439301d0f0ce2cbafbe8d03dfc567",
+  "approved_sample_sha256": "3df11059f4ccf05c7fec9751f2b93fa8492ea1ea595b4cc3b21c0648d7995305",
+  "scope": "按 v3 预览生成 18 秒、1920×1080、30 fps、含原创代码配乐的完整 MP4；完整 UI 停留 2 秒，先选择 Skills 再开始研究。"
+}

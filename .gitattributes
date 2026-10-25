@@ -3,3 +3,6 @@ frontend/docs/provider-2026-10-14-kimi-report.md -text
 frontend/docs/provider-2026-10-14-kimi-full-report.md -text
 frontend/docs/provider-2026-10-15-kimi-fixes-report.md -text
 frontend/docs/provider-2026-10-15-kimi-fixes-reviewed-report.md -text
+
+# Preserve the exact bytes bound by video approval and verification manifests.
+product-video/** -text

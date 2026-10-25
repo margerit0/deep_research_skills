@@ -1,0 +1,739 @@
+{
+  "version": "2026-10-25-v1",
+  "approval": {
+    "status": "approved",
+    "approved_version": "2026-10-25-v1",
+    "approved_date": "2026-10-25",
+    "timezone": "Asia/Shanghai",
+    "user_message": "确认分镜",
+    "preview_manifest_sha256": "fc00ceb1f93d724cdbbb9be0805bb2a96f9e8ea3534445593d642094bc48aea4",
+    "approved_timeline_sha256": "d3d8e6b9be0c2a94362cbf51e49d950100b09e6833b2010676bb9c0cb0ca01cf",
+    "approved_sample_sha256": "b7b13bd22f7322bf0d6d1ca8b90aec0408d7d8feee8afdf1403ec1c1580acecd",
+    "scope": "按本次分镜、标语和时间轴制作完整 12 秒带声音 MP4"
+  },
+  "movie_sha256": "c48e5d31b75aad31a7ac11d3016a03744993b0dc681e8f7339dab64dcf3b99a4",
+  "video": {
+    "movie_sha256": "c48e5d31b75aad31a7ac11d3016a03744993b0dc681e8f7339dab64dcf3b99a4",
+    "video": {
+      "index": 0,
+      "codec_name": "h264",
+      "codec_long_name": "H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10",
+      "profile": "High",
+      "codec_type": "video",
+      "codec_tag_string": "avc1",
+      "codec_tag": "0x31637661",
+      "width": 1920,
+      "height": 1080,
+      "coded_width": 1920,
+      "coded_height": 1088,
+      "closed_captions": 0,
+      "film_grain": 0,
+      "has_b_frames": 2,
+      "pix_fmt": "yuv420p",
+      "level": 41,
+      "chroma_location": "left",
+      "field_order": "progressive",
+      "refs": 4,
+      "is_avc": "true",
+      "nal_length_size": "4",
+      "id": "0x1",
+      "r_frame_rate": "30/1",
+      "avg_frame_rate": "30/1",
+      "time_base": "1/15360",
+      "start_pts": 0,
+      "start_time": "0.000000",
+      "duration_ts": 184320,
+      "duration": "12.000000",
+      "bit_rate": "1353964",
+      "bits_per_raw_sample": "8",
+      "nb_frames": "360",
+      "nb_read_frames": "360",
+      "extradata_size": 47,
+      "disposition": {
+        "default": 1,
+        "dub": 0,
+        "original": 0,
+        "comment": 0,
+        "lyrics": 0,
+        "karaoke": 0,
+        "forced": 0,
+        "hearing_impaired": 0,
+        "visual_impaired": 0,
+        "clean_effects": 0,
+        "attached_pic": 0,
+        "timed_thumbnails": 0,
+        "non_diegetic": 0,
+        "captions": 0,
+        "descriptions": 0,
+        "metadata": 0,
+        "dependent": 0,
+        "still_image": 0,
+        "multilayer": 0
+      },
+      "tags": {
+        "language": "und",
+        "handler_name": "VideoHandler",
+        "vendor_id": "[0][0][0][0]",
+        "encoder": "Lavc61.19.101 libx264"
+      }
+    },
+    "audio": {
+      "index": 1,
+      "codec_name": "aac",
+      "codec_long_name": "AAC (Advanced Audio Coding)",
+      "profile": "LC",
+      "codec_type": "audio",
+      "codec_tag_string": "mp4a",
+      "codec_tag": "0x6134706d",
+      "sample_fmt": "fltp",
+      "sample_rate": "48000",
+      "channels": 2,
+      "channel_layout": "stereo",
+      "bits_per_sample": 0,
+      "initial_padding": 0,
+      "id": "0x2",
+      "r_frame_rate": "0/0",
+      "avg_frame_rate": "0/0",
+      "time_base": "1/48000",
+      "start_pts": 0,
+      "start_time": "0.000000",
+      "duration_ts": 576000,
+      "duration": "12.000000",
+      "bit_rate": "200253",
+      "nb_frames": "564",
+      "nb_read_frames": "563",
+      "extradata_size": 5,
+      "disposition": {
+        "default": 1,
+        "dub": 0,
+        "original": 0,
+        "comment": 0,
+        "lyrics": 0,
+        "karaoke": 0,
+        "forced": 0,
+        "hearing_impaired": 0,
+        "visual_impaired": 0,
+        "clean_effects": 0,
+        "attached_pic": 0,
+        "timed_thumbnails": 0,
+        "non_diegetic": 0,
+        "captions": 0,
+        "descriptions": 0,
+        "metadata": 0,
+        "dependent": 0,
+        "still_image": 0,
+        "multilayer": 0
+      },
+      "tags": {
+        "language": "und",
+        "handler_name": "SoundHandler",
+        "vendor_id": "[0][0][0][0]"
+      }
+    },
+    "container_duration": "12.000000",
+    "video_frames": 360,
+    "video_pts_first": 0.0,
+    "video_pts_last": 11.966667,
+    "constant_frame_timestamps": true,
+    "decoded_running_motion": {
+      "pixels_over_8": 914,
+      "fraction_over_8": 0.0030375540046527084,
+      "mean_absolute_channel_error": 0.17165503489531406
+    },
+    "decoded_report_hold": {
+      "pixels_over_8": 9,
+      "fraction_over_8": 4.340277777777778e-06,
+      "mean_absolute_channel_error": 0.018634098508230452
+    },
+    "decoded_brand_hold": {
+      "pixels_over_8": 1,
+      "fraction_over_8": 4.822530864197531e-07,
+      "mean_absolute_channel_error": 0.010006912294238684
+    },
+    "random_access_pixels": {
+      "255": {
+        "pixels_over_8": 6,
+        "fraction_over_8": 2.8935185185185184e-06,
+        "mean_absolute_channel_error": 7.764274691358025e-05
+      },
+      "45": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 0.0012173675411522634
+      },
+      "195": {
+        "pixels_over_8": 1,
+        "fraction_over_8": 4.822530864197531e-07,
+        "mean_absolute_channel_error": 6.156764403292182e-05
+      },
+      "105": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 0.00014837319958847738
+      },
+      "345": {
+        "pixels_over_8": 6236,
+        "fraction_over_8": 0.00300733024691358,
+        "mean_absolute_channel_error": 0.06630819187242798
+      },
+      "100": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 0.0001469264403292181
+      },
+      "110": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 0.00015464248971193415
+      },
+      "150": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 0.0
+      },
+      "165": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 0.0013916216563786008
+      },
+      "239": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 0.0
+      },
+      "225": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 0.0
+      }
+    },
+    "approved_keyframe_match": {
+      "45": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 0.001250350729517396
+      },
+      "105": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 0.0
+      },
+      "195": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 0.0
+      },
+      "255": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 0.0
+      },
+      "345": {
+        "pixels_over_8": 0,
+        "fraction_over_8": 0.0,
+        "mean_absolute_channel_error": 0.0
+      }
+    },
+    "encoding_command": [
+      "ffmpeg",
+      "-hide_banner",
+      "-loglevel",
+      "error",
+      "-y",
+      "-framerate",
+      "30",
+      "-start_number",
+      "0",
+      "-i",
+      "D:\\deep_research_public_preview\\product-video\\2026-10-25-v1\\cache\\final\\frames\\frame-%03d.png",
+      "-i",
+      "D:\\deep_research_public_preview\\product-video\\2026-10-25-v1\\cache\\final\\music.wav",
+      "-map",
+      "0:v:0",
+      "-map",
+      "1:a:0",
+      "-c:v",
+      "libx264",
+      "-preset",
+      "medium",
+      "-crf",
+      "17",
+      "-profile:v",
+      "high",
+      "-level:v",
+      "4.1",
+      "-pix_fmt",
+      "yuv420p",
+      "-r",
+      "30",
+      "-c:a",
+      "aac",
+      "-b:a",
+      "192k",
+      "-ar",
+      "48000",
+      "-ac",
+      "2",
+      "-t",
+      "12",
+      "-movflags",
+      "+faststart",
+      "D:\\deep_research_public_preview\\product-video\\2026-10-25-v1\\final\\product-demo.mp4"
+    ],
+    "check_sheet_source": "decoded frames of this exact product-demo.mp4"
+  },
+  "audio_source": {
+    "description": "Original 120 BPM score: warm pads, sine/FM plucks, bass, restrained percussion and event-derived UI cues; no voices or external samples.",
+    "sampleRate": 48000,
+    "channels": 2,
+    "samplesPerChannel": 576000,
+    "seconds": 12,
+    "bpm": 120,
+    "beats": 24,
+    "peak": 0.67,
+    "peakDbfs": -3.4785039459834706,
+    "rmsDbfs": -21.09296913005162,
+    "clippingSamples": 0,
+    "seed": "0x41544c41",
+    "fadeInSeconds": 0.025,
+    "fadeOutSeconds": 0.52,
+    "cues": [
+      {
+        "frame": 60,
+        "seconds": 2,
+        "sample": 96000,
+        "kind": "automatic",
+        "target": "研究简报"
+      },
+      {
+        "frame": 75,
+        "seconds": 2.5,
+        "sample": 120000,
+        "kind": "automatic",
+        "target": "派发三路研究"
+      },
+      {
+        "frame": 90,
+        "seconds": 3,
+        "sample": 144000,
+        "kind": "automatic",
+        "target": "并行检索资料"
+      },
+      {
+        "frame": 150,
+        "seconds": 5,
+        "sample": 240000,
+        "kind": "click",
+        "target": "[data-flow-node='b']"
+      },
+      {
+        "frame": 165,
+        "seconds": 5.5,
+        "sample": 264000,
+        "kind": "click",
+        "target": "#cw-tab-events"
+      },
+      {
+        "frame": 180,
+        "seconds": 6,
+        "sample": 288000,
+        "kind": "automatic",
+        "target": "汇总笔记"
+      },
+      {
+        "frame": 195,
+        "seconds": 6.5,
+        "sample": 312000,
+        "kind": "automatic",
+        "target": "撰写报告"
+      },
+      {
+        "frame": 210,
+        "seconds": 7,
+        "sample": 336000,
+        "kind": "automatic",
+        "target": "报告完成"
+      },
+      {
+        "frame": 300,
+        "seconds": 10,
+        "sample": 480000,
+        "kind": "brand",
+        "target": "星图工作台"
+      }
+    ],
+    "sourceSha256": "af2f9e3816710f1d479e1bc63081660d9dc101f20b51d800de3a899f27a58d6e",
+    "timelineSha256": "2161d7184fc674e776baaec58b4d795f4f74f7f32622ac4bf16e2e4096b801e7"
+  },
+  "audio_decoded": {
+    "sampleRate": 48000,
+    "decodedSamplesPerChannel": 576512,
+    "decodedSeconds": 12.010666666666667,
+    "playableSamplesPerChannel": 576000,
+    "playableSeconds": 12,
+    "aacTrailingPaddingSamples": 512,
+    "paddingPeak": 1.9067116454607458e-06,
+    "peak": 0.6684244275093079,
+    "peakDbfs": -3.498953744733634,
+    "rmsDbfs": -21.10952194731258,
+    "clippedSamples": 0,
+    "startRms": 0.03958328330396245,
+    "endRms": 7.045008928117489e-07,
+    "eventAlignment": [
+      {
+        "frame": 60,
+        "seconds": 2,
+        "sampleLag": 0,
+        "lagMilliseconds": 0,
+        "correlation": 0.9999986464605187
+      },
+      {
+        "frame": 75,
+        "seconds": 2.5,
+        "sampleLag": 0,
+        "lagMilliseconds": 0,
+        "correlation": 0.9998918200955595
+      },
+      {
+        "frame": 90,
+        "seconds": 3,
+        "sampleLag": 0,
+        "lagMilliseconds": 0,
+        "correlation": 0.9999877787905399
+      },
+      {
+        "frame": 150,
+        "seconds": 5,
+        "sampleLag": 0,
+        "lagMilliseconds": 0,
+        "correlation": 0.999989077031921
+      },
+      {
+        "frame": 165,
+        "seconds": 5.5,
+        "sampleLag": 0,
+        "lagMilliseconds": 0,
+        "correlation": 0.9996688777013585
+      },
+      {
+        "frame": 180,
+        "seconds": 6,
+        "sampleLag": 0,
+        "lagMilliseconds": 0,
+        "correlation": 0.9999945026673218
+      },
+      {
+        "frame": 195,
+        "seconds": 6.5,
+        "sampleLag": 0,
+        "lagMilliseconds": 0,
+        "correlation": 0.9998323182616323
+      },
+      {
+        "frame": 210,
+        "seconds": 7,
+        "sampleLag": 0,
+        "lagMilliseconds": 0,
+        "correlation": 0.9999974397990737
+      },
+      {
+        "frame": 300,
+        "seconds": 10,
+        "sampleLag": 0,
+        "lagMilliseconds": 0,
+        "correlation": 0.9999763551491502
+      }
+    ],
+    "scope": "Numerical decoding, peak, clipping and timing validation; this does not claim subjective listening."
+  },
+  "browser_playback": {
+    "movieSha256": "c48e5d31b75aad31a7ac11d3016a03744993b0dc681e8f7339dab64dcf3b99a4",
+    "transport": "fully buffered local Blob",
+    "duration": 12,
+    "currentTime": 12,
+    "ended": true,
+    "playbackRate": 1,
+    "muted": false,
+    "volume": 1,
+    "audioContextState": "native media playback",
+    "audioDecodedBytes": 300915,
+    "audioMeter": {
+      "enabled": false,
+      "measuredFrames": 359,
+      "activeFrames": 0,
+      "maxRms": 0
+    },
+    "totalVideoFrames": 360,
+    "droppedDuringPlayback": 0,
+    "presentedCallbacks": 359,
+    "firstMediaTime": 0.033333,
+    "lastMediaTime": 11.966667,
+    "presentationGaps": [],
+    "scope": "Automated full-rate audiovisual playback and decoded-frame visual inspection; subjective listening is not claimed."
+  },
+  "instrumented_audio_playback": {
+    "movieSha256": "c48e5d31b75aad31a7ac11d3016a03744993b0dc681e8f7339dab64dcf3b99a4",
+    "duration": 12,
+    "currentTime": 12,
+    "ended": true,
+    "playbackRate": 1,
+    "muted": false,
+    "volume": 1,
+    "audioContextState": "running",
+    "audioMeter": {
+      "measuredFrames": 335,
+      "activeFrames": 334,
+      "maxRms": 0.28933726172863705
+    },
+    "totalVideoFrames": 360,
+    "droppedDuringPlayback": 21,
+    "presentedCallbacks": 335,
+    "firstMediaTime": 0.033333,
+    "lastMediaTime": 11.966667,
+    "scope": "Automated full-rate audiovisual playback and decoded-frame visual inspection; subjective listening is not claimed."
+  },
+  "visual_review": {
+    "movie_sha256": "c48e5d31b75aad31a7ac11d3016a03744993b0dc681e8f7339dab64dcf3b99a4",
+    "review_date": "2026-10-25",
+    "visual_keyframes": [
+      45,
+      105,
+      195,
+      255,
+      345
+    ],
+    "visual_transitions": [
+      0,
+      59,
+      60,
+      74,
+      89,
+      100,
+      110,
+      149,
+      150,
+      151,
+      164,
+      165,
+      176,
+      209,
+      210,
+      224,
+      225,
+      239,
+      299,
+      300,
+      306,
+      315,
+      329,
+      330,
+      359
+    ],
+    "visual_result": "已目视检查编码后五张关键帧、转场拼图及第 255 帧完整分辨率正文；中文、图谱、节点检查器、报告与品牌标识无缺字或意外裁切。",
+    "playback_review": "启用音轨的程序完整播放；未将抽帧目视称为人类连续观看。",
+    "subjective_listening": false,
+    "subjective_listening_note": "当前工具环境无法执行主观听音；音频已做解码、削波、真峰值、响度、事件对齐及浏览器音轨启用检查。",
+    "historical_playback_observations": {
+      "instrumented_http_dropped_frames": 21,
+      "native_http_dropped_frames": 20,
+      "fully_buffered_blob_dropped_frames": 0
+    }
+  },
+  "visual_review_matches_movie": true,
+  "semantic_capture": {
+    "frames_checked": 360,
+    "clicks": [
+      {
+        "frame": 150,
+        "target": "[data-flow-node='b']",
+        "tip": [
+          642.1911926605505,
+          485.65814615627966
+        ],
+        "nativeTip": [
+          1258.82578125,
+          394.84375
+        ],
+        "bounds": {
+          "x": 1205.65625,
+          "y": 354.15625,
+          "width": 96.671875,
+          "height": 81.375,
+          "right": 1302.328125,
+          "bottom": 435.53125
+        },
+        "hit": true,
+        "insideViewport": true,
+        "topElement": "<span class=\"cw-node-name\">商业</span>"
+      },
+      {
+        "frame": 165,
+        "target": "#cw-tab-events",
+        "tip": [
+          827.7393340354856,
+          240.50190391314914
+        ],
+        "nativeTip": [
+          1357.83125,
+          728.59375
+        ],
+        "bounds": {
+          "x": 1302.625,
+          "y": 715.09375,
+          "width": 100.375,
+          "height": 27,
+          "right": 1403,
+          "bottom": 742.09375
+        },
+        "hit": true,
+        "insideViewport": true,
+        "topElement": "<button type=\"button\" role=\"tab\" id=\"cw-tab-events\" class=\"cw-inspector-tab\" aria-selected=\"true\" aria-controls=\"cw-pane-events\" tabindex=\"0\">执行记录</button>"
+      }
+    ],
+    "graph": [
+      {
+        "pair": [
+          "clarify",
+          "brief"
+        ],
+        "maxError": 0,
+        "arrow": "url(#cw-arrow-base)",
+        "loop": false
+      },
+      {
+        "pair": [
+          "brief",
+          "supervisor"
+        ],
+        "maxError": 0,
+        "arrow": "url(#cw-arrow-base)",
+        "loop": false
+      },
+      {
+        "pair": [
+          "supervisor",
+          "a"
+        ],
+        "maxError": 0,
+        "arrow": "url(#cw-arrow-active)",
+        "loop": false
+      },
+      {
+        "pair": [
+          "a",
+          "join"
+        ],
+        "maxError": 0,
+        "arrow": "url(#cw-arrow-base)",
+        "loop": false
+      },
+      {
+        "pair": [
+          "supervisor",
+          "b"
+        ],
+        "maxError": 0,
+        "arrow": "url(#cw-arrow-base)",
+        "loop": false
+      },
+      {
+        "pair": [
+          "b",
+          "join"
+        ],
+        "maxError": 0,
+        "arrow": "url(#cw-arrow-base)",
+        "loop": false
+      },
+      {
+        "pair": [
+          "supervisor",
+          "c"
+        ],
+        "maxError": 0,
+        "arrow": "url(#cw-arrow-base)",
+        "loop": false
+      },
+      {
+        "pair": [
+          "c",
+          "join"
+        ],
+        "maxError": 0,
+        "arrow": "url(#cw-arrow-base)",
+        "loop": false
+      },
+      {
+        "pair": [
+          "join",
+          "report"
+        ],
+        "maxError": 0,
+        "arrow": "url(#cw-arrow-base)",
+        "loop": false
+      },
+      {
+        "pair": [
+          "join",
+          "supervisor"
+        ],
+        "maxError": 0,
+        "arrow": "url(#cw-arrow-base)",
+        "loop": true
+      }
+    ],
+    "random_access": [
+      {
+        "frame": 255,
+        "equal": true
+      },
+      {
+        "frame": 45,
+        "equal": true
+      },
+      {
+        "frame": 195,
+        "equal": true
+      },
+      {
+        "frame": 105,
+        "equal": true
+      },
+      {
+        "frame": 345,
+        "equal": true
+      },
+      {
+        "frame": 100,
+        "equal": true
+      },
+      {
+        "frame": 110,
+        "equal": true
+      },
+      {
+        "frame": 150,
+        "equal": true
+      },
+      {
+        "frame": 165,
+        "equal": true
+      },
+      {
+        "frame": 239,
+        "equal": true
+      },
+      {
+        "frame": 225,
+        "equal": true
+      }
+    ],
+    "page_errors": [],
+    "blocked_requests": []
+  },
+  "subjective_listening": "not_performed_in_this_environment",
+  "formatting_changes_from_preview": [
+    "页脚“产品演示 / 预览 v1”改为“产品演示 / v1”",
+    "品牌淡入期间保留报告镜头的底层文案，审批说明不进入成片"
+  ]
+}
