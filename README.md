@@ -8,11 +8,11 @@
 
 ## 🎬 产品演示
 
-18 秒浏览完整工作台、选择 Skills、并行研究与报告阅读，包含原创配乐。点击封面打开视频。
+18 秒浏览完整工作台、选择 Skills、并行研究与报告阅读，包含原创配乐。点击下方播放器即可在本页观看。
 
-[![播放星图工作台 18 秒产品演示](product-video/2026-10-25-v3/final/poster.png)](product-video/2026-10-25-v3/final/product-demo.mp4)
+https://github.com/user-attachments/assets/842bb9ac-3161-4461-a1fc-537c392d3cb4
 
-[▶ 观看 / 下载 MP4](product-video/2026-10-25-v3/final/product-demo.mp4) · [制作与复现说明](product-video/2026-10-25-v3/README.md)
+[下载 MP4](product-video/2026-10-25-v3/final/product-demo.mp4) · [制作与复现说明](product-video/2026-10-25-v3/README.md)
 
 *合成演示 · 流程已压缩。使用项目内置模拟数据，演示时长不代表真实研究的响应速度。*
 
