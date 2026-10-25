@@ -6,6 +6,16 @@
 
 配套的 **「星图工作台」** 位于 [`frontend/`](frontend/README.md)，使用 React + TypeScript + Vite，已接入 LangGraph 后端。可以在同一界面完成提问、澄清、查看研究进度与阅读报告，也可以通过内置演示浏览完整流程。
 
+## 🎬 产品演示
+
+18 秒浏览完整工作台、选择 Skills、并行研究与报告阅读，包含原创配乐。点击封面打开视频。
+
+[![播放星图工作台 18 秒产品演示](product-video/2026-10-25-v3/final/poster.png)](product-video/2026-10-25-v3/final/product-demo.mp4)
+
+[▶ 观看 / 下载 MP4](product-video/2026-10-25-v3/final/product-demo.mp4) · [制作与复现说明](product-video/2026-10-25-v3/README.md)
+
+*合成演示 · 流程已压缩。使用项目内置模拟数据，演示时长不代表真实研究的响应速度。*
+
 ## 🖥️ 前端预览
 
 Apple 银白 / 石墨双主题，左侧管理会话，中间展示研究对话，右侧运行图谱展示阶段与并行研究员。点击节点可查看输入输出、检索与 Skills 加载记录。
