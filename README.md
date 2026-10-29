@@ -1,4 +1,4 @@
-# 🧱 Deep Research Agent
+# Deep Research Agent
 
 一个用 [LangGraph](https://langchain-ai.github.io/langgraph/) 搭建的**深度研究智能体**：给它一个开放式问题，它会先澄清研究范围，再把任务分解成多个子课题并行检索，最后汇总成一份结构化报告。
 
@@ -6,7 +6,7 @@
 
 配套的 **「星图工作台」** 位于 [`frontend/`](frontend/README.md)，使用 React + TypeScript + Vite，已接入 LangGraph 后端。可以在同一界面完成提问、澄清、查看研究进度与阅读报告，也可以通过内置演示浏览完整流程。
 
-## 🎬 产品演示
+## 产品演示
 
 18 秒浏览完整工作台、选择 Skills、并行研究与报告阅读，包含原创配乐。点击下方播放器即可在本页观看。
 
@@ -16,7 +16,7 @@ https://github.com/user-attachments/assets/842bb9ac-3161-4461-a1fc-537c392d3cb4
 
 *合成演示 · 流程已压缩。使用项目内置模拟数据，演示时长不代表真实研究的响应速度。*
 
-## 🖥️ 前端预览
+## 前端预览
 
 Apple 银白 / 石墨双主题，左侧管理会话，中间展示研究对话，右侧运行图谱展示阶段与并行研究员。点击节点可查看输入输出、检索与 Skills 加载记录。
 
@@ -41,11 +41,11 @@ Apple 银白 / 石墨双主题，左侧管理会话，中间展示研究对话�
 
 </details>
 
-启动方式见下方[快速开始](#-快速开始)，完整交互、代理配置与运行边界见 [前端说明](frontend/README.md)。
+启动方式见下方[快速开始](#快速开始)，完整交互、代理配置与运行边界见 [前端说明](frontend/README.md)。
 
 ---
 
-## 🧭 整体架构
+## 整体架构
 
 研究任务被拆成三个阶段，串成一条端到端流水线：
 
@@ -124,13 +124,14 @@ flowchart TB
 
 ---
 
-## ✨ 核心特性
+## 核心特性
 
 - **Skills 渐进式披露**：研究员先看到 skills 索引（仅 name + description），需要时用 `load_skill` 工具加载完整方法论正文（见 `skills/*.md`）。
 - **多智能体并行**：supervisor 把子课题并行派发给多个研究员，各研究员上下文隔离、互不干扰，显著缩短深度研究的墙钟时间。
 - **可配置模型路由**：每个逻辑角色（SCOPING / RESEARCHER / SUPERVISOR / SUMMARIZATION / COMPRESSION / FINAL_REPORT）都能独立指定模型、端点与 key。同一套图可无缝对接 OpenAI、Anthropic 或任意 OpenAI 兼容网关（详见 `model_config.py`）。
 - **稳健性设计**：结构化输出带回退重试（`structured_output_fallback.py`）、Tavily 瞬时故障多级退避重试、网关 RPM 限速（`AGENT_RPM`，避免并发洪峰触发 WAF 封禁）。
 - **评估闭环**：scoping / research / supervisor 三套基于 LangSmith 的评估脚本，每套含「上传数据集 / 跑评估 / 回读结果」三件套。
+- **评估驱动的 Skill 持续优化**：从开发集失败证据诊断方法论问题，生成候选修订，经独立数据集配对验证后显式晋升或回退；首版支持 `product-comparison`，详见[功能说明](docs/skill-evolution.md)。
 
 ### 内置 Skills
 
@@ -145,7 +146,65 @@ flowchart TB
 
 ---
 
-## 📚 示例
+## 评估驱动的 Skill 持续优化
+
+通过研究轨迹与逐项评估反馈，定位 Skill 方法论中值得改进的部分，并验证候选修订是否有效。首版提供 **后端 CLI、SQLite 追溯记录和 Markdown 报告**，仅处理 `product-comparison`；每个实验最多一轮改进、两个候选，默认停在报告与结论，由操作者显式决定晋升或回退。
+
+```mermaid
+flowchart TB
+    Evidence([开发集失败证据<br/>实际加载、工具轨迹、来源与逐项反馈]):::io
+    Diagnose{"① 诊断归因<br/>证据是否支持修改 Skill 内容？"}:::scope
+    Candidate["② 生成候选方法论<br/>最多 2 个修订 · 保存正文与 diff"]:::candidate
+    Selection{"③ 选择集配对比较<br/>基线与候选是否通过全部门槛？"}:::compare
+    Freeze["冻结 1 个候选<br/>之后才读取最终测试集"]:::compare
+    Final{"④ 最终集配对测试<br/>基线与冻结候选是否通过全部门槛？"}:::verify
+    Report([保存通过报告<br/>默认到此结束]):::io
+    Hold([保留诊断、失败与不足记录<br/>输出报告 · 不晋升]):::hold
+    Promote["晋升为默认 Skill<br/>归档旧版本 · 重启后新请求生效"]:::verify
+    Rollback["回退到晋升前版本<br/>核对修订并恢复归档正文"]:::io
+
+    Evidence ==> Diagnose
+    Diagnose ==>|内容归因成立且证据充分| Candidate
+    Diagnose -.->|其他归因或证据不足| Hold
+    Candidate ==> Selection
+    Selection ==>|通过| Freeze
+    Selection -.->|拒绝或证据不足| Hold
+    Freeze ==> Final
+    Final ==>|通过| Report
+    Final -.->|拒绝或证据不足| Hold
+    Report -.->|审阅后显式 promote| Promote
+    Promote -.->|需要时显式 rollback| Rollback
+
+    classDef scope fill:#e3f2fd,stroke:#1976d2,stroke-width:1px,color:#0d47a1;
+    classDef candidate fill:#f3e5f5,stroke:#8e24aa,stroke-width:1px,color:#4a148c;
+    classDef compare fill:#ede7f6,stroke:#5e35b1,stroke-width:1px,color:#311b92;
+    classDef verify fill:#e8f5e9,stroke:#43a047,stroke-width:1px,color:#1b5e20;
+    classDef hold fill:#fff8e1,stroke:#f9a825,stroke-width:1px,color:#e65100;
+    classDef io fill:#eceff1,stroke:#546e7a,stroke-width:1.5px,color:#263238;
+```
+
+1. **收集开发证据**：运行已登记的开发集，或导入有明确身份的历史证据，保留实际 Skill 加载、工具调用、来源正文、压缩结果和逐项 feedback。执行异常时也保留已捕获的有界来源正文。
+2. **诊断并生成候选**：区分方法论内容、选择／加载、执行、检索、压缩／写作、基础设施、评估器和证据不足等原因。只有实际加载正文一致、轨迹完整且有逐项失败证据时，才允许生成内容修订，并保存 diff、理由与预期改善。
+3. **在选择集配对比较**：固定输入、模型、提示词、评估器和预算，对基线与候选逐题比较覆盖度、引用可信度及基于来源正文的支持度，同时检查用户约束、回归、成本和长度。
+4. **冻结后做最终测试**：选择集通过门槛后冻结一个候选，再读取独立最终测试集；最终反馈不回流生成器。最终门槛通过后可显式晋升，保留原版本以供回退；晋升后需重启服务，让新请求加载新默认正文。
+
+开发集、选择集和最终测试集分开登记，候选生成只读取开发证据与父版本正文。基线和候选都必须有与各自版本匹配的成功 `load_skill` 记录；缺失运行、证据、评分或完整成本统计时，结果为 `insufficient_evidence`，不能冻结或晋升。命令退出码为 0 仅表示执行完成，仍需查看报告中的门槛结论。
+
+在仓库根目录、已激活项目虚拟环境时，可先查看帮助和数据契约；以下命令不调用模型或搜索服务：
+
+```bash
+python -m scripts.research_agent.skill_evolution --help
+python -m scripts.research_agent.skill_evolution schema --kind manifest
+python -m scripts.research_agent.skill_evolution schema --kind evidence
+```
+
+模型诊断、候选生成和研究执行均需显式传入 `--allow-external`。数据准备、配置归档、完整 CLI 流程、成本记录及晋升／回退步骤见 **[Skill 持续优化指南](docs/skill-evolution.md)**。
+
+**验证状态**：目前已完成实现与确定性单元检查，尚未运行真实模型优化实验，暂无效果提升结论。该流程评估研究员的 `compressed_research`，不直接代表最终 `final_report` 的质量。
+
+---
+
+## 示例
 
 [`examples/`](examples/) 收录了由 `research_agent_full` 全流程**自动生成**的完整示例报告，每份都附「**决策与执行轨迹**」——逐一记录 Scope 的研究简报、Supervisor 的拆解/并行调度决策、以及每个研究员加载了哪个 skill、搜了哪些 query。
 
@@ -158,7 +217,7 @@ flowchart TB
 
 ---
 
-## 🧪 评估
+## 评估
 
 流水线的三个环节各有一套基于 [LangSmith](https://smith.langchain.com/) 的评估，**每套沿两个轴打分**——一轴看「覆盖/正确」，一轴看「质量/可信」：
 
@@ -189,7 +248,7 @@ python -m scripts.supervisor.run_supervisor_eval           # 并行调度
 
 ---
 
-## 📁 目录结构
+## 目录结构
 
 ```
 deep_research_skills/
@@ -200,23 +259,24 @@ deep_research_skills/
 │   ├── research_agent_full.py         # 端到端全流程
 │   ├── skills_loader.py               # 扫描并加载 skills/*.md，暴露 load_skill 工具
 │   ├── skills/                        # 领域方法论 skill 文件
+│   ├── skill_evolution*.py             # Skill 优化契约、诊断、执行、证据与追溯
 │   ├── prompts.py                     # 各阶段提示词
 │   ├── model_config.py                # 按角色路由模型 / 端点 / 限流
 │   ├── state_*.py                     # 各图的状态定义
 │   ├── structured_output_fallback.py  # 结构化输出回退重试
 │   └── utils.py                       # Tavily 检索、压缩、工具函数
 ├── examples/                          # 端到端示例报告 + 决策轨迹 runner（run_example.py）
-├── scripts/                           # LangSmith 评估脚本（scoping / research_agent / supervisor）
+├── scripts/                           # LangSmith 评估脚本与 Skill 持续优化 CLI
 ├── tests/                             # 单元测试
 ├── frontend/                          # 星图工作台：React + TypeScript + Vite
-├── docs/                              # 评估、维护说明与前端截图
+├── docs/                              # 评估、Skill 持续优化、维护说明与前端截图
 ├── pyproject.toml                     # 项目配置 / 依赖
 └── langgraph.json                     # LangGraph 图注册
 ```
 
 ---
 
-## 🚀 快速开始
+## 快速开始
 
 ### 环境要求
 
@@ -313,7 +373,7 @@ asyncio.run(main())
 
 ---
 
-## ✅ 测试
+## 测试
 
 ```bash
 uv run --locked --extra dev pytest
@@ -323,4 +383,5 @@ uv run --locked --extra dev pytest
 
 - [本地开发与维护](docs/maintenance.md)：配置、网关兼容、重试与评估排障。
 - [架构约定](docs/architecture-decisions.md)：Skills 加载、证据过滤、失败信号和评估边界。
+- [Skill 持续优化](docs/skill-evolution.md)：证据诊断、候选修订、配对验证、成本记录与显式晋升／回退。
 - [历史评估记录](docs/evaluation-history.md)：提示词与摘要器调整的实验依据及局限。
