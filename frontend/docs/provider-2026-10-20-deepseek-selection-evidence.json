@@ -1,0 +1,879 @@
+{
+  "schemaVersion": 1,
+  "stage": "P1 source-condition scope and classification",
+  "at": "2026-10-20T10:19:39.337953+00:00",
+  "head": "5cf597d4cd7d1ba07949a61ef5561abdd9fc733d",
+  "singleVariable": "source-condition selection system prompt only",
+  "baselineSelectionPrompt": "只依据原始研究要求与实际来源，独立选择会改变比较结论或试用建议的必要条件。当前没有候选稿，不要猜测报告会写什么，也不要写报告答案。先单独填写 prerequisites：通读来源，选择能力真正成立或安全使用所需的实质适用与适配前提。不能将支持声明、标签、构建方式或性能表现放入此组；这些不是实际安全或适配工作的替代品。来源描述的内部机制、状态或资源的安全约束若影响试用建议，应概括为实质审查或适配前提，保留可能性和触发条件，不扩大为所有场景一律实施某项防护。只有原文确实没有与任务相关的此类前提，才留空并填写 prerequisites_absent_reason。再填写 conditions 中的其余决策条件，不因容易复述而优先选择标签或数值。短比较报告两组合计约四至六项，最多八项；不按来源目录顺序枚举。同义的声明、标记与回退行为合并；一项条件只表达一个清晰前提，不塞入整章摘要。不罗列全部 API 或实现步骤；用户未问未来计划时不把历史展望列为必需内容。用户只问是否试用时，不要从兼容性维度推导必须覆盖源码适配手册；编程接口调用、底层内存管理、编译平台与分发工具的具体操作不作为独立必需项。每项 condition 用一句话忠实概括所选前提，source 给出可直接核对的完整来源行范围。概括必须保留对象、触发条件和例外，不得新增来源未说的义务。输出 schema 要求的 JSON，不输出思考过程。\n",
+  "experimentalSelectionPrompt": "只依据原始研究要求与实际来源，独立选择完成本次比较或试用判断所必需的条件。当前没有候选稿，不猜测报告内容，不写报告答案。先通读原始要求和来源，再依次做范围筛选、层级概括和分类。范围筛选：只有遗漏后会改变用户所问结论、使用边界或建议成立前提的内容才入选。来源包含某细节不等于本任务必须交代它；不把未要求的实现教程、性能数字或历史展望变成报告义务。用户明确询问的操作须保留来源确证的行为及相关证据缺口，不能以范围筛选略去未知部分。层级概括：短比较中的实质前提应说明需要审查或保障的对象及条件，允许忠实概括相关底层约束。具体函数、分配步骤、构建或平台操作是实现该前提的方法；用户未要求实现时，不拆成独立必需项，也不在一句概括后附上实现清单。概括不能把实际审查缩成声明支持、成功构建或试跑。分类后填写 prerequisites：仅放来源要求的实质适用、安全或适配工作，说明什么情况下需审查或保障什么。支持声明、标记、检测结果、构建方式与测试表现即使影响兼容判断，也只可进入 conditions，不能与实质审查捆绑后放进 prerequisites，不能用它们替代内部状态、资源或数据的相关安全约束。来源的条件性防护须保留触发对象、条件、例外及强度；不要变成所有场景一律适配的义务或安全保证。若相关实质前提确实不存在，prerequisites 留空，并在 prerequisites_absent_reason 说明限定来源的证据边界。不能因篇幅短或已经选了兼容声明而跳过实质前提检查。conditions 再放其余不可缺少的决策边界：相关能力与运行状态、兼容行为、所问操作的限定和证据缺口。同义的声明、标记与回退行为可合并；不要与实质审查重复，不把可选实现途径写成获得收益的必要条件。只选择最低必要集合，不凑条数、不按来源目录枚举；仍受 schema 的三项实质前提、五项其余条件上限约束。每项 condition 用一句话表达一个清晰条件，保留对象、触发条件与例外，source 指向足以核对其完整含义的原文行。来源位置证明出处，不授权扩大原文义务。只输出 schema 要求的 JSON，不输出思考过程。\n",
+  "limits": {
+    "model": "deepseek-v4.1-flash",
+    "thinking": "enabled",
+    "effort": "high",
+    "maxTokens": 128000,
+    "writerMaxTokens": 32000,
+    "sdkAttempts": 5,
+    "modelReadsPerArm": 4,
+    "secondsPerArm": 1800,
+    "offlineConcurrency": 2,
+    "observerSeconds": 1800,
+    "serverWatchdogSeconds": 1950,
+    "nativeRunLimit": 2,
+    "noReplacementRuns": true
+  },
+  "datasetCaveat": "Three previously exposed regression cases plus two newly authored synthetic design fixtures; no held-out accuracy claim. Labels and scope criteria frozen before prompt editing and requests.",
+  "cases": [
+    {
+      "case": 1,
+      "origin": "p0-fidelity-20261015-local-revision-high128-direct-deepseek-20261017af",
+      "synthetic": false,
+      "criteria": {
+        "substantive": [
+          "internal/shared state concurrency-safety review, conditional on relevant extension use"
+        ],
+        "decision": [
+          "declaration/import fallback and runtime state are distinct",
+          "experimental compatibility constraints",
+          "requested runtime-switch evidence gaps"
+        ],
+        "forbidden": [
+          "declaration as substantive safety prerequisite",
+          "mandatory API/allocation tutorial",
+          "unconditional protection where source is conditional"
+        ],
+        "negativeDefects": []
+      },
+      "candidates": [
+        {
+          "id": "historical",
+          "expectedPass": true,
+          "sha256": "1d9a3a239542026331ead36ba0b8986d0c9c94f44be601f1872457831ec97cc2"
+        }
+      ]
+    },
+    {
+      "case": 2,
+      "origin": "p1-deepseek-20261019-high02",
+      "synthetic": false,
+      "criteria": {
+        "substantive": [
+          "internal/shared state concurrency-safety review, conditional on relevant extension use"
+        ],
+        "decision": [
+          "declaration/import fallback and runtime state are distinct",
+          "experimental compatibility constraints",
+          "requested runtime-switch evidence gaps"
+        ],
+        "forbidden": [
+          "declaration as substantive safety prerequisite",
+          "mandatory API/allocation tutorial",
+          "unconditional protection where source is conditional"
+        ],
+        "negativeDefects": [
+          "substantive safety review missing",
+          "switch effective-time evidence gap missing"
+        ]
+      },
+      "candidates": [
+        {
+          "id": "historical",
+          "expectedPass": false,
+          "sha256": "dd364563398d32ed538c68f4114f4015011d24967f57e4e9cd1bba4ad659cb4e"
+        }
+      ]
+    },
+    {
+      "case": 3,
+      "origin": "p1-review-20261020-native02/first actually reviewed draft",
+      "synthetic": false,
+      "criteria": {
+        "substantive": [
+          "internal shared-state safety audit at a summary level"
+        ],
+        "decision": [
+          "compatibility declaration/import fallback",
+          "runtime state and switch gaps",
+          "experimental/ABI boundaries"
+        ],
+        "forbidden": [
+          "support declaration classified as substantive",
+          "allocation domains as a separate mandatory report item",
+          "API or allocator implementation recipe"
+        ],
+        "positiveScope": "Keep the prior independent positive label. A concise safety audit covers implementation constraints without listing allocator APIs."
+      },
+      "candidates": [
+        {
+          "id": "qualified-short",
+          "expectedPass": true,
+          "sha256": "ff3cb3a8872f8747e4fd2ff6c6612d7c800081651838d672d44bdc8e49913d95"
+        }
+      ]
+    },
+    {
+      "case": 4,
+      "origin": "new synthetic design fixture, not held out",
+      "synthetic": true,
+      "criteria": {
+        "substantive": [
+          {
+            "concept": "audit/protect shared mutable caches when concurrent updates conflict; readonly exception",
+            "sourceLines": [
+              3,
+              3
+            ]
+          }
+        ],
+        "decision": [
+          {
+            "concept": "compatibility declaration is not safety certification and unmarked plugin falls back",
+            "sourceLines": [
+              2,
+              5
+            ]
+          },
+          {
+            "concept": "startup values and absent live-switch evidence",
+            "sourceLines": [
+              6,
+              6
+            ]
+          },
+          {
+            "concept": "experimental scope",
+            "sourceLines": [
+              1,
+              1
+            ]
+          }
+        ],
+        "forbidden": [
+          "declaration classified as substantive",
+          "CachePin/allocator operations demanded independently",
+          "performance number outside explicitly requested scope",
+          "readonly caches required to protect writes",
+          "unconditional safety guarantee"
+        ],
+        "negativeDefects": [
+          "shared-state safety audit/protection omitted; declarations and startup testing cannot replace it"
+        ]
+      },
+      "candidates": [
+        {
+          "id": "qualified-short",
+          "expectedPass": true,
+          "sha256": "c657ab15daec8da4da848c038333f409ebf89cee30d7f1d19e2fa54973017669"
+        },
+        {
+          "id": "missing-safety",
+          "expectedPass": false,
+          "sha256": "5a3a8399a77dc2571f37958612286c11a7e84effece303c2ffd3bf696f90667c"
+        }
+      ],
+      "fixture": {
+        "requirements": "仅依据所附 Aurora 2 指南，简短比较并行模式与默认模式的执行状态、插件兼容性及适用限制，给开发者试用建议，说明开关的值、生效时机及能否运行中切换。不讨论性能数字或实现教程。",
+        "sourceEvidence": [
+          {
+            "url": "https://aurora.example.invalid/v2/guide",
+            "title": "",
+            "retrieval": "search",
+            "body_kind": "raw_content",
+            "body_sha256": "1999a157ab2f5508f18dd268272be70e2721fbd1729b76fc20c6cdc5912ccf50",
+            "body_characters": 1088,
+            "start": 0,
+            "end": 1088,
+            "text": "Aurora 2 parallel mode is experimental; it can execute independent requests on multiple workers, while the default mode serializes them.\nA plugin can declare parallel_ready=true. This declaration says compatibility is claimed; it does not certify thread safety of its internal state.\nIf a plugin shares mutable caches between workers, developers must audit concurrent access and protect conflicting updates. Read-only caches do not require that update protection.\nThe implementation guide demonstrates CachePin(handle) and CacheAlloc(pool) calls. Every handle created by CacheAlloc must be freed with CacheFree, never LibFree.\nLoading a plugin without the declaration emits a warning and changes the process to serialized execution. This does not establish that every other performance benefit disappears.\nAURORA_WORKERS and --workers accept 1 or 4 and are read at process startup. This guide does not specify changing the mode in an already running process.\nA test on one image batch measured 18% higher throughput with four workers than with one worker; other workloads were not tested.",
+            "truncated": false
+          }
+        ],
+        "candidates": [
+          {
+            "id": "qualified-short",
+            "text": "Aurora 2 的实验性并行模式可让多个 worker 执行独立请求，默认模式串行。插件声明 parallel_ready=true 只表示声称兼容，不能证明内部线程安全；若跨 worker 共享可变缓存，试用前应审查并发访问并保护冲突更新，只读缓存无需这项更新保护。未声明的插件加载会告警并使进程转为串行，不能推论所有其他性能收益消失。AURORA_WORKERS 与 --workers 取 1 或 4，在进程启动时读取；指南未说明运行中改模式。因此建议先核实插件及相关共享状态，再隔离试用。[1]\n### 来源\n[1] https://aurora.example.invalid/v2/guide",
+            "expectedPass": true,
+            "sha256": "c657ab15daec8da4da848c038333f409ebf89cee30d7f1d19e2fa54973017669"
+          },
+          {
+            "id": "missing-safety",
+            "text": "Aurora 2 的实验性并行模式可让多个 worker 执行独立请求，默认模式串行。插件声明 parallel_ready=true 表示声称兼容。未声明的插件加载会告警并使进程转为串行，不能推论所有其他性能收益消失。AURORA_WORKERS 与 --workers 取 1 或 4，在进程启动时读取；指南未说明运行中改模式。建议确认插件声明并验证成功启动后隔离试用。[1]\n### 来源\n[1] https://aurora.example.invalid/v2/guide",
+            "expectedPass": false,
+            "sha256": "5a3a8399a77dc2571f37958612286c11a7e84effece303c2ffd3bf696f90667c"
+          }
+        ]
+      }
+    },
+    {
+      "case": 5,
+      "origin": "new synthetic design fixture, not held out",
+      "synthetic": true,
+      "criteria": {
+        "substantive": [
+          {
+            "concept": "continuing writes require missed-update reconciliation and consistency validation before read cutover; readonly snapshot exception",
+            "sourceLines": [
+              3,
+              3
+            ]
+          }
+        ],
+        "decision": [
+          {
+            "concept": "claimed adapter support versus substantive consistency and fallback",
+            "sourceLines": [
+              2,
+              5
+            ]
+          },
+          {
+            "concept": "next-job timing plus value/live-switch gaps",
+            "sourceLines": [
+              6,
+              6
+            ]
+          },
+          {
+            "concept": "experimental dual-write versus source-frozen batch",
+            "sourceLines": [
+              1,
+              1
+            ]
+          }
+        ],
+        "forbidden": [
+          "manifest/schema success classified as substantive",
+          "RowBorrow/allocator API as independent obligation",
+          "performance number despite explicit exclusion",
+          "reconciliation unconditionally imposed on readonly snapshots",
+          "invented mode values"
+        ],
+        "negativeDefects": [
+          "missed-write reconciliation and consistency checks omitted despite live-write trial advice"
+        ]
+      },
+      "candidates": [
+        {
+          "id": "qualified-short",
+          "expectedPass": true,
+          "sha256": "4ea712a6915710eb791e6f15770e1fc978bc24e73e74e805d4ee67a702a62e67"
+        },
+        {
+          "id": "missing-safety",
+          "expectedPass": false,
+          "sha256": "256d55ffc22c917f23d0515dad6d5579c545e96f7aead5646cbc9b793e806dcd"
+        }
+      ],
+      "fixture": {
+        "requirements": "仅依据所附 MirrorSync 5 资料，写简短中文比较，覆盖迁移时写入状态、适配器兼容性和适用限制，给试用建议，并说明模式开关取值、何时生效及能否在任务运行中切换。不要求 SDK 教程，不讨论性能数字。",
+        "sourceEvidence": [
+          {
+            "url": "https://mirrorsync.example.invalid/v5/migration",
+            "title": "",
+            "retrieval": "search",
+            "body_kind": "raw_content",
+            "body_sha256": "d616efc4eeedd4c6783657f917839b65d8782b00d9658d056a216f4f207f1865",
+            "body_characters": 1172,
+            "start": 0,
+            "end": 1172,
+            "text": "MirrorSync 5 offers experimental dual-write migration and the default offline batch copy. Dual-write can accept new writes during migration; batch copy requires the source to be frozen.\nThe adapter manifest may carry dual_ready=true. A successful schema check and this label do not prove that application updates have been preserved.\nWhen writes continue during migration, operators must reconcile missed updates and validate consistency before directing readers to the destination. A frozen read-only snapshot does not need missed-write reconciliation.\nThe adapter SDK illustrates RowBorrow(token), RowRelease(token), and allocator pairing rules. These APIs describe implementation work, not a separate deployment acceptance test.\nAn adapter without dual_ready causes a warning and selects batch copy for that migration; the guide does not claim that all other benefits are lost.\nMIRROR_MODE and --migration-mode select the migration mode for the next job start. The guide gives no permitted value strings and does not document switching a running job.\nOne fixed data-size benchmark reports a 12% duration reduction versus batch copy. It is not an all-workload guarantee.",
+            "truncated": false
+          }
+        ],
+        "candidates": [
+          {
+            "id": "qualified-short",
+            "text": "MirrorSync 5 的实验性双写迁移可在迁移期间接收新写入，默认离线批量复制要求冻结源端。适配器的 dual_ready 声明和成功的 schema 检查不能证明应用更新已保全；若迁移中持续写入，切换读者到目标端前须对账遗漏更新并验证一致性，冻结只读快照无需这项遗漏写入对账。未声明的适配器会告警并使该次迁移使用批量复制，不能据此称其他收益全部丧失。MIRROR_MODE 和 --migration-mode 在下次任务启动时选择模式，资料未给出合法取值字符串，也未说明运行中切换。因此建议核实适配器和相应数据一致性条件后隔离试用。[1]\n### 来源\n[1] https://mirrorsync.example.invalid/v5/migration",
+            "expectedPass": true,
+            "sha256": "4ea712a6915710eb791e6f15770e1fc978bc24e73e74e805d4ee67a702a62e67"
+          },
+          {
+            "id": "missing-safety",
+            "text": "MirrorSync 5 的实验性双写迁移可在迁移期间接收新写入，默认离线批量复制要求冻结源端。适配器的 dual_ready 表示声明支持，未声明会告警并使该次迁移使用批量复制，不能据此称其他收益全部丧失。MIRROR_MODE 和 --migration-mode 在下次任务启动时选择模式，资料未给出合法取值字符串，也未说明运行中切换。建议确认适配器声明和 schema 检查通过后隔离试用。[1]\n### 来源\n[1] https://mirrorsync.example.invalid/v5/migration",
+            "expectedPass": false,
+            "sha256": "256d55ffc22c917f23d0515dad6d5579c545e96f7aead5646cbc9b793e806dcd"
+          }
+        ]
+      }
+    }
+  ],
+  "tests": {
+    "tests": "227",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "28.020"
+  },
+  "offline": {
+    "arms": [
+      {
+        "id": "case-01-baseline",
+        "case": 1,
+        "variant": "baseline",
+        "status": "error",
+        "exception": "ReportReviewRequestError",
+        "diagnostics": {
+          "phase": "model_read",
+          "elapsed_seconds": 54.92468659998849,
+          "exception_type": "InternalServerError",
+          "http_status": 502,
+          "provider_error": {
+            "type": "unknown",
+            "code": "unknown"
+          },
+          "decision_available": false
+        },
+        "modelReads": 1,
+        "elapsedSeconds": 55.62736370001221,
+        "selectionAvailable": false,
+        "candidates": [],
+        "traffic": {
+          "httpAttempts": 5,
+          "httpStatuses": {
+            "502": 5
+          },
+          "transportFailures": 0,
+          "attemptsWithUsage": 0,
+          "reportedTotalTokens": null,
+          "attemptsWithoutUsage": 5,
+          "directVerifiedSockets": true,
+          "finishReasons": {},
+          "bodyExceptions": {},
+          "streamErrors": [],
+          "phases": {
+            "selection": 5
+          }
+        }
+      },
+      {
+        "id": "case-01-new",
+        "case": 1,
+        "variant": "new",
+        "status": "error",
+        "exception": "ReportReviewRequestError",
+        "diagnostics": {
+          "phase": "model_read",
+          "elapsed_seconds": 53.87060120003298,
+          "exception_type": "InternalServerError",
+          "http_status": 502,
+          "provider_error": {
+            "type": "unknown",
+            "code": "unknown"
+          },
+          "decision_available": false
+        },
+        "modelReads": 1,
+        "elapsedSeconds": 54.614930999989156,
+        "selectionAvailable": false,
+        "candidates": [],
+        "traffic": {
+          "httpAttempts": 5,
+          "httpStatuses": {
+            "502": 5
+          },
+          "transportFailures": 0,
+          "attemptsWithUsage": 0,
+          "reportedTotalTokens": null,
+          "attemptsWithoutUsage": 5,
+          "directVerifiedSockets": true,
+          "finishReasons": {},
+          "bodyExceptions": {},
+          "streamErrors": [],
+          "phases": {
+            "selection": 5
+          }
+        }
+      },
+      {
+        "id": "case-02-new",
+        "case": 2,
+        "variant": "new",
+        "status": "error",
+        "exception": "ReportReviewRequestError",
+        "diagnostics": {
+          "phase": "model_read",
+          "elapsed_seconds": 54.67109119996894,
+          "exception_type": "InternalServerError",
+          "http_status": 502,
+          "provider_error": {
+            "type": "unknown",
+            "code": "unknown"
+          },
+          "decision_available": false
+        },
+        "modelReads": 1,
+        "elapsedSeconds": 55.38331379997544,
+        "selectionAvailable": false,
+        "candidates": [],
+        "traffic": {
+          "httpAttempts": 5,
+          "httpStatuses": {
+            "502": 5
+          },
+          "transportFailures": 0,
+          "attemptsWithUsage": 0,
+          "reportedTotalTokens": null,
+          "attemptsWithoutUsage": 5,
+          "directVerifiedSockets": true,
+          "finishReasons": {},
+          "bodyExceptions": {},
+          "streamErrors": [],
+          "phases": {
+            "selection": 5
+          }
+        }
+      },
+      {
+        "id": "case-02-baseline",
+        "case": 2,
+        "variant": "baseline",
+        "status": "error",
+        "exception": "ReportReviewRequestError",
+        "diagnostics": {
+          "phase": "model_read",
+          "elapsed_seconds": 54.0843677999801,
+          "exception_type": "InternalServerError",
+          "http_status": 502,
+          "provider_error": {
+            "type": "unknown",
+            "code": "unknown"
+          },
+          "decision_available": false
+        },
+        "modelReads": 1,
+        "elapsedSeconds": 54.84566300001461,
+        "selectionAvailable": false,
+        "candidates": [],
+        "traffic": {
+          "httpAttempts": 5,
+          "httpStatuses": {
+            "502": 5
+          },
+          "transportFailures": 0,
+          "attemptsWithUsage": 0,
+          "reportedTotalTokens": null,
+          "attemptsWithoutUsage": 5,
+          "directVerifiedSockets": true,
+          "finishReasons": {},
+          "bodyExceptions": {},
+          "streamErrors": [],
+          "phases": {
+            "selection": 5
+          }
+        }
+      },
+      {
+        "id": "case-03-baseline",
+        "case": 3,
+        "variant": "baseline",
+        "status": "error",
+        "exception": "ReportReviewRequestError",
+        "diagnostics": {
+          "phase": "model_read",
+          "elapsed_seconds": 54.03355319995899,
+          "exception_type": "InternalServerError",
+          "http_status": 502,
+          "provider_error": {
+            "type": "unknown",
+            "code": "unknown"
+          },
+          "decision_available": false
+        },
+        "modelReads": 1,
+        "elapsedSeconds": 54.74901349999709,
+        "selectionAvailable": false,
+        "candidates": [],
+        "traffic": {
+          "httpAttempts": 5,
+          "httpStatuses": {
+            "502": 5
+          },
+          "transportFailures": 0,
+          "attemptsWithUsage": 0,
+          "reportedTotalTokens": null,
+          "attemptsWithoutUsage": 5,
+          "directVerifiedSockets": true,
+          "finishReasons": {},
+          "bodyExceptions": {},
+          "streamErrors": [],
+          "phases": {
+            "selection": 5
+          }
+        }
+      },
+      {
+        "id": "case-03-new",
+        "case": 3,
+        "variant": "new",
+        "status": "error",
+        "exception": "ReportReviewRequestError",
+        "diagnostics": {
+          "phase": "model_read",
+          "elapsed_seconds": 53.355137899983674,
+          "exception_type": "InternalServerError",
+          "http_status": 502,
+          "provider_error": {
+            "type": "unknown",
+            "code": "unknown"
+          },
+          "decision_available": false
+        },
+        "modelReads": 1,
+        "elapsedSeconds": 54.2048105999711,
+        "selectionAvailable": false,
+        "candidates": [],
+        "traffic": {
+          "httpAttempts": 5,
+          "httpStatuses": {
+            "502": 5
+          },
+          "transportFailures": 0,
+          "attemptsWithUsage": 0,
+          "reportedTotalTokens": null,
+          "attemptsWithoutUsage": 5,
+          "directVerifiedSockets": true,
+          "finishReasons": {},
+          "bodyExceptions": {},
+          "streamErrors": [],
+          "phases": {
+            "selection": 5
+          }
+        }
+      },
+      {
+        "id": "case-04-new",
+        "case": 4,
+        "variant": "new",
+        "status": "error",
+        "exception": "ReportReviewRequestError",
+        "diagnostics": {
+          "phase": "model_read",
+          "elapsed_seconds": 52.457802599994466,
+          "exception_type": "InternalServerError",
+          "http_status": 502,
+          "provider_error": {
+            "type": "unknown",
+            "code": "unknown"
+          },
+          "decision_available": false
+        },
+        "modelReads": 1,
+        "elapsedSeconds": 53.188446199987084,
+        "selectionAvailable": false,
+        "candidates": [],
+        "traffic": {
+          "httpAttempts": 5,
+          "httpStatuses": {
+            "502": 5
+          },
+          "transportFailures": 0,
+          "attemptsWithUsage": 0,
+          "reportedTotalTokens": null,
+          "attemptsWithoutUsage": 5,
+          "directVerifiedSockets": true,
+          "finishReasons": {},
+          "bodyExceptions": {},
+          "streamErrors": [],
+          "phases": {
+            "selection": 5
+          }
+        }
+      },
+      {
+        "id": "case-04-baseline",
+        "case": 4,
+        "variant": "baseline",
+        "status": "error",
+        "exception": "ReportReviewRequestError",
+        "diagnostics": {
+          "phase": "model_read",
+          "elapsed_seconds": 51.430492600018624,
+          "exception_type": "InternalServerError",
+          "http_status": 502,
+          "provider_error": {
+            "type": "unknown",
+            "code": "unknown"
+          },
+          "decision_available": false
+        },
+        "modelReads": 1,
+        "elapsedSeconds": 52.28091939998558,
+        "selectionAvailable": false,
+        "candidates": [],
+        "traffic": {
+          "httpAttempts": 5,
+          "httpStatuses": {
+            "429": 1,
+            "502": 4
+          },
+          "transportFailures": 0,
+          "attemptsWithUsage": 0,
+          "reportedTotalTokens": null,
+          "attemptsWithoutUsage": 5,
+          "directVerifiedSockets": true,
+          "finishReasons": {},
+          "bodyExceptions": {},
+          "streamErrors": [],
+          "phases": {
+            "selection": 5
+          }
+        }
+      },
+      {
+        "id": "case-05-baseline",
+        "case": 5,
+        "variant": "baseline",
+        "status": "error",
+        "exception": "ReportReviewRequestError",
+        "diagnostics": {
+          "phase": "model_read",
+          "elapsed_seconds": 52.04082749999361,
+          "exception_type": "InternalServerError",
+          "http_status": 502,
+          "provider_error": {
+            "type": "unknown",
+            "code": "unknown"
+          },
+          "decision_available": false
+        },
+        "modelReads": 1,
+        "elapsedSeconds": 52.812498999992386,
+        "selectionAvailable": false,
+        "candidates": [],
+        "traffic": {
+          "httpAttempts": 5,
+          "httpStatuses": {
+            "502": 5
+          },
+          "transportFailures": 0,
+          "attemptsWithUsage": 0,
+          "reportedTotalTokens": null,
+          "attemptsWithoutUsage": 5,
+          "directVerifiedSockets": true,
+          "finishReasons": {},
+          "bodyExceptions": {},
+          "streamErrors": [],
+          "phases": {
+            "selection": 5
+          }
+        }
+      },
+      {
+        "id": "case-05-new",
+        "case": 5,
+        "variant": "new",
+        "status": "error",
+        "exception": "ReportReviewRequestError",
+        "diagnostics": {
+          "phase": "model_read",
+          "elapsed_seconds": 53.579777400009334,
+          "exception_type": "InternalServerError",
+          "http_status": 502,
+          "provider_error": {
+            "type": "unknown",
+            "code": "unknown"
+          },
+          "decision_available": false
+        },
+        "modelReads": 1,
+        "elapsedSeconds": 54.433845399995334,
+        "selectionAvailable": false,
+        "candidates": [],
+        "traffic": {
+          "httpAttempts": 5,
+          "httpStatuses": {
+            "502": 5
+          },
+          "transportFailures": 0,
+          "attemptsWithUsage": 0,
+          "reportedTotalTokens": null,
+          "attemptsWithoutUsage": 5,
+          "directVerifiedSockets": true,
+          "finishReasons": {},
+          "bodyExceptions": {},
+          "streamErrors": [],
+          "phases": {
+            "selection": 5
+          }
+        }
+      }
+    ],
+    "paired": [
+      {
+        "case": 1,
+        "sameRequestExceptSelectionSystemPrompt": true,
+        "twoActualSelectionPrompts": true
+      },
+      {
+        "case": 2,
+        "sameRequestExceptSelectionSystemPrompt": true,
+        "twoActualSelectionPrompts": true
+      },
+      {
+        "case": 3,
+        "sameRequestExceptSelectionSystemPrompt": true,
+        "twoActualSelectionPrompts": true
+      },
+      {
+        "case": 4,
+        "sameRequestExceptSelectionSystemPrompt": true,
+        "twoActualSelectionPrompts": true
+      },
+      {
+        "case": 5,
+        "sameRequestExceptSelectionSystemPrompt": true,
+        "twoActualSelectionPrompts": true
+      }
+    ],
+    "plannedCandidateReviews": 14,
+    "availableSelections": 0,
+    "availableCandidateDecisions": 0
+  },
+  "native": [
+    {
+      "index": 1,
+      "directory": ".local/p1-selection-20261020-native01",
+      "threadId": "8f64a76d-3c67-43f0-97eb-991c8a5e45d7",
+      "businessStatus": "failed",
+      "phase": "clarify",
+      "researchErrors": [
+        {
+          "code": "clarification_failed",
+          "message": "需求澄清失败，请检查后端模型服务后发起新研究。",
+          "node": "clarify_with_user"
+        }
+      ],
+      "runs": [
+        {
+          "run_id": "e6eaff38-b84a-4064-b93d-9c5009b688ba",
+          "status": "success"
+        }
+      ],
+      "reportPresent": false,
+      "sourceCount": 0,
+      "reportReviewCount": 0,
+      "observerErrors": [
+        {
+          "kind": "observer",
+          "message": "Clarification did not reach awaiting_input"
+        }
+      ],
+      "configUnchanged": true,
+      "cleanup": {
+        "backendPortFree": true,
+        "frontendPortFree": true
+      },
+      "traffic": {
+        "httpAttempts": 15,
+        "httpStatuses": {
+          "502": 15
+        },
+        "transportFailures": 0,
+        "attemptsWithUsage": 0,
+        "reportedTotalTokens": null,
+        "attemptsWithoutUsage": 15,
+        "directVerifiedSockets": true,
+        "finishReasons": {},
+        "bodyExceptions": {},
+        "streamErrors": [],
+        "phases": {
+          "clarify_with_user": 15
+        }
+      },
+      "searchHttpAttempts": 0
+    },
+    {
+      "index": 2,
+      "directory": ".local/p1-selection-20261020-native02",
+      "threadId": "9e550a0d-af7d-49f8-87fc-a60c94fd6aa6",
+      "businessStatus": "failed",
+      "phase": "clarify",
+      "researchErrors": [
+        {
+          "code": "clarification_failed",
+          "message": "需求澄清失败，请检查后端模型服务后发起新研究。",
+          "node": "clarify_with_user"
+        }
+      ],
+      "runs": [
+        {
+          "run_id": "86b6a3f6-dd5a-46d1-879b-a95b78192356",
+          "status": "success"
+        }
+      ],
+      "reportPresent": false,
+      "sourceCount": 0,
+      "reportReviewCount": 0,
+      "observerErrors": [
+        {
+          "kind": "observer",
+          "message": "Clarification did not reach awaiting_input"
+        }
+      ],
+      "configUnchanged": true,
+      "cleanup": {
+        "backendPortFree": true,
+        "frontendPortFree": true
+      },
+      "traffic": {
+        "httpAttempts": 15,
+        "httpStatuses": {
+          "502": 15
+        },
+        "transportFailures": 0,
+        "attemptsWithUsage": 0,
+        "reportedTotalTokens": null,
+        "attemptsWithoutUsage": 15,
+        "directVerifiedSockets": true,
+        "finishReasons": {},
+        "bodyExceptions": {},
+        "streamErrors": [],
+        "phases": {
+          "clarify_with_user": 15
+        }
+      },
+      "searchHttpAttempts": 0
+    }
+  ],
+  "adoption": {
+    "decision": "not_adopted",
+    "reason": "No valid selections or candidate decisions; all planned native runs failed in clarification before the changed node. Quality remains untested.",
+    "restoredOriginalSource": true,
+    "originalSourceSha256": "2a74401d665ffc8b2132b9b9aa6577c4d83f4e99b87c4e078af29db96bba2150",
+    "experimentalSourceSha256": "2244cb8d934237d1b753b12b0d37641c286e09e0ea6ee222145d41df4b2d010d",
+    "onlyIntentionalFrozenSourceDifference": "src/deep_research/report_review.py",
+    "priorDiagnosticsPreserved": true
+  },
+  "preAdoptionVerification": {
+    "at": "2026-10-20T10:17:11.051595+00:00",
+    "preservation": {
+      "count": 7831,
+      "changed": [],
+      "unexpected": []
+    },
+    "frozen": {
+      "count": 133,
+      "changed": [],
+      "unexpected": []
+    }
+  },
+  "totalTraffic": {
+    "httpAttempts": 80,
+    "httpStatuses": {
+      "502": 79,
+      "429": 1
+    },
+    "transportFailures": 0,
+    "attemptsWithUsage": 0,
+    "attemptsWithoutUsage": 80,
+    "reportedTotalTokens": null,
+    "searchHttpAttempts": 0,
+    "additionalModelConnectivityProbes": 0
+  },
+  "quality": {
+    "selectionOmissions": null,
+    "misclassification": null,
+    "excessiveRequirements": null,
+    "falseRejections": null,
+    "falseAccepts": null,
+    "reason": "No valid model selection or review decision; HTTP failures do not establish prompt quality."
+  }
+}

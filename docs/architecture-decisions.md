@@ -89,6 +89,14 @@ Skills 位于 Python 包内，并通过 `pyproject.toml` 的 package-data 随包
 
 ## 研究证据与方法论分开处理
 
+以下日期段落记录历史实验及其采纳边界；已撤下的提示不属于当前实现，后续计划不自动启动。材料索引见 [P1 实验归档](../frontend/docs/p1-experiments-2026-10.md)。
+
+2026-10-20 的 GLM 读取实验在共享结构化 helper 增加显式 JSON 对象策略，避免必须先等待原生 json_schema。策略通过调用参数或模型 metadata 选择，默认不变；使用原模型客户端、绑定参数和限流器，流式结果必须有 stop / `[DONE]` 且无流内错误，再做原 schema 校验。原 Qwen 回退和诊断保留。来源选择、写作、候选核验提示与预算固定，精确重复摘要仅审查而未加入缓存。两份保存简报输入均有效，完整业务样本被本地隔离包装错误阻断，不能推广为完整流程通过；证据及边界见 [本批结果](../frontend/docs/p1-glm-jsonstream-results-2026-10-20.md)。
+
+2026-10-20 的来源条件范围／分类实验只改变选择 system prompt；十个离线选择和两次新原生流程均未取得变更节点的有效输出，HTTP 失败不能证明语义改善。实验提示未采纳，来源选择、核验、schema 和预算继续沿用进入本批时的行为；新提示及两个合成设计样本作为可审查证据保留。原生 run 的 `success` 与检查点 `failed/clarify` 同时存在，完整交付继续依据业务状态。记录与后续边界见[本批结果](../frontend/docs/p1-selection-results-2026-10-20.md)。
+
+2026-10-20 的诊断补充将 schema 错误定位限制为已知字段名与有界数组索引，未知字段名替换、最多 16 条错误及 8 层路径；不保存输入或异常正文。SDK 读取失败保存安全类型／代码、读取耗时和无决定状态，并随失败核验记录保留。实际流内错误与 HTTP 状态、正文超时、明确 `length` 分开观察。本轮通用核验提示实验未能稳定改善质量，实验段落已撤下，原提示和读取／重试预算不变；结果见 [核验提示复验](../frontend/docs/p1-review-results-2026-10-20.md)。下列既有机制继续适用。
+
 [research_agent_skills.py](../src/deep_research/research_agent_skills.py) 构造 `raw_notes` 时保留 AI 消息和 `RESEARCH_TOOL_WHITELIST` 中工具的消息。目前工具白名单只有 `tavily_search`，`load_skill` 与 `think_tool` 的工具正文不进入这些原始笔记。
 
 新增检索工具时，需要同时检查白名单及 `_has_real_search_results()` 的判断；仅把工具挂到模型上还不够。2026-10-16 起，压缩模型只读取检索工具正文、子任务和全局要求，不再读取模型自述、思考工具或方法论正文；`raw_notes` 的追溯格式保持不变。

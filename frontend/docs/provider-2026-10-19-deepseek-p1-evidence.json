@@ -1,0 +1,3347 @@
+{
+  "generatedAt": "2026-10-18T18:04:59.229334+00:00",
+  "head": "5cf597d4cd7d1ba07949a61ef5561abdd9fc733d",
+  "scope": "Three bounded native runs followed by fixed-candidate high/low offline reviews",
+  "nativeCompletion": {
+    "numerator": 2,
+    "denominator": 3
+  },
+  "independentNativeAcceptance": {
+    "numerator": 0,
+    "denominator": 3
+  },
+  "native": [
+    {
+      "directory": ".local/p1-deepseek-20261019-high01",
+      "status": "partial",
+      "phase": "writing",
+      "threadId": "3c1e9613-0def-4edf-910f-5c023861eb04",
+      "researchId": "cea1b710-adcf-4b1a-b6ea-7743c5cda2fc",
+      "writingAttemptId": "",
+      "reportSha256": null,
+      "bodyHan": 0,
+      "researchErrors": [
+        {
+          "code": "report_failed",
+          "message": "最终报告生成失败；已保留研究笔记和来源。",
+          "node": "final_report_generation"
+        }
+      ],
+      "endToEndSeconds": 491.821,
+      "afterSecondSubmissionSeconds": 355.557,
+      "sourceHashes": [
+        [
+          "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+          "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91"
+        ],
+        [
+          "https://docs.python.org/3.13/howto/free-threading-python.html",
+          "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee"
+        ],
+        [
+          "https://docs.python.org/3.13/howto/free-threading-python.html",
+          "9969211308b25562a68231b70a145af65da9de8fa011c86d4212df0df6eba741"
+        ]
+      ],
+      "nativeRunCount": 2,
+      "processResult": {
+        "code": 2,
+        "signal": null,
+        "finishedAt": "2026-10-18T17:10:37.845Z",
+        "modelAndSearchSubstitutes": false,
+        "cleanup": {
+          "backendPortFree": true,
+          "frontendPortFree": true
+        }
+      },
+      "searchHttp": {
+        "200": 6
+      },
+      "model": {
+        "attempts": 40,
+        "http": {
+          "200": 31,
+          "429": 2
+        },
+        "connectionFailures": {
+          "ConnectError": 7
+        },
+        "streamFailures": {},
+        "finishReasons": {
+          "tool_calls": 22,
+          "stop": 6
+        },
+        "usageAttempts": 31,
+        "http200WithoutUsage": [],
+        "attemptsWithoutUsage": 9,
+        "reportedTokens": {
+          "prompt_tokens": 219530,
+          "completion_tokens": 60229,
+          "total_tokens": 279759,
+          "reasoning_tokens_reported": 22867
+        },
+        "headersSeconds": {
+          "n": 33,
+          "min": 1.478,
+          "median": 2.529,
+          "max": 27.627
+        },
+        "completedConsumptionSeconds": {
+          "n": 31,
+          "min": 2.0622058999724686,
+          "median": 12.340744299988728,
+          "max": 82.61169380001957
+        },
+        "allObservedSocketsDirect": true
+      },
+      "writingAndReviewHttp": [
+        {
+          "id": "e94a40fb-8ac6-4cf5-994c-d96589277c08",
+          "node": "final_report_generation",
+          "effort": "high",
+          "stage": "writing",
+          "maxTokens": 32000,
+          "httpStatus": 200,
+          "headersSeconds": 2.218,
+          "completedConsumptionSeconds": 55.539731799974106,
+          "firstVisibleSeconds": 52.66776819998631,
+          "finishReasons": [
+            "stop"
+          ],
+          "bodyException": null,
+          "usage": {
+            "prompt_tokens": 9796,
+            "completion_tokens": 9711,
+            "total_tokens": 19507,
+            "completion_tokens_details": {
+              "reasoning_tokens": 9037,
+              "accepted_prediction_tokens": 0,
+              "rejected_prediction_tokens": 0
+            }
+          },
+          "messagesSha256": null,
+          "requestWithoutEffortSha256": null
+        },
+        {
+          "id": "b825fd92-f607-4f8a-8116-e2ccca6100b2",
+          "node": "final_report_generation",
+          "effort": "high",
+          "stage": "source_condition_selection",
+          "maxTokens": 128000,
+          "httpStatus": 200,
+          "headersSeconds": 2.441,
+          "completedConsumptionSeconds": 82.61169380001957,
+          "firstVisibleSeconds": 79.25720550003462,
+          "finishReasons": [
+            "stop"
+          ],
+          "bodyException": null,
+          "usage": {
+            "prompt_tokens": 9562,
+            "completion_tokens": 14643,
+            "total_tokens": 24205,
+            "completion_tokens_details": {
+              "reasoning_tokens": 13830,
+              "accepted_prediction_tokens": 0,
+              "rejected_prediction_tokens": 0
+            }
+          },
+          "messagesSha256": null,
+          "requestWithoutEffortSha256": null
+        }
+      ],
+      "mechanicalChecks": {
+        "requiredSkillPerTaskBeforeSearch": true,
+        "exactRequestedSourceSet": true,
+        "persistedConstraints": true,
+        "searchesHaveScopeAudit": true,
+        "reportMatchesRefresh": true,
+        "sourcesMatchRefresh": true,
+        "configMatchesReceipts": true,
+        "nativeRunsSucceeded": true,
+        "refreshCreatesNoRun": true,
+        "approximately500ChineseCharacters": false,
+        "durableWritingComplete": true,
+        "replayDiagnosticsCaptured": true,
+        "noPrematureWritingReplay": true,
+        "unique_event_ids": true,
+        "continuous_sequence": true,
+        "active_identity_matches_checkpoint": false,
+        "utf8_offsets_contiguous": true,
+        "stream_bytes_equal_report_and_disk": true,
+        "finish_hash_matches": false,
+        "screenshot_before_active_finish": false,
+        "screenshot_matches_active_attempt": false,
+        "no_browser_errors": true,
+        "no_recovery_notice": true,
+        "complete_body_paragraph_before_finish": false,
+        "first_body_paragraph_is_substantive": false,
+        "successful_business_with_no_errors": false,
+        "models_used_verified_direct_transport": true,
+        "production_code_matches_launch": true,
+        "evidence_anchors_match_consumed_body": true,
+        "writer_received_source_hashes": true,
+        "final_review_passed_and_bound": false,
+        "grounded_claims_cover_report": false,
+        "grounded_support_covers_claims": false,
+        "grounded_passages_match_consumed_body": false,
+        "source_prerequisite_selection_recorded": false,
+        "source_conditions_match_consumed_body": false,
+        "condition_input_excerpts_match_consumed_body": false,
+        "source_condition_coverage_complete": false,
+        "source_condition_selection_excludes_candidate": true,
+        "review_model_reads_within_shared_budget": false
+      },
+      "nativeReviews": [
+        {
+          "writing_attempt_id": "6f64d067-c456-40a3-9c70-cdca3deb8355",
+          "report_sha256": "f0875042797c2fed14977c44e9e7be32595bde79b262772b0521a3fb1b287000",
+          "status": "unavailable",
+          "error_type": "ReportReviewFormatError",
+          "diagnostics": {
+            "response_sha256": "b71e0a68149ac8d763595d9ce08ce303f03eea54e890a033dc36da40df5bcc39",
+            "response_characters": 2103,
+            "finish_reason": "stop",
+            "validation_error_types": [
+              "too_long"
+            ]
+          }
+        }
+      ],
+      "independentCandidates": [
+        {
+          "writingAttemptId": "6f64d067-c456-40a3-9c70-cdca3deb8355",
+          "sha256": "f0875042797c2fed14977c44e9e7be32595bde79b262772b0521a3fb1b287000",
+          "bodyHan": 556,
+          "claims": [
+            {
+              "claim_id": 1,
+              "text": "# Python 3.13 free-threaded 与默认 GIL 构建对比\n\nGIL 状态：3.13 起，free-threaded CPython 是实验性构建，GIL 被禁用，线程可在多核上并行；默认构建仍启用 GIL。[1]",
+              "passed": true,
+              "sections": [
+                "gil"
+              ],
+              "reason": "实验性构建、禁用 GIL 和多核线程并行符合来源；后文明确可再启用，未当成永久状态。",
+              "claim_sha256": "6a3ff44db66e180fd986fa8df629ad5ff4f4d1a12bd8b76397e6e3396361eb06",
+              "sourceAnchors": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                  "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                  "start": 293,
+                  "end": 1214,
+                  "quote_sha256": "af0d405cfd8564f657f9d296edd3b478ba7af0db537c36543e07c752162d22e1"
+                }
+              ]
+            },
+            {
+              "claim_id": 2,
+              "text": "free-threaded 构建可在运行时选择启用 GIL，使用环境变量 PYTHON_GIL 或命令行选项 -X gil；导入未显式标记支持 free threading 的 C-API 扩展时，GIL 也可能自动启用并打印警告。[1]",
+              "passed": true,
+              "sections": [
+                "detection"
+              ],
+              "reason": "开关名称、运行时选择和未标记扩展触发行为均有支持。",
+              "claim_sha256": "24b5bd7b167e65a40db1f012d43d0cd1eecc8686a282ee0b54488ca04d8f30ac",
+              "sourceAnchors": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                  "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                  "start": 1714,
+                  "end": 2930,
+                  "quote_sha256": "0c2bf2a1a634d71acd245908e27fde2f168dbae66c972b9687c281a57916791d"
+                }
+              ]
+            },
+            {
+              "claim_id": 3,
+              "text": "可用 sys._is_gil_enabled() 查看运行进程 GIL 是否实际禁用，用 sysconfig.get_config_var(\"Py_GIL_DISABLED\") 判断构建是否支持 free threading。[1]",
+              "passed": true,
+              "sections": [
+                "detection"
+              ],
+              "reason": "区分实际运行 GIL 状态与构建能力。",
+              "claim_sha256": "55ae9a3d7f78c2250aa95d29ac082d1522ab7072d457c7d7a5ffcdfd38a7411e",
+              "sourceAnchors": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                  "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                  "start": 1714,
+                  "end": 2930,
+                  "quote_sha256": "0c2bf2a1a634d71acd245908e27fde2f168dbae66c972b9687c281a57916791d"
+                }
+              ]
+            },
+            {
+              "claim_id": 4,
+              "text": "两页未说明两个开关的具体取值、生效时机，也未说明能否在运行中的进程里任意切换。[1]",
+              "passed": true,
+              "sections": [
+                "detection"
+              ],
+              "reason": "核对完整两页后，取值、生效时机、运行中任意切换均未展开；没有补写链接页面中的内容。",
+              "claim_sha256": "81d6c8f94dd2228f7724d72ed8670c762a6ed387a55270e75e80e77445f8824a",
+              "sourceAnchors": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                  "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                  "start": 1714,
+                  "end": 2930,
+                  "quote_sha256": "0c2bf2a1a634d71acd245908e27fde2f168dbae66c972b9687c281a57916791d"
+                }
+              ]
+            },
+            {
+              "claim_id": 5,
+              "text": "C 扩展兼容性：扩展模块必须显式表明支持 GIL 禁用，否则导入时警告并启用 GIL。[2]",
+              "passed": true,
+              "sections": [
+                "extension_declaration"
+              ],
+              "reason": "符合扩展初始化章节的声明、警告和启用行为。",
+              "claim_sha256": "c281b9748242564774e291d25bd53fa6002cbe2e21e43edddb07af2afa3c42fd",
+              "sourceAnchors": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                  "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                  "start": 1112,
+                  "end": 2643,
+                  "quote_sha256": "ff5985933076ba13700f0b57894b4acf5276221772a0b278d809132ea30b21bf"
+                }
+              ]
+            },
+            {
+              "claim_id": 6,
+              "text": "free-threaded 构建当前不支持 Limited C API 或 stable ABI；需要为它单独构建扩展；若使用 stable ABI，仍可为多个非 free-threaded 版本构建单个 wheel。[2]",
+              "passed": true,
+              "sections": [
+                "build_abi"
+              ],
+              "reason": "保留 free-threaded 构建适用范围，普通构建的 stable ABI wheel 复用例外清楚。",
+              "claim_sha256": "0764edb0e7869de005c426354e3cafed7c417ad636490486961643afb126c99c",
+              "sourceAnchors": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                  "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                  "start": 7298,
+                  "end": 8402,
+                  "quote_sha256": "8b4632da61589ff4f6e564044501cb54207c322aa9f2385f70559ca76e9e2394"
+                }
+              ]
+            },
+            {
+              "claim_id": 7,
+              "text": "直接访问可能被并发修改的结构体字段、使用不检查错误或加锁的访问宏、在包含对象可能并发修改时使用借用引用，均可能不安全；容器内部加锁，但 PyDict_Next 不加锁，需临界区保护；扩展内部状态可能需加锁。[2]",
+              "passed": false,
+              "sections": [
+                "api_safety",
+                "internal_state"
+              ],
+              "reason": "PyDict_Next 后直接写‘需临界区保护’，遗漏来源的‘字典可能被并发修改’条件；访问宏的并发修改条件也未明确附着。扩展内部状态‘可能需加锁’本身准确。",
+              "claim_sha256": "49aa7f0429de425ec56a3bd3dbc093932198f5f1e702c3edac8bce1bea950045",
+              "sourceAnchors": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                  "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                  "start": 2643,
+                  "end": 5301,
+                  "quote_sha256": "cc9ab13a5061a88e60895bcd8d4a75a6cde2c94884600ec83685a209d61cd3ed"
+                },
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                  "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                  "start": 6679,
+                  "end": 7298,
+                  "quote_sha256": "0238226c06656ee32f25a546e79acaf4e98098310abe860bbaa4056c881cc9c4"
+                }
+              ]
+            },
+            {
+              "claim_id": 8,
+              "text": "适用限制：free-threaded 模式实验性，预期一些 bug 和显著单线程性能损失。[1]",
+              "passed": true,
+              "sections": [
+                "gil"
+              ],
+              "reason": "与实验性和性能损失提示一致。",
+              "claim_sha256": "f9806ee9e7006fb93d6e32f233f77ef07db7d06172d1bfcdbf3e8ef12fa05d2a",
+              "sourceAnchors": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                  "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                  "start": 293,
+                  "end": 1214,
+                  "quote_sha256": "af0d405cfd8564f657f9d296edd3b478ba7af0db537c36543e07c752162d22e1"
+                }
+              ]
+            },
+            {
+              "claim_id": 9,
+              "text": "3.13 在 pyperformance 套件上单线程开销约 40%，主要因 specializing adaptive interpreter 被禁用；大部分时间在 C 扩展或 I/O 的程序影响较小。[1]",
+              "passed": false,
+              "sections": [
+                "performance"
+              ],
+              "reason": "保留 3.13、pyperformance 和 C 扩展/I/O 例外，但数值句缺少‘相对默认 GIL 构建’的比较基线；标题不能替代该限定。",
+              "claim_sha256": "517c6d614f13534f59969d40af9cf69379c37ac5fd2eba07ab4e2560491dd913",
+              "sourceAnchors": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                  "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                  "start": 5223,
+                  "end": 5899,
+                  "quote_sha256": "675d6f032dde812d22b861e40a5569ac0922b0aa42a2c725760238154ba224a9"
+                }
+              ]
+            },
+            {
+              "claim_id": 10,
+              "text": "来源称未来目标为降到 10% 或以下，但非当前保证。[1]",
+              "passed": false,
+              "sections": [
+                "performance"
+              ],
+              "reason": "10% 目标未保留 pyperformance／默认 GIL 构建基线，且‘来源称未来目标’未清楚标注为该版本文档当时的目标。",
+              "claim_sha256": "ca60650cf6a614c648e75d7af6ff0886aeed55bd8ab7b05a83f749fa7f0b0198",
+              "sourceAnchors": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                  "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                  "start": 5223,
+                  "end": 5899,
+                  "quote_sha256": "675d6f032dde812d22b861e40a5569ac0922b0aa42a2c725760238154ba224a9"
+                }
+              ]
+            },
+            {
+              "claim_id": 11,
+              "text": "3.13 free-threaded 构建会使某些对象 immortal，创建大量这些类型对象的应用可能增加内存使用，预计 3.14 处理；跨线程访问 frame 对象不安全，可能崩溃；跨线程共享同一迭代器一般不安全，可能重复或缺失元素或崩溃。[1]",
+              "passed": false,
+              "sections": [
+                "memory_frames_iterators"
+              ],
+              "reason": "内存使用规模、frame 和 iterator 风险条件基本忠实；‘预计 3.14 处理’没有标注为来源当时预期，不能作为当前预告。",
+              "claim_sha256": "66793572a084ecdaf61db84efd467792d1de2b79d6b6aa7dcbea44739240c107",
+              "sourceAnchors": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                  "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                  "start": 3724,
+                  "end": 5223,
+                  "quote_sha256": "e0d24e5bc46e876794370455c685f4f76728aada0225428366bbbc46f9c0c556"
+                }
+              ]
+            },
+            {
+              "claim_id": 12,
+              "text": "建议（推断）：有多线程 CPU 密集需求者可小范围试用，但需接受实验性 bug 和单线程性能损失，并先确认依赖扩展已显式标记支持；未标记扩展会触发 GIL 自动启用，可能抵消并行收益。",
+              "passed": true,
+              "sections": [
+                "gil",
+                "detection",
+                "internal_state"
+              ],
+              "reason": "建议已标为推断并有多线程工作负载、依赖和实验性条件；结合后文要求实质审查，未把声明当作安全证明。‘可能抵消’不读作全部收益必然消失。",
+              "claim_sha256": "4fc4ab9ab346925c4a272e0d9d86db8d296e58541bc714383914bb7e446e066f",
+              "sourceAnchors": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                  "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                  "start": 293,
+                  "end": 1214,
+                  "quote_sha256": "af0d405cfd8564f657f9d296edd3b478ba7af0db537c36543e07c752162d22e1"
+                },
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                  "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                  "start": 1714,
+                  "end": 2930,
+                  "quote_sha256": "0c2bf2a1a634d71acd245908e27fde2f168dbae66c972b9687c281a57916791d"
+                },
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                  "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                  "start": 6679,
+                  "end": 7298,
+                  "quote_sha256": "0238226c06656ee32f25a546e79acaf4e98098310abe860bbaa4056c881cc9c4"
+                }
+              ]
+            },
+            {
+              "claim_id": 13,
+              "text": "依赖 stable ABI 或大量 C 扩展内部状态的项目暂缓更稳妥。",
+              "passed": true,
+              "sections": [
+                "build_abi",
+                "internal_state"
+              ],
+              "reason": "承接推断标签的保守暂缓建议，有 ABI 不支持和内部状态适配风险依据，没有给出安全保证。",
+              "claim_sha256": "eafb3a2d3ef10d49dc6a06af345f96349f8512c61ba234518a9ef0ea56bef848",
+              "sourceAnchors": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                  "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                  "start": 7298,
+                  "end": 8402,
+                  "quote_sha256": "8b4632da61589ff4f6e564044501cb54207c322aa9f2385f70559ca76e9e2394"
+                },
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                  "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                  "start": 6679,
+                  "end": 7298,
+                  "quote_sha256": "0238226c06656ee32f25a546e79acaf4e98098310abe860bbaa4056c881cc9c4"
+                }
+              ]
+            },
+            {
+              "claim_id": 14,
+              "text": "试用前应审查扩展内部状态和并发安全，不能仅凭导入、编译或性能实测判断安全。[1][2]",
+              "passed": true,
+              "sections": [
+                "api_safety",
+                "internal_state"
+              ],
+              "reason": "明确保留内部状态与并发审查，形式性成功不能替代安全判断。",
+              "claim_sha256": "b9989dcfb9670df6aa0ee6dc97e4d1b7ea4dee57edb351c3039cc586822a0543",
+              "sourceAnchors": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                  "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                  "start": 2643,
+                  "end": 5301,
+                  "quote_sha256": "cc9ab13a5061a88e60895bcd8d4a75a6cde2c94884600ec83685a209d61cd3ed"
+                },
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                  "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                  "start": 6679,
+                  "end": 7298,
+                  "quote_sha256": "0238226c06656ee32f25a546e79acaf4e98098310abe860bbaa4056c881cc9c4"
+                }
+              ]
+            }
+          ],
+          "contentPassed": false,
+          "lengthPassed": true,
+          "summary": "556 汉字，操作证据边界、内存使用规模和扩展内部状态审查已保留。API 临界区保护省略并发修改前提，40% 的数值句未明确默认 GIL 构建基线，3.14 展望未说明是来源当时预期，内容不通过。原生失败发生在来源条件选择 schema 校验，未产生候选稿语义决定，不能计为正确拒绝或错误拒绝。"
+        }
+      ],
+      "document": "provider-2026-10-19-deepseek-p1-high01-draft.md"
+    },
+    {
+      "directory": ".local/p1-deepseek-20261019-high02",
+      "status": "succeeded",
+      "phase": "complete",
+      "threadId": "01e38574-3602-4cbc-98a2-1f3fbc27454d",
+      "researchId": "065af42c-b141-4adc-8faf-e040f2751cce",
+      "writingAttemptId": "e9b83566-e9fd-476d-ad0a-73897566dbc8",
+      "reportSha256": "dd364563398d32ed538c68f4114f4015011d24967f57e4e9cd1bba4ad659cb4e",
+      "bodyHan": 512,
+      "researchErrors": [],
+      "endToEndSeconds": 361.141,
+      "afterSecondSubmissionSeconds": 344.177,
+      "sourceHashes": [
+        [
+          "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+          "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91"
+        ],
+        [
+          "https://docs.python.org/3.13/howto/free-threading-python.html",
+          "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee"
+        ]
+      ],
+      "nativeRunCount": 2,
+      "processResult": {
+        "code": 0,
+        "signal": null,
+        "finishedAt": "2026-10-18T17:17:21.801Z",
+        "modelAndSearchSubstitutes": false,
+        "cleanup": {
+          "backendPortFree": true,
+          "frontendPortFree": true
+        }
+      },
+      "searchHttp": {
+        "200": 2
+      },
+      "model": {
+        "attempts": 19,
+        "http": {
+          "200": 19
+        },
+        "connectionFailures": {},
+        "streamFailures": {},
+        "finishReasons": {
+          "tool_calls": 11,
+          "stop": 5
+        },
+        "usageAttempts": 19,
+        "http200WithoutUsage": [],
+        "attemptsWithoutUsage": 0,
+        "reportedTokens": {
+          "prompt_tokens": 103693,
+          "completion_tokens": 43378,
+          "total_tokens": 147071,
+          "reasoning_tokens_reported": 26708
+        },
+        "headersSeconds": {
+          "n": 19,
+          "min": 1.709,
+          "median": 2.435,
+          "max": 14.041
+        },
+        "completedConsumptionSeconds": {
+          "n": 19,
+          "min": 2.281004299991764,
+          "median": 12.59272219997365,
+          "max": 99.91283089999342
+        },
+        "allObservedSocketsDirect": true
+      },
+      "writingAndReviewHttp": [
+        {
+          "id": "ff708b65-ceeb-4366-9000-6287edd1eca6",
+          "node": "final_report_generation",
+          "effort": "high",
+          "stage": "writing",
+          "maxTokens": 32000,
+          "httpStatus": 200,
+          "headersSeconds": 4.574,
+          "completedConsumptionSeconds": 55.36717599997064,
+          "firstVisibleSeconds": 52.64794150000671,
+          "finishReasons": [
+            "stop"
+          ],
+          "bodyException": null,
+          "usage": {
+            "prompt_tokens": 7160,
+            "completion_tokens": 8046,
+            "total_tokens": 15206,
+            "completion_tokens_details": {
+              "reasoning_tokens": 7400,
+              "accepted_prediction_tokens": 0,
+              "rejected_prediction_tokens": 0
+            }
+          },
+          "messagesSha256": null,
+          "requestWithoutEffortSha256": null
+        },
+        {
+          "id": "0c5e0f34-d8d7-4060-9eaa-c2587cb7f162",
+          "node": "final_report_generation",
+          "effort": "high",
+          "stage": "source_condition_selection",
+          "maxTokens": 128000,
+          "httpStatus": 200,
+          "headersSeconds": 1.766,
+          "completedConsumptionSeconds": 99.91283089999342,
+          "firstVisibleSeconds": 98.13514829997439,
+          "finishReasons": [
+            "stop"
+          ],
+          "bodyException": null,
+          "usage": {
+            "prompt_tokens": 6775,
+            "completion_tokens": 16457,
+            "total_tokens": 23232,
+            "completion_tokens_details": {
+              "reasoning_tokens": 15985,
+              "accepted_prediction_tokens": 0,
+              "rejected_prediction_tokens": 0
+            }
+          },
+          "messagesSha256": null,
+          "requestWithoutEffortSha256": null
+        },
+        {
+          "id": "e84eb00e-1bf0-4792-ae1f-d3f533b84e1b",
+          "node": "final_report_generation",
+          "effort": "high",
+          "stage": "candidate_review",
+          "maxTokens": 128000,
+          "httpStatus": 200,
+          "headersSeconds": 2.149,
+          "completedConsumptionSeconds": 23.670151100028306,
+          "firstVisibleSeconds": 21.566800600034185,
+          "finishReasons": [
+            "stop"
+          ],
+          "bodyException": null,
+          "usage": {
+            "prompt_tokens": 10067,
+            "completion_tokens": 3916,
+            "total_tokens": 13983,
+            "completion_tokens_details": {
+              "reasoning_tokens": 3323,
+              "accepted_prediction_tokens": 0,
+              "rejected_prediction_tokens": 0
+            }
+          },
+          "messagesSha256": null,
+          "requestWithoutEffortSha256": null
+        }
+      ],
+      "mechanicalChecks": {
+        "requiredSkillPerTaskBeforeSearch": true,
+        "exactRequestedSourceSet": true,
+        "persistedConstraints": true,
+        "searchesHaveScopeAudit": true,
+        "reportMatchesRefresh": true,
+        "sourcesMatchRefresh": true,
+        "configMatchesReceipts": true,
+        "nativeRunsSucceeded": true,
+        "refreshCreatesNoRun": true,
+        "approximately500ChineseCharacters": true,
+        "durableWritingComplete": true,
+        "replayDiagnosticsCaptured": true,
+        "noPrematureWritingReplay": true,
+        "unique_event_ids": true,
+        "continuous_sequence": true,
+        "active_identity_matches_checkpoint": true,
+        "utf8_offsets_contiguous": true,
+        "stream_bytes_equal_report_and_disk": true,
+        "finish_hash_matches": true,
+        "screenshot_before_active_finish": true,
+        "screenshot_matches_active_attempt": true,
+        "no_browser_errors": true,
+        "no_recovery_notice": true,
+        "complete_body_paragraph_before_finish": true,
+        "first_body_paragraph_is_substantive": true,
+        "successful_business_with_no_errors": true,
+        "models_used_verified_direct_transport": true,
+        "production_code_matches_launch": true,
+        "evidence_anchors_match_consumed_body": true,
+        "writer_received_source_hashes": true,
+        "final_review_passed_and_bound": true,
+        "grounded_claims_cover_report": true,
+        "grounded_support_covers_claims": true,
+        "grounded_passages_match_consumed_body": true,
+        "source_prerequisite_selection_recorded": true,
+        "source_conditions_match_consumed_body": true,
+        "condition_input_excerpts_match_consumed_body": true,
+        "source_condition_coverage_complete": true,
+        "source_condition_selection_excludes_candidate": true,
+        "review_model_reads_within_shared_budget": true
+      },
+      "nativeReviews": [
+        {
+          "writing_attempt_id": "e9b83566-e9fd-476d-ad0a-73897566dbc8",
+          "report_sha256": "dd364563398d32ed538c68f4114f4015011d24967f57e4e9cd1bba4ad659cb4e",
+          "status": "completed",
+          "passed": true,
+          "issues": [],
+          "source_conditions": [
+            {
+              "condition_id": 1,
+              "condition": "C 扩展模块必须显式声明支持在禁用 GIL 下运行；否则导入该扩展会发出警告并在运行时启用 GIL。",
+              "kind": "substantive_prerequisite",
+              "source": {
+                "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                "start": 1112,
+                "end": 1316,
+                "quote_sha256": "e75fce5ffc9f6bfb18c1877352e02709b373868453a4035dfb9d7f528bcdc2cb"
+              }
+            },
+            {
+              "condition_id": 2,
+              "condition": "跨线程访问 frame 对象不安全；在线程间共享同一迭代器通常不安全，可能导致解释器崩溃或迭代时出现重复/丢失元素。",
+              "kind": "substantive_prerequisite",
+              "source": {
+                "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                "start": 4678,
+                "end": 5223,
+                "quote_sha256": "ebc8f17d53e6c6f91be92498f312cd442d5821aed2d82ad2fea5ef5f6da4fa72"
+              }
+            },
+            {
+              "condition_id": 3,
+              "condition": "free-threaded 构建支持在运行时通过环境变量 PYTHON_GIL 或命令行选项 -X gil 选择启用 GIL。",
+              "kind": "decision_condition",
+              "source": {
+                "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                "start": 2296,
+                "end": 2517,
+                "quote_sha256": "177ef34b515b86e59410bb48e1ce704b6f2007e84baa6a8a3b74371a1d915a91"
+              }
+            },
+            {
+              "condition_id": 4,
+              "condition": "free-threaded 构建当前不支持 Limited C API 或 stable ABI；需要为 free-threaded 构建单独构建 wheel，而使用 stable ABI 的扩展仍可为多个非 free-threaded Python 版本构建单一 wheel。",
+              "kind": "decision_condition",
+              "source": {
+                "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                "start": 7684,
+                "end": 8249,
+                "quote_sha256": "db71ffd1d855f609fd8628c532e0eb43b74315c8bcd092f7490dc46edc9ea8b7"
+              }
+            },
+            {
+              "condition_id": 5,
+              "condition": "在 3.13 中，free-threaded 构建在 pyperformance 套件上的单线程性能开销约为 40%；大部分时间花在 C 扩展或 I/O 的程序受影响较小。",
+              "kind": "decision_condition",
+              "source": {
+                "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                "start": 5223,
+                "end": 5899,
+                "quote_sha256": "675d6f032dde812d22b861e40a5569ac0922b0aa42a2c725760238154ba224a9"
+              }
+            },
+            {
+              "condition_id": 6,
+              "condition": "free-threaded 模式是实验性的，工作仍在进行中，预期会有一些 bug。",
+              "kind": "decision_condition",
+              "source": {
+                "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                "start": 739,
+                "end": 881,
+                "quote_sha256": "402baebdd092e83fe7c4c5bd1b35a078dfb6ec11abf3b7f8278569ff2fa8c912"
+              }
+            }
+          ],
+          "source_prerequisites_absent_reason": "",
+          "review_model_reads": 2,
+          "source_support": [
+            {
+              "claim_id": 1,
+              "claim_sha256": "66ba838f602be000df8daa5a2cc8583a5d802d1d2e00b989b2c05e2467a588e3",
+              "evidence": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                  "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                  "start": 293,
+                  "end": 881,
+                  "quote_sha256": "966e5d656a6cafd38417d874fb131eae4fa0713d045b78d80ea492e02419ec2d"
+                },
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                  "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                  "start": 5223,
+                  "end": 5435,
+                  "quote_sha256": "54b2c04d959108f6954f88ba8dbb19bb016d815c35953b85c39070d892a237bb"
+                }
+              ]
+            },
+            {
+              "claim_id": 2,
+              "claim_sha256": "1178a57063eac1bdc1a551fe91eba7c4b225424b72accf7adac87b2118fd1b93",
+              "evidence": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                  "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                  "start": 2296,
+                  "end": 2517,
+                  "quote_sha256": "177ef34b515b86e59410bb48e1ce704b6f2007e84baa6a8a3b74371a1d915a91"
+                }
+              ]
+            },
+            {
+              "claim_id": 3,
+              "claim_sha256": "65c9e0684e1400c9f6c6f195336dedd78822d1d9262980ad343786a1a07f9897",
+              "evidence": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                  "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                  "start": 2517,
+                  "end": 2700,
+                  "quote_sha256": "1267e922c74f1f60ecb9184fe77479fee106756139f5b0900d546991b8114c89"
+                }
+              ]
+            },
+            {
+              "claim_id": 4,
+              "claim_sha256": "10b844943e51053d458dd4c3d30067d4877f3af901ca4474be561e30cea19d8d",
+              "evidence": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                  "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                  "start": 1714,
+                  "end": 2296,
+                  "quote_sha256": "4492d528ff537667b7371df2dbe0f20a7360ceab8ec20ec8bc95b43208ce73a8"
+                }
+              ]
+            },
+            {
+              "claim_id": 5,
+              "claim_sha256": "56cede4b02e4b6c70f8e2b6a525c2f0aa923a6afce9938e5c3c7294b320223cf",
+              "evidence": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                  "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                  "start": 1112,
+                  "end": 1316,
+                  "quote_sha256": "e75fce5ffc9f6bfb18c1877352e02709b373868453a4035dfb9d7f528bcdc2cb"
+                }
+              ]
+            },
+            {
+              "claim_id": 6,
+              "claim_sha256": "db1d68f7a066b209c96b1e62c13505462c647b59d2ba584eae07c7aa65f97092",
+              "evidence": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                  "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                  "start": 7298,
+                  "end": 8249,
+                  "quote_sha256": "267f1a0d0b43d0aa96b685b7aa10c98018c2f37e924e9869470dfb666600766c"
+                }
+              ]
+            },
+            {
+              "claim_id": 7,
+              "claim_sha256": "036a4c9a72533d494f754e31769a499a4b0ea11421289a79e68020690297ce66",
+              "evidence": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                  "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                  "start": 739,
+                  "end": 881,
+                  "quote_sha256": "402baebdd092e83fe7c4c5bd1b35a078dfb6ec11abf3b7f8278569ff2fa8c912"
+                }
+              ]
+            },
+            {
+              "claim_id": 8,
+              "claim_sha256": "ca45e8c5b1baacd6b0e5c248a476c574564701de56ad2bc20df6d894508bdf24",
+              "evidence": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                  "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                  "start": 5223,
+                  "end": 5506,
+                  "quote_sha256": "4676ead816cf4967d1a63f3ff76a6ad93886399d3663eeaae296e87980f7d780"
+                }
+              ]
+            },
+            {
+              "claim_id": 9,
+              "claim_sha256": "6633e7a079037f704564c0de94a2ee4d89304b82df57a456ae768b4afada33d9",
+              "evidence": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                  "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                  "start": 3741,
+                  "end": 4678,
+                  "quote_sha256": "f53590694edb8006cb60c4f5f7ef51869a0bcef618c6a61f90266b85dcd98479"
+                },
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                  "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                  "start": 4678,
+                  "end": 5223,
+                  "quote_sha256": "ebc8f17d53e6c6f91be92498f312cd442d5821aed2d82ad2fea5ef5f6da4fa72"
+                }
+              ]
+            },
+            {
+              "claim_id": 10,
+              "claim_sha256": "6474aed7de7ed257ae2dbaed8a2be1bafd9abf08fd642f8f6e2d3a07b435d94d",
+              "evidence": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                  "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                  "start": 1112,
+                  "end": 1316,
+                  "quote_sha256": "e75fce5ffc9f6bfb18c1877352e02709b373868453a4035dfb9d7f528bcdc2cb"
+                },
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                  "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                  "start": 2349,
+                  "end": 2700,
+                  "quote_sha256": "b92f417efeeef9ea0420d075d462249e07132aa26c132c7941de7eab8cb0ee38"
+                },
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                  "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                  "start": 7684,
+                  "end": 8249,
+                  "quote_sha256": "db71ffd1d855f609fd8628c532e0eb43b74315c8bcd092f7490dc46edc9ea8b7"
+                }
+              ]
+            },
+            {
+              "claim_id": 11,
+              "claim_sha256": "228138319735d4d34e50c126e8947677612803818de17f40c768ef0435896cf1",
+              "evidence": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                  "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                  "start": 739,
+                  "end": 881,
+                  "quote_sha256": "402baebdd092e83fe7c4c5bd1b35a078dfb6ec11abf3b7f8278569ff2fa8c912"
+                }
+              ]
+            },
+            {
+              "claim_id": 12,
+              "claim_sha256": "9c157a2fd1f5270530e2de7229306e748db2cce1884b14ea95f062dd465677c3",
+              "evidence": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                  "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                  "start": 2296,
+                  "end": 2517,
+                  "quote_sha256": "177ef34b515b86e59410bb48e1ce704b6f2007e84baa6a8a3b74371a1d915a91"
+                }
+              ]
+            }
+          ],
+          "condition_coverage": [
+            {
+              "condition_id": 1,
+              "claim_ids": [
+                5
+              ],
+              "not_applicable_reason": ""
+            },
+            {
+              "condition_id": 2,
+              "claim_ids": [
+                9
+              ],
+              "not_applicable_reason": ""
+            },
+            {
+              "condition_id": 3,
+              "claim_ids": [
+                2
+              ],
+              "not_applicable_reason": ""
+            },
+            {
+              "condition_id": 4,
+              "claim_ids": [
+                6
+              ],
+              "not_applicable_reason": ""
+            },
+            {
+              "condition_id": 5,
+              "claim_ids": [
+                8
+              ],
+              "not_applicable_reason": ""
+            },
+            {
+              "condition_id": 6,
+              "claim_ids": [
+                7
+              ],
+              "not_applicable_reason": ""
+            }
+          ],
+          "body_han_count": 512,
+          "body_han_bounds": [
+            400,
+            650
+          ]
+        }
+      ],
+      "independentCandidates": [
+        {
+          "writingAttemptId": "e9b83566-e9fd-476d-ad0a-73897566dbc8",
+          "sha256": "dd364563398d32ed538c68f4114f4015011d24967f57e4e9cd1bba4ad659cb4e",
+          "bodyHan": 512,
+          "claims": [
+            {
+              "claim_id": 1,
+              "text": "**Python 3.13 free-threaded 与默认 GIL 构建对比**\n\nPython 3.13 的 free-threaded 构建是实验性构建，禁用 GIL，目标是让线程在可用 CPU 核上并行；默认构建仍启用 GIL。[1]",
+              "passed": true,
+              "sections": [
+                "gil"
+              ],
+              "reason": "实验性、GIL 状态及并行能力描述有来源支持，后文限定可启用。",
+              "claim_sha256": "66ba838f602be000df8daa5a2cc8583a5d802d1d2e00b989b2c05e2467a588e3",
+              "sourceAnchors": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                  "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                  "start": 293,
+                  "end": 1214,
+                  "quote_sha256": "af0d405cfd8564f657f9d296edd3b478ba7af0db537c36543e07c752162d22e1"
+                }
+              ]
+            },
+            {
+              "claim_id": 2,
+              "text": "free-threaded 构建可在运行时通过环境变量 PYTHON_GIL 或命令行选项 -X gil 启用 GIL；来源未说明这两个开关的取值，也未说明能否在进程运行中任意切换。[1]",
+              "passed": false,
+              "sections": [
+                "detection"
+              ],
+              "reason": "开关与运行中切换缺口准确，但只列取值和能否运行中切换，遗漏该限定来源未说明生效时机；后文重复也未补齐。",
+              "claim_sha256": "1178a57063eac1bdc1a551fe91eba7c4b225424b72accf7adac87b2118fd1b93",
+              "sourceAnchors": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                  "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                  "start": 1714,
+                  "end": 2930,
+                  "quote_sha256": "0c2bf2a1a634d71acd245908e27fde2f168dbae66c972b9687c281a57916791d"
+                }
+              ]
+            },
+            {
+              "claim_id": 3,
+              "text": "导入未显式标记支持 free threading 的 C-API 扩展模块时，GIL 可能自动启用并打印警告。[1]",
+              "passed": true,
+              "sections": [
+                "detection"
+              ],
+              "reason": "保留未显式标记支持、可能自动启用与警告。",
+              "claim_sha256": "65c9e0684e1400c9f6c6f195336dedd78822d1d9262980ad343786a1a07f9897",
+              "sourceAnchors": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                  "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                  "start": 1714,
+                  "end": 2930,
+                  "quote_sha256": "0c2bf2a1a634d71acd245908e27fde2f168dbae66c972b9687c281a57916791d"
+                }
+              ]
+            },
+            {
+              "claim_id": 4,
+              "text": "可用 sys._is_gil_enabled() 检查运行进程是否实际禁用 GIL，用 sysconfig.get_config_var(\"Py_GIL_DISABLED\") 判断构建是否支持 free threading，后者是构建配置决策的推荐机制。[1]",
+              "passed": true,
+              "sections": [
+                "detection"
+              ],
+              "reason": "区分运行状态与构建能力，推荐机制也正确。",
+              "claim_sha256": "10b844943e51053d458dd4c3d30067d4877f3af901ca4474be561e30cea19d8d",
+              "sourceAnchors": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                  "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                  "start": 1714,
+                  "end": 2930,
+                  "quote_sha256": "0c2bf2a1a634d71acd245908e27fde2f168dbae66c972b9687c281a57916791d"
+                }
+              ]
+            },
+            {
+              "claim_id": 5,
+              "text": "C 扩展兼容性方面，扩展模块必须显式表明支持禁用 GIL；否则导入会警告并在运行时启用 GIL。[2]",
+              "passed": true,
+              "sections": [
+                "extension_declaration"
+              ],
+              "reason": "声明与导入行为描述准确；其本身不证明实际线程安全。",
+              "claim_sha256": "56cede4b02e4b6c70f8e2b6a525c2f0aa923a6afce9938e5c3c7294b320223cf",
+              "sourceAnchors": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                  "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                  "start": 1112,
+                  "end": 2643,
+                  "quote_sha256": "ff5985933076ba13700f0b57894b4acf5276221772a0b278d809132ea30b21bf"
+                }
+              ]
+            },
+            {
+              "claim_id": 6,
+              "text": "扩展需专门为 free-threaded 构建编译，wheel、共享库和二进制以 t 后缀标识；free-threaded 构建目前不支持 Limited C API 或 stable ABI，因此需单独构建 wheel；默认 GIL 构建可继续使用 stable ABI 为多个非 free-threaded 版本构建单个 wheel。[2]",
+              "passed": true,
+              "sections": [
+                "build_abi"
+              ],
+              "reason": "构建、t 后缀、Limited API／stable ABI 限制及普通构建例外均保留。",
+              "claim_sha256": "db1d68f7a066b209c96b1e62c13505462c647b59d2ba584eae07c7aa65f97092",
+              "sourceAnchors": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                  "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                  "start": 7298,
+                  "end": 8402,
+                  "quote_sha256": "8b4632da61589ff4f6e564044501cb54207c322aa9f2385f70559ca76e9e2394"
+                }
+              ]
+            },
+            {
+              "claim_id": 7,
+              "text": "适用限制：free-threaded 模式实验性，预期有 bug 和显著单线程性能损失。[1]",
+              "passed": true,
+              "sections": [
+                "gil"
+              ],
+              "reason": "实验性和性能风险提示有据。",
+              "claim_sha256": "036a4c9a72533d494f754e31769a499a4b0ea11421289a79e68020690297ce66",
+              "sourceAnchors": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                  "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                  "start": 293,
+                  "end": 1214,
+                  "quote_sha256": "af0d405cfd8564f657f9d296edd3b478ba7af0db537c36543e07c752162d22e1"
+                }
+              ]
+            },
+            {
+              "claim_id": 8,
+              "text": "在 3.13 的 pyperformance 套件上，其单线程开销相对默认 GIL 构建约 40%；大部分时间在 C 扩展或 I/O 的程序受影响较小。[1]",
+              "passed": true,
+              "sections": [
+                "performance"
+              ],
+              "reason": "40% 的版本、测试套件、默认 GIL 基线及 C 扩展／I/O 例外完整。",
+              "claim_sha256": "ca45e8c5b1baacd6b0e5c248a476c574564701de56ad2bc20df6d894508bdf24",
+              "sourceAnchors": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                  "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                  "start": 5223,
+                  "end": 5899,
+                  "quote_sha256": "675d6f032dde812d22b861e40a5569ac0922b0aa42a2c725760238154ba224a9"
+                }
+              ]
+            },
+            {
+              "claim_id": 9,
+              "text": "跨线程访问 frame 对象不安全，可能导致程序崩溃；同一迭代器对象在多线程间共享通常不安全，可能重复、缺失元素或崩溃；模块级函数、方法描述符、代码对象、模块、类等对象会被 immortal 化，大量创建这些类型可能增加内存使用。[1]",
+              "passed": true,
+              "sections": [
+                "memory_frames_iterators"
+              ],
+              "reason": "帧与迭代器风险、对象范围和大量创建触发的内存风险均保留；本短报告无需展开 immortalization 实现教程。",
+              "claim_sha256": "6633e7a079037f704564c0de94a2ee4d89304b82df57a456ae768b4afada33d9",
+              "sourceAnchors": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                  "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                  "start": 3724,
+                  "end": 5223,
+                  "quote_sha256": "e0d24e5bc46e876794370455c685f4f76728aada0225428366bbbc46f9c0c556"
+                }
+              ]
+            },
+            {
+              "claim_id": 10,
+              "text": "试用建议（推断）：若需评估多核并行且能接受实验风险，可先小范围试用 free-threaded 构建，并用上述检查确认实际 GIL 状态；若依赖未声明支持 free threading 的 C 扩展，导入会警告并启用 GIL，可能抵消并行收益，应先确认扩展已显式支持并为 free-threaded 构建单独构建，且不依赖 Limited C API/stable ABI。",
+              "passed": false,
+              "sections": [
+                "gil",
+                "detection",
+                "api_safety",
+                "internal_state",
+                "build_abi"
+              ],
+              "reason": "建议只要求显式支持、专门构建和 ABI 条件，整篇未提扩展内部共享状态可能需要保护、API 并发安全审查；这些形式性条件不能替代来源中的实质适配前提。",
+              "claim_sha256": "6474aed7de7ed257ae2dbaed8a2be1bafd9abf08fd642f8f6e2d3a07b435d94d",
+              "sourceAnchors": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                  "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                  "start": 293,
+                  "end": 1214,
+                  "quote_sha256": "af0d405cfd8564f657f9d296edd3b478ba7af0db537c36543e07c752162d22e1"
+                },
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                  "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                  "start": 1714,
+                  "end": 2930,
+                  "quote_sha256": "0c2bf2a1a634d71acd245908e27fde2f168dbae66c972b9687c281a57916791d"
+                },
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                  "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                  "start": 2643,
+                  "end": 5301,
+                  "quote_sha256": "cc9ab13a5061a88e60895bcd8d4a75a6cde2c94884600ec83685a209d61cd3ed"
+                },
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                  "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                  "start": 6679,
+                  "end": 7298,
+                  "quote_sha256": "0238226c06656ee32f25a546e79acaf4e98098310abe860bbaa4056c881cc9c4"
+                },
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                  "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                  "start": 7298,
+                  "end": 8402,
+                  "quote_sha256": "8b4632da61589ff4f6e564044501cb54207c322aa9f2385f70559ca76e9e2394"
+                }
+              ]
+            },
+            {
+              "claim_id": 11,
+              "text": "否则默认 GIL 构建更稳妥。",
+              "passed": true,
+              "sections": [
+                "build_abi",
+                "internal_state"
+              ],
+              "reason": "承接推断标签的保守建议本身可成立；前句遗漏的安全审查单独计为失败。",
+              "claim_sha256": "228138319735d4d34e50c126e8947677612803818de17f40c768ef0435896cf1",
+              "sourceAnchors": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                  "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                  "start": 7298,
+                  "end": 8402,
+                  "quote_sha256": "8b4632da61589ff4f6e564044501cb54207c322aa9f2385f70559ca76e9e2394"
+                },
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                  "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                  "start": 6679,
+                  "end": 7298,
+                  "quote_sha256": "0238226c06656ee32f25a546e79acaf4e98098310abe860bbaa4056c881cc9c4"
+                }
+              ]
+            },
+            {
+              "claim_id": 12,
+              "text": "来源未说明 PYTHON_GIL 和 -X gil 的具体取值及运行中切换行为，需另行核实。",
+              "passed": false,
+              "sections": [
+                "detection"
+              ],
+              "reason": "再次列出取值和运行中切换，仍未说明生效时机的证据缺口；与第 2 条是同一缺陷，不重复计算为两个独立根因。",
+              "claim_sha256": "9c157a2fd1f5270530e2de7229306e748db2cce1884b14ea95f062dd465677c3",
+              "sourceAnchors": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                  "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                  "start": 1714,
+                  "end": 2930,
+                  "quote_sha256": "0c2bf2a1a634d71acd245908e27fde2f168dbae66c972b9687c281a57916791d"
+                }
+              ]
+            }
+          ],
+          "contentPassed": false,
+          "lengthPassed": true,
+          "summary": "512 汉字，机械检查全通过，模型原生 passed=true，但独立内容不通过。实质适配／安全审查整条遗漏；来源条件选择将支持声明放入 substantive_prerequisite，未选择扩展内部共享状态与并发 API 审查；操作证据边界只列取值和运行中切换，遗漏生效时机。归类为原生误放行，不改写已交付报告。"
+        }
+      ],
+      "document": "provider-2026-10-19-deepseek-p1-high02-report.md"
+    },
+    {
+      "directory": ".local/p1-deepseek-20261019-high03",
+      "status": "succeeded",
+      "phase": "complete",
+      "threadId": "ea1513e4-28da-45c1-a1d1-dc466f452822",
+      "researchId": "b5f49bb1-c44e-404a-be76-30d67b670f01",
+      "writingAttemptId": "820fc9cc-6799-4f4e-bd22-dcd9e7e798dd",
+      "reportSha256": "47eafb07e463ab19edfdab8e0a90e54e50bdaa2c370e4a45b2e9a132cfb00289",
+      "bodyHan": 590,
+      "researchErrors": [],
+      "endToEndSeconds": 553.175,
+      "afterSecondSubmissionSeconds": 546.655,
+      "sourceHashes": [
+        [
+          "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+          "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91"
+        ],
+        [
+          "https://docs.python.org/3.13/howto/free-threading-python.html",
+          "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee"
+        ],
+        [
+          "https://docs.python.org/3.13/howto/free-threading-python.html",
+          "9969211308b25562a68231b70a145af65da9de8fa011c86d4212df0df6eba741"
+        ]
+      ],
+      "nativeRunCount": 2,
+      "processResult": {
+        "code": 0,
+        "signal": null,
+        "finishedAt": "2026-10-18T17:38:17.306Z",
+        "modelAndSearchSubstitutes": false,
+        "cleanup": {
+          "backendPortFree": true,
+          "frontendPortFree": true
+        }
+      },
+      "searchHttp": {
+        "200": 2
+      },
+      "model": {
+        "attempts": 19,
+        "http": {
+          "200": 19
+        },
+        "connectionFailures": {},
+        "streamFailures": {},
+        "finishReasons": {
+          "tool_calls": 11,
+          "stop": 5
+        },
+        "usageAttempts": 19,
+        "http200WithoutUsage": [],
+        "attemptsWithoutUsage": 0,
+        "reportedTokens": {
+          "prompt_tokens": 115165,
+          "completion_tokens": 60936,
+          "total_tokens": 176101,
+          "reasoning_tokens_reported": 43166
+        },
+        "headersSeconds": {
+          "n": 19,
+          "min": 1.799,
+          "median": 3.189,
+          "max": 6.236
+        },
+        "completedConsumptionSeconds": {
+          "n": 19,
+          "min": 2.4480517000192776,
+          "median": 7.191047100001015,
+          "max": 201.29861320002237
+        },
+        "allObservedSocketsDirect": true
+      },
+      "writingAndReviewHttp": [
+        {
+          "id": "0944ad96-17a6-4e9d-b2aa-a3594b02965f",
+          "node": "final_report_generation",
+          "effort": "high",
+          "stage": "writing",
+          "maxTokens": 32000,
+          "httpStatus": 200,
+          "headersSeconds": 3.532,
+          "completedConsumptionSeconds": 66.90071259997785,
+          "firstVisibleSeconds": 61.546219699957874,
+          "finishReasons": [
+            "stop"
+          ],
+          "bodyException": null,
+          "usage": {
+            "prompt_tokens": 9788,
+            "completion_tokens": 6828,
+            "total_tokens": 16616,
+            "completion_tokens_details": {
+              "reasoning_tokens": 6141,
+              "accepted_prediction_tokens": 0,
+              "rejected_prediction_tokens": 0
+            }
+          },
+          "messagesSha256": null,
+          "requestWithoutEffortSha256": null
+        },
+        {
+          "id": "6ad0da17-5ea7-4759-a592-448b68b8c249",
+          "node": "final_report_generation",
+          "effort": "high",
+          "stage": "source_condition_selection",
+          "maxTokens": 128000,
+          "httpStatus": 200,
+          "headersSeconds": 5.503,
+          "completedConsumptionSeconds": 119.06957400002284,
+          "firstVisibleSeconds": 115.06286519998685,
+          "finishReasons": [
+            "stop"
+          ],
+          "bodyException": null,
+          "usage": {
+            "prompt_tokens": 9558,
+            "completion_tokens": 12645,
+            "total_tokens": 22203,
+            "completion_tokens_details": {
+              "reasoning_tokens": 11896,
+              "accepted_prediction_tokens": 0,
+              "rejected_prediction_tokens": 0
+            }
+          },
+          "messagesSha256": null,
+          "requestWithoutEffortSha256": null
+        },
+        {
+          "id": "470d9a88-77d4-449e-bbcf-279f84242dc6",
+          "node": "final_report_generation",
+          "effort": "high",
+          "stage": "candidate_review",
+          "maxTokens": 128000,
+          "httpStatus": 200,
+          "headersSeconds": 3.451,
+          "completedConsumptionSeconds": 201.29861320002237,
+          "firstVisibleSeconds": 196.39786670001922,
+          "finishReasons": [
+            "stop"
+          ],
+          "bodyException": null,
+          "usage": {
+            "prompt_tokens": 13803,
+            "completion_tokens": 26078,
+            "total_tokens": 39881,
+            "completion_tokens_details": {
+              "reasoning_tokens": 25129,
+              "accepted_prediction_tokens": 0,
+              "rejected_prediction_tokens": 0
+            }
+          },
+          "messagesSha256": null,
+          "requestWithoutEffortSha256": null
+        }
+      ],
+      "mechanicalChecks": {
+        "requiredSkillPerTaskBeforeSearch": true,
+        "exactRequestedSourceSet": true,
+        "persistedConstraints": true,
+        "searchesHaveScopeAudit": true,
+        "reportMatchesRefresh": true,
+        "sourcesMatchRefresh": true,
+        "configMatchesReceipts": true,
+        "nativeRunsSucceeded": true,
+        "refreshCreatesNoRun": true,
+        "approximately500ChineseCharacters": true,
+        "durableWritingComplete": true,
+        "replayDiagnosticsCaptured": true,
+        "noPrematureWritingReplay": true,
+        "unique_event_ids": true,
+        "continuous_sequence": true,
+        "active_identity_matches_checkpoint": true,
+        "utf8_offsets_contiguous": true,
+        "stream_bytes_equal_report_and_disk": true,
+        "finish_hash_matches": true,
+        "screenshot_before_active_finish": true,
+        "screenshot_matches_active_attempt": true,
+        "no_browser_errors": true,
+        "no_recovery_notice": true,
+        "complete_body_paragraph_before_finish": true,
+        "first_body_paragraph_is_substantive": true,
+        "successful_business_with_no_errors": true,
+        "models_used_verified_direct_transport": true,
+        "production_code_matches_launch": true,
+        "evidence_anchors_match_consumed_body": true,
+        "writer_received_source_hashes": true,
+        "final_review_passed_and_bound": true,
+        "grounded_claims_cover_report": true,
+        "grounded_support_covers_claims": true,
+        "grounded_passages_match_consumed_body": true,
+        "source_prerequisite_selection_recorded": true,
+        "source_conditions_match_consumed_body": true,
+        "condition_input_excerpts_match_consumed_body": true,
+        "source_condition_coverage_complete": true,
+        "source_condition_selection_excludes_candidate": true,
+        "review_model_reads_within_shared_budget": true
+      },
+      "nativeReviews": [
+        {
+          "writing_attempt_id": "820fc9cc-6799-4f4e-bd22-dcd9e7e798dd",
+          "report_sha256": "47eafb07e463ab19edfdab8e0a90e54e50bdaa2c370e4a45b2e9a132cfb00289",
+          "status": "completed",
+          "passed": true,
+          "issues": [],
+          "source_conditions": [
+            {
+              "condition_id": 1,
+              "condition": "若扩展有此前由 GIL 保护的内部状态（如全局缓存或全局变量），可能需要加锁或改为线程局部存储以保护该状态。",
+              "kind": "substantive_prerequisite",
+              "source": {
+                "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                "start": 6679,
+                "end": 7298,
+                "quote_sha256": "0238226c06656ee32f25a546e79acaf4e98098310abe860bbaa4056c881cc9c4"
+              }
+            },
+            {
+              "condition_id": 2,
+              "condition": "free-threaded 构建要求仅用 object 域分配 Python 对象，且所有 Python 对象都必须用该域分配；需检查 PyObject_Malloc 的用途，缓冲区改用 PyMem_Malloc。",
+              "kind": "substantive_prerequisite",
+              "source": {
+                "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                "start": 5301,
+                "end": 5923,
+                "quote_sha256": "128bacccdcad2638f37a85166be220760236bf4b36e526e8963a1aa7d86be9d3"
+              }
+            },
+            {
+              "condition_id": 3,
+              "condition": "C API 中直接访问可能被并发修改的结构体字段、访问器宏（如 PyList_GET_ITEM）和借用引用不是线程安全的；需审查并改用强引用 API 或临界区保护。",
+              "kind": "substantive_prerequisite",
+              "source": {
+                "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                "start": 2643,
+                "end": 3273,
+                "quote_sha256": "2f7c20a280693c65f02a5c022f060e17eec2b032df90e2655d5385b461f5ecc0"
+              }
+            },
+            {
+              "condition_id": 4,
+              "condition": "free-threaded 构建支持在运行时通过环境变量 PYTHON_GIL 或命令行选项 -X gil 选择启用 GIL；导入未显式标记支持 free-threading 的 C-API 扩展时，GIL 可能自动启用并打印警告。",
+              "kind": "decision_condition",
+              "source": {
+                "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                "start": 2296,
+                "end": 2700,
+                "quote_sha256": "963077c54ddb66e15bea4ea25e234811de5b10a7aa823199bb8100623653edd0"
+              }
+            },
+            {
+              "condition_id": 5,
+              "condition": "C API 扩展需要专门为 free-threaded 构建编译，wheel、共享库和二进制文件以 t 后缀标识；该构建目前不支持 Limited C API 或 stable ABI，需要为 free-threaded 构建单独构建 wheel。",
+              "kind": "decision_condition",
+              "source": {
+                "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                "start": 7298,
+                "end": 8249,
+                "quote_sha256": "267f1a0d0b43d0aa96b685b7aa10c98018c2f37e924e9869470dfb666600766c"
+              }
+            },
+            {
+              "condition_id": 6,
+              "condition": "不应从其他线程访问 frame 对象，否则可能导致程序崩溃；sys._current_frames() 在 free-threaded 构建中通常不安全，而 inspect.currentframe() 和 sys._getframe() 只要不把 frame 对象传给其他线程通常安全。",
+              "kind": "decision_condition",
+              "source": {
+                "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                "start": 4678,
+                "end": 5041,
+                "quote_sha256": "e6a7b0b701e357cf37c7bb69eaf37819753eed4d3f299ce0cc69d22a51bb5c4c"
+              }
+            },
+            {
+              "condition_id": 7,
+              "condition": "在多线程间共享同一个迭代器对象通常不安全，迭代时可能看到重复或缺失元素，甚至使解释器崩溃。",
+              "kind": "decision_condition",
+              "source": {
+                "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                "start": 5041,
+                "end": 5223,
+                "quote_sha256": "263c7adf0bd4ea0d3a470636d06d35f058fc7f201e675b8d4686cb955df2a417"
+              }
+            },
+            {
+              "condition_id": 8,
+              "condition": "free-threaded 构建执行 Python 代码有额外开销；在 3.13 的 pyperformance 套件上约 40%，大部分时间花在 C 扩展或 I/O 的程序受影响较小，最大影响来自特化自适应解释器被禁用，预期后续版本降低，目标是在 pyperformance 套件上开销不超过 10%。",
+              "kind": "decision_condition",
+              "source": {
+                "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                "start": 5223,
+                "end": 5899,
+                "quote_sha256": "675d6f032dde812d22b861e40a5569ac0922b0aa42a2c725760238154ba224a9"
+              }
+            }
+          ],
+          "source_prerequisites_absent_reason": "",
+          "review_model_reads": 2,
+          "source_support": [
+            {
+              "claim_id": 1,
+              "claim_sha256": "46bd103ccd8387461ccd6f5dc3095b9d39ea0c411782ca9ed9b21533cf44fbfa",
+              "evidence": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                  "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                  "start": 293,
+                  "end": 597,
+                  "quote_sha256": "b521fb127999ae51232af74e2ac584d9023c9dd07991ffa0ff93f934f657bfc2"
+                }
+              ]
+            },
+            {
+              "claim_id": 2,
+              "claim_sha256": "df937e51275c693d1be37b7668cbaa60b4a49e8436b6c0b431ecedd7b66e90b1",
+              "evidence": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                  "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                  "start": 2349,
+                  "end": 2517,
+                  "quote_sha256": "ec11c1867f43ea981b1bebc338b5ac478ebd0211a9c1469ced63d21b5ed479ff"
+                }
+              ]
+            },
+            {
+              "claim_id": 3,
+              "claim_sha256": "3d657372821c38e70269d10bf87a16bd93e1f5cd218dbc855af745f8b5327537",
+              "evidence": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                  "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                  "start": 1748,
+                  "end": 2296,
+                  "quote_sha256": "7343c1b8bf3b714c3fb15e7f84ff7bdea30a6b585f1bdc526ea164e6e2d2b1e7"
+                }
+              ]
+            },
+            {
+              "claim_id": 4,
+              "claim_sha256": "d020b856a50d18bc2c809df01d06dac61335bda9d304b6176b53845b2e4f4aba",
+              "evidence": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                  "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                  "start": 1135,
+                  "end": 1316,
+                  "quote_sha256": "cb7787821b99e943984c973fec0385a8f3bd88a59a3024b9fa2f4cc614a94d4f"
+                },
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                  "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                  "start": 2517,
+                  "end": 2700,
+                  "quote_sha256": "1267e922c74f1f60ecb9184fe77479fee106756139f5b0900d546991b8114c89"
+                }
+              ]
+            },
+            {
+              "claim_id": 5,
+              "claim_sha256": "15ebc53308f47e4249b88397d1241887f48f8015308a58dc9c88c5f1e6b1d8fc",
+              "evidence": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                  "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                  "start": 1495,
+                  "end": 1762,
+                  "quote_sha256": "8f2d2aecf5ffc177b8c5d8147a4f734e43dc8527ef0870b0d1f1c5c9a315efa6"
+                },
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                  "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                  "start": 1999,
+                  "end": 2367,
+                  "quote_sha256": "c52a4f42cdfe0ce754924b8b5e0240d9dcc38c8f24d833a4e1649eb69c6fdccd"
+                }
+              ]
+            },
+            {
+              "claim_id": 6,
+              "claim_sha256": "fcf0b7b349f393ba278b00c7c04ca6ffae25c6a23f021be26d1660df88f2cd93",
+              "evidence": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                  "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                  "start": 2732,
+                  "end": 3273,
+                  "quote_sha256": "fc695314307b1c11f770b2481f98a0fd6e7dc0d9ae5be07ee6ca75b191aa7c5e"
+                },
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                  "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                  "start": 3490,
+                  "end": 3717,
+                  "quote_sha256": "fa81172fc7d5edc92a70feee062d93038d4bb3c479fdedd5c8ac425a76de6acf"
+                }
+              ]
+            },
+            {
+              "claim_id": 7,
+              "claim_sha256": "02081d3b831ac4936f263ce5b9b2af66b4c00cf6449a2cb19cd32810c795b936",
+              "evidence": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                  "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                  "start": 5444,
+                  "end": 5730,
+                  "quote_sha256": "6bcceca99c20e91be9b153b8d945b7c107ecc371e6b5adfe1a9cdea9495b6404"
+                }
+              ]
+            },
+            {
+              "claim_id": 8,
+              "claim_sha256": "65e7bbccfaf87437fc3fe998f0d665bad1855b1fa43216243a87e766a47cf37e",
+              "evidence": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                  "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                  "start": 7298,
+                  "end": 7814,
+                  "quote_sha256": "373d7719d83439b6745ed77c7cc6ba4aaa819e59e84d594e715a337c2a2c58d0"
+                }
+              ]
+            },
+            {
+              "claim_id": 9,
+              "claim_sha256": "32bc4c51f77eaa42f780962442b0d2070336ca2c86da6c1c2307cd938f597d79",
+              "evidence": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                  "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                  "start": 739,
+                  "end": 881,
+                  "quote_sha256": "402baebdd092e83fe7c4c5bd1b35a078dfb6ec11abf3b7f8278569ff2fa8c912"
+                }
+              ]
+            },
+            {
+              "claim_id": 10,
+              "claim_sha256": "efe623ca2a1d2e9435ed23178a5e483a15a939ff0c222312391d80802db605d5",
+              "evidence": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                  "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                  "start": 5223,
+                  "end": 5731,
+                  "quote_sha256": "15b91ee59df88948bbb09fbbf96f188df7727174c18b3f0942ed265b8aae1f68"
+                }
+              ]
+            },
+            {
+              "claim_id": 11,
+              "claim_sha256": "96f1a5d852021d0cc078231867e8fc4661976243dc654b3d4c8aaa315326410e",
+              "evidence": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                  "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                  "start": 3741,
+                  "end": 4487,
+                  "quote_sha256": "92347414ed9934bc126c7e91b86d5100b350d2d44a23a7ebd4b322d1a2e52ac3"
+                }
+              ]
+            },
+            {
+              "claim_id": 12,
+              "claim_sha256": "d4a27a27c30480292662a6c93c316e652cae70f2bf25c17ef0e8d5c6f0fd7573",
+              "evidence": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                  "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                  "start": 4678,
+                  "end": 5223,
+                  "quote_sha256": "ebc8f17d53e6c6f91be92498f312cd442d5821aed2d82ad2fea5ef5f6da4fa72"
+                }
+              ]
+            },
+            {
+              "claim_id": 13,
+              "claim_sha256": "5b1cbf6e8031a32fd96e474b0440d7d62858997f7a413e6f1e7e1b230226f619",
+              "evidence": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                  "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                  "start": 2945,
+                  "end": 3628,
+                  "quote_sha256": "14cea96cf14c6280ec43565c2c54e91251bfe3b1b547261fba8cb8d02a6f8b0f"
+                }
+              ]
+            },
+            {
+              "claim_id": 14,
+              "claim_sha256": "5733a7e6420657b2f6252a18f353d3dc2875810bfeb9dc2d87616567138821f7",
+              "evidence": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                  "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                  "start": 2349,
+                  "end": 2700,
+                  "quote_sha256": "b92f417efeeef9ea0420d075d462249e07132aa26c132c7941de7eab8cb0ee38"
+                },
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                  "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                  "start": 1135,
+                  "end": 1316,
+                  "quote_sha256": "cb7787821b99e943984c973fec0385a8f3bd88a59a3024b9fa2f4cc614a94d4f"
+                }
+              ]
+            },
+            {
+              "claim_id": 15,
+              "claim_sha256": "2f7d794aca075dd969cd746a1eedd3b33b04af90c9dbbc1f60e658708c36b065",
+              "evidence": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                  "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                  "start": 6679,
+                  "end": 7298,
+                  "quote_sha256": "0238226c06656ee32f25a546e79acaf4e98098310abe860bbaa4056c881cc9c4"
+                },
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                  "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                  "start": 7298,
+                  "end": 7495,
+                  "quote_sha256": "7b8467f8c02dbd87795c46389a02562887ad1ba5d5730c3b43740b6270f24d2e"
+                }
+              ]
+            },
+            {
+              "claim_id": 16,
+              "claim_sha256": "03d79f1912f7d4f1c610fe8293da8e9c26b000777becbe8074090e0b9f18539f",
+              "evidence": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                  "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                  "start": 5223,
+                  "end": 5899,
+                  "quote_sha256": "675d6f032dde812d22b861e40a5569ac0922b0aa42a2c725760238154ba224a9"
+                },
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                  "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                  "start": 7684,
+                  "end": 7814,
+                  "quote_sha256": "792bcfb7a83b05f7cc74d54c413647c0df6bc4fd5bf0bbaab4de170992e72339"
+                }
+              ]
+            }
+          ],
+          "condition_coverage": [
+            {
+              "condition_id": 1,
+              "claim_ids": [
+                15
+              ],
+              "not_applicable_reason": ""
+            },
+            {
+              "condition_id": 2,
+              "claim_ids": [
+                7
+              ],
+              "not_applicable_reason": ""
+            },
+            {
+              "condition_id": 3,
+              "claim_ids": [
+                6
+              ],
+              "not_applicable_reason": ""
+            },
+            {
+              "condition_id": 4,
+              "claim_ids": [
+                2,
+                4
+              ],
+              "not_applicable_reason": ""
+            },
+            {
+              "condition_id": 5,
+              "claim_ids": [
+                8
+              ],
+              "not_applicable_reason": ""
+            },
+            {
+              "condition_id": 6,
+              "claim_ids": [
+                12
+              ],
+              "not_applicable_reason": ""
+            },
+            {
+              "condition_id": 7,
+              "claim_ids": [
+                12
+              ],
+              "not_applicable_reason": ""
+            },
+            {
+              "condition_id": 8,
+              "claim_ids": [
+                10
+              ],
+              "not_applicable_reason": ""
+            }
+          ],
+          "body_han_count": 590,
+          "body_han_bounds": [
+            400,
+            650
+          ]
+        }
+      ],
+      "independentCandidates": [
+        {
+          "writingAttemptId": "820fc9cc-6799-4f4e-bd22-dcd9e7e798dd",
+          "sha256": "47eafb07e463ab19edfdab8e0a90e54e50bdaa2c370e4a45b2e9a132cfb00289",
+          "bodyHan": 590,
+          "claims": [
+            {
+              "claim_id": 1,
+              "text": "# Python 3.13 free-threaded 与默认 GIL 构建对比\n\n**GIL 状态**：3.13 起 CPython 提供实验性 free threading 构建，GIL 被禁用，线程可在多核并行 [1]。",
+              "passed": true,
+              "sections": [
+                "gil"
+              ],
+              "reason": "实验性及禁用 GIL 后多核线程并行符合来源；下句明确可启用 GIL。",
+              "claim_sha256": "46bd103ccd8387461ccd6f5dc3095b9d39ea0c411782ca9ed9b21533cf44fbfa",
+              "sourceAnchors": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                  "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                  "start": 293,
+                  "end": 1214,
+                  "quote_sha256": "af0d405cfd8564f657f9d296edd3b478ba7af0db537c36543e07c752162d22e1"
+                }
+              ]
+            },
+            {
+              "claim_id": 2,
+              "text": "该构建仍可在运行时启用 GIL，用环境变量 PYTHON_GIL 或命令行选项 -X gil [1]；来源未说明这两个选项的取值写法，也未说明能否在进程运行中随时切换。",
+              "passed": false,
+              "sections": [
+                "detection"
+              ],
+              "reason": "取值与运行中任意切换的缺口已列，遗漏生效时机未展开这一单独证据缺口。",
+              "claim_sha256": "df937e51275c693d1be37b7668cbaa60b4a49e8436b6c0b431ecedd7b66e90b1",
+              "sourceAnchors": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                  "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                  "start": 1714,
+                  "end": 2930,
+                  "quote_sha256": "0c2bf2a1a634d71acd245908e27fde2f168dbae66c972b9687c281a57916791d"
+                }
+              ]
+            },
+            {
+              "claim_id": 3,
+              "text": "sys._is_gil_enabled() 可查运行进程中 GIL 是否实际禁用；sysconfig.get_config_var(\"Py_GIL_DISABLED\") 为 1 表示构建支持 free threading，这是构建配置决策的推荐机制 [1]。",
+              "passed": true,
+              "sections": [
+                "detection"
+              ],
+              "reason": "两种检测对象及构建变量为 1 的含义准确。",
+              "claim_sha256": "3d657372821c38e70269d10bf87a16bd93e1f5cd218dbc855af745f8b5327537",
+              "sourceAnchors": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                  "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                  "start": 1714,
+                  "end": 2930,
+                  "quote_sha256": "0c2bf2a1a634d71acd245908e27fde2f168dbae66c972b9687c281a57916791d"
+                }
+              ]
+            },
+            {
+              "claim_id": 4,
+              "text": "**C 扩展兼容性**：扩展模块须显式声明支持 GIL 禁用，否则导入时打印警告并在运行时启用 GIL [1][2]。",
+              "passed": true,
+              "sections": [
+                "extension_declaration"
+              ],
+              "reason": "扩展声明与未声明导入行为符合来源。",
+              "claim_sha256": "d020b856a50d18bc2c809df01d06dac61335bda9d304b6176b53845b2e4f4aba",
+              "sourceAnchors": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                  "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                  "start": 1112,
+                  "end": 2643,
+                  "quote_sha256": "ff5985933076ba13700f0b57894b4acf5276221772a0b278d809132ea30b21bf"
+                }
+              ]
+            },
+            {
+              "claim_id": 5,
+              "text": "声明方式随初始化方式而异：多阶段初始化加 Py_mod_gil 槽，单阶段初始化调用 PyUnstable_Module_SetGIL()，后者仅在 free-threaded 构建中定义 [2]。",
+              "passed": true,
+              "sections": [
+                "extension_declaration"
+              ],
+              "reason": "两种初始化路径正确，保留单阶段 API 仅 free-threaded 构建可用；未声称跨旧版无条件兼容。",
+              "claim_sha256": "15ebc53308f47e4249b88397d1241887f48f8015308a58dc9c88c5f1e6b1d8fc",
+              "sourceAnchors": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                  "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                  "start": 1112,
+                  "end": 2643,
+                  "quote_sha256": "ff5985933076ba13700f0b57894b4acf5276221772a0b278d809132ea30b21bf"
+                }
+              ]
+            },
+            {
+              "claim_id": 6,
+              "text": "直接访问可能被并发修改的结构体字段、PyList_GET_ITEM 等访问宏、容器被并发修改时返回借用引用的 API 均不线程安全；PyDict_Next() 不加锁，需用临界区保护 [2]。",
+              "passed": false,
+              "sections": [
+                "api_safety"
+              ],
+              "reason": "PyDict_Next 的‘需用临界区保护’省略‘字典可能被并发修改时’，将有条件建议写为无条件要求；访问宏的并发修改前提也没有清楚附着。",
+              "claim_sha256": "fcf0b7b349f393ba278b00c7c04ca6ffae25c6a23f021be26d1660df88f2cd93",
+              "sourceAnchors": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                  "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                  "start": 2643,
+                  "end": 5301,
+                  "quote_sha256": "cc9ab13a5061a88e60895bcd8d4a75a6cde2c94884600ec83685a209d61cd3ed"
+                }
+              ]
+            },
+            {
+              "claim_id": 7,
+              "text": "该构建要求 Python 对象只能用 object 域分配，此前只是最佳实践 [2]。",
+              "passed": true,
+              "sections": [
+                "memory_allocation"
+              ],
+              "reason": "所有 Python 对象必须使用 object 域确为要求；此句没有宣称完整枚举另一个方向的分配规则。",
+              "claim_sha256": "02081d3b831ac4936f263ce5b9b2af66b4c00cf6449a2cb19cd32810c795b936",
+              "sourceAnchors": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                  "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                  "start": 5301,
+                  "end": 5923,
+                  "quote_sha256": "128bacccdcad2638f37a85166be220760236bf4b36e526e8963a1aa7d86be9d3"
+                }
+              ]
+            },
+            {
+              "claim_id": 8,
+              "text": "扩展须专门为该构建编译，产物带 t 后缀；目前不支持 Limited C API 与 stable ABI [2]。",
+              "passed": true,
+              "sections": [
+                "build_abi"
+              ],
+              "reason": "专用构建、t 后缀与 ABI 限制均明确处于 free-threaded 上下文。",
+              "claim_sha256": "65e7bbccfaf87437fc3fe998f0d665bad1855b1fa43216243a87e766a47cf37e",
+              "sourceAnchors": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                  "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                  "start": 7298,
+                  "end": 8402,
+                  "quote_sha256": "8b4632da61589ff4f6e564044501cb54207c322aa9f2385f70559ca76e9e2394"
+                }
+              ]
+            },
+            {
+              "claim_id": 9,
+              "text": "**适用限制**：该模式是实验性的，预期有 bug 和显著单线程性能损失 [1]。",
+              "passed": true,
+              "sections": [
+                "gil"
+              ],
+              "reason": "保留实验性、bug 与性能损失风险。",
+              "claim_sha256": "32bc4c51f77eaa42f780962442b0d2070336ca2c86da6c1c2307cd938f597d79",
+              "sourceAnchors": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                  "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                  "start": 293,
+                  "end": 1214,
+                  "quote_sha256": "af0d405cfd8564f657f9d296edd3b478ba7af0db537c36543e07c752162d22e1"
+                }
+              ]
+            },
+            {
+              "claim_id": 10,
+              "text": "3.13 在 pyperformance 套件上单线程开销约 40%，主因是特化自适应解释器被禁用；大部分时间花在 C 扩展或 I/O 的程序受影响较小 [1]。",
+              "passed": false,
+              "sections": [
+                "performance"
+              ],
+              "reason": "版本、套件、主要原因和 C 扩展／I/O 例外保留，但 40% 数值句没有‘相对默认 GIL 构建’基线。",
+              "claim_sha256": "efe623ca2a1d2e9435ed23178a5e483a15a939ff0c222312391d80802db605d5",
+              "sourceAnchors": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                  "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                  "start": 5223,
+                  "end": 5899,
+                  "quote_sha256": "675d6f032dde812d22b861e40a5569ac0922b0aa42a2c725760238154ba224a9"
+                }
+              ]
+            },
+            {
+              "claim_id": 11,
+              "text": "3.13 会将模块级函数、方法描述符、代码对象、模块对象及其字典、类等对象 immortal 化，大量创建这些对象的应用可能内存占用增加 [1]。",
+              "passed": true,
+              "sections": [
+                "memory_frames_iterators"
+              ],
+              "reason": "相关对象范围及大量创建这些类型对象的内存风险条件均保留，没有改写为普遍内存膨胀。",
+              "claim_sha256": "96f1a5d852021d0cc078231867e8fc4661976243dc654b3d4c8aaa315326410e",
+              "sourceAnchors": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                  "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                  "start": 3724,
+                  "end": 5223,
+                  "quote_sha256": "e0d24e5bc46e876794370455c685f4f76728aada0225428366bbbc46f9c0c556"
+                }
+              ]
+            },
+            {
+              "claim_id": 12,
+              "text": "跨线程访问 frame 对象不安全，可能崩溃；多线程共享同一迭代器对象通常不安全，可能重复或丢失元素甚至崩溃 [1]。",
+              "passed": true,
+              "sections": [
+                "memory_frames_iterators"
+              ],
+              "reason": "分别保留跨线程 frame 与共享同一 iterator 的触发条件及可能后果。",
+              "claim_sha256": "d4a27a27c30480292662a6c93c316e652cae70f2bf25c17ef0e8d5c6f0fd7573",
+              "sourceAnchors": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                  "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                  "start": 3724,
+                  "end": 5223,
+                  "quote_sha256": "e0d24e5bc46e876794370455c685f4f76728aada0225428366bbbc46f9c0c556"
+                }
+              ]
+            },
+            {
+              "claim_id": 13,
+              "text": "内置 dict、list、set 的内部锁只是当前实现的描述，不构成保证，建议改用 threading.Lock 等同步原语 [1]。",
+              "passed": true,
+              "sections": [
+                "python_safety"
+              ],
+              "reason": "内部锁只是实现描述、同步原语建议有来源支持，未写成一律必须替换。",
+              "claim_sha256": "5b1cbf6e8031a32fd96e474b0440d7d62858997f7a413e6f1e7e1b230226f619",
+              "sourceAnchors": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                  "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                  "start": 2930,
+                  "end": 3628,
+                  "quote_sha256": "9090d606123dda62d7d9408a51648036c9a86cb6b7251b5fa2a854e94647e7c5"
+                }
+              ]
+            },
+            {
+              "claim_id": 14,
+              "text": "**建议（推断）**：若程序以多线程并行计算为主、依赖扩展已声明支持 free threading，可试用该构建，并用 PYTHON_GIL 或 -X gil 对照测试；扩展未声明支持时导入会回退启用 GIL 并告警，并行收益不成立。",
+              "passed": false,
+              "sections": [
+                "gil",
+                "detection",
+                "internal_state"
+              ],
+              "reason": "有条件试用和对照测试可作为推断；‘并行收益不成立’超出两页只证明 GIL 启用的事实范围，缺少 Python 代码执行等限定，不能推导整个并行收益类别不存在。",
+              "claim_sha256": "5733a7e6420657b2f6252a18f353d3dc2875810bfeb9dc2d87616567138821f7",
+              "sourceAnchors": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                  "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                  "start": 293,
+                  "end": 1214,
+                  "quote_sha256": "af0d405cfd8564f657f9d296edd3b478ba7af0db537c36543e07c752162d22e1"
+                },
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                  "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                  "start": 1714,
+                  "end": 2930,
+                  "quote_sha256": "0c2bf2a1a634d71acd245908e27fde2f168dbae66c972b9687c281a57916791d"
+                },
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                  "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                  "start": 6679,
+                  "end": 7298,
+                  "quote_sha256": "0238226c06656ee32f25a546e79acaf4e98098310abe860bbaa4056c881cc9c4"
+                }
+              ]
+            },
+            {
+              "claim_id": 15,
+              "text": "试用前应确认扩展已为 t 后缀构建单独编译，并审查其内部缓存与全局状态的加锁情况 [2]。",
+              "passed": true,
+              "sections": [
+                "build_abi",
+                "internal_state"
+              ],
+              "reason": "单独构建与对内部缓存／全局状态保护的实质审查均保留，未把声明支持当成充分安全保证。",
+              "claim_sha256": "2f7d794aca075dd969cd746a1eedd3b33b04af90c9dbbc1f60e658708c36b065",
+              "sourceAnchors": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                  "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                  "start": 7298,
+                  "end": 8402,
+                  "quote_sha256": "8b4632da61589ff4f6e564044501cb54207c322aa9f2385f70559ca76e9e2394"
+                },
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                  "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                  "start": 6679,
+                  "end": 7298,
+                  "quote_sha256": "0238226c06656ee32f25a546e79acaf4e98098310abe860bbaa4056c881cc9c4"
+                }
+              ]
+            },
+            {
+              "claim_id": 16,
+              "text": "单线程性能敏感或依赖 stable ABI 的场景暂不宜作为默认选择。",
+              "passed": true,
+              "sections": [
+                "performance",
+                "build_abi"
+              ],
+              "reason": "承接推断标签的保守选择，有性能敏感和 ABI 依赖条件。",
+              "claim_sha256": "03d79f1912f7d4f1c610fe8293da8e9c26b000777becbe8074090e0b9f18539f",
+              "sourceAnchors": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                  "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                  "start": 5223,
+                  "end": 5899,
+                  "quote_sha256": "675d6f032dde812d22b861e40a5569ac0922b0aa42a2c725760238154ba224a9"
+                },
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                  "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                  "start": 7298,
+                  "end": 8402,
+                  "quote_sha256": "8b4632da61589ff4f6e564044501cb54207c322aa9f2385f70559ca76e9e2394"
+                }
+              ]
+            }
+          ],
+          "contentPassed": false,
+          "lengthPassed": true,
+          "summary": "590 汉字，原生模型 passed=true、机械检查全部通过，独立内容不通过。遗漏开关生效时机证据边界，PyDict_Next 临界区保护省略并发修改前提，40% 数值句缺少默认 GIL 比较基线；‘并行收益不成立’把 GIL 重新启用过度推广为整个收益类别不存在。实质内部缓存和全局状态审查本次保留。"
+        }
+      ],
+      "document": "provider-2026-10-19-deepseek-p1-high03-report.md"
+    }
+  ],
+  "paired": [
+    {
+      "result": {
+        "case": 1,
+        "effort": "high",
+        "nativeExecution": false,
+        "candidateSha256": "dd364563398d32ed538c68f4114f4015011d24967f57e4e9cd1bba4ad659cb4e",
+        "messagesSha256": "bc90d11e56b0abdb8125659da2275c00d9e16c9f8536713e2b71f44914e626cd",
+        "status": "error",
+        "exception": "APIError",
+        "diagnostics": null,
+        "elapsedSeconds": 601.6037080999813,
+        "modelReads": 1,
+        "finishedAt": "2026-10-18T17:50:42.226238+00:00"
+      },
+      "model": {
+        "attempts": 1,
+        "http": {
+          "200": 1
+        },
+        "connectionFailures": {},
+        "streamFailures": {},
+        "finishReasons": {},
+        "usageAttempts": 0,
+        "http200WithoutUsage": [
+          "2683dd33-434a-4955-b313-06b4aa867b2c"
+        ],
+        "attemptsWithoutUsage": 1,
+        "reportedTokens": {
+          "prompt_tokens": null,
+          "completion_tokens": null,
+          "total_tokens": null,
+          "reasoning_tokens_reported": null
+        },
+        "headersSeconds": {
+          "n": 1,
+          "min": 3.4703970000264235,
+          "median": 3.4703970000264235,
+          "max": 3.4703970000264235
+        },
+        "completedConsumptionSeconds": {
+          "n": 0
+        },
+        "allObservedSocketsDirect": true,
+        "attemptDetails": [
+          {
+            "id": "2683dd33-434a-4955-b313-06b4aa867b2c",
+            "node": null,
+            "effort": "high",
+            "stage": "offline_candidate_review",
+            "maxTokens": 128000,
+            "httpStatus": 200,
+            "headersSeconds": 3.4703970000264235,
+            "completedConsumptionSeconds": null,
+            "firstVisibleSeconds": null,
+            "finishReasons": [],
+            "bodyException": null,
+            "usage": null,
+            "messagesSha256": "bc90d11e56b0abdb8125659da2275c00d9e16c9f8536713e2b71f44914e626cd",
+            "requestWithoutEffortSha256": "0b9a653a48fc79f0e473b066ad322822e97955e0e78e724a4f71848c67e25789"
+          }
+        ]
+      }
+    },
+    {
+      "result": {
+        "case": 1,
+        "effort": "low",
+        "nativeExecution": false,
+        "candidateSha256": "dd364563398d32ed538c68f4114f4015011d24967f57e4e9cd1bba4ad659cb4e",
+        "messagesSha256": "bc90d11e56b0abdb8125659da2275c00d9e16c9f8536713e2b71f44914e626cd",
+        "status": "completed",
+        "decision": {
+          "passed": false,
+          "issues": [
+            "候选稿称“模块级函数、方法描述符、代码对象、模块、类等对象会被 immortal 化”，但来源 Source 2 第80-81行限定为“当主线程运行后首次启动新线程时”才会被 immortal 化；省略该触发条件会把有条件行为写成无条件结论。",
+            "候选稿建议“应先确认扩展已显式支持并为 free-threaded 构建单独构建，且不依赖 Limited C API/stable ABI”，但来源 Source 1 第175-185行还要求扩展作者审查此前由 GIL 保护的内部状态并可能加锁；仅声明支持、单独构建和避开 Limited API 不能代替该实质适配审查。"
+          ],
+          "source_conditions": [
+            {
+              "condition_id": 1,
+              "condition": "C 扩展模块必须显式声明支持在禁用 GIL 下运行；否则导入该扩展会发出警告并在运行时启用 GIL。",
+              "kind": "substantive_prerequisite",
+              "source": {
+                "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                "start": 1112,
+                "end": 1316,
+                "quote_sha256": "e75fce5ffc9f6bfb18c1877352e02709b373868453a4035dfb9d7f528bcdc2cb"
+              }
+            },
+            {
+              "condition_id": 2,
+              "condition": "跨线程访问 frame 对象不安全；在线程间共享同一迭代器通常不安全，可能导致解释器崩溃或迭代时出现重复/丢失元素。",
+              "kind": "substantive_prerequisite",
+              "source": {
+                "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                "start": 4678,
+                "end": 5223,
+                "quote_sha256": "ebc8f17d53e6c6f91be92498f312cd442d5821aed2d82ad2fea5ef5f6da4fa72"
+              }
+            },
+            {
+              "condition_id": 3,
+              "condition": "free-threaded 构建支持在运行时通过环境变量 PYTHON_GIL 或命令行选项 -X gil 选择启用 GIL。",
+              "kind": "decision_condition",
+              "source": {
+                "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                "start": 2296,
+                "end": 2517,
+                "quote_sha256": "177ef34b515b86e59410bb48e1ce704b6f2007e84baa6a8a3b74371a1d915a91"
+              }
+            },
+            {
+              "condition_id": 4,
+              "condition": "free-threaded 构建当前不支持 Limited C API 或 stable ABI；需要为 free-threaded 构建单独构建 wheel，而使用 stable ABI 的扩展仍可为多个非 free-threaded Python 版本构建单一 wheel。",
+              "kind": "decision_condition",
+              "source": {
+                "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                "start": 7684,
+                "end": 8249,
+                "quote_sha256": "db71ffd1d855f609fd8628c532e0eb43b74315c8bcd092f7490dc46edc9ea8b7"
+              }
+            },
+            {
+              "condition_id": 5,
+              "condition": "在 3.13 中，free-threaded 构建在 pyperformance 套件上的单线程性能开销约为 40%；大部分时间花在 C 扩展或 I/O 的程序受影响较小。",
+              "kind": "decision_condition",
+              "source": {
+                "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                "start": 5223,
+                "end": 5899,
+                "quote_sha256": "675d6f032dde812d22b861e40a5569ac0922b0aa42a2c725760238154ba224a9"
+              }
+            },
+            {
+              "condition_id": 6,
+              "condition": "free-threaded 模式是实验性的，工作仍在进行中，预期会有一些 bug。",
+              "kind": "decision_condition",
+              "source": {
+                "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                "start": 739,
+                "end": 881,
+                "quote_sha256": "402baebdd092e83fe7c4c5bd1b35a078dfb6ec11abf3b7f8278569ff2fa8c912"
+              }
+            }
+          ],
+          "source_prerequisites_absent_reason": "",
+          "review_model_reads": 1,
+          "body_han_count": 512,
+          "body_han_bounds": [
+            400,
+            650
+          ]
+        },
+        "elapsedSeconds": 90.69852019997779,
+        "modelReads": 1,
+        "finishedAt": "2026-10-18T17:52:59.086366+00:00"
+      },
+      "model": {
+        "attempts": 1,
+        "http": {
+          "200": 1
+        },
+        "connectionFailures": {},
+        "streamFailures": {},
+        "finishReasons": {
+          "stop": 1
+        },
+        "usageAttempts": 1,
+        "http200WithoutUsage": [],
+        "attemptsWithoutUsage": 0,
+        "reportedTokens": {
+          "prompt_tokens": 10067,
+          "completion_tokens": 10482,
+          "total_tokens": 20549,
+          "reasoning_tokens_reported": 9473
+        },
+        "headersSeconds": {
+          "n": 1,
+          "min": 2.6655541000072844,
+          "median": 2.6655541000072844,
+          "max": 2.6655541000072844
+        },
+        "completedConsumptionSeconds": {
+          "n": 1,
+          "min": 90.13107920001494,
+          "median": 90.13107920001494,
+          "max": 90.13107920001494
+        },
+        "allObservedSocketsDirect": true,
+        "attemptDetails": [
+          {
+            "id": "40bd11b3-9dc5-4485-8c2f-d9df6ddd8cc3",
+            "node": null,
+            "effort": "low",
+            "stage": "offline_candidate_review",
+            "maxTokens": 128000,
+            "httpStatus": 200,
+            "headersSeconds": 2.6655541000072844,
+            "completedConsumptionSeconds": 90.13107920001494,
+            "firstVisibleSeconds": 84.3321512999828,
+            "finishReasons": [
+              "stop"
+            ],
+            "bodyException": null,
+            "usage": {
+              "prompt_tokens": 10067,
+              "completion_tokens": 10482,
+              "total_tokens": 20549,
+              "completion_tokens_details": {
+                "reasoning_tokens": 9473,
+                "accepted_prediction_tokens": 0,
+                "rejected_prediction_tokens": 0
+              }
+            },
+            "messagesSha256": "bc90d11e56b0abdb8125659da2275c00d9e16c9f8536713e2b71f44914e626cd",
+            "requestWithoutEffortSha256": "0b9a653a48fc79f0e473b066ad322822e97955e0e78e724a4f71848c67e25789"
+          }
+        ]
+      }
+    },
+    {
+      "result": {
+        "case": 2,
+        "effort": "low",
+        "nativeExecution": false,
+        "candidateSha256": "47eafb07e463ab19edfdab8e0a90e54e50bdaa2c370e4a45b2e9a132cfb00289",
+        "messagesSha256": "dfc0fb3773cfdba1dbcb1627dfbbe2f06e6968330a92d9f870eb7750bf7e623b",
+        "status": "completed",
+        "decision": {
+          "passed": false,
+          "issues": [
+            "候选稿称“容器被并发修改时返回借用引用的 API 均不线程安全”，但来源 Source 1 第88-91行只说这些 API “may not be thread-safe if the containing object is modified concurrently”，且第138-144行明确并非所有返回借用引用的 API 都有问题（如 PyTuple_GetItem 安全、PyDict_GetItem 在私有字典上下文安全）。候选稿把“可能”写成“均”，丢失例外。",
+            "候选稿称“3.13 会将模块级函数、方法描述符、代码对象、模块对象及其字典、类等对象 immortal 化”，但来源 Source 2 第80-81行限定这些对象是在“主线程运行后首次启动新线程时”才被 immortal 化；候选稿省略触发条件，可能被理解为无条件 immortal 化。",
+            "候选稿称“建议改用 threading.Lock 等同步原语”，但来源 Source 2 第69-72行的建议带有“when possible”限定；候选稿省略该条件，把有条件建议写成无条件建议。"
+          ],
+          "source_conditions": [
+            {
+              "condition_id": 1,
+              "condition": "若扩展有此前由 GIL 保护的内部状态（如全局缓存或全局变量），可能需要加锁或改为线程局部存储以保护该状态。",
+              "kind": "substantive_prerequisite",
+              "source": {
+                "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                "start": 6679,
+                "end": 7298,
+                "quote_sha256": "0238226c06656ee32f25a546e79acaf4e98098310abe860bbaa4056c881cc9c4"
+              }
+            },
+            {
+              "condition_id": 2,
+              "condition": "free-threaded 构建要求仅用 object 域分配 Python 对象，且所有 Python 对象都必须用该域分配；需检查 PyObject_Malloc 的用途，缓冲区改用 PyMem_Malloc。",
+              "kind": "substantive_prerequisite",
+              "source": {
+                "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                "start": 5301,
+                "end": 5923,
+                "quote_sha256": "128bacccdcad2638f37a85166be220760236bf4b36e526e8963a1aa7d86be9d3"
+              }
+            },
+            {
+              "condition_id": 3,
+              "condition": "C API 中直接访问可能被并发修改的结构体字段、访问器宏（如 PyList_GET_ITEM）和借用引用不是线程安全的；需审查并改用强引用 API 或临界区保护。",
+              "kind": "substantive_prerequisite",
+              "source": {
+                "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                "start": 2643,
+                "end": 3273,
+                "quote_sha256": "2f7c20a280693c65f02a5c022f060e17eec2b032df90e2655d5385b461f5ecc0"
+              }
+            },
+            {
+              "condition_id": 4,
+              "condition": "free-threaded 构建支持在运行时通过环境变量 PYTHON_GIL 或命令行选项 -X gil 选择启用 GIL；导入未显式标记支持 free-threading 的 C-API 扩展时，GIL 可能自动启用并打印警告。",
+              "kind": "decision_condition",
+              "source": {
+                "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                "start": 2296,
+                "end": 2700,
+                "quote_sha256": "963077c54ddb66e15bea4ea25e234811de5b10a7aa823199bb8100623653edd0"
+              }
+            },
+            {
+              "condition_id": 5,
+              "condition": "C API 扩展需要专门为 free-threaded 构建编译，wheel、共享库和二进制文件以 t 后缀标识；该构建目前不支持 Limited C API 或 stable ABI，需要为 free-threaded 构建单独构建 wheel。",
+              "kind": "decision_condition",
+              "source": {
+                "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                "start": 7298,
+                "end": 8249,
+                "quote_sha256": "267f1a0d0b43d0aa96b685b7aa10c98018c2f37e924e9869470dfb666600766c"
+              }
+            },
+            {
+              "condition_id": 6,
+              "condition": "不应从其他线程访问 frame 对象，否则可能导致程序崩溃；sys._current_frames() 在 free-threaded 构建中通常不安全，而 inspect.currentframe() 和 sys._getframe() 只要不把 frame 对象传给其他线程通常安全。",
+              "kind": "decision_condition",
+              "source": {
+                "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                "start": 4678,
+                "end": 5041,
+                "quote_sha256": "e6a7b0b701e357cf37c7bb69eaf37819753eed4d3f299ce0cc69d22a51bb5c4c"
+              }
+            },
+            {
+              "condition_id": 7,
+              "condition": "在多线程间共享同一个迭代器对象通常不安全，迭代时可能看到重复或缺失元素，甚至使解释器崩溃。",
+              "kind": "decision_condition",
+              "source": {
+                "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                "start": 5041,
+                "end": 5223,
+                "quote_sha256": "263c7adf0bd4ea0d3a470636d06d35f058fc7f201e675b8d4686cb955df2a417"
+              }
+            },
+            {
+              "condition_id": 8,
+              "condition": "free-threaded 构建执行 Python 代码有额外开销；在 3.13 的 pyperformance 套件上约 40%，大部分时间花在 C 扩展或 I/O 的程序受影响较小，最大影响来自特化自适应解释器被禁用，预期后续版本降低，目标是在 pyperformance 套件上开销不超过 10%。",
+              "kind": "decision_condition",
+              "source": {
+                "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                "start": 5223,
+                "end": 5899,
+                "quote_sha256": "675d6f032dde812d22b861e40a5569ac0922b0aa42a2c725760238154ba224a9"
+              }
+            }
+          ],
+          "source_prerequisites_absent_reason": "",
+          "review_model_reads": 1,
+          "body_han_count": 590,
+          "body_han_bounds": [
+            400,
+            650
+          ]
+        },
+        "elapsedSeconds": 112.74137569998857,
+        "modelReads": 1,
+        "finishedAt": "2026-10-18T17:55:16.839654+00:00"
+      },
+      "model": {
+        "attempts": 1,
+        "http": {
+          "200": 1
+        },
+        "connectionFailures": {},
+        "streamFailures": {},
+        "finishReasons": {
+          "stop": 1
+        },
+        "usageAttempts": 1,
+        "http200WithoutUsage": [],
+        "attemptsWithoutUsage": 0,
+        "reportedTokens": {
+          "prompt_tokens": 13803,
+          "completion_tokens": 12227,
+          "total_tokens": 26030,
+          "reasoning_tokens_reported": 11042
+        },
+        "headersSeconds": {
+          "n": 1,
+          "min": 2.2617488999967463,
+          "median": 2.2617488999967463,
+          "max": 2.2617488999967463
+        },
+        "completedConsumptionSeconds": {
+          "n": 1,
+          "min": 111.89761430001818,
+          "median": 111.89761430001818,
+          "max": 111.89761430001818
+        },
+        "allObservedSocketsDirect": true,
+        "attemptDetails": [
+          {
+            "id": "98178680-9973-47b0-b94e-482d3ffb32ca",
+            "node": null,
+            "effort": "low",
+            "stage": "offline_candidate_review",
+            "maxTokens": 128000,
+            "httpStatus": 200,
+            "headersSeconds": 2.2617488999967463,
+            "completedConsumptionSeconds": 111.89761430001818,
+            "firstVisibleSeconds": 105.7036488999729,
+            "finishReasons": [
+              "stop"
+            ],
+            "bodyException": null,
+            "usage": {
+              "prompt_tokens": 13803,
+              "completion_tokens": 12227,
+              "total_tokens": 26030,
+              "completion_tokens_details": {
+                "reasoning_tokens": 11042,
+                "accepted_prediction_tokens": 0,
+                "rejected_prediction_tokens": 0
+              }
+            },
+            "messagesSha256": "dfc0fb3773cfdba1dbcb1627dfbbe2f06e6968330a92d9f870eb7750bf7e623b",
+            "requestWithoutEffortSha256": "3274c01656db507707e7ef1100e52eff4befa906d7b9a949f534fbdefc405f4a"
+          }
+        ]
+      }
+    },
+    {
+      "result": {
+        "case": 2,
+        "effort": "high",
+        "nativeExecution": false,
+        "candidateSha256": "47eafb07e463ab19edfdab8e0a90e54e50bdaa2c370e4a45b2e9a132cfb00289",
+        "messagesSha256": "dfc0fb3773cfdba1dbcb1627dfbbe2f06e6968330a92d9f870eb7750bf7e623b",
+        "status": "completed",
+        "decision": {
+          "passed": true,
+          "issues": [],
+          "source_conditions": [
+            {
+              "condition_id": 1,
+              "condition": "若扩展有此前由 GIL 保护的内部状态（如全局缓存或全局变量），可能需要加锁或改为线程局部存储以保护该状态。",
+              "kind": "substantive_prerequisite",
+              "source": {
+                "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                "start": 6679,
+                "end": 7298,
+                "quote_sha256": "0238226c06656ee32f25a546e79acaf4e98098310abe860bbaa4056c881cc9c4"
+              }
+            },
+            {
+              "condition_id": 2,
+              "condition": "free-threaded 构建要求仅用 object 域分配 Python 对象，且所有 Python 对象都必须用该域分配；需检查 PyObject_Malloc 的用途，缓冲区改用 PyMem_Malloc。",
+              "kind": "substantive_prerequisite",
+              "source": {
+                "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                "start": 5301,
+                "end": 5923,
+                "quote_sha256": "128bacccdcad2638f37a85166be220760236bf4b36e526e8963a1aa7d86be9d3"
+              }
+            },
+            {
+              "condition_id": 3,
+              "condition": "C API 中直接访问可能被并发修改的结构体字段、访问器宏（如 PyList_GET_ITEM）和借用引用不是线程安全的；需审查并改用强引用 API 或临界区保护。",
+              "kind": "substantive_prerequisite",
+              "source": {
+                "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                "start": 2643,
+                "end": 3273,
+                "quote_sha256": "2f7c20a280693c65f02a5c022f060e17eec2b032df90e2655d5385b461f5ecc0"
+              }
+            },
+            {
+              "condition_id": 4,
+              "condition": "free-threaded 构建支持在运行时通过环境变量 PYTHON_GIL 或命令行选项 -X gil 选择启用 GIL；导入未显式标记支持 free-threading 的 C-API 扩展时，GIL 可能自动启用并打印警告。",
+              "kind": "decision_condition",
+              "source": {
+                "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                "start": 2296,
+                "end": 2700,
+                "quote_sha256": "963077c54ddb66e15bea4ea25e234811de5b10a7aa823199bb8100623653edd0"
+              }
+            },
+            {
+              "condition_id": 5,
+              "condition": "C API 扩展需要专门为 free-threaded 构建编译，wheel、共享库和二进制文件以 t 后缀标识；该构建目前不支持 Limited C API 或 stable ABI，需要为 free-threaded 构建单独构建 wheel。",
+              "kind": "decision_condition",
+              "source": {
+                "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                "start": 7298,
+                "end": 8249,
+                "quote_sha256": "267f1a0d0b43d0aa96b685b7aa10c98018c2f37e924e9869470dfb666600766c"
+              }
+            },
+            {
+              "condition_id": 6,
+              "condition": "不应从其他线程访问 frame 对象，否则可能导致程序崩溃；sys._current_frames() 在 free-threaded 构建中通常不安全，而 inspect.currentframe() 和 sys._getframe() 只要不把 frame 对象传给其他线程通常安全。",
+              "kind": "decision_condition",
+              "source": {
+                "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                "start": 4678,
+                "end": 5041,
+                "quote_sha256": "e6a7b0b701e357cf37c7bb69eaf37819753eed4d3f299ce0cc69d22a51bb5c4c"
+              }
+            },
+            {
+              "condition_id": 7,
+              "condition": "在多线程间共享同一个迭代器对象通常不安全，迭代时可能看到重复或缺失元素，甚至使解释器崩溃。",
+              "kind": "decision_condition",
+              "source": {
+                "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                "start": 5041,
+                "end": 5223,
+                "quote_sha256": "263c7adf0bd4ea0d3a470636d06d35f058fc7f201e675b8d4686cb955df2a417"
+              }
+            },
+            {
+              "condition_id": 8,
+              "condition": "free-threaded 构建执行 Python 代码有额外开销；在 3.13 的 pyperformance 套件上约 40%，大部分时间花在 C 扩展或 I/O 的程序受影响较小，最大影响来自特化自适应解释器被禁用，预期后续版本降低，目标是在 pyperformance 套件上开销不超过 10%。",
+              "kind": "decision_condition",
+              "source": {
+                "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                "start": 5223,
+                "end": 5899,
+                "quote_sha256": "675d6f032dde812d22b861e40a5569ac0922b0aa42a2c725760238154ba224a9"
+              }
+            }
+          ],
+          "source_prerequisites_absent_reason": "",
+          "review_model_reads": 1,
+          "source_support": [
+            {
+              "claim_id": 1,
+              "claim_sha256": "46bd103ccd8387461ccd6f5dc3095b9d39ea0c411782ca9ed9b21533cf44fbfa",
+              "evidence": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                  "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                  "start": 293,
+                  "end": 597,
+                  "quote_sha256": "b521fb127999ae51232af74e2ac584d9023c9dd07991ffa0ff93f934f657bfc2"
+                }
+              ]
+            },
+            {
+              "claim_id": 2,
+              "claim_sha256": "df937e51275c693d1be37b7668cbaa60b4a49e8436b6c0b431ecedd7b66e90b1",
+              "evidence": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                  "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                  "start": 2349,
+                  "end": 2517,
+                  "quote_sha256": "ec11c1867f43ea981b1bebc338b5ac478ebd0211a9c1469ced63d21b5ed479ff"
+                }
+              ]
+            },
+            {
+              "claim_id": 3,
+              "claim_sha256": "3d657372821c38e70269d10bf87a16bd93e1f5cd218dbc855af745f8b5327537",
+              "evidence": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                  "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                  "start": 1748,
+                  "end": 2296,
+                  "quote_sha256": "7343c1b8bf3b714c3fb15e7f84ff7bdea30a6b585f1bdc526ea164e6e2d2b1e7"
+                }
+              ]
+            },
+            {
+              "claim_id": 4,
+              "claim_sha256": "d020b856a50d18bc2c809df01d06dac61335bda9d304b6176b53845b2e4f4aba",
+              "evidence": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                  "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                  "start": 1135,
+                  "end": 1316,
+                  "quote_sha256": "cb7787821b99e943984c973fec0385a8f3bd88a59a3024b9fa2f4cc614a94d4f"
+                },
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                  "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                  "start": 2517,
+                  "end": 2700,
+                  "quote_sha256": "1267e922c74f1f60ecb9184fe77479fee106756139f5b0900d546991b8114c89"
+                }
+              ]
+            },
+            {
+              "claim_id": 5,
+              "claim_sha256": "15ebc53308f47e4249b88397d1241887f48f8015308a58dc9c88c5f1e6b1d8fc",
+              "evidence": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                  "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                  "start": 1495,
+                  "end": 1904,
+                  "quote_sha256": "0263fa834a2650e45146c715a8eca59a7a4f027e539a2706c4e8d0dd457953b2"
+                },
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                  "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                  "start": 1999,
+                  "end": 2367,
+                  "quote_sha256": "c52a4f42cdfe0ce754924b8b5e0240d9dcc38c8f24d833a4e1649eb69c6fdccd"
+                }
+              ]
+            },
+            {
+              "claim_id": 6,
+              "claim_sha256": "fcf0b7b349f393ba278b00c7c04ca6ffae25c6a23f021be26d1660df88f2cd93",
+              "evidence": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                  "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                  "start": 2643,
+                  "end": 3273,
+                  "quote_sha256": "2f7c20a280693c65f02a5c022f060e17eec2b032df90e2655d5385b461f5ecc0"
+                },
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                  "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                  "start": 3490,
+                  "end": 3717,
+                  "quote_sha256": "fa81172fc7d5edc92a70feee062d93038d4bb3c479fdedd5c8ac425a76de6acf"
+                }
+              ]
+            },
+            {
+              "claim_id": 7,
+              "claim_sha256": "02081d3b831ac4936f263ce5b9b2af66b4c00cf6449a2cb19cd32810c795b936",
+              "evidence": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                  "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                  "start": 5301,
+                  "end": 5730,
+                  "quote_sha256": "ca6eee79e3279637555bd464490be322b5f13627c2247eb1496b714880709273"
+                }
+              ]
+            },
+            {
+              "claim_id": 8,
+              "claim_sha256": "65e7bbccfaf87437fc3fe998f0d665bad1855b1fa43216243a87e766a47cf37e",
+              "evidence": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                  "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                  "start": 7298,
+                  "end": 7814,
+                  "quote_sha256": "373d7719d83439b6745ed77c7cc6ba4aaa819e59e84d594e715a337c2a2c58d0"
+                }
+              ]
+            },
+            {
+              "claim_id": 9,
+              "claim_sha256": "32bc4c51f77eaa42f780962442b0d2070336ca2c86da6c1c2307cd938f597d79",
+              "evidence": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                  "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                  "start": 739,
+                  "end": 881,
+                  "quote_sha256": "402baebdd092e83fe7c4c5bd1b35a078dfb6ec11abf3b7f8278569ff2fa8c912"
+                }
+              ]
+            },
+            {
+              "claim_id": 10,
+              "claim_sha256": "efe623ca2a1d2e9435ed23178a5e483a15a939ff0c222312391d80802db605d5",
+              "evidence": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                  "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                  "start": 5223,
+                  "end": 5899,
+                  "quote_sha256": "675d6f032dde812d22b861e40a5569ac0922b0aa42a2c725760238154ba224a9"
+                }
+              ]
+            },
+            {
+              "claim_id": 11,
+              "claim_sha256": "96f1a5d852021d0cc078231867e8fc4661976243dc654b3d4c8aaa315326410e",
+              "evidence": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                  "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                  "start": 3741,
+                  "end": 4487,
+                  "quote_sha256": "92347414ed9934bc126c7e91b86d5100b350d2d44a23a7ebd4b322d1a2e52ac3"
+                }
+              ]
+            },
+            {
+              "claim_id": 12,
+              "claim_sha256": "d4a27a27c30480292662a6c93c316e652cae70f2bf25c17ef0e8d5c6f0fd7573",
+              "evidence": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                  "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                  "start": 4678,
+                  "end": 5223,
+                  "quote_sha256": "ebc8f17d53e6c6f91be92498f312cd442d5821aed2d82ad2fea5ef5f6da4fa72"
+                }
+              ]
+            },
+            {
+              "claim_id": 13,
+              "claim_sha256": "5b1cbf6e8031a32fd96e474b0440d7d62858997f7a413e6f1e7e1b230226f619",
+              "evidence": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                  "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                  "start": 2930,
+                  "end": 3628,
+                  "quote_sha256": "9090d606123dda62d7d9408a51648036c9a86cb6b7251b5fa2a854e94647e7c5"
+                }
+              ]
+            },
+            {
+              "claim_id": 14,
+              "claim_sha256": "5733a7e6420657b2f6252a18f353d3dc2875810bfeb9dc2d87616567138821f7",
+              "evidence": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                  "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                  "start": 2349,
+                  "end": 2700,
+                  "quote_sha256": "b92f417efeeef9ea0420d075d462249e07132aa26c132c7941de7eab8cb0ee38"
+                },
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                  "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                  "start": 1135,
+                  "end": 1316,
+                  "quote_sha256": "cb7787821b99e943984c973fec0385a8f3bd88a59a3024b9fa2f4cc614a94d4f"
+                }
+              ]
+            },
+            {
+              "claim_id": 15,
+              "claim_sha256": "2f7d794aca075dd969cd746a1eedd3b33b04af90c9dbbc1f60e658708c36b065",
+              "evidence": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                  "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                  "start": 6679,
+                  "end": 7298,
+                  "quote_sha256": "0238226c06656ee32f25a546e79acaf4e98098310abe860bbaa4056c881cc9c4"
+                },
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                  "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                  "start": 7298,
+                  "end": 7495,
+                  "quote_sha256": "7b8467f8c02dbd87795c46389a02562887ad1ba5d5730c3b43740b6270f24d2e"
+                }
+              ]
+            },
+            {
+              "claim_id": 16,
+              "claim_sha256": "03d79f1912f7d4f1c610fe8293da8e9c26b000777becbe8074090e0b9f18539f",
+              "evidence": [
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+                  "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+                  "start": 5223,
+                  "end": 5435,
+                  "quote_sha256": "54b2c04d959108f6954f88ba8dbb19bb016d815c35953b85c39070d892a237bb"
+                },
+                {
+                  "url": "https://docs.python.org/3.13/howto/free-threading-extensions.html",
+                  "body_sha256": "7a254f8f4ad71e1a30e832e06a4fb3d57fcf05b27248ca3d1fa4eec54d878b91",
+                  "start": 7684,
+                  "end": 7814,
+                  "quote_sha256": "792bcfb7a83b05f7cc74d54c413647c0df6bc4fd5bf0bbaab4de170992e72339"
+                }
+              ]
+            }
+          ],
+          "condition_coverage": [
+            {
+              "condition_id": 1,
+              "claim_ids": [
+                15
+              ],
+              "not_applicable_reason": ""
+            },
+            {
+              "condition_id": 2,
+              "claim_ids": [
+                7
+              ],
+              "not_applicable_reason": ""
+            },
+            {
+              "condition_id": 3,
+              "claim_ids": [
+                6
+              ],
+              "not_applicable_reason": ""
+            },
+            {
+              "condition_id": 4,
+              "claim_ids": [
+                2,
+                4
+              ],
+              "not_applicable_reason": ""
+            },
+            {
+              "condition_id": 5,
+              "claim_ids": [
+                8
+              ],
+              "not_applicable_reason": ""
+            },
+            {
+              "condition_id": 6,
+              "claim_ids": [
+                12
+              ],
+              "not_applicable_reason": ""
+            },
+            {
+              "condition_id": 7,
+              "claim_ids": [
+                12
+              ],
+              "not_applicable_reason": ""
+            },
+            {
+              "condition_id": 8,
+              "claim_ids": [
+                10
+              ],
+              "not_applicable_reason": ""
+            }
+          ],
+          "body_han_count": 590,
+          "body_han_bounds": [
+            400,
+            650
+          ]
+        },
+        "elapsedSeconds": 340.4978618999594,
+        "modelReads": 1,
+        "finishedAt": "2026-10-18T18:01:30.991829+00:00"
+      },
+      "model": {
+        "attempts": 1,
+        "http": {
+          "200": 1
+        },
+        "connectionFailures": {},
+        "streamFailures": {},
+        "finishReasons": {
+          "stop": 1
+        },
+        "usageAttempts": 1,
+        "http200WithoutUsage": [],
+        "attemptsWithoutUsage": 0,
+        "reportedTokens": {
+          "prompt_tokens": 13803,
+          "completion_tokens": 38802,
+          "total_tokens": 52605,
+          "reasoning_tokens_reported": 37853
+        },
+        "headersSeconds": {
+          "n": 1,
+          "min": 2.326408300024923,
+          "median": 2.326408300024923,
+          "max": 2.326408300024923
+        },
+        "completedConsumptionSeconds": {
+          "n": 1,
+          "min": 339.912341999996,
+          "median": 339.912341999996,
+          "max": 339.912341999996
+        },
+        "allObservedSocketsDirect": true,
+        "attemptDetails": [
+          {
+            "id": "a2914818-db9c-413a-8bc5-b7907f04dfad",
+            "node": null,
+            "effort": "high",
+            "stage": "offline_candidate_review",
+            "maxTokens": 128000,
+            "httpStatus": 200,
+            "headersSeconds": 2.326408300024923,
+            "completedConsumptionSeconds": 339.912341999996,
+            "firstVisibleSeconds": 334.7942336000269,
+            "finishReasons": [
+              "stop"
+            ],
+            "bodyException": null,
+            "usage": {
+              "prompt_tokens": 13803,
+              "completion_tokens": 38802,
+              "total_tokens": 52605,
+              "completion_tokens_details": {
+                "reasoning_tokens": 37853,
+                "accepted_prediction_tokens": 0,
+                "rejected_prediction_tokens": 0
+              }
+            },
+            "messagesSha256": "dfc0fb3773cfdba1dbcb1627dfbbe2f06e6968330a92d9f870eb7750bf7e623b",
+            "requestWithoutEffortSha256": "3274c01656db507707e7ef1100e52eff4befa906d7b9a949f534fbdefc405f4a"
+          }
+        ]
+      }
+    }
+  ],
+  "pairedPlan": {
+    "preparedAt": "2026-10-18T17:39:32.099239+00:00",
+    "cases": [
+      {
+        "case": 1,
+        "file": "case-01.json",
+        "sha256": "ebcd9d2f071f5e300ad624dc3c7fdb04316e4ca23745d30baf9a7a171d72dff9",
+        "candidateSha256": "dd364563398d32ed538c68f4114f4015011d24967f57e4e9cd1bba4ad659cb4e",
+        "messagesSha256": "bc90d11e56b0abdb8125659da2275c00d9e16c9f8536713e2b71f44914e626cd",
+        "order": [
+          "high",
+          "low"
+        ]
+      },
+      {
+        "case": 2,
+        "file": "case-02.json",
+        "sha256": "8c61c3d45b1faf2ded26f795f80a58879a1be10a45c3c2db152012afb1d5ea5f",
+        "candidateSha256": "47eafb07e463ab19edfdab8e0a90e54e50bdaa2c370e4a45b2e9a132cfb00289",
+        "messagesSha256": "dfc0fb3773cfdba1dbcb1627dfbbe2f06e6968330a92d9f870eb7750bf7e623b",
+        "order": [
+          "low",
+          "high"
+        ]
+      }
+    ],
+    "excluded": [
+      {
+        "run": ".local/p1-deepseek-20261019-high01",
+        "reason": "No native candidate-review input"
+      }
+    ],
+    "type": "offline_candidate_review_only",
+    "sourceSelection": "Held fixed from native high selection; selection quality is not compared",
+    "variable": "reasoning_effort high vs low",
+    "max_tokens": 128000,
+    "thinking": "enabled",
+    "temperature": 0,
+    "sdkAttemptsPerRead": 5,
+    "streamReadAttempts": 2,
+    "secondsPerArm": 1800
+  },
+  "pairedIssueAudit": {
+    "method": "Independent issue-level reading against the same consumed source text and the content verdicts saved before paired calls. Native reports and pre-pair judgments remain unchanged.",
+    "arms": [
+      {
+        "case": 1,
+        "effort": "high",
+        "classification": "unavailable",
+        "reason": "APIError after HTTP 200; no semantic decision, usage, finish reason or DONE marker. Not a semantic rejection and not established length truncation."
+      },
+      {
+        "case": 1,
+        "effort": "low",
+        "classification": "supported_rejection_with_extra_requirement",
+        "knownMaterialDefectsCaught": [
+          "Missing substantive internal-extension-state safety review"
+        ],
+        "knownMaterialDefectsMissed": [
+          "Missing explicit evidence gap for GIL switch effective timing"
+        ],
+        "issues": [
+          {
+            "index": 1,
+            "assessment": "additional_detail_not_counted_as_material_hit",
+            "reason": "First-new-thread immortalization timing is in the source, but the pre-pair review accepted the concise description and its many-objects memory-risk trigger. Do not retroactively relabel that claim to agree with this reviewer; this extra implementation timing requirement does not establish the rejection on its own."
+          },
+          {
+            "index": 2,
+            "assessment": "supported_material_issue",
+            "reason": "The report requires declarations/build/ABI compatibility but omits actual internal shared-state and concurrency review. The cited internal-state source section supports this defect; the prerequisite was recorded independently before this call."
+          }
+        ]
+      },
+      {
+        "case": 2,
+        "effort": "low",
+        "classification": "rejects_bad_candidate_without_supported_material_hit",
+        "knownMaterialDefectsCaught": [],
+        "knownMaterialDefectsMissed": [
+          "Missing GIL switch effective-timing evidence gap",
+          "Unconditional PyDict_Next protection and unclear macro concurrency condition",
+          "Missing default-GIL baseline in the 40-percent claim",
+          "Overbroad denial of parallel benefits after GIL enablement"
+        ],
+        "issues": [
+          {
+            "index": 1,
+            "assessment": "unsupported_objection_to_already_conditional_statement",
+            "reason": "The candidate explicitly limits borrowed-reference danger to concurrent modification of the containing object. The source's Borrowed References section states these APIs are not thread-safe under that condition; immutable tuples and private keyword dictionaries are not counterexamples to the stated condition. The model cites a broader 'may' passage and exceptions while ignoring the source's narrower conditional statement. This does not identify the actual PyDict_Next/macro defect in the same sentence."
+          },
+          {
+            "index": 2,
+            "assessment": "additional_detail_not_counted_as_material_hit",
+            "reason": "First-new-thread timing exists in the source but was not a material omission in the pre-pair short-report judgment. The object scope and many-objects risk trigger were retained."
+          },
+          {
+            "index": 3,
+            "assessment": "overstrict_objection_to_recommendation",
+            "reason": "The candidate says '建议' and expressly avoids a guarantee. The reviewer treats omission of 'when possible' as an unconditional requirement although the candidate does not say '必须' or otherwise require every use to replace internal locks. This is not the independently established reason this report fails."
+          }
+        ],
+        "metricBoundary": "The final reject decision matches the negative candidate label; its unsupported reasons do not count as a false rejection of a good candidate, nor as successful detection of the known defects."
+      },
+      {
+        "case": 2,
+        "effort": "high",
+        "classification": "false_acceptance",
+        "reason": "The reviewer returned passed=true with complete mechanically validated source anchors and condition coverage. It still missed the independently identified effective-timing evidence gap, unconditional PyDict_Next protection, missing default-GIL numeric baseline, and overbroad claim that parallel benefits do not hold. Valid source locations and empty issues do not establish semantic correctness."
+      }
+    ]
+  },
+  "verification": {
+    "protectedFilesUnchanged": 6987,
+    "frozenFilesUnchanged": 103,
+    "dedicatedPortsFree": [
+      2101,
+      5261,
+      2102,
+      5262,
+      2103,
+      5263
+    ],
+    "pairedBodiesEqualExceptEffort": true,
+    "telemetryOfflineTests": 7
+  },
+  "limits": [
+    "Small nonrandom sample; no population stability claim",
+    "Source bodies and drafts vary between native runs",
+    "Paired source conditions fixed from native high selection; selection capability not compared",
+    "No independently passing paired candidate, so false-rejection rate is not estimable",
+    "Usage is provider-reported; missing attempts and monetary costs are not estimated"
+  ]
+}

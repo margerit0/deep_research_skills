@@ -1,0 +1,624 @@
+{
+  "schema_version": 1,
+  "at": "2026-10-20T15:50:35.060267+00:00",
+  "model": "z-ai/glm-5.3",
+  "plan_sha256": "aa0bffbce19079cd8f262e108dedc3fc1074c8795babc335f036f4cd25c7b082",
+  "frozen_manifest_sha256": "0b4798ca9036c2e77c8db77bb50b1de35429d1bfa273bd1d91ea9affa475f9fb",
+  "same_base_url_and_key": true,
+  "historical_audit": {
+    "requests": [
+      {
+        "id": "224cf52c-1a5f-4b95-bbb7-3b51f9c37c5b",
+        "at": "2026-10-20T14:36:31.504116+00:00",
+        "node": "clarify_with_user",
+        "format": "json_schema",
+        "tools": [],
+        "http_status": 200,
+        "firstVisibleSeconds": 23.411934300034773,
+        "closedSeconds": 24.754489200015087,
+        "finishReasons": [
+          "stop"
+        ],
+        "doneMarker": true,
+        "errorEvents": [],
+        "completionObserved": true
+      },
+      {
+        "id": "cf874853-2861-4c9a-a0ae-3f0910136fd2",
+        "at": "2026-10-20T14:36:58.545511+00:00",
+        "node": "clarify_with_user",
+        "format": "json_schema",
+        "tools": [],
+        "http_status": 200,
+        "firstVisibleSeconds": 37.74482149997493,
+        "closedSeconds": 44.26274039997952,
+        "finishReasons": [
+          "stop"
+        ],
+        "doneMarker": true,
+        "errorEvents": [],
+        "completionObserved": true
+      },
+      {
+        "id": "dc8f27bc-c7ea-4cd9-9a44-056fc26f521f",
+        "at": "2026-10-20T14:37:42.858234+00:00",
+        "node": "write_research_brief",
+        "format": "json_schema",
+        "tools": [],
+        "http_status": 200,
+        "firstVisibleSeconds": 575.859387799981,
+        "closedSeconds": 602.8753613999579,
+        "finishReasons": [],
+        "doneMarker": false,
+        "errorEvents": [
+          {
+            "type": "unknown",
+            "code": "request_timeout",
+            "seconds": 602.8751000000047,
+            "visible_output_seen": true,
+            "finish_seen": false,
+            "done_seen": false
+          }
+        ],
+        "completionObserved": false
+      },
+      {
+        "id": "6245f699-927c-4ee9-b85f-0b4bd20cb1f1",
+        "at": "2026-10-20T14:47:45.736368+00:00",
+        "node": "write_research_brief",
+        "format": null,
+        "tools": [],
+        "http_status": 200,
+        "firstVisibleSeconds": 328.04375180002535,
+        "closedSeconds": 345.2044401000021,
+        "finishReasons": [
+          "stop"
+        ],
+        "doneMarker": true,
+        "errorEvents": [],
+        "completionObserved": true
+      },
+      {
+        "id": "4851363e-9f93-4c1d-b8a3-aeb29904ae7a",
+        "at": "2026-10-20T14:53:31.021388+00:00",
+        "node": "supervisor",
+        "format": null,
+        "tools": [
+          "ConductResearch",
+          "ResearchComplete",
+          "think_tool"
+        ],
+        "http_status": 200,
+        "firstVisibleSeconds": null,
+        "closedSeconds": 140.26187410001876,
+        "finishReasons": [
+          "tool_calls"
+        ],
+        "doneMarker": true,
+        "errorEvents": [],
+        "completionObserved": true
+      },
+      {
+        "id": "4477b7d3-d926-451a-b16a-ca0f31a7f0c8",
+        "at": "2026-10-20T14:55:53.421808+00:00",
+        "node": "llm_call",
+        "format": null,
+        "tools": [
+          "tavily_search",
+          "think_tool",
+          "load_skill"
+        ],
+        "http_status": 200,
+        "firstVisibleSeconds": 57.674148400023114,
+        "closedSeconds": 72.9383550999919,
+        "finishReasons": [
+          "tool_calls"
+        ],
+        "doneMarker": true,
+        "errorEvents": [],
+        "completionObserved": true
+      },
+      {
+        "id": "7fea15ef-ab0f-4cab-8874-2979813b0cea",
+        "at": "2026-10-20T14:57:17.711001+00:00",
+        "node": "tool_node",
+        "format": null,
+        "tools": [
+          "Summary"
+        ],
+        "http_status": 200,
+        "firstVisibleSeconds": null,
+        "closedSeconds": 162.21333120000781,
+        "finishReasons": [
+          "tool_calls"
+        ],
+        "doneMarker": false,
+        "errorEvents": [],
+        "completionObserved": false
+      },
+      {
+        "id": "637710a4-4c12-4584-85b1-e8a8cceaee3e",
+        "at": "2026-10-20T14:57:19.717796+00:00",
+        "node": "tool_node",
+        "format": null,
+        "tools": [
+          "Summary"
+        ],
+        "http_status": 200,
+        "firstVisibleSeconds": null,
+        "closedSeconds": 229.04218940000283,
+        "finishReasons": [
+          "tool_calls"
+        ],
+        "doneMarker": true,
+        "errorEvents": [],
+        "completionObserved": true
+      },
+      {
+        "id": "f17945d2-1a14-4e8e-9d9a-68e258eb8609",
+        "at": "2026-10-20T15:01:21.005772+00:00",
+        "node": "tool_node",
+        "format": null,
+        "tools": [
+          "Summary"
+        ],
+        "http_status": 200,
+        "firstVisibleSeconds": null,
+        "closedSeconds": null,
+        "finishReasons": null,
+        "doneMarker": null,
+        "errorEvents": null,
+        "completionObserved": null
+      },
+      {
+        "id": "d1a3aaa4-a552-422d-a900-219962b108d4",
+        "at": "2026-10-20T15:01:23.013128+00:00",
+        "node": "tool_node",
+        "format": null,
+        "tools": [
+          "Summary"
+        ],
+        "http_status": 200,
+        "firstVisibleSeconds": null,
+        "closedSeconds": 152.90960790001554,
+        "finishReasons": [
+          "tool_calls"
+        ],
+        "doneMarker": true,
+        "errorEvents": [],
+        "completionObserved": true
+      }
+    ],
+    "exact_duplicate_consumptions": [
+      {
+        "task_id": "61497d54-4eda-53c0-b940-828f6eedc007",
+        "url": "https://docs.python.org/3.13/howto/free-threading-python.html",
+        "body_sha256": "066f2fec5f65b9e44e8d982c9d12f0c7a10d38d5970e6a8b7052d413854a74ee",
+        "at": "2026-10-20T15:01:20.996597+00:00"
+      }
+    ],
+    "distinct_body_versions": 3,
+    "old_evidence_read_only": true
+  },
+  "startup_attempts": [
+    {
+      "directory": "p1-glm-jsonstream-20261020-native01",
+      "result": {
+        "code": 1,
+        "error": "A dedicated server exited before readiness; see local logs.",
+        "cleanup": {
+          "backendPortFree": true,
+          "frontendPortFree": true
+        }
+      },
+      "model_requests": 0,
+      "business_submissions": 0
+    },
+    {
+      "directory": "p1-glm-jsonstream-20261020-native02",
+      "result": {
+        "code": 1,
+        "signal": null,
+        "finishedAt": "2026-10-20T15:47:35.416Z",
+        "modelAndSearchSubstitutes": false,
+        "cleanup": {
+          "backendPortFree": true,
+          "frontendPortFree": true
+        }
+      },
+      "business_submissions": 1
+    }
+  ],
+  "startup_repair": {
+    "at": "2026-10-20T15:47:12.745059+00:00",
+    "failed_startup": "p1-glm-jsonstream-20261020-native01",
+    "failure": "Vite EPERM writing pre-existing node_modules/.vite-temp",
+    "model_requests": 0,
+    "search_requests": 0,
+    "user_submissions": 0,
+    "native_runs": 0,
+    "old_state_empty": true,
+    "failed_startup_retained_in_infrastructure_denominator": true,
+    "fresh_startup": "p1-glm-jsonstream-20261020-native02",
+    "ports": [
+      2152,
+      5312
+    ],
+    "business_sample_limit": 1,
+    "observation_seconds": 7200,
+    "server_watchdog_seconds": 7500,
+    "implementation_input_model_prompt_budget_unchanged": true,
+    "change": "programmatic equivalent Vite server, isolated cacheDir, no config bundling write",
+    "no_pilot_repeats": true,
+    "no_failed_model_or_business_sample_replenished": true
+  },
+  "pilot": {
+    "summary": {
+      "planned_samples": 2,
+      "results": [
+        {
+          "sample": 1,
+          "input_sha256": "df6e0ebbed4bd2fc7d4c87f9e2f943173fd9fbda5ca99a1c37a63ad293b15cdc",
+          "schema": "ResearchQuestion",
+          "schema_valid": true,
+          "output": {
+            "research_brief": "我需要进行一项对比研究：比较 Python 3.13 实验性的 free-threaded CPython 构建与默认 GIL 构建，目的是帮助开发者判断是否试用该实验性构建。对比范围严格限定于以下三个维度：(1) GIL 状态，需说明 GIL 运行时开关；(2) C 扩展兼容性，需说明不兼容扩展的处理方式；(3) 适用限制。最终交付物为约 500 字的中文报告，并附编号引用；报告只依照指定资料给出可核验的试用建议，若某方面证据不足，必须明确说明，不得编造。执行流程要求：研究员必须先调用 load_skill 工具（skill_name 使用 product-comparison），再进行真实检索。资料范围固定为两篇官方指南：https://docs.python.org/3.13/howto/free-threading-python.html 和 https://docs.python.org/3.13/howto/free-threading-extensions.html；检索时请用简单的关键词或 site: 查询定位这两页，不扩展到长篇版本更新汇总或历史提案。研究范围已明确，不需要再次向我澄清。对于我未明确指定的其他维度或偏好，请一律作为开放变量处理，不预设偏好、不擅自缩窄范围。"
+          },
+          "nonempty": true,
+          "elapsed_seconds": 54.50541179999709,
+          "http_attempts": 1,
+          "ended_at": "2026-10-20T15:41:25.048577+00:00"
+        },
+        {
+          "sample": 2,
+          "input_sha256": "df6e0ebbed4bd2fc7d4c87f9e2f943173fd9fbda5ca99a1c37a63ad293b15cdc",
+          "schema": "ResearchQuestion",
+          "schema_valid": true,
+          "output": {
+            "research_brief": "我要做一项对比研究：比较 Python 3.13 实验性的 free-threaded CPython 与默认 GIL 构建，目的是帮助开发者判断是否试用。对比仅限以下三个维度：(1) GIL 状态；(2) C 扩展兼容性；(3) 适用限制。最终产出一份约 500 字的中文报告，并附编号引用。执行流程要求：研究员必须先调用 load_skill 工具（skill_name 使用 product-comparison），再进行真实检索。资料范围固定为两篇官方指南：https://docs.python.org/3.13/howto/free-threading-python.html 和 https://docs.python.org/3.13/howto/free-threading-extensions.html；检索时请用简单的关键词或 site: 查询针对这两页进行，不扩展到长篇版本更新汇总或历史提案。报告内容要求：只依照这两页给出可核验的试用建议，必须说明 GIL 运行时开关及不兼容扩展的处理方式；证据不足时明确说明，不编造。研究范围已明确，无需再次向我澄清。除上述已明确的维度与范围外，其他我未明确指定的方面一律作为开放变量处理，不预设偏好、不擅自缩窄范围。"
+          },
+          "nonempty": true,
+          "elapsed_seconds": 116.25913109997055,
+          "http_attempts": 1,
+          "ended_at": "2026-10-20T15:43:24.774280+00:00"
+        }
+      ],
+      "complete_protocol": [
+        true,
+        true
+      ],
+      "schema_protocol_gate": true,
+      "requirements_review_pending": true,
+      "elapsed_seconds": 177.19576909998432
+    },
+    "gate": {
+      "passed": true,
+      "planned_samples": 2,
+      "usable_samples": 2,
+      "schema_protocol_gate": true,
+      "manual_requirements_review": {
+        "python_313_experimental_vs_default_gil": [
+          true,
+          true
+        ],
+        "only_three_requested_dimensions": [
+          true,
+          true
+        ],
+        "approximately_500_chinese_characters_and_numbered_citations": [
+          true,
+          true
+        ],
+        "exact_two_official_urls": [
+          true,
+          true
+        ],
+        "product_comparison_skill_before_real_search": [
+          true,
+          true
+        ],
+        "runtime_gil_switch_and_incompatible_extension_handling": [
+          true,
+          true
+        ],
+        "bounded_search_no_history_or_version_summary": [
+          true,
+          true
+        ],
+        "acknowledge_insufficient_evidence_without_invention": [
+          true,
+          true
+        ],
+        "no_further_clarification": [
+          true,
+          true
+        ]
+      },
+      "request_payloads_identical": true,
+      "http_attempts": [
+        1,
+        1
+      ],
+      "elapsed_seconds": [
+        54.50541179999709,
+        116.25913109997055
+      ],
+      "done_markers": [
+        true,
+        true
+      ],
+      "finish_reasons": [
+        "stop",
+        "stop"
+      ],
+      "stream_error_counts": [
+        0,
+        0
+      ],
+      "telemetry_note": "Raw bodyException=GeneratorExit is the consumer closing the raw HTTP iterator after observing stop and [DONE]. It is not a pre-terminal body failure. The archived counter's completionObserved=false is retained; acceptance uses the terminal evidence plus helper schema validation.",
+      "latency_caveat": "Different observation times; no isolated upstream-load or TPS comparison.",
+      "native_identities_authorized_by_frozen_plan": 1
+    },
+    "traffic": [
+      {
+        "attempt_count": 1,
+        "statuses": {
+          "200": 1
+        },
+        "all_streaming": true,
+        "all_original_endpoints": true,
+        "usage_anomalies": 1,
+        "attempts": [
+          {
+            "id": "90f4c333-0c8c-4a88-a689-6e4c3947d8cd",
+            "at": "2026-10-20T15:40:30.596198+00:00",
+            "node": null,
+            "model": "z-ai/glm-5.3",
+            "stream": true,
+            "responseFormat": "json_object",
+            "sdkRetryCount": "0",
+            "endpointMatchesOriginal": true,
+            "messagesSha256": "0b0a79cb445a106b1f389aace3a3c397266fbb574588b3655debacb8f531d33a",
+            "http_status": 200,
+            "headers_seconds": 4.953272400016431,
+            "closedSeconds": 54.451191500003915,
+            "firstVisibleSeconds": 52.95096740004374,
+            "visibleChunks": 42,
+            "finishReasons": [
+              "stop"
+            ],
+            "doneMarker": true,
+            "bodyException": "GeneratorExit",
+            "errorEvents": [],
+            "completionObserved": false,
+            "usage": {
+              "prompt_tokens": 2244,
+              "completion_tokens": 0,
+              "total_tokens": 2244,
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "accepted_prediction_tokens": 0,
+                "rejected_prediction_tokens": 0
+              }
+            },
+            "consumer_closed_after_terminal": true,
+            "protocol_complete_interpreted": true,
+            "usage_anomalous": true
+          }
+        ],
+        "transport_failures": []
+      },
+      {
+        "attempt_count": 1,
+        "statuses": {
+          "200": 1
+        },
+        "all_streaming": true,
+        "all_original_endpoints": true,
+        "usage_anomalies": 1,
+        "attempts": [
+          {
+            "id": "b8d96f59-cde1-4691-ad6e-5593be940861",
+            "at": "2026-10-20T15:41:28.573224+00:00",
+            "node": null,
+            "model": "z-ai/glm-5.3",
+            "stream": true,
+            "responseFormat": "json_object",
+            "sdkRetryCount": "0",
+            "endpointMatchesOriginal": true,
+            "messagesSha256": "0b0a79cb445a106b1f389aace3a3c397266fbb574588b3655debacb8f531d33a",
+            "http_status": 200,
+            "headers_seconds": 16.027059399988502,
+            "closedSeconds": 116.19950410001911,
+            "firstVisibleSeconds": 90.54142279998632,
+            "visibleChunks": 37,
+            "finishReasons": [
+              "stop"
+            ],
+            "doneMarker": true,
+            "bodyException": "GeneratorExit",
+            "errorEvents": [],
+            "completionObserved": false,
+            "usage": {
+              "prompt_tokens": 2244,
+              "completion_tokens": 0,
+              "total_tokens": 2244,
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "accepted_prediction_tokens": 0,
+                "rejected_prediction_tokens": 0
+              }
+            },
+            "consumer_closed_after_terminal": true,
+            "protocol_complete_interpreted": true,
+            "usage_anomalous": true
+          }
+        ],
+        "transport_failures": []
+      }
+    ]
+  },
+  "native": {
+    "executed": true,
+    "thread_id": "577bcaa0-2917-4b69-946c-b313bc25ca5e",
+    "business_status": "failed",
+    "phase": "clarify",
+    "native_runs": [
+      {
+        "run_id": "3fad5f5d-2e24-4690-9612-a8f9ce13e9b1",
+        "thread_id": "577bcaa0-2917-4b69-946c-b313bc25ca5e",
+        "status": "success",
+        "created_at": "2026-10-20T15:47:33.090792+00:00",
+        "updated_at": "2026-10-20T15:47:33.751761+00:00",
+        "metadata": {
+          "created_by": "system",
+          "atlas_workspace": 1,
+          "graph_id": "research_agent_full",
+          "assistant_id": "10770da1-72cd-522a-b5d6-b69efc68eb94",
+          "atlas_research_id": "4877448f-0650-46e7-a6bf-0c61b1a41efc",
+          "atlas_turn_id": "addd77e2-f591-4036-a5df-716b6ed51e9b",
+          "atlas_attempt_id": "addd77e2-f591-4036-a5df-716b6ed51e9b",
+          "atlas_submission_version": 1
+        }
+      }
+    ],
+    "errors": [
+      {
+        "code": "clarification_failed",
+        "message": "需求澄清失败，请检查后端模型服务后发起新研究。",
+        "node": "clarify_with_user"
+      }
+    ],
+    "brief": "",
+    "report": "",
+    "report_identity": {
+      "active_research_id": "4877448f-0650-46e7-a6bf-0c61b1a41efc",
+      "active_turn_id": "addd77e2-f591-4036-a5df-716b6ed51e9b",
+      "report_research_id": "",
+      "report_run_id": "",
+      "report_turn_id": "",
+      "report_attempt_id": "",
+      "report_writing_attempt_id": ""
+    },
+    "sources": [],
+    "report_reviews": [],
+    "body_han_characters": null,
+    "browser_scenario_checks": null,
+    "browser_errors": [
+      {
+        "kind": "observer",
+        "message": "Clarification did not reach awaiting_input"
+      }
+    ],
+    "run_result": {
+      "code": 1,
+      "signal": null,
+      "finishedAt": "2026-10-20T15:47:35.416Z",
+      "modelAndSearchSubstitutes": false,
+      "cleanup": {
+        "backendPortFree": true,
+        "frontendPortFree": true
+      }
+    },
+    "traffic": {
+      "attempt_count": 0,
+      "statuses": {},
+      "all_streaming": false,
+      "all_original_endpoints": false,
+      "usage_anomalies": 0,
+      "attempts": [],
+      "transport_failures": []
+    },
+    "structured_reads": [],
+    "search_attempts": 0,
+    "verification": {
+      "at": "2026-10-20T15:50:34.947106+00:00",
+      "business_status": "failed",
+      "phase": "clarify",
+      "native_run_statuses": [
+        "success"
+      ],
+      "native_run_success_is_not_business_success": true,
+      "model_requests": 0,
+      "search_requests": 0,
+      "user_submissions": 1,
+      "report_characters": 0,
+      "report_reviews": 0,
+      "complete_delivery": false,
+      "complete_delivery_denominator": 1,
+      "failure_class": "isolated_harness_duplicate_import_NameError",
+      "not_a_provider_failure": true,
+      "unreached": [
+        "live clarification read",
+        "brief",
+        "skill/search",
+        "summary",
+        "compression",
+        "writing",
+        "source selection",
+        "candidate verification",
+        "report delivery",
+        "refresh acceptance"
+      ],
+      "ports_released": {
+        "2151": true,
+        "5311": true,
+        "2152": true,
+        "5312": true
+      },
+      "real_replenishment_runs": 0
+    },
+    "independent_review": null,
+    "business_delivery_denominator": 1,
+    "business_deliveries": 0,
+    "root_cause": "Local telemetry wrapper NameError after duplicate graph/http app import; no model call reached",
+    "harness_repair": {
+      "path": ".local/p1-glm-jsonstream-20261020/audit_install.py",
+      "offline_tests": 2,
+      "passed": 2,
+      "real_retest": false
+    }
+  },
+  "preservation": {
+    "baseline_files": 658,
+    "baseline_changes": [
+      "src/deep_research/structured_output_fallback.py",
+      "src/deep_research/utils.py"
+    ],
+    "old_evidence_changes": [],
+    "env_unchanged": true,
+    "frozen_files": 147,
+    "frozen_changes": [],
+    "preexisting_source_changes_preserved": true,
+    "fixed_prompts_unchanged": true,
+    "startup_repair_frozen_files": 42,
+    "startup_repair_frozen_changes": []
+  },
+  "usage_caveat": "Provider reports completion_tokens=0 with generated output; actual generated tokens and cost are unknown.",
+  "comparison_caveat": "Same saved input and different times; latency does not isolate upstream load/TPS/thinking from response-format behavior.",
+  "tests": {
+    "verified": {
+      "tests": 240,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "harness-repair": {
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "scope": {
+    "source_changes": [
+      "src/deep_research/structured_output_fallback.py",
+      "src/deep_research/utils.py"
+    ],
+    "default_native_first_preserved": true,
+    "glm_configuration_enabled_only_in_isolated_experiment": true,
+    "source_summary_cache_implemented": false,
+    "commit": false,
+    "push": false
+  }
+}
