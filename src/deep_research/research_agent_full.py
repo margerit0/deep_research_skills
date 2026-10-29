@@ -25,7 +25,7 @@ from deep_research.submission_journal import accepted_configuration
 from deep_research.run_configuration import configured_node, selected_model
 from deep_research.report_streaming import stream_final_report
 from deep_research.source_evidence import WRITER_LIMIT, merge_source_evidence, writer_evidence_context
-from deep_research.report_review import ReportReviewContext, ReportReviewFormatError, decision_claim_checks, review_report, review_record, revision_messages
+from deep_research.report_review import ReportReviewContext, ReportReviewFormatError, ReportReviewRequestError, decision_claim_checks, review_report, review_record, revision_messages
 from deep_research.research_requirements import (
     allowed_sources, constraints_for, report_citations_within_sources,
     requirements_context, resolve_constraints, report_length_guidance, approximate_report_length,
@@ -327,7 +327,7 @@ async def final_report_generation(state: AgentState):
             except Exception as exc:
                 reviews.append(review_record(candidate, writing_attempt_id, {
                     "status": "unavailable", "error_type": type(exc).__name__,
-                    **({"diagnostics": exc.diagnostics} if isinstance(exc, ReportReviewFormatError) else {}),
+                    **({"diagnostics": exc.diagnostics} if isinstance(exc, (ReportReviewFormatError, ReportReviewRequestError)) else {}),
                 }))
                 raise
             reviews.append(review_record(candidate, writing_attempt_id, {"status": "completed", **decision}))

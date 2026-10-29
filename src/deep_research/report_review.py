@@ -2,12 +2,14 @@
 import hashlib
 import json
 import re
+import time
 
 from langchain_core.messages import HumanMessage, SystemMessage
-from openai import LengthFinishReasonError
+from openai import APIError, LengthFinishReasonError
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
 
 from deep_research.model_transport import ainvoke_with_stream_retry, streaming_options
+from deep_research.review_diagnostics import safe_provider_error, safe_validation_errors
 from deep_research.prompts import evidence_fidelity_instructions
 from deep_research.research_requirements import requirements_context, approximate_report_length, report_length_guidance
 from deep_research.source_evidence import writer_evidence_payload
@@ -180,7 +182,7 @@ def anchored_support(decision, claims, evidence, raw, finish_reason):
 class ReportReviewFormatError(ValueError):
     """Persist only safe response diagnostics, never provider text or reasoning."""
 
-    def __init__(self, raw, finish_reason, errors):
+    def __init__(self, raw, finish_reason, errors, *, validation=None):
         self.diagnostics = {
             "response_sha256": hashlib.sha256(raw.encode()).hexdigest(),
             "response_characters": len(raw),
@@ -189,12 +191,31 @@ class ReportReviewFormatError(ValueError):
             } else "unknown",
             "validation_error_types": errors,
         }
+        if validation is not None:
+            self.diagnostics.update(validation)
         super().__init__("Report review did not produce a complete, valid decision")
+
+
+class ReportReviewRequestError(ValueError):
+    """A failed SDK read is unavailable, not a semantic rejection."""
+
+    def __init__(self, error, elapsed):
+        status = getattr(error, "status_code", None)
+        self.diagnostics = {
+            "phase": "model_read", "elapsed_seconds": elapsed,
+            "exception_type": type(error).__name__ if type(error).__module__.startswith("openai") else "APIError",
+            "http_status": status if type(status) is int and 100 <= status <= 599 else None,
+            "provider_error": safe_provider_error({"type": getattr(error, "type", None),
+                                                  "code": getattr(error, "code", None)}),
+            "decision_available": False,
+        }
+        super().__init__("Report review SDK read failed; no decision is available")
 
 
 async def read_review_json(model, schema, prompt, content, context):
     prompt = build_json_fallback_prompt(schema, prompt, disable_thinking=False)
     reviewer = model.bind(response_format={"type": "json_object"}) if streaming_options(model) else model
+    started = time.monotonic()
     try:
         response = await ainvoke_with_stream_retry(reviewer, [
             SystemMessage(content=prompt), HumanMessage(content=content),
@@ -202,6 +223,8 @@ async def read_review_json(model, schema, prompt, content, context):
     except LengthFinishReasonError as exc:
         visible = "".join(message_text(choice.message.content) for choice in exc.completion.choices)
         raise ReportReviewFormatError(visible, "length", ["incomplete_response"]) from None
+    except APIError as exc:
+        raise ReportReviewRequestError(exc, time.monotonic() - started) from None
     raw = message_text(response.content)
     finish_reason = response.response_metadata.get("finish_reason")
     if finish_reason and finish_reason != "stop":
@@ -210,9 +233,10 @@ async def read_review_json(model, schema, prompt, content, context):
     try:
         decision = schema.model_validate_json(payload)
     except ValidationError as exc:
+        errors = exc.errors(include_url=False, include_context=False, include_input=False)
         raise ReportReviewFormatError(raw, finish_reason, sorted({
-            error["type"] for error in exc.errors(include_url=False, include_context=False, include_input=False)
-        })) from None
+            error["type"] for error in errors
+        }), validation=safe_validation_errors(schema, errors)) from None
     return decision, raw, finish_reason
 
 
