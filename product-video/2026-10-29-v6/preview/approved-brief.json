@@ -1,0 +1,329 @@
+{
+  "version": "2026-10-29-v6",
+  "state": "pending",
+  "date": "2026-10-29",
+  "timezone": "Asia/Shanghai",
+  "planSha256": "f5252340c47c84f7f832da0c2218a43a72f42260bac29e2e74863d6fe619ad2c",
+  "request": "总体不错，在前端演示与优化介绍之间增加画面，告知观众接下来介绍 Agent 自动进化。",
+  "product": "星图工作台 / Deep Research Agent",
+  "tagline": {
+    "text": "让研究的每一步，看得见。",
+    "source": "现有 v3 品牌文案"
+  },
+  "scenario": {
+    "type": "existing_original_synthetic",
+    "source": "frontend/src/data/demo.ts 与 mock.ts",
+    "question": "比较 AI 搜索产品的技术路线、商业模式和隐私风险，附可核验的来源。",
+    "clarification": "我会从技术路线、商业模式和隐私风险三个方向并行研究。先确认比较范围，再核验资料、汇总证据，最后整理成一份便于阅读的对比报告。",
+    "report": "研究摘要（模拟）\n\n01 · 技术路线\n围绕检索、生成与引用追溯建立统一比较维度，记录各项能力需要核验的证据。\n\n02 · 商业模式\n按免费入口、订阅服务与企业场景整理分析框架，标记价格与服务条款的核验位置。\n\n03 · 隐私风险\n将数据收集、保留期限和用户控制列为审查项目，区分已确认信息与待验证问题。\n\n下一步\n接入真实检索后逐项补充来源，交叉核验，再形成结论。此处仅演示报告呈现，不含真实产品评价。",
+    "reportKey": "demoReport",
+    "citations": [],
+    "sourceTitles": [],
+    "sourceExcerpts": [],
+    "limitation": "现有合成报告没有编号引用或真实来源原文；仅展示同一演示路径，不新增引用操作。"
+  },
+  "audience": "第一次了解项目的观众。先建立研究方法概念，再解释评估和修订的因果。",
+  "revision": {
+    "parentVersion": "2026-10-29-v5",
+    "durationBefore": 50,
+    "durationAfter": 53,
+    "changes": [
+      "16–19 秒新增全屏章节卡",
+      "主题：Agent 自动进化；副标题：评估驱动的 Skill 持续优化",
+      "保留上一版报告、方法与评估因果衔接"
+    ],
+    "approval": "用户认可总体方向并要求新增章节卡；本次新增画面已制作预览，尚未据此生成完整配乐视频。"
+  },
+  "bridgeFacts": [
+    {
+      "copy": "Skill 把研究经验写成可重复使用的步骤",
+      "source": "README.md / Skills 渐进式披露；src/deep_research/skills/product-comparison.md"
+    },
+    {
+      "copy": [
+        "优先查哪些来源",
+        "怎样组织检索",
+        "何时停止，如何引用"
+      ],
+      "source": "src/deep_research/skills/product-comparison.md / 信息源优先级、查询模式、停止判据、引用规范",
+      "treatment": "忠实概括，不伪造候选修订正文"
+    },
+    {
+      "copy": [
+        "要求是否覆盖完整？",
+        "引用是否有证据支持？"
+      ],
+      "source": "docs/skill-evolution.md / coverage、citation grounding、source support",
+      "treatment": "评估问题示意，无打分或失败判决；没有宣称片中报告已被评估"
+    },
+    {
+      "copy": "问题来自方法时才修订；验证通过、显式采纳后用于新研究",
+      "source": "docs/skill-evolution.md / 诊断归因、最终验证、晋升与重启",
+      "treatment": "保留操作者审阅；不称系统自动改写生产方法"
+    }
+  ],
+  "evolution": {
+    "type": "documentation_based_mechanism_animation",
+    "dataPolicy": "没有新增优化实验、假失败样本、候选正文、评估分数或提升结论。候选 A/B 仅标识功能允许的分支，并非实验产物。未使用单元 fixture 作为实验结果。",
+    "facts": [
+      {
+        "shot": "diagnose",
+        "source": "docs/skill-evolution.md / 证据诊断；src/deep_research/skill_evolution.py / validate_diagnosis",
+        "text": "只有内容归因成立且证据充分时才允许生成修订"
+      },
+      {
+        "shot": "candidate",
+        "source": "docs/skill-evolution.md；src/deep_research/skill_evolution.py / Manifest, Candidate",
+        "text": "首版仅 product-comparison；每实验最多一轮、两个候选；保存正文、diff、理由与预期改善"
+      },
+      {
+        "shot": "validate",
+        "source": "docs/skill-evolution.md / 冻结、最终验证、晋升和回退；skill_evolution_runner.py",
+        "text": "开发、选择、最终集分开；选择集配对通过后冻结一个候选，再读最终集；最终反馈不回流"
+      },
+      {
+        "shot": "release",
+        "source": "docs/skill-evolution.md；src/deep_research/skill_evolution_store.py / promote, rollback",
+        "text": "默认停在报告；门槛通过后显式晋升；归档旧版，重启生效；回退核对修订"
+      }
+    ],
+    "limitations": [
+      "后端 CLI、SQLite 和 Markdown 报告，不是新增前端界面",
+      "尚无真实模型优化实验与效果提升结论",
+      "研究员 compressed_research 的评估不直接代表 final_report 质量",
+      "缺失运行、反馈或完整成本不能冻结或晋升"
+    ]
+  },
+  "coverage": [
+    {
+      "item": "产品全貌",
+      "decision": "show",
+      "shotIds": [
+        "question"
+      ],
+      "evidence": "frame-0045.png",
+      "reason": "保留原完整工作台"
+    },
+    {
+      "item": "关键配置",
+      "decision": "show",
+      "shotIds": [
+        "skills"
+      ],
+      "evidence": "context.mp4、frame-0150.png、frame-0210.png",
+      "reason": "原生菜单与选中结果；增强方法概念解释，不展开额外模型配置"
+    },
+    {
+      "item": "核心操作",
+      "decision": "show",
+      "shotIds": [
+        "chapter-card",
+        "parallel",
+        "inspect",
+        "method",
+        "feedback",
+        "diagnose",
+        "candidate",
+        "validate"
+      ],
+      "evidence": "context.mp4、bridge.mp4 与完整关键帧",
+      "reason": "保留原生流程；新增方法解释和评估动机；机制图解与原 UI 区分"
+    },
+    {
+      "item": "结果",
+      "decision": "show",
+      "shotIds": [
+        "report",
+        "release",
+        "brand"
+      ],
+      "evidence": "frame-0435.png、frame-1455.png、frame-1545.png",
+      "reason": "原合成报告与采纳决策；无来源原文，未增加引用操作"
+    }
+  ],
+  "layout": {
+    "measuredNativeWindow": {
+      "x": 570,
+      "y": 164,
+      "width": 1272,
+      "height": 814
+    },
+    "nativeViewport": {
+      "viewport": [
+        1920,
+        1080
+      ],
+      "appViewport": [
+        1920,
+        1032
+      ],
+      "elements": [
+        {
+          "selector": ".cw-sidebar",
+          "box": {
+            "x": 11,
+            "y": 11,
+            "width": 146,
+            "height": 1010
+          },
+          "font": "14px"
+        },
+        {
+          "selector": ".cw-composer-wrap",
+          "box": {
+            "x": 496,
+            "y": 796.640625,
+            "width": 720,
+            "height": 224.359375
+          },
+          "font": "14px"
+        },
+        {
+          "selector": ".cw-graph-panel",
+          "box": {
+            "x": 1559,
+            "y": 79,
+            "width": 350,
+            "height": 942
+          },
+          "font": "14px"
+        },
+        {
+          "selector": ".cw-composer",
+          "box": {
+            "x": 508,
+            "y": 836.234375,
+            "width": 696,
+            "height": 146.171875
+          },
+          "font": "14px"
+        }
+      ]
+    },
+    "bridgeFinalReportWidth": 450,
+    "sharedMethodCard": {
+      "x": 1171,
+      "y": 410,
+      "width": 574,
+      "height": 400
+    },
+    "continuity": "使用同一实时原生 iframe，在测得的窗口边界连续缩放；没有切换为旧截图"
+  },
+  "spec": {
+    "video": {
+      "width": 1920,
+      "height": 1080,
+      "fps": "30",
+      "totalFrames": 1590,
+      "durationSeconds": 53.0
+    },
+    "audio": {
+      "bpm": 120.0,
+      "sampleRate": 48000,
+      "sampleCount": 2544000
+    },
+    "previewClips": [
+      {
+        "id": "context",
+        "startFrame": 120,
+        "endFrameExclusive": 435,
+        "frameCount": 315,
+        "durationSeconds": 10.5
+      },
+      {
+        "id": "bridge",
+        "startFrame": 390,
+        "endFrameExclusive": 960,
+        "frameCount": 570,
+        "durationSeconds": 19.0
+      }
+    ],
+    "recommendation": "53 秒；章节卡 3 秒，淡入淡出各 0.5 秒、稳定阅读 2 秒；原 50 秒内容保留。"
+  },
+  "restrictions": {
+    "modelCalls": 0,
+    "searchCalls": 0,
+    "realUserData": false,
+    "publication": false,
+    "commitsCreated": false
+  },
+  "sources": [
+    {
+      "path": "product-video/2026-10-29-v6/source/app.html",
+      "sha256": "33e5bb3a3f75e25586e7bb85b5225382414464adec617c43c4301922296d098c"
+    },
+    {
+      "path": "product-video/2026-10-29-v6/source/app.tsx",
+      "sha256": "390c9550f04a7f56a1d699ef4aa18f51f0cc2cdda42c257789fe83f8f690b5c0"
+    },
+    {
+      "path": "product-video/2026-10-29-v6/source/bridge.css",
+      "sha256": "18be01489013f0d8a982bf0bf5873bf8c5351ac82220575da5fddbe8c95b075f"
+    },
+    {
+      "path": "product-video/2026-10-29-v6/source/build.py",
+      "sha256": "89bb1158dd131d57cd02dacd1d939b125f52892b0a39f6c928f0b32b6f8f81d7"
+    },
+    {
+      "path": "product-video/2026-10-29-v6/source/capture.mjs",
+      "sha256": "7de49c84458cbe986d11fb1c7a899b263fc47037d9dcb2ce654d7a8b3d1242ab"
+    },
+    {
+      "path": "product-video/2026-10-29-v6/source/check-playback.mjs",
+      "sha256": "ac3d8891cc0bac76d84c5faa626bee103a386ca70d87ee259c14275f7d8769bb"
+    },
+    {
+      "path": "product-video/2026-10-29-v6/source/index.html",
+      "sha256": "887a91ae964a464ae8a14165a8087854d3d8a8ac2e1573d18131a4fdcfd04ee9"
+    },
+    {
+      "path": "product-video/2026-10-29-v6/source/native-scene.css",
+      "sha256": "54d9deeb9c0de5087eb5bfbadea9276097718e4a88443929ab413ac6d9db0f7a"
+    },
+    {
+      "path": "product-video/2026-10-29-v6/source/native-scene.js",
+      "sha256": "38db2a2e7e6368eb503334bb222b74f3d2b95ef6171f9cf95c66f26b12b4dfe3"
+    },
+    {
+      "path": "product-video/2026-10-29-v6/source/native.html",
+      "sha256": "26375df68afb869b25cec09df29e32a247a23a80775fd08fe281df494b9b4d10"
+    },
+    {
+      "path": "product-video/2026-10-29-v6/source/package-preview.py",
+      "sha256": "1b70e11a6b4868313df39e7218e9bb884042f24f5f787929d9af1ee2e4bf7e6b"
+    },
+    {
+      "path": "product-video/2026-10-29-v6/source/record-delivery.py",
+      "sha256": "3cd3713df1b88cddbe9f09ac20fb59d28f55ce51b9284f031105adddb4422485"
+    },
+    {
+      "path": "product-video/2026-10-29-v6/source/scene.css",
+      "sha256": "88b034c1e9e7d02286613e852ad0395040792d457920da7034e04954766b0568"
+    },
+    {
+      "path": "product-video/2026-10-29-v6/source/scene.js",
+      "sha256": "c4004d652e1aab64d134718289a7395db59efa5ec0573c98da937b67d1be7539"
+    },
+    {
+      "path": "product-video/2026-10-29-v6/source/serve.mjs",
+      "sha256": "1b093f751c1dd2013807dd8f176dbd7f5a12ea8cdee442a2e43d8dee1aa853a3"
+    },
+    {
+      "path": "product-video/2026-10-29-v6/source/timeline.py",
+      "sha256": "9f444db0b8ec0f8aef253658d82e343b82103cf3fc4be7b4bd663905884faf48"
+    }
+  ],
+  "chapterCard": {
+    "copy": {
+      "headline": "Agent 自动进化",
+      "description": "评估驱动的 Skill 持续优化",
+      "eyebrow": "接下来 · 第二部分",
+      "path": "生成候选 → 独立验证 → 人工采纳",
+      "focus": "全屏章节标题，提前告知接下来介绍 Agent 自动进化；副标题限定为 Skill 优化",
+      "transition": "0.5 秒淡入，稳定阅读 2 秒，0.5 秒淡出，接回同一报告与方法卡"
+    },
+    "startSeconds": 16.0,
+    "durationSeconds": 3.0,
+    "scope": "标题沿用用户提出的介绍主题；副标题和流程说明将具体能力限定为 Skill 优化，并保留人工采纳。未新增无人审批晋升能力。"
+  }
+}

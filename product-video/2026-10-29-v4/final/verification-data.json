@@ -1,0 +1,870 @@
+{
+  "planSha256": "7502713fe2609aaaa4941743d2cc347ae72f84aa9cfe917029a548a06b3a04af",
+  "movieSha256": "3b6a9e226d7387e7aa580a31a7640f6c6307c2ef748df39f4162b037bc22fffd",
+  "sizeBytes": 4499736,
+  "encodingCommand": [
+    "ffmpeg",
+    "-hide_banner",
+    "-loglevel",
+    "error",
+    "-y",
+    "-framerate",
+    "30.0",
+    "-start_number",
+    "0",
+    "-i",
+    "D:\\deep_research_public_preview\\product-video\\2026-10-29-v4\\cache\\final\\frames\\frame-%04d.png",
+    "-i",
+    "D:\\deep_research_public_preview\\product-video\\2026-10-29-v4\\cache\\final\\music.wav",
+    "-map",
+    "0:v:0",
+    "-map",
+    "1:a:0",
+    "-frames:v",
+    "1260",
+    "-t",
+    "42.0",
+    "-c:v",
+    "libx264",
+    "-preset",
+    "medium",
+    "-crf",
+    "17",
+    "-pix_fmt",
+    "yuv420p",
+    "-r",
+    "30.0",
+    "-c:a",
+    "aac",
+    "-b:a",
+    "192k",
+    "-ar",
+    "48000",
+    "-ac",
+    "2",
+    "-movflags",
+    "+faststart",
+    "D:\\deep_research_public_preview\\product-video\\2026-10-29-v4\\final\\product-demo.mp4"
+  ],
+  "probe": {
+    "streams": [
+      {
+        "index": 0,
+        "codec_name": "h264",
+        "codec_long_name": "H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10",
+        "profile": "High",
+        "codec_type": "video",
+        "codec_tag_string": "avc1",
+        "codec_tag": "0x31637661",
+        "width": 1920,
+        "height": 1080,
+        "coded_width": 1920,
+        "coded_height": 1088,
+        "closed_captions": 0,
+        "film_grain": 0,
+        "has_b_frames": 2,
+        "pix_fmt": "yuv420p",
+        "level": 40,
+        "chroma_location": "left",
+        "field_order": "progressive",
+        "refs": 4,
+        "is_avc": "true",
+        "nal_length_size": "4",
+        "id": "0x1",
+        "r_frame_rate": "30/1",
+        "avg_frame_rate": "30/1",
+        "time_base": "1/15360",
+        "start_pts": 0,
+        "start_time": "0.000000",
+        "duration_ts": 645120,
+        "duration": "42.000000",
+        "bit_rate": "647713",
+        "bits_per_raw_sample": "8",
+        "nb_frames": "1260",
+        "nb_read_frames": "1260",
+        "extradata_size": 47,
+        "disposition": {
+          "default": 1,
+          "dub": 0,
+          "original": 0,
+          "comment": 0,
+          "lyrics": 0,
+          "karaoke": 0,
+          "forced": 0,
+          "hearing_impaired": 0,
+          "visual_impaired": 0,
+          "clean_effects": 0,
+          "attached_pic": 0,
+          "timed_thumbnails": 0,
+          "non_diegetic": 0,
+          "captions": 0,
+          "descriptions": 0,
+          "metadata": 0,
+          "dependent": 0,
+          "still_image": 0,
+          "multilayer": 0
+        },
+        "tags": {
+          "language": "und",
+          "handler_name": "VideoHandler",
+          "vendor_id": "[0][0][0][0]",
+          "encoder": "Lavc61.19.101 libx264"
+        }
+      },
+      {
+        "index": 1,
+        "codec_name": "aac",
+        "codec_long_name": "AAC (Advanced Audio Coding)",
+        "profile": "LC",
+        "codec_type": "audio",
+        "codec_tag_string": "mp4a",
+        "codec_tag": "0x6134706d",
+        "sample_fmt": "fltp",
+        "sample_rate": "48000",
+        "channels": 2,
+        "channel_layout": "stereo",
+        "bits_per_sample": 0,
+        "initial_padding": 0,
+        "id": "0x2",
+        "r_frame_rate": "0/0",
+        "avg_frame_rate": "0/0",
+        "time_base": "1/48000",
+        "start_pts": 0,
+        "start_time": "0.000000",
+        "duration_ts": 2016000,
+        "duration": "42.000000",
+        "bit_rate": "200287",
+        "nb_frames": "1970",
+        "nb_read_frames": "1969",
+        "extradata_size": 5,
+        "disposition": {
+          "default": 1,
+          "dub": 0,
+          "original": 0,
+          "comment": 0,
+          "lyrics": 0,
+          "karaoke": 0,
+          "forced": 0,
+          "hearing_impaired": 0,
+          "visual_impaired": 0,
+          "clean_effects": 0,
+          "attached_pic": 0,
+          "timed_thumbnails": 0,
+          "non_diegetic": 0,
+          "captions": 0,
+          "descriptions": 0,
+          "metadata": 0,
+          "dependent": 0,
+          "still_image": 0,
+          "multilayer": 0
+        },
+        "tags": {
+          "language": "und",
+          "handler_name": "SoundHandler",
+          "vendor_id": "[0][0][0][0]"
+        }
+      }
+    ],
+    "format": {
+      "filename": "D:\\deep_research_public_preview\\product-video\\2026-10-29-v4\\final\\product-demo.mp4",
+      "nb_streams": 2,
+      "nb_programs": 0,
+      "nb_stream_groups": 0,
+      "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+      "format_long_name": "QuickTime / MOV",
+      "start_time": "0.000000",
+      "duration": "42.000000",
+      "size": "4499736",
+      "bit_rate": "857092",
+      "probe_score": 100,
+      "tags": {
+        "major_brand": "isom",
+        "minor_version": "512",
+        "compatible_brands": "isomiso2avc1mp41",
+        "encoder": "Lavf61.7.100"
+      }
+    }
+  },
+  "constantFrameTimestamps": true,
+  "frameCount": 1260,
+  "firstPTS": 0.0,
+  "lastPTS": 41.966667,
+  "decodedNativeMotion": {
+    "changedPixels": 1333,
+    "fraction": 0.004430043203722167,
+    "mean": 0.1950625900077545
+  },
+  "decodedNewMotion": {
+    "changedPixels": 12038,
+    "fraction": 0.005805362654320988,
+    "mean": 0.26193704989711936
+  },
+  "decodedStoppedState": {
+    "changedPixels": 0,
+    "fraction": 0.0,
+    "mean": 0.000997460133744856
+  },
+  "decodedBrandHold": {
+    "changedPixels": 0,
+    "fraction": 0.0,
+    "mean": 0.0012564300411522635
+  },
+  "approvedPreviewSimilarity": [
+    {
+      "frame": 45,
+      "renderedAgainstPreview": {
+        "changedPixels": 0,
+        "fraction": 0.0,
+        "mean": 7.876800411522633e-06
+      },
+      "encodedAgainstRendered": {
+        "changedPixels": 3283,
+        "fraction": 0.0015832368827160494,
+        "mean": 0.7952705439814816,
+        "lumaPSNR": 47.911741727064964
+      }
+    },
+    {
+      "frame": 105,
+      "renderedAgainstPreview": {
+        "changedPixels": 0,
+        "fraction": 0.0,
+        "mean": 0.0006839956275720166
+      },
+      "encodedAgainstRendered": {
+        "changedPixels": 2256,
+        "fraction": 0.0010879629629629629,
+        "mean": 0.6773014724794238,
+        "lumaPSNR": 49.308237579839435
+      }
+    },
+    {
+      "frame": 150,
+      "renderedAgainstPreview": {
+        "changedPixels": 0,
+        "fraction": 0.0,
+        "mean": 0.0006253215020576131
+      },
+      "encodedAgainstRendered": {
+        "changedPixels": 2127,
+        "fraction": 0.0010257523148148148,
+        "mean": 0.6265600887345679,
+        "lumaPSNR": 50.00688338924033
+      }
+    },
+    {
+      "frame": 210,
+      "renderedAgainstPreview": {
+        "changedPixels": 0,
+        "fraction": 0.0,
+        "mean": 0.0006954089506172839
+      },
+      "encodedAgainstRendered": {
+        "changedPixels": 6549,
+        "fraction": 0.003158275462962963,
+        "mean": 0.7128031764403292,
+        "lumaPSNR": 49.17088117880397
+      }
+    },
+    {
+      "frame": 285,
+      "renderedAgainstPreview": {
+        "changedPixels": 0,
+        "fraction": 0.0,
+        "mean": 6.0763888888888894e-05
+      },
+      "encodedAgainstRendered": {
+        "changedPixels": 8038,
+        "fraction": 0.0038763503086419755,
+        "mean": 0.6492282343106995,
+        "lumaPSNR": 50.09916296418801
+      }
+    },
+    {
+      "frame": 375,
+      "renderedAgainstPreview": {
+        "changedPixels": 0,
+        "fraction": 0.0,
+        "mean": 0.00028822659465020575
+      },
+      "encodedAgainstRendered": {
+        "changedPixels": 3000,
+        "fraction": 0.0014467592592592592,
+        "mean": 0.5181983024691358,
+        "lumaPSNR": 51.323433807738745
+      }
+    },
+    {
+      "frame": 435,
+      "renderedAgainstPreview": {
+        "changedPixels": 0,
+        "fraction": 0.0,
+        "mean": 0.0
+      },
+      "encodedAgainstRendered": {
+        "changedPixels": 15067,
+        "fraction": 0.00726610725308642,
+        "mean": 0.6796609760802469,
+        "lumaPSNR": 50.69306948307917
+      }
+    },
+    {
+      "frame": 585,
+      "renderedAgainstPreview": {
+        "changedPixels": 15528,
+        "fraction": 0.007488425925925926,
+        "mean": 0.1977565586419753
+      },
+      "encodedAgainstRendered": {
+        "changedPixels": 37494,
+        "fraction": 0.01808159722222222,
+        "mean": 0.7191787229938272,
+        "lumaPSNR": 49.77053898279323
+      }
+    },
+    {
+      "frame": 735,
+      "renderedAgainstPreview": {
+        "changedPixels": 8760,
+        "fraction": 0.004224537037037037,
+        "mean": 0.1111130401234568
+      },
+      "encodedAgainstRendered": {
+        "changedPixels": 34951,
+        "fraction": 0.01685522762345679,
+        "mean": 0.6368534593621399,
+        "lumaPSNR": 51.3848134257
+      }
+    },
+    {
+      "frame": 840,
+      "renderedAgainstPreview": {
+        "changedPixels": 5871,
+        "fraction": 0.0028313078703703703,
+        "mean": 0.07019595550411523
+      },
+      "encodedAgainstRendered": {
+        "changedPixels": 35500,
+        "fraction": 0.017119984567901234,
+        "mean": 0.6167031571502058,
+        "lumaPSNR": 50.890139816391844
+      }
+    },
+    {
+      "frame": 945,
+      "renderedAgainstPreview": {
+        "changedPixels": 13382,
+        "fraction": 0.006453510802469135,
+        "mean": 0.1645159786522634
+      },
+      "encodedAgainstRendered": {
+        "changedPixels": 41947,
+        "fraction": 0.02022907021604938,
+        "mean": 0.744045138888889,
+        "lumaPSNR": 48.97964825773336
+      }
+    },
+    {
+      "frame": 1020,
+      "renderedAgainstPreview": {
+        "changedPixels": 5438,
+        "fraction": 0.0026224922839506175,
+        "mean": 0.06488361625514404
+      },
+      "encodedAgainstRendered": {
+        "changedPixels": 32094,
+        "fraction": 0.015477430555555555,
+        "mean": 0.5893910751028807,
+        "lumaPSNR": 50.96115464693051
+      }
+    },
+    {
+      "frame": 1125,
+      "renderedAgainstPreview": {
+        "changedPixels": 13192,
+        "fraction": 0.006361882716049383,
+        "mean": 0.16264355066872427
+      },
+      "encodedAgainstRendered": {
+        "changedPixels": 37179,
+        "fraction": 0.0179296875,
+        "mean": 0.7042364326131687,
+        "lumaPSNR": 49.9544875343463
+      }
+    },
+    {
+      "frame": 1215,
+      "renderedAgainstPreview": {
+        "changedPixels": 4628,
+        "fraction": 0.002231867283950617,
+        "mean": 0.048974247685185185
+      },
+      "encodedAgainstRendered": {
+        "changedPixels": 5286,
+        "fraction": 0.002549189814814815,
+        "mean": 0.4075906635802469,
+        "lumaPSNR": 58.62035406716866
+      }
+    }
+  ],
+  "extractedFrames": [
+    45,
+    90,
+    97,
+    104,
+    105,
+    119,
+    120,
+    150,
+    179,
+    180,
+    210,
+    285,
+    295,
+    330,
+    345,
+    375,
+    390,
+    420,
+    430,
+    435,
+    479,
+    480,
+    487,
+    495,
+    585,
+    629,
+    630,
+    650,
+    655,
+    735,
+    779,
+    780,
+    840,
+    945,
+    989,
+    990,
+    1020,
+    1125,
+    1169,
+    1170,
+    1185,
+    1215,
+    1245,
+    1259
+  ],
+  "allFramesValidated": 1260,
+  "nativeClicks": [
+    {
+      "target": "#cw-skill",
+      "bounds": {
+        "x": 599.328125,
+        "y": 941.40625,
+        "width": 74.15625,
+        "height": 28,
+        "top": 941.40625,
+        "right": 673.484375,
+        "bottom": 969.40625,
+        "left": 599.328125
+      },
+      "nativeTip": [
+        640.1140625,
+        955.40625
+      ],
+      "hit": true,
+      "visible": true,
+      "text": "Skills",
+      "callbacks": [
+        {
+          "type": "menu",
+          "value": "skill"
+        }
+      ],
+      "phase": "before-native-handler",
+      "frame": 120,
+      "id": "open-skills",
+      "tip": [
+        285.26478125000017,
+        516.9790625
+      ],
+      "callbackMatches": true,
+      "insideViewport": true
+    },
+    {
+      "target": "[data-skill-option='product-comparison']",
+      "bounds": {
+        "x": 606.328125,
+        "y": 800.40625,
+        "width": 220,
+        "height": 32,
+        "top": 800.40625,
+        "right": 826.328125,
+        "bottom": 832.40625,
+        "left": 606.328125
+      },
+      "nativeTip": [
+        727.328125,
+        816.40625
+      ],
+      "hit": true,
+      "visible": true,
+      "text": "产品对比",
+      "callbacks": [
+        {
+          "type": "config",
+          "config": {
+            "skill": "product-comparison"
+          }
+        },
+        {
+          "type": "menu",
+          "value": null
+        }
+      ],
+      "phase": "before-native-handler",
+      "frame": 180,
+      "id": "choose-skill",
+      "tip": [
+        426.55156250000005,
+        291.7990625
+      ],
+      "callbackMatches": true,
+      "insideViewport": true
+    },
+    {
+      "target": "[data-flow-node='b']",
+      "bounds": {
+        "x": 1685.65625,
+        "y": 354.15625,
+        "width": 96.671875,
+        "height": 81.375,
+        "top": 354.15625,
+        "right": 1782.328125,
+        "bottom": 435.53125,
+        "left": 1685.65625
+      },
+      "nativeTip": [
+        1738.82578125,
+        394.84375
+      ],
+      "hit": true,
+      "visible": true,
+      "text": "研究员 02\n●\n商业\n检索中",
+      "callbacks": [
+        {
+          "type": "inspect",
+          "id": "b"
+        }
+      ],
+      "phase": "before-native-handler",
+      "frame": 330,
+      "id": "inspect-node",
+      "tip": [
+        642.1911926605503,
+        485.65814615627966
+      ],
+      "callbackMatches": true,
+      "insideViewport": true
+    },
+    {
+      "target": "#cw-tab-events",
+      "bounds": {
+        "x": 1782.625,
+        "y": 715.09375,
+        "width": 100.375,
+        "height": 27,
+        "top": 715.09375,
+        "right": 1883,
+        "bottom": 742.09375,
+        "left": 1782.625
+      },
+      "nativeTip": [
+        1837.83125,
+        728.59375
+      ],
+      "hit": true,
+      "visible": true,
+      "text": "执行记录",
+      "callbacks": [
+        {
+          "type": "tab",
+          "tab": "events"
+        }
+      ],
+      "phase": "before-native-handler",
+      "frame": 345,
+      "id": "inspect-events",
+      "tip": [
+        827.7393340354856,
+        240.50190391314914
+      ],
+      "callbackMatches": true,
+      "insideViewport": true
+    }
+  ],
+  "decodedAudio": {
+    "sampleRate": 48000,
+    "decodedSamplesPerChannel": 2016256,
+    "decodedSeconds": 42.00533333333333,
+    "playableSamplesPerChannel": 2016000,
+    "playableSeconds": 42,
+    "aacTrailingPaddingSamples": 256,
+    "paddingPeak": 7.167295166254917e-07,
+    "peak": 0.6680638194084167,
+    "peakDbfs": -3.503640957285134,
+    "rmsDbfs": -20.815104103497156,
+    "clippedSamples": 0,
+    "startRms": 0.04327899217768312,
+    "endRms": 7.646442697249737e-07,
+    "eventAlignment": [
+      {
+        "frame": 60,
+        "seconds": 2,
+        "sampleLag": 0,
+        "lagMilliseconds": 0,
+        "correlation": 0.99999882614381
+      },
+      {
+        "frame": 120,
+        "seconds": 4,
+        "sampleLag": 0,
+        "lagMilliseconds": 0,
+        "correlation": 0.9998595142506574
+      },
+      {
+        "frame": 180,
+        "seconds": 6,
+        "sampleLag": 0,
+        "lagMilliseconds": 0,
+        "correlation": 0.9999951398447962
+      },
+      {
+        "frame": 240,
+        "seconds": 8,
+        "sampleLag": 0,
+        "lagMilliseconds": 0,
+        "correlation": 0.9999987526592451
+      },
+      {
+        "frame": 255,
+        "seconds": 8.5,
+        "sampleLag": 0,
+        "lagMilliseconds": 0,
+        "correlation": 0.9997632319002745
+      },
+      {
+        "frame": 270,
+        "seconds": 9,
+        "sampleLag": 0,
+        "lagMilliseconds": 0,
+        "correlation": 0.9999984746498457
+      },
+      {
+        "frame": 330,
+        "seconds": 11,
+        "sampleLag": 0,
+        "lagMilliseconds": 0,
+        "correlation": 0.9996312656344304
+      },
+      {
+        "frame": 345,
+        "seconds": 11.5,
+        "sampleLag": 0,
+        "lagMilliseconds": 0,
+        "correlation": 0.9998913620523211
+      },
+      {
+        "frame": 360,
+        "seconds": 12,
+        "sampleLag": 0,
+        "lagMilliseconds": 0,
+        "correlation": 0.9999988529705948
+      },
+      {
+        "frame": 375,
+        "seconds": 12.5,
+        "sampleLag": 0,
+        "lagMilliseconds": 0,
+        "correlation": 0.9997899687301881
+      },
+      {
+        "frame": 390,
+        "seconds": 13,
+        "sampleLag": 0,
+        "lagMilliseconds": 0,
+        "correlation": 0.9999976815158442
+      },
+      {
+        "frame": 480,
+        "seconds": 16,
+        "sampleLag": 0,
+        "lagMilliseconds": 0,
+        "correlation": 0.999999044553201
+      },
+      {
+        "frame": 495,
+        "seconds": 16.5,
+        "sampleLag": 0,
+        "lagMilliseconds": 0,
+        "correlation": 0.9995361589598654
+      },
+      {
+        "frame": 525,
+        "seconds": 17.5,
+        "sampleLag": 0,
+        "lagMilliseconds": 0,
+        "correlation": 0.9994427732026385
+      },
+      {
+        "frame": 555,
+        "seconds": 18.5,
+        "sampleLag": 0,
+        "lagMilliseconds": 0,
+        "correlation": 0.9998025085376916
+      },
+      {
+        "frame": 630,
+        "seconds": 21,
+        "sampleLag": 0,
+        "lagMilliseconds": 0,
+        "correlation": 0.9999900875421116
+      },
+      {
+        "frame": 645,
+        "seconds": 21.5,
+        "sampleLag": 0,
+        "lagMilliseconds": 0,
+        "correlation": 0.9997611122499958
+      },
+      {
+        "frame": 660,
+        "seconds": 22,
+        "sampleLag": 0,
+        "lagMilliseconds": 0,
+        "correlation": 0.9999987794747063
+      },
+      {
+        "frame": 690,
+        "seconds": 23,
+        "sampleLag": 0,
+        "lagMilliseconds": 0,
+        "correlation": 0.999997235591464
+      },
+      {
+        "frame": 780,
+        "seconds": 26,
+        "sampleLag": 0,
+        "lagMilliseconds": 0,
+        "correlation": 0.999999012504002
+      },
+      {
+        "frame": 825,
+        "seconds": 27.5,
+        "sampleLag": 0,
+        "lagMilliseconds": 0,
+        "correlation": 0.9996013612245295
+      },
+      {
+        "frame": 870,
+        "seconds": 29,
+        "sampleLag": 0,
+        "lagMilliseconds": 0,
+        "correlation": 0.9999975272104749
+      },
+      {
+        "frame": 900,
+        "seconds": 30,
+        "sampleLag": 0,
+        "lagMilliseconds": 0,
+        "correlation": 0.9999968696213166
+      },
+      {
+        "frame": 990,
+        "seconds": 33,
+        "sampleLag": 0,
+        "lagMilliseconds": 0,
+        "correlation": 0.9999971739756157
+      },
+      {
+        "frame": 1035,
+        "seconds": 34.5,
+        "sampleLag": 0,
+        "lagMilliseconds": 0,
+        "correlation": 0.9998804008205485
+      },
+      {
+        "frame": 1065,
+        "seconds": 35.5,
+        "sampleLag": 0,
+        "lagMilliseconds": 0,
+        "correlation": 0.9997394156820228
+      },
+      {
+        "frame": 1095,
+        "seconds": 36.5,
+        "sampleLag": 0,
+        "lagMilliseconds": 0,
+        "correlation": 0.999776078125161
+      },
+      {
+        "frame": 1170,
+        "seconds": 39,
+        "sampleLag": 0,
+        "lagMilliseconds": 0,
+        "correlation": 0.9999979853837296
+      }
+    ],
+    "scope": "Numerical decoding, peak, clipping and timing validation; this does not claim subjective listening."
+  },
+  "programPlayback": {
+    "movieSha256": "3b6a9e226d7387e7aa580a31a7640f6c6307c2ef748df39f4162b037bc22fffd",
+    "servedSha256": "3b6a9e226d7387e7aa580a31a7640f6c6307c2ef748df39f4162b037bc22fffd",
+    "transport": "local HTTP",
+    "bufferedAtStart": false,
+    "fallbackReason": null,
+    "duration": 42,
+    "ended": true,
+    "playbackRate": 1,
+    "wallTimeMs": 42307.599999997765,
+    "muted": false,
+    "volume": 1,
+    "audioContextState": "running",
+    "audioDecodedBytes": 1057917,
+    "audioMeter": {
+      "measuredFrames": 1260,
+      "activeFrames": 1258,
+      "maxRms": 0.215408649137615
+    },
+    "cumulativeVideoFramesBefore": 4,
+    "totalVideoFrames": 1264,
+    "presentationCoverage": {
+      "complete": true,
+      "uniqueFrames": 1260,
+      "firstFrame": 0,
+      "lastFrame": 1259,
+      "preloadedFirstFrame": true
+    },
+    "droppedDuringPlayback": 0,
+    "presentedCallbacks": 1260,
+    "frameCallbackGaps": 0,
+    "firstCallback": {
+      "mediaTime": 0,
+      "presentedFrames": 2
+    },
+    "lastCallback": {
+      "mediaTime": 41.966667,
+      "presentedFrames": 1261
+    },
+    "scope": "Full-speed program playback with audio enabled, signal metering and decoded-frame visual inspection; subjective listening is not claimed.",
+    "pageErrors": []
+  },
+  "visualReview": {
+    "movieSha256": "3b6a9e226d7387e7aa580a31a7640f6c6307c2ef748df39f4162b037bc22fffd",
+    "sheetSha256": "619870f58ce37651816b77c73c80da8281d3427e181e83e34af5a035b2eea8f7",
+    "date": "2026-10-29",
+    "visualResult": "passed",
+    "method": "Viewed final decoded 14-frame check sheet, 12-frame transition sheet and full-size verification diagram. Compared decoded diagnosis frame with approved preview; glyph antialiasing and yuv420p color-edge differences do not alter copy or layout.",
+    "subjectiveListening": "not_run",
+    "fullManualPlayback": "not_claimed; see program playback with enabled audio"
+  }
+}

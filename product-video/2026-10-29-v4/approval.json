@@ -1,0 +1,14 @@
+{
+  "status": "approved",
+  "version": "2026-10-29-v4",
+  "date": "2026-10-29",
+  "timezone": "Asia/Shanghai",
+  "planSha256": "7502713fe2609aaaa4941743d2cc347ae72f84aa9cfe917029a548a06b3a04af",
+  "evidence": "用户在本对话明确回复：按这版制作配乐成片并替换 README 视频",
+  "scope": "42 秒，1920×1080，30 fps；沿用已预览镜头、内容与布局；生成原创代码配乐并替换 README 视频入口。",
+  "previewSha256": {
+    "evolution.mp4": "d1024d665ab1b74bef1525a633a94287e0673480981717d6662c6706cc6d1deb",
+    "workflow.mp4": "425085ab54f0981c0ea4bdff2d29a8d5d08cd341fb41f7c933dde56d7ea21455",
+    "storyboard-overview.png": "efbeadf806bcf1fd89a0da451b7318f7595263311c255ecbfdf3ec4183fdc00c"
+  }
+}

@@ -1,0 +1,129 @@
+{
+  "planSha256": "f5252340c47c84f7f832da0c2218a43a72f42260bac29e2e74863d6fe619ad2c",
+  "files": [
+    {
+      "path": "approved-brief.json",
+      "sha256": "09162889f4d5b71766a0b0b14f179c5d99f808c48180917207e474bf9f2913c4"
+    },
+    {
+      "path": "approved-index.html",
+      "sha256": "626ba96ccc8f479cc521b3d76806fc8a5ffe7fe750f8753a5df25ac5c7f3839e"
+    },
+    {
+      "path": "approved-timeline.json",
+      "sha256": "c8e8b9c8f9858f5eeaf4a02b523094f8c2325c3c0c2799d028343b25e1d9d5a6"
+    },
+    {
+      "path": "bridge-overview.png",
+      "sha256": "fdf8774cdaa69d1e03c0607146da44d8add578a2a8abe0572aa7d413c50855ca"
+    },
+    {
+      "path": "bridge.mp4",
+      "sha256": "8cc1876fb935788d766cae462ffa90acf805c5cf3bba6f559ed3fc9dc1625d12"
+    },
+    {
+      "path": "context.mp4",
+      "sha256": "d067b065f594c352d04067061c7bf4c0d2f2f89cb2457232e3149297d2505b26"
+    },
+    {
+      "path": "frame-0045.png",
+      "sha256": "6d32449de08a7a38b710ae855c4b9b00668e827fa6c3960058dc0612dd226375"
+    },
+    {
+      "path": "frame-0105.png",
+      "sha256": "a66662c579e143b76ab4979e7301fdda1c13fff8b92ad8f03393b902f0ebbcc2"
+    },
+    {
+      "path": "frame-0150.png",
+      "sha256": "f638d36facdd28f984742e9d7dd89a050445a8786f63a5275cfd99b637f16a18"
+    },
+    {
+      "path": "frame-0210.png",
+      "sha256": "0aee1b9350854d5670bf601821e2597e007e91fc6c6b29c40efe7a1be430b6f6"
+    },
+    {
+      "path": "frame-0285.png",
+      "sha256": "2e5e885ac806987821333d63f11ce5d5c0607ae6d5cde55d8be77dfe6f60e1e9"
+    },
+    {
+      "path": "frame-0375.png",
+      "sha256": "8a356e9915f4d88438e9b4aa011285adca4fdbd7ccd36dff269fccf554472c4c"
+    },
+    {
+      "path": "frame-0435.png",
+      "sha256": "7b0923776f4cf5a82d325e4fee9d8df4c67d25262edb72822178d452ab6d7245"
+    },
+    {
+      "path": "frame-0525.png",
+      "sha256": "ad8b7e7d831b1a4cb651c1327cdfe8217406912d03229939ba23e9509934d761"
+    },
+    {
+      "path": "frame-0585.png",
+      "sha256": "b907d8a466b948d28650a48bb990e0053377bbecf30b971259ff9ac099894003"
+    },
+    {
+      "path": "frame-0645.png",
+      "sha256": "255e8ed9ecc1133f2e65c7b606b07667a9c95cf8eb79f01b9354b66fd118bd84"
+    },
+    {
+      "path": "frame-0735.png",
+      "sha256": "cb135da4fff6c33d9bc5bf6c29cfcb44d5e50d5df1138b8d68e7c425753e7acb"
+    },
+    {
+      "path": "frame-0795.png",
+      "sha256": "da3d1e5275a7aa6fbf4ee7f604fbaf856e9ca61171ed12b6592462a869e42751"
+    },
+    {
+      "path": "frame-0915.png",
+      "sha256": "d535c30d34f3a35e14eaf6614d4db37b9c4d4f223238e704d5b33043dc20b0c2"
+    },
+    {
+      "path": "frame-1065.png",
+      "sha256": "90a77b4a4dc1004ddcf982eb0524369548e9df8cd0073be4f0a7e5b74b4271af"
+    },
+    {
+      "path": "frame-1170.png",
+      "sha256": "ca974d6f87ecc16d524d87a7781c387bc3c15d985400cd12d271f7d535f1ff79"
+    },
+    {
+      "path": "frame-1275.png",
+      "sha256": "b85d595a19c0e02845a74d597e884ce0cb881a740f496480f0d9c12c83e05676"
+    },
+    {
+      "path": "frame-1350.png",
+      "sha256": "469fc1e54cd7910a85e7aaef1cf134e836bcd990564cc0f638146c4512791a6c"
+    },
+    {
+      "path": "frame-1455.png",
+      "sha256": "301d695e5196e4a8cb0de405a35f629746d2355733da971db8f3a65302cff8b2"
+    },
+    {
+      "path": "frame-1545.png",
+      "sha256": "8418b5de6d9da2d4c4302aa3cc2b081a624da46ab0f52eba6754e9baa7253283"
+    },
+    {
+      "path": "index.html",
+      "sha256": "7a948bcd89abf340ddbe7f928470514fb7759ba9c5236386a89cf456d58874f2"
+    },
+    {
+      "path": "media-verification.json",
+      "sha256": "79b0342aac6c6aa1c1f8daca57ad0fb2b13c674ecb80b42b151ee9e5467cb749"
+    },
+    {
+      "path": "playback-verification.json",
+      "sha256": "b4523cc9c16ef7310976b287cd671f60bff392e5f24c078032461f41b421de7f"
+    },
+    {
+      "path": "reproduce.md",
+      "sha256": "a42a765d0626250c09f8253400b69c6bf2d9fae608f2e4d8469028a087625e0f"
+    },
+    {
+      "path": "storyboard-overview.png",
+      "sha256": "37c7c29464f1b3c189efa70aaf9a4e5fa2919b60a7b5b022f2ac203d7b2e545d"
+    },
+    {
+      "path": "verification.md",
+      "sha256": "2e457b18c7a531572e3bcb63871a725c9d0aa5b211b0b581131e58e2e7e1cb56"
+    }
+  ]
+}

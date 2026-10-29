@@ -1,0 +1,125 @@
+{
+  "movieSha256": "7debc5ff2def76644d4baa327e747fcdf1c5c7cd5a88282e5c8cc4e90818e2f9",
+  "planSha256": "f5252340c47c84f7f832da0c2218a43a72f42260bac29e2e74863d6fe619ad2c",
+  "approval": "../approval.json",
+  "files": [
+    {
+      "path": "check-sheet.png",
+      "sha256": "0017df27d1965e7707cf9000815fea5b558b16ba888844b746c3d5817798cb62"
+    },
+    {
+      "path": "index.html",
+      "sha256": "181dd697d93e58d786ca8a546a41fa9b8ca89198125a8fef013ab9612e683c06"
+    },
+    {
+      "path": "poster.png",
+      "sha256": "3b0abb445175da5b509a5f5a1ab01c776edb742458aa138b797794df26cea318"
+    },
+    {
+      "path": "product-demo.mp4",
+      "sha256": "7debc5ff2def76644d4baa327e747fcdf1c5c7cd5a88282e5c8cc4e90818e2f9"
+    },
+    {
+      "path": "reproduce.md",
+      "sha256": "3b5a8b45aa18254995c3adb2b239ecf8a42ab98cf7e0c342348709000d6ac11c"
+    },
+    {
+      "path": "verification-data.json",
+      "sha256": "6bc03c9c3ef85a9c032e1c88ec18b434727cc60fb2af42957a9caaefdba251fa"
+    },
+    {
+      "path": "verification.md",
+      "sha256": "ba9b3485956025549448d81c8d055c479373ad88f92695c999b3c3fba2e78c6d"
+    }
+  ],
+  "sources": [
+    {
+      "path": "source/app.html",
+      "sha256": "33e5bb3a3f75e25586e7bb85b5225382414464adec617c43c4301922296d098c"
+    },
+    {
+      "path": "source/app.tsx",
+      "sha256": "390c9550f04a7f56a1d699ef4aa18f51f0cc2cdda42c257789fe83f8f690b5c0"
+    },
+    {
+      "path": "source/approve-final.py",
+      "sha256": "11de2c18f2ddf091b3826fcd389d75915d6561ce443ff4515f3be8b2726514dc"
+    },
+    {
+      "path": "source/bridge.css",
+      "sha256": "18be01489013f0d8a982bf0bf5873bf8c5351ac82220575da5fddbe8c95b075f"
+    },
+    {
+      "path": "source/build.py",
+      "sha256": "89bb1158dd131d57cd02dacd1d939b125f52892b0a39f6c928f0b32b6f8f81d7"
+    },
+    {
+      "path": "source/capture.mjs",
+      "sha256": "7de49c84458cbe986d11fb1c7a899b263fc47037d9dcb2ce654d7a8b3d1242ab"
+    },
+    {
+      "path": "source/check-playback.mjs",
+      "sha256": "ac3d8891cc0bac76d84c5faa626bee103a386ca70d87ee259c14275f7d8769bb"
+    },
+    {
+      "path": "source/finalize.py",
+      "sha256": "977f0806e644ea14cb431f7a64e8b92933a20ff119e570863f6b0ddf3f709306"
+    },
+    {
+      "path": "source/index.html",
+      "sha256": "887a91ae964a464ae8a14165a8087854d3d8a8ac2e1573d18131a4fdcfd04ee9"
+    },
+    {
+      "path": "source/native-scene.css",
+      "sha256": "54d9deeb9c0de5087eb5bfbadea9276097718e4a88443929ab413ac6d9db0f7a"
+    },
+    {
+      "path": "source/native-scene.js",
+      "sha256": "38db2a2e7e6368eb503334bb222b74f3d2b95ef6171f9cf95c66f26b12b4dfe3"
+    },
+    {
+      "path": "source/native.html",
+      "sha256": "26375df68afb869b25cec09df29e32a247a23a80775fd08fe281df494b9b4d10"
+    },
+    {
+      "path": "source/package-final.py",
+      "sha256": "169bd5b6170a602d6603725c08b7cf61c960fb43404b3f0252c83712c26d2560"
+    },
+    {
+      "path": "source/package-preview.py",
+      "sha256": "1b70e11a6b4868313df39e7218e9bb884042f24f5f787929d9af1ee2e4bf7e6b"
+    },
+    {
+      "path": "source/playback-final.mjs",
+      "sha256": "6eecb6ba96158731997267339b35ba83ebbac3be998e63aab88e91a14396f7f8"
+    },
+    {
+      "path": "source/record-delivery.py",
+      "sha256": "3cd3713df1b88cddbe9f09ac20fb59d28f55ce51b9284f031105adddb4422485"
+    },
+    {
+      "path": "source/scene.css",
+      "sha256": "88b034c1e9e7d02286613e852ad0395040792d457920da7034e04954766b0568"
+    },
+    {
+      "path": "source/scene.js",
+      "sha256": "c4004d652e1aab64d134718289a7395db59efa5ec0573c98da937b67d1be7539"
+    },
+    {
+      "path": "source/serve.mjs",
+      "sha256": "1b093f751c1dd2013807dd8f176dbd7f5a12ea8cdee442a2e43d8dee1aa853a3"
+    },
+    {
+      "path": "source/synthesize-audio.mjs",
+      "sha256": "9e7ee978ad600a289ffd2c7eebbb9004d6c16dba35c1c02d2ecf81ba743e5321"
+    },
+    {
+      "path": "source/timeline.py",
+      "sha256": "9f444db0b8ec0f8aef253658d82e343b82103cf3fc4be7b4bd663905884faf48"
+    },
+    {
+      "path": "source/verify-audio.mjs",
+      "sha256": "59aed17c9e09ab8722d77c6c7e91920fa7811230661e9edeeb7fe3c7b89a3235"
+    }
+  ]
+}

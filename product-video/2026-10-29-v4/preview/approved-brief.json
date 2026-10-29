@@ -1,0 +1,456 @@
+{
+  "version": "2026-10-29-v4",
+  "state": "pending",
+  "date": "2026-10-29",
+  "timezone": "Asia/Shanghai",
+  "planSha256": "7502713fe2609aaaa4941743d2cc347ae72f84aa9cfe917029a548a06b3a04af",
+  "product": "星图工作台 / Deep Research Agent",
+  "audience": {
+    "text": "需要可追溯研究流程与可验证方法论改进的开发者、研究工作流使用者",
+    "basis": "根据 README 与本次需求推断，随分镜确认"
+  },
+  "value": "研究过程可见；Skill 修订由失败证据驱动，经独立验证后由操作者采纳。",
+  "tagline": {
+    "text": "让研究的每一步，看得见。",
+    "source": "现有 v3 品牌文案"
+  },
+  "scenario": {
+    "type": "existing_original_synthetic",
+    "source": "frontend/src/data/demo.ts 与 mock.ts",
+    "question": "比较 AI 搜索产品的技术路线、商业模式和隐私风险，附可核验的来源。",
+    "clarification": "我会从技术路线、商业模式和隐私风险三个方向并行研究。先确认比较范围，再核验资料、汇总证据，最后整理成一份便于阅读的对比报告。",
+    "report": "研究摘要（模拟）\n\n01 · 技术路线\n围绕检索、生成与引用追溯建立统一比较维度，记录各项能力需要核验的证据。\n\n02 · 商业模式\n按免费入口、订阅服务与企业场景整理分析框架，标记价格与服务条款的核验位置。\n\n03 · 隐私风险\n将数据收集、保留期限和用户控制列为审查项目，区分已确认信息与待验证问题。\n\n下一步\n接入真实检索后逐项补充来源，交叉核验，再形成结论。此处仅演示报告呈现，不含真实产品评价。",
+    "reportKey": "demoReport",
+    "citations": [],
+    "sourceTitles": [],
+    "sourceExcerpts": [],
+    "limitation": "现有合成报告没有编号引用或真实来源原文；仅展示同一演示路径，不新增引用操作。"
+  },
+  "evolution": {
+    "type": "documentation_based_mechanism_animation",
+    "dataPolicy": "没有新增优化实验、假失败样本、候选正文、评估分数或提升结论。候选 A/B 仅标识功能允许的分支，并非实验产物。未使用单元 fixture 作为实验结果。",
+    "facts": [
+      {
+        "shot": "diagnose",
+        "source": "docs/skill-evolution.md / 证据诊断；src/deep_research/skill_evolution.py / validate_diagnosis",
+        "text": "只有内容归因成立且证据充分时才允许生成修订"
+      },
+      {
+        "shot": "candidate",
+        "source": "docs/skill-evolution.md；src/deep_research/skill_evolution.py / Manifest, Candidate",
+        "text": "首版仅 product-comparison；每实验最多一轮、两个候选；保存正文、diff、理由与预期改善"
+      },
+      {
+        "shot": "validate",
+        "source": "docs/skill-evolution.md / 冻结、最终验证、晋升和回退；skill_evolution_runner.py",
+        "text": "开发、选择、最终集分开；选择集配对通过后冻结一个候选，再读最终集；最终反馈不回流"
+      },
+      {
+        "shot": "release",
+        "source": "docs/skill-evolution.md；src/deep_research/skill_evolution_store.py / promote, rollback",
+        "text": "默认停在报告；门槛通过后显式晋升；归档旧版，重启生效；回退核对修订"
+      }
+    ],
+    "limitations": [
+      "后端 CLI、SQLite 和 Markdown 报告，不是新增前端界面",
+      "尚无真实模型优化实验与效果提升结论",
+      "研究员 compressed_research 的评估不直接代表 final_report 质量",
+      "缺失运行、反馈或完整成本不能冻结或晋升"
+    ]
+  },
+  "coverage": [
+    {
+      "item": "产品全貌",
+      "decision": "show",
+      "shotIds": [
+        "question"
+      ],
+      "evidence": "0–2 秒完整原生工作台；preview/frame-0045.png",
+      "reason": "建立产品上下文"
+    },
+    {
+      "item": "关键配置",
+      "decision": "show",
+      "shotIds": [
+        "skills"
+      ],
+      "evidence": "preview/frame-0150.png、frame-0210.png；四次原生回调核验",
+      "reason": "展开 Skills 菜单并选中产品对比；不展开额外模型配置，沿用内置模拟配置"
+    },
+    {
+      "item": "核心操作",
+      "decision": "show",
+      "shotIds": [
+        "parallel",
+        "inspect",
+        "diagnose",
+        "candidate",
+        "validate"
+      ],
+      "evidence": "workflow.mp4、evolution.mp4",
+      "reason": "研究自动推进、真实节点检查器；优化部分用明确标注的机制图解"
+    },
+    {
+      "item": "结果",
+      "decision": "show",
+      "shotIds": [
+        "report",
+        "release",
+        "brand"
+      ],
+      "evidence": "frame-0435.png、frame-1125.png、frame-1215.png",
+      "reason": "原合成报告、采纳决策、品牌收尾；原文核对不适用，合成数据无引用原文"
+    }
+  ],
+  "layout": {
+    "measured": {
+      "viewport": [
+        1920,
+        1080
+      ],
+      "appViewport": [
+        1920,
+        1032
+      ],
+      "elements": [
+        {
+          "selector": ".cw-sidebar",
+          "box": {
+            "x": 11,
+            "y": 11,
+            "width": 146,
+            "height": 1010
+          },
+          "font": "14px"
+        },
+        {
+          "selector": ".cw-composer-wrap",
+          "box": {
+            "x": 496,
+            "y": 796.640625,
+            "width": 720,
+            "height": 224.359375
+          },
+          "font": "14px"
+        },
+        {
+          "selector": ".cw-graph-panel",
+          "box": {
+            "x": 1559,
+            "y": 79,
+            "width": 350,
+            "height": 942
+          },
+          "font": "14px"
+        },
+        {
+          "selector": ".cw-composer",
+          "box": {
+            "x": 508,
+            "y": 836.234375,
+            "width": 696,
+            "height": 146.171875
+          },
+          "font": "14px"
+        }
+      ]
+    },
+    "videoPixels": [
+      1920,
+      1080
+    ],
+    "nativeCSSSource": [
+      "frontend/src/apple.css",
+      "frontend/src/app.css",
+      "frontend/src/demo.css"
+    ],
+    "newBoard": [
+      570,
+      164,
+      1272,
+      814
+    ],
+    "explanationFonts": {
+      "headline": 58,
+      "description": 23,
+      "diagramHeading": 29,
+      "body": 20
+    },
+    "nativeGraphSemantics": "原生节点、连接、返回回路与逐次调用时间线分别保留；节点检查器触发真实组件回调",
+    "runtimeEvidence": "cache/capture-audit.json；不是旧截图"
+  },
+  "spec": {
+    "video": {
+      "width": 1920,
+      "height": 1080,
+      "fps": "30",
+      "totalFrames": 1260,
+      "durationSeconds": 42.0
+    },
+    "audio": {
+      "bpm": 120.0,
+      "sampleRate": 48000,
+      "sampleCount": 2016000
+    },
+    "recommendation": "42 秒；前16秒复用现有产品路径，新机制23秒，品牌3秒。为每个新增阶段保留稳定阅读区间。",
+    "preview": "两段无声小样；正式配乐和完整 MP4 等待本版确认"
+  },
+  "provenance": {
+    "repositoryCommit": "9b6807e7b6d079bd9ac2e728ee6ce80325947937",
+    "nativeAdapter": "从 v3 源码复制至本版并切换统一派生时间轴；本版运行不依赖旧版目录",
+    "timelineCompiler": "复制 product-demo-video/scripts/timeline.py；无需安装新依赖"
+  },
+  "sources": [
+    {
+      "path": "README.md",
+      "sha256": "7ab1a4b4cf3b138a9f064bcc51c7f78fc99f1d6c0cecd5ffc676cb19fb1bae49"
+    },
+    {
+      "path": "docs/architecture-decisions.md",
+      "sha256": "3942461415680bf87655e19d29ebdfb3c825aa8602fa28a7428b5446f06a2335"
+    },
+    {
+      "path": "docs/maintenance.md",
+      "sha256": "fc404fe347f5bf9b8383cd7908fdf40772a4b01782a007d0a406fda90ba0345f"
+    },
+    {
+      "path": "docs/skill-evolution.md",
+      "sha256": "70d0f1afc406aca7e465e3115693f4fb3e4a08b4a0e61c0bdabebe0bcc779b04"
+    },
+    {
+      "path": "frontend/src/App.tsx",
+      "sha256": "552f807a9c64b6b6a2a6854960b39137734b378bceb01ff7f077696934aaa735"
+    },
+    {
+      "path": "frontend/src/api/errors.ts",
+      "sha256": "55f2d2e3c532a6ec84704cb237c551ba5905ef5f4c160e11e273da617a69f39a"
+    },
+    {
+      "path": "frontend/src/api/eventReplay.ts",
+      "sha256": "82d20be4b3eb55669ed5d0f021fc4ed0a6740ca0f79332811dcf09bd2a6e9e9a"
+    },
+    {
+      "path": "frontend/src/api/langgraph.ts",
+      "sha256": "cbc5eb76e6bce4d581f7d39b2c057b0dfdb88eae220096b27e8c616d6764e7ed"
+    },
+    {
+      "path": "frontend/src/api/reportReplay.ts",
+      "sha256": "0e7b8fa295450b6fb7c788b50f4eac3df8d6021a1a52cbff5cae2ce3937df44f"
+    },
+    {
+      "path": "frontend/src/api/researchStream.ts",
+      "sha256": "5bd5677351b1b1da89db6c704cf68847d8404fab71b615f386f16fe2e3b69b97"
+    },
+    {
+      "path": "frontend/src/api/submissions.ts",
+      "sha256": "161d31a5eec3e370e6393b31e95cbecd908ca90272e84d0febf13570a7641f37"
+    },
+    {
+      "path": "frontend/src/app.css",
+      "sha256": "4d41f573320b0d0cb8851fa16610eb46ecd3dd89f6329a8eb54860d0ae2afb04"
+    },
+    {
+      "path": "frontend/src/apple.css",
+      "sha256": "61390c99d3846f15bb00c64b2aac13c3b64590504a2fac25faede8814d0ba4f5"
+    },
+    {
+      "path": "frontend/src/components/BackendControls.tsx",
+      "sha256": "a174c76cf8537e6839a4d237e8d32f18fb492e3409b438e5e74386060bf3464f"
+    },
+    {
+      "path": "frontend/src/components/Composer.tsx",
+      "sha256": "f9978007b178303345f2fe175b5d689b1be37d8950fbda2e6ed77943f14a37e4"
+    },
+    {
+      "path": "frontend/src/components/Conversation.tsx",
+      "sha256": "6f8534491c80058b59bdbf522ad0af7279a2a8fc54f9e4e5bbf0957c3fa1a639"
+    },
+    {
+      "path": "frontend/src/components/DemoPlayer.tsx",
+      "sha256": "9a52039f2a4801bbe1a2c44b2f50d45f37279762c8fb2265e8c63b07ec5f94ed"
+    },
+    {
+      "path": "frontend/src/components/Graph.tsx",
+      "sha256": "28f1226b5ef8eecf02effeddbbe16758e3f17abd6345964655e23bffdd221844"
+    },
+    {
+      "path": "frontend/src/components/Icon.tsx",
+      "sha256": "dd9ab4c3464a26c5015716b414623f75d09dfa7d627a7425fcdde84a6b954e26"
+    },
+    {
+      "path": "frontend/src/components/Inspector.tsx",
+      "sha256": "e7a44dd44261093b1a722f534fcf9c0450906bdb5d039f5c9d349e839a3c4147"
+    },
+    {
+      "path": "frontend/src/components/LiveConversation.tsx",
+      "sha256": "664288754046f9df8e60e74302c150b87cfb7c8b1bf427018d60c643babd6e1e"
+    },
+    {
+      "path": "frontend/src/components/LiveReportDraft.tsx",
+      "sha256": "8e79004b4fccc1a1bb9b33b1125556c5541ad1a93528b0f6ad2a7c0ab0c3fb58"
+    },
+    {
+      "path": "frontend/src/components/Picker.tsx",
+      "sha256": "647947d881cd7fa9c9df3bc316f13bb6044ca0f1959808e1bbeb62bea0887e78"
+    },
+    {
+      "path": "frontend/src/components/RecordedConversation.tsx",
+      "sha256": "6495af29191575e135a4e6c19f20ed060343379f8172a25f3273458ccb1f398e"
+    },
+    {
+      "path": "frontend/src/components/ReportText.tsx",
+      "sha256": "163fe39c88e578a5d971e5cd52c55b5a116838e48f5d5761a9313808b2e9a934"
+    },
+    {
+      "path": "frontend/src/components/Sidebar.tsx",
+      "sha256": "e63b4a281f764a4f772b5678216e44e2004bb57d5e970e6d20a3ad9813dbb909"
+    },
+    {
+      "path": "frontend/src/components/StatusMark.tsx",
+      "sha256": "fa2a087d98a4ae963898e730d0473cb8e03ea885920918d5ae48fbdbf5b096e5"
+    },
+    {
+      "path": "frontend/src/data/demo.ts",
+      "sha256": "a437945e8facf9bb752f4e567597c54122ebc696040dd9f8de45d54bad8c1d85"
+    },
+    {
+      "path": "frontend/src/data/eventRecovery.ts",
+      "sha256": "c010e6c35fb055a91f183932e51378aa54e797c7f76645d399d24cac4cc88421"
+    },
+    {
+      "path": "frontend/src/data/executionRecovery.ts",
+      "sha256": "eea184e5a8e5fcb7ab1fd7790a9b3cc09ecbf3bfed2d45aa0f7afef6f424f806"
+    },
+    {
+      "path": "frontend/src/data/live.ts",
+      "sha256": "51fc2dd837314f832cc0a52e8e3002f38866f24d94d83c65e3de730033bf1f86"
+    },
+    {
+      "path": "frontend/src/data/liveSchema.ts",
+      "sha256": "6652bbe048890258e12ef5f84cb6392c701de874fcc1b21e226b2379db318f9d"
+    },
+    {
+      "path": "frontend/src/data/mock.ts",
+      "sha256": "d6c8f05845af2d927afbd53bb818d11cff503c3475ce2800c064d14ea1ca39c5"
+    },
+    {
+      "path": "frontend/src/data/recordings.ts",
+      "sha256": "2b651949d716d038588c18964d360d4bba2ec58e13f4e71d0792493e4cbfb6bb"
+    },
+    {
+      "path": "frontend/src/data/reportEvents.ts",
+      "sha256": "d42f3c053731c1e19a8e067c3cb11117fef1ced78b62c2b18d5f237f89a68bd4"
+    },
+    {
+      "path": "frontend/src/data/researchEvents.ts",
+      "sha256": "0e3ff2b95d95a470ca87cb43433ed6706d35ff9b8854291ddea60d79e5874031"
+    },
+    {
+      "path": "frontend/src/data/schema.ts",
+      "sha256": "177b66a513111080d21beb09bb24e21965ed92e10a342430d81a6b714faa13f0"
+    },
+    {
+      "path": "frontend/src/demo.css",
+      "sha256": "52c2b8d114646b162ddf51f5c7c7ce4f9fa69cd8fb3c3dbfd547ef270f1def88"
+    },
+    {
+      "path": "frontend/src/main.tsx",
+      "sha256": "91e436bd68ee5aa96f00191c0882b1f0a97db43ef57c876f5bd3acb19e3855df"
+    },
+    {
+      "path": "frontend/src/state/useDemo.ts",
+      "sha256": "0ca168d53ec3065d2bf3d304d74bd178e774a9bb729e9142100135642aa1cb0e"
+    },
+    {
+      "path": "frontend/src/state/useLiveResearch.ts",
+      "sha256": "fbfb52a9a5173902b53a407a36417e612267ebd850ab8cb3b146636aacd00789"
+    },
+    {
+      "path": "frontend/src/state/useWorkspace.ts",
+      "sha256": "f0406b5ee2b2da322b3630015acc464fd05855911ccafa208a440e6ac629c1d6"
+    },
+    {
+      "path": "product-video/2026-10-29-v4/source/app.html",
+      "sha256": "33e5bb3a3f75e25586e7bb85b5225382414464adec617c43c4301922296d098c"
+    },
+    {
+      "path": "product-video/2026-10-29-v4/source/app.tsx",
+      "sha256": "390c9550f04a7f56a1d699ef4aa18f51f0cc2cdda42c257789fe83f8f690b5c0"
+    },
+    {
+      "path": "product-video/2026-10-29-v4/source/build.py",
+      "sha256": "09953f945faf562452b6921eee7e58c88bd991d61a8a792d2ec9dc740f5f47ef"
+    },
+    {
+      "path": "product-video/2026-10-29-v4/source/capture.mjs",
+      "sha256": "1837cfd21027dd495f5b1f84236105ddcd36da59816135367d432d40561c9ccc"
+    },
+    {
+      "path": "product-video/2026-10-29-v4/source/check-playback.mjs",
+      "sha256": "9d895cdc1875d73b913da3cce83f9a2cab3c9c826d95d68a1a8152206270f19a"
+    },
+    {
+      "path": "product-video/2026-10-29-v4/source/index.html",
+      "sha256": "54693a7a3de3a05de41e5a23df08f296b15fee328eef506bb7c3d5c27d47e78c"
+    },
+    {
+      "path": "product-video/2026-10-29-v4/source/native-scene.css",
+      "sha256": "54d9deeb9c0de5087eb5bfbadea9276097718e4a88443929ab413ac6d9db0f7a"
+    },
+    {
+      "path": "product-video/2026-10-29-v4/source/native-scene.js",
+      "sha256": "68e1595f2e8dafc6b9b42f20c6ee8a598860659120df62ea32c63538433c13e1"
+    },
+    {
+      "path": "product-video/2026-10-29-v4/source/native.html",
+      "sha256": "428ccafa0c07a51b6be3bb7bf705056b23b4a169d61e67447f8714efb98c4153"
+    },
+    {
+      "path": "product-video/2026-10-29-v4/source/package-preview.py",
+      "sha256": "0b0167bce7d7c33548cfdb910833952e3035cdb2e6425007ca204a4fb0076459"
+    },
+    {
+      "path": "product-video/2026-10-29-v4/source/record-brief.py",
+      "sha256": "3243ea0aa2a579f019d261ac18b4aa3a8f90b93ba2fd41578a19ceb1fb525020"
+    },
+    {
+      "path": "product-video/2026-10-29-v4/source/scene.css",
+      "sha256": "efac2fc3822d919c731b335c90f48ad6408ca870385e72c5a3ae0640285e0a87"
+    },
+    {
+      "path": "product-video/2026-10-29-v4/source/scene.js",
+      "sha256": "0929e1bae2b37e2ac8ff102c3c89f7d4d25a6da182aeb3030317a0a3361ce2da"
+    },
+    {
+      "path": "product-video/2026-10-29-v4/source/serve.mjs",
+      "sha256": "d7e6ecdcbba07f72c4b4b835d9530d6d47650a7e031395c692a6c17bd278e339"
+    },
+    {
+      "path": "product-video/2026-10-29-v4/source/timeline.py",
+      "sha256": "44dfbc42459f2fd007165e3348edbf26e8d1a1ea6b2731d3f73a622d6babec5f"
+    },
+    {
+      "path": "src/deep_research/skill_evolution.py",
+      "sha256": "51dd50eaacb062ed05dc185d0ff466ead7146b011a8fed2053107ee4b21f1524"
+    },
+    {
+      "path": "src/deep_research/skill_evolution_models.py",
+      "sha256": "0bcd4214d34ad66f29ae3e99e65adec959a77f18f92a7c770d191cfb2ffcd86a"
+    },
+    {
+      "path": "src/deep_research/skill_evolution_runner.py",
+      "sha256": "7aa1da1aa471b040ad51111caf686b2b4490719276fa2c8657b4528c5d90927b"
+    },
+    {
+      "path": "src/deep_research/skill_evolution_store.py",
+      "sha256": "acccf90c18837998a78208675c7976b534b6f6196a34671e948c7026a73bd5da"
+    }
+  ],
+  "restrictions": {
+    "modelCalls": 0,
+    "searchCalls": 0,
+    "realUserData": false,
+    "publication": false,
+    "commitsCreated": false
+  }
+}

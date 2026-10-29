@@ -1,0 +1,117 @@
+{
+  "movieSha256": "3b6a9e226d7387e7aa580a31a7640f6c6307c2ef748df39f4162b037bc22fffd",
+  "planSha256": "7502713fe2609aaaa4941743d2cc347ae72f84aa9cfe917029a548a06b3a04af",
+  "approval": "../approval.json",
+  "files": [
+    {
+      "path": "check-sheet.png",
+      "sha256": "619870f58ce37651816b77c73c80da8281d3427e181e83e34af5a035b2eea8f7"
+    },
+    {
+      "path": "index.html",
+      "sha256": "aace5a62f7e66eaeccd98a72c5828b78747002d8237c8a8d8d3664a91f76cb28"
+    },
+    {
+      "path": "poster.png",
+      "sha256": "e717a7204835e6ad2f189ab7fb757b9a0ee9867982e04a150260d4d04f898ba3"
+    },
+    {
+      "path": "product-demo.mp4",
+      "sha256": "3b6a9e226d7387e7aa580a31a7640f6c6307c2ef748df39f4162b037bc22fffd"
+    },
+    {
+      "path": "reproduce.md",
+      "sha256": "3c69965c78c8bed8b4d36431e36e9dd9f322a644fe8187f5e2309a6490c5544a"
+    },
+    {
+      "path": "verification-data.json",
+      "sha256": "e4a0560592c5354b6125785fb6a2c026e3bf9bffb73dafae9b4e937e77ee89d8"
+    },
+    {
+      "path": "verification.md",
+      "sha256": "048ae52bf876479fcafd7219bfdaa80ca481653817756c1d8613a5ef55069cfb"
+    }
+  ],
+  "sources": [
+    {
+      "path": "source/app.html",
+      "sha256": "33e5bb3a3f75e25586e7bb85b5225382414464adec617c43c4301922296d098c"
+    },
+    {
+      "path": "source/app.tsx",
+      "sha256": "390c9550f04a7f56a1d699ef4aa18f51f0cc2cdda42c257789fe83f8f690b5c0"
+    },
+    {
+      "path": "source/build.py",
+      "sha256": "09953f945faf562452b6921eee7e58c88bd991d61a8a792d2ec9dc740f5f47ef"
+    },
+    {
+      "path": "source/capture.mjs",
+      "sha256": "ea496e46a409994aa9be0b70bfdee61e56f32909c3f092e780855b3b664d05b8"
+    },
+    {
+      "path": "source/check-playback.mjs",
+      "sha256": "8a864570e02ab3bf72f9803e4508c8e67a4bbdd8506c495e641e3d19aa71336b"
+    },
+    {
+      "path": "source/finalize.py",
+      "sha256": "889156a1783893635f6cc17cc799994caa0b147ce9ca9dc0fbc8c9c5fb50a764"
+    },
+    {
+      "path": "source/index.html",
+      "sha256": "54693a7a3de3a05de41e5a23df08f296b15fee328eef506bb7c3d5c27d47e78c"
+    },
+    {
+      "path": "source/native-scene.css",
+      "sha256": "54d9deeb9c0de5087eb5bfbadea9276097718e4a88443929ab413ac6d9db0f7a"
+    },
+    {
+      "path": "source/native-scene.js",
+      "sha256": "2065e8c8f16f6ce054376756b8aee96299914f17ee687740dd04446bd1636f5c"
+    },
+    {
+      "path": "source/native.html",
+      "sha256": "428ccafa0c07a51b6be3bb7bf705056b23b4a169d61e67447f8714efb98c4153"
+    },
+    {
+      "path": "source/package-final.py",
+      "sha256": "1525c6621d0ec3a2963816416baca7813bcf49b7054a4e46653d2a5336e4022e"
+    },
+    {
+      "path": "source/package-preview.py",
+      "sha256": "0b0167bce7d7c33548cfdb910833952e3035cdb2e6425007ca204a4fb0076459"
+    },
+    {
+      "path": "source/playback-final.mjs",
+      "sha256": "ab955fd55dd093c7f74c567161d08a175a36b935780fb41f757dbb66e23e2c64"
+    },
+    {
+      "path": "source/record-brief.py",
+      "sha256": "3243ea0aa2a579f019d261ac18b4aa3a8f90b93ba2fd41578a19ceb1fb525020"
+    },
+    {
+      "path": "source/scene.css",
+      "sha256": "efac2fc3822d919c731b335c90f48ad6408ca870385e72c5a3ae0640285e0a87"
+    },
+    {
+      "path": "source/scene.js",
+      "sha256": "08a5073e0acaf61dc1b5af2a4f6f64aefd115067bfacabeaa25ac62700833473"
+    },
+    {
+      "path": "source/serve.mjs",
+      "sha256": "d7e6ecdcbba07f72c4b4b835d9530d6d47650a7e031395c692a6c17bd278e339"
+    },
+    {
+      "path": "source/synthesize-audio.mjs",
+      "sha256": "ccd8f3755bf8b97441f2d3396af759aeff89fa0c729acd268a3455ad109c2fe8"
+    },
+    {
+      "path": "source/timeline.py",
+      "sha256": "44dfbc42459f2fd007165e3348edbf26e8d1a1ea6b2731d3f73a622d6babec5f"
+    },
+    {
+      "path": "source/verify-audio.mjs",
+      "sha256": "59aed17c9e09ab8722d77c6c7e91920fa7811230661e9edeeb7fe3c7b89a3235"
+    }
+  ]
+}

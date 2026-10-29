@@ -1,0 +1,15 @@
+{
+  "status": "approved",
+  "version": "2026-10-29-v6",
+  "date": "2026-10-29",
+  "timezone": "Europe/Amsterdam",
+  "planSha256": "f5252340c47c84f7f832da0c2218a43a72f42260bac29e2e74863d6fe619ad2c",
+  "evidence": "用户在新增章节卡的 v6 预览后明确回复：制作完整视频",
+  "scope": "53 秒、1920×1080、30 fps；沿用已确认的章节卡和镜头安排，制作原创配乐成片；按此前请求更新 README 本地视频入口。",
+  "previewSha256": {
+    "bridge.mp4": "8cc1876fb935788d766cae462ffa90acf805c5cf3bba6f559ed3fc9dc1625d12",
+    "context.mp4": "d067b065f594c352d04067061c7bf4c0d2f2f89cb2457232e3149297d2505b26",
+    "storyboard-overview.png": "37c7c29464f1b3c189efa70aaf9a4e5fa2919b60a7b5b022f2ac203d7b2e545d",
+    "index.html": "626ba96ccc8f479cc521b3d76806fc8a5ffe7fe750f8753a5df25ac5c7f3839e"
+  }
+}

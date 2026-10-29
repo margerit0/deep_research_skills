@@ -1,0 +1,127 @@
+{
+  "currentVersion": "2026-10-29-v6",
+  "publishedVersion": "2026-10-29-v6",
+  "currentEntry": "index.html",
+  "versions": [
+    {
+      "id": "2026-10-29-v6",
+      "state": "complete",
+      "planSha256": "f5252340c47c84f7f832da0c2218a43a72f42260bac29e2e74863d6fe619ad2c",
+      "approval": {
+        "planSha256": "f5252340c47c84f7f832da0c2218a43a72f42260bac29e2e74863d6fe619ad2c",
+        "evidence": "用户在新增章节卡的 v6 预览后明确回复：制作完整视频"
+      },
+      "changes": [
+        "新增 3 秒 Agent 自动进化章节卡",
+        "完整方案 53 秒，保留 v5 因果衔接"
+      ],
+      "coverage": "2026-10-29-v6/brief.json",
+      "preview": {
+        "page": "2026-10-29-v6/preview/index.html",
+        "sheet": "2026-10-29-v6/preview/storyboard-overview.png",
+        "verification": "2026-10-29-v6/preview/verification.md",
+        "clips": [
+          {
+            "label": "章节卡与衔接 · 19 秒",
+            "path": "2026-10-29-v6/preview/bridge.mp4"
+          },
+          {
+            "label": "研究方法铺垫 · 10.5 秒",
+            "path": "2026-10-29-v6/preview/context.mp4"
+          }
+        ]
+      },
+      "final": {
+        "video": "2026-10-29-v6/final/product-demo.mp4",
+        "page": "2026-10-29-v6/final/index.html",
+        "sheet": "2026-10-29-v6/final/check-sheet.png",
+        "verification": "2026-10-29-v6/final/verification.md",
+        "reproduce": "2026-10-29-v6/final/reproduce.md",
+        "sha256": "7debc5ff2def76644d4baa327e747fcdf1c5c7cd5a88282e5c8cc4e90818e2f9"
+      }
+    },
+    {
+      "id": "2026-10-29-v5",
+      "state": "pending",
+      "planSha256": "ca33e4a871795cb26055c380d4ad9fb5888d746c866dff470fed0d5a6d70e0e8",
+      "approval": null,
+      "changes": [
+        "Skill 选择先解释研究方法",
+        "新增 8 秒报告→方法→评估因果衔接",
+        "总长建议 50 秒"
+      ],
+      "coverage": "2026-10-29-v5/brief.json",
+      "preview": {
+        "page": "2026-10-29-v5/preview/index.html",
+        "sheet": "2026-10-29-v5/preview/storyboard-overview.png",
+        "verification": "2026-10-29-v5/preview/verification.md",
+        "clips": [
+          {
+            "label": "报告到方法优化 · 16 秒",
+            "path": "2026-10-29-v5/preview/bridge.mp4"
+          },
+          {
+            "label": "Skill 概念铺垫 · 10.5 秒",
+            "path": "2026-10-29-v5/preview/context.mp4"
+          }
+        ]
+      },
+      "supersededBy": "2026-10-29-v6"
+    },
+    {
+      "id": "2026-10-29-v4",
+      "state": "complete",
+      "planSha256": "7502713fe2609aaaa4941743d2cc347ae72f84aa9cfe917029a548a06b3a04af",
+      "approval": {
+        "planSha256": "7502713fe2609aaaa4941743d2cc347ae72f84aa9cfe917029a548a06b3a04af",
+        "evidence": "用户在本对话明确回复：按这版制作配乐成片并替换 README 视频"
+      },
+      "changes": [
+        "保留前 16 秒研究路径",
+        "新增 23 秒评估驱动的 Skill 优化机制动画",
+        "品牌收尾增加评估改进"
+      ],
+      "coverage": "2026-10-29-v4/brief.json",
+      "preview": {
+        "page": "2026-10-29-v4/preview/index.html",
+        "sheet": "2026-10-29-v4/preview/storyboard-overview.png",
+        "verification": "2026-10-29-v4/preview/verification.md",
+        "clips": [
+          {
+            "label": "新增优化机制 · 23 秒",
+            "path": "2026-10-29-v4/preview/evolution.mp4"
+          },
+          {
+            "label": "原生配置与运行 · 11 秒",
+            "path": "2026-10-29-v4/preview/workflow.mp4"
+          }
+        ]
+      },
+      "final": {
+        "video": "2026-10-29-v4/final/product-demo.mp4",
+        "page": "2026-10-29-v4/final/index.html",
+        "sheet": "2026-10-29-v4/final/check-sheet.png",
+        "verification": "2026-10-29-v4/final/verification.md",
+        "reproduce": "2026-10-29-v4/final/reproduce.md",
+        "sha256": "3b6a9e226d7387e7aa580a31a7640f6c6307c2ef748df39f4162b037bc22fffd"
+      }
+    },
+    {
+      "id": "2026-10-25-v3",
+      "state": "complete",
+      "role": "historical_delivery",
+      "approvalRecord": "2026-10-25-v3/approval.json",
+      "note": "旧交付包按原字节保留；旧 preview 中的待确认属于历史状态，不是本次待办。",
+      "final": {
+        "video": "2026-10-25-v3/final/product-demo.mp4",
+        "verification": "2026-10-25-v3/final/verification.md"
+      }
+    }
+  ],
+  "readmeVersion": "2026-10-29-v6",
+  "hostedPlayer": {
+    "status": "configured",
+    "url": "https://github.com/user-attachments/assets/412eff30-c3d0-4f79-80b6-5f3d15ed8610"
+  },
+  "currentFinalVersion": "2026-10-29-v6"
+}

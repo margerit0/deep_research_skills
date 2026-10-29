@@ -17,7 +17,7 @@ git show dac1870ec56e08603f3e93e58bb5a2e916a45456:ui-drafts/atlas-workspace/APPL
 git ls-tree -r --name-only dac1870ec56e08603f3e93e58bb5a2e916a45456 -- product-video/2026-10-25-v1 product-video/2026-10-25-v2
 ```
 
-当前 [演示视频](../product-video/README.md) 保留 v3 成片、源码、批准记录与校验清单。原交付包的历史文字和版本来源字段不改写；当前说明置于包外。视频材料通过 `.gitattributes` 的 `linguist-documentation` 排除出语言统计，正式应用源码仍正常计入。旧版本的本地缓存继续忽略，不重新入库。
+当前 [演示视频](../product-video/README.md) 为 v6：53 秒，增加“Agent 自动进化”章节卡，先解释研究方法与评估的关系，再介绍 Skill 优化机制，包含原创配乐；保留源码、批准记录与校验清单。v4 和 v3 原交付包归档保留，其历史文字和版本来源字段不改写；当前说明置于包外。视频材料通过 `.gitattributes` 的 `linguist-documentation` 排除出语言统计，正式应用源码仍正常计入。旧版本的本地缓存继续忽略，不重新入库。
 
 ## 环境与入口
 
