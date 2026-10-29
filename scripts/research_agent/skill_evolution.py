@@ -23,6 +23,7 @@ from deep_research.skill_evolution_runner import (
     evaluate,
     freeze,
     implementation_versions,
+    load_environment,
     report,
 )
 from deep_research.skill_evolution_store import Store, promote, rollback, safe_error
@@ -85,6 +86,9 @@ def main(argv=None):
         elif args.command in {"versions", "config"}:
             value = {"versions": implementation_versions, "config": capture_configuration}[args.command]()
         else:
+            # Resolve archive paths and credential guards consistently with config.
+            # Loading .env does not construct models or import the research graph.
+            load_environment()
             store = Store(args.dir)
             value = {"command": args.command, "status": "complete"}
             if args.command == "init":

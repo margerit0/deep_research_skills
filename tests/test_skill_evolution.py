@@ -9,11 +9,14 @@ import json
 import socket
 import sqlite3
 import sys
+from concurrent.futures import ThreadPoolExecutor
+from contextvars import copy_context
 from pathlib import Path
 
 import pytest
 
 from deep_research import run_configuration as config
+from deep_research import skill_evolution_runner as runner
 from deep_research.skill_evolution import (
     POLICY,
     SKILL,
@@ -46,6 +49,8 @@ from deep_research.skill_evolution_models import (
 )
 from deep_research.skill_evolution_runner import (
     collect,
+    compare,
+    freeze,
     implementation_versions,
     normalize_export,
     phase_arms,
@@ -58,8 +63,20 @@ from deep_research.skill_evolution_store import (
     rollback,
     safe_error,
 )
-from deep_research.skill_evolution_trace import after_tool, before_tool, capture_tools
+from deep_research.skill_evolution_trace import (
+    after_tool,
+    before_tool,
+    capture_tools,
+    retained_source_evidence,
+)
+from deep_research.source_evidence import (
+    capture_source_evidence,
+    record_source_evidence,
+)
+from scripts.research_agent import skill_evolution as cli
 from scripts.research_agent.skill_evolution import main, parser
+
+ARCHIVE_PATH = config.archive_path
 
 
 @pytest.fixture(autouse=True)
@@ -100,13 +117,22 @@ def manifest(parent):
                     gates=Gates(coverage_gain=0.1, support_floor=0.8, max_regression=0.05))
 
 
+def visible_observations(body):
+    with capture_source_evidence() as sources:
+        record_source_evidence("https://example.invalid/unit", {"raw_content": "unit source text"})
+    return {"skill_body": body, "loaded_skills": [SKILL], "trace_complete": True,
+            "tools": [{"name": "load_skill", "input": {"skill_name": SKILL}, "status": "complete", "output": body},
+                      {"name": "tavily_search", "input": {"query": "unit"}, "status": "complete", "output": "unit tool output"}],
+            "source_evidence": sources, "compressed_research": "unit contract"}
+
+
 def observation(manifest, parent):
     return Evidence(experiment_id=manifest.experiment_id, run_id="unit-observation", example_id="development",
                     split="development", dataset_id="development", dataset_version="v1", example_digest=sha("development"),
                     task="unit contract", user_requirements="", constraints={}, versions=versions(manifest),
-                    skill_revision=manifest.parent_revision, skill_body=skill_definition(parent)["body"],
-                    loaded_skills=[SKILL], trace_complete=True,
-                    feedback=[Feedback(key="criteria_coverage_score", score=0.5)])
+                    skill_revision=manifest.parent_revision, **visible_observations(skill_definition(parent)["body"]),
+                    feedback=[Feedback(key="criteria_coverage_score", score=0.5,
+                                       value={"individual_evaluations": [{"criteria": "unit dimension", "captured": False}]})])
 
 
 def diagnosis(evidence):
@@ -127,7 +153,9 @@ def rows(manifest):
                     skill_revision=manifest.parent_revision, status="complete", violations=[], output_chars=100,
                     evidence=Evidence(experiment_id=manifest.experiment_id, run_id=arm, example_id="selection",
                                       split="selection", dataset_id="selection", dataset_version="v1", example_digest=sha("selection"),
-                                      task="unit contract", user_requirements="", constraints={}, versions=versions(manifest), trace_complete=True),
+                                      task="unit contract", user_requirements="", constraints={}, versions=versions(manifest),
+                                      skill_revision=manifest.parent_revision,
+                                      **visible_observations(config.archive(manifest.parent_revision)["body"])),
                     statistics=Statistics(tokens=100, searches=1, seconds=1.0, failures=0),
                     feedback=[Feedback(key="criteria_coverage_score", score=coverage),
                               Feedback(key="citation_grounding_score", score=1.0),
@@ -168,12 +196,32 @@ def test_evidence_identity_and_missing_fields(manifest, parent):
         check_evidence(manifest, evidence, "development")
 
 
-@pytest.mark.parametrize("missing", ["skill_body", "loaded_skills", "trace_complete", "feedback"])
+@pytest.mark.parametrize("missing", ["skill_body", "skill_revision", "loaded_skills", "trace_complete", "feedback",
+                                     "tools", "source_evidence", "compressed_research"])
 def test_insufficient_evidence_cannot_blame_skill(manifest, parent, missing):
     evidence = observation(manifest, parent)
     setattr(evidence, missing, False if missing == "trace_complete" else [] if missing == "feedback" else None)
     with pytest.raises(ValueError):
         validate_diagnosis(diagnosis(evidence), [evidence])
+
+
+@pytest.mark.parametrize("problem", ["aggregate_only", "unfinished_tool", "unobserved_load", "wrong_body"])
+def test_content_diagnosis_requires_observed_load_and_item_feedback(manifest, parent, problem):
+    evidence = observation(manifest, parent)
+    if problem == "aggregate_only":
+        evidence.feedback[0].value = {}
+    elif problem == "unfinished_tool":
+        evidence.tools[-1]["status"] = "started"
+    elif problem == "unobserved_load":
+        evidence.tools.pop(0)
+    else:
+        evidence.tools[0]["output"] = "different methodology"
+    with pytest.raises(ValueError):
+        validate_diagnosis(diagnosis(evidence), [evidence])
+    # Other attributions can still describe incomplete evidence.
+    result = diagnosis(evidence)
+    result.hypotheses[0].cause = "insufficient_or_mixed"
+    validate_diagnosis(result, [evidence])
 
 
 def test_references_and_non_skill_diagnosis(manifest, parent):
@@ -257,6 +305,46 @@ def test_deterministic_gate_logic(manifest, problem, expected):
     assert decide(manifest, attempts, "1").status == expected
 
 
+@pytest.mark.parametrize("arm_index", [0, 1])
+@pytest.mark.parametrize("problem", ["not_loaded", "unobserved", "wrong_body", "wrong_revision", "failed_load"])
+def test_gates_require_actual_matching_load_in_both_arms(manifest, arm_index, problem):
+    attempts = rows(manifest)
+    evidence = attempts[arm_index].evidence
+    if problem == "not_loaded":
+        evidence.loaded_skills = []
+    elif problem == "unobserved":
+        evidence.tools.pop(0)
+    elif problem == "wrong_body":
+        evidence.tools[0]["output"] = "different methodology"
+    elif problem == "wrong_revision":
+        evidence.skill_revision = sha("different revision")
+    else:
+        evidence.tools[0].update(status="failed", error={"category": "execution_error"})
+    result = decide(manifest, attempts, "1")
+    assert result.status == "insufficient_evidence"
+    assert any("matching Skill load" in reason for reason in result.reasons)
+
+
+def test_compare_and_freeze_reject_missing_candidate_load(tmp_path, manifest, parent):
+    # Gate unit records only: no graph, model, batch runner or report is invoked.
+    store = Store(tmp_path)
+    store.initialize(manifest, parent)
+    candidate = make_candidate(draft(parent), manifest, parent, diagnosis(observation(manifest, parent)))
+    store.put("candidate/1", candidate.model_dump())
+    attempts = rows(manifest)
+    row = attempts[1]
+    row.skill_revision = row.evidence.skill_revision = candidate.revision
+    row.evidence.skill_body = skill_definition(candidate.document)["body"]
+    row.evidence.loaded_skills = []
+    row.evidence.tools.pop(0)
+    for item in attempts:
+        store.put(f"attempt/{item.run_id}", item.model_dump())
+    assert compare(store, "1").status == "insufficient_evidence"
+    with pytest.raises(ValueError, match="selection gates"):
+        freeze(store, "1")
+    assert "frozen" not in store.names()
+
+
 def test_user_constraint_checks():
     constraints = {"allowed_source_urls": ["https://example.invalid/a"], "required_skills": [SKILL], "max_output_chars": 3}
     assert constraint_violations(constraints, [{"url": "https://example.invalid/b"}], [], "long") == ["source_scope", "required_skills", "output_length"]
@@ -311,6 +399,21 @@ def test_collect_rejects_held_out_data(tmp_path, manifest, parent):
     with pytest.raises(ValueError):
         collect(store, [evidence.model_dump()])
     assert "development_evidence" not in store.names()
+
+
+@pytest.mark.parametrize("missing", ["tools", "source_evidence", "compressed_research"])
+def test_collect_downgrades_unsubstantiated_completeness(tmp_path, manifest, parent, missing):
+    store = Store(tmp_path)
+    store.initialize(manifest, parent)
+    evidence = observation(manifest, parent)
+    setattr(evidence, missing, None)
+    assert evidence.trace_complete
+    collect(store, [evidence.model_dump()])
+    saved = Evidence.model_validate(store.get("development_evidence")[0])
+    assert not saved.trace_complete
+    assert getattr(saved, missing) is None
+    with pytest.raises(ValueError):
+        validate_diagnosis(diagnosis(saved), [saved])
 
 
 def test_held_out_plan_requires_freeze(tmp_path, manifest, parent):
@@ -368,6 +471,60 @@ def test_trace_excludes_thoughts_and_counts_failed_search(manifest):
             before_tool("tavily_search", {"query": "four"})
 
 
+@pytest.mark.parametrize("failure_point", ["during_capture", "after_capture"])
+def test_source_bodies_survive_exception_without_graph_output(tmp_path, manifest, failure_point):
+    body = "unit original body that is absent from the tool summary"
+    url = "https://example.invalid/retained"
+    with pytest.raises(RuntimeError), capture_tools(manifest.budget) as trace:
+        with capture_source_evidence() as captured:
+            record_source_evidence(url, {"raw_content": body})
+            if failure_point == "during_capture":
+                raise RuntimeError("unit exceptional exit")
+        assert captured[0]["text"] == body
+        raise RuntimeError("unit exceptional exit")
+    saved = retained_source_evidence(trace, {}, {"allowed_source_urls": [url]})
+    assert saved[0]["text"] == body and saved[0]["body_sha256"] == sha(body)
+    assert saved[0]["end"] == len(body)
+    assert retained_source_evidence(trace, {}, {"allowed_source_urls": []}) == []
+    assert retained_source_evidence(trace, {"source_evidence": saved}, {}) == saved
+    store = Store(tmp_path)
+    store.put("unit-retained-source", saved)
+    assert store.get("unit-retained-source") == saved
+    # Leaving the scope and later retrievals must not mutate the saved trace.
+    with capture_source_evidence():
+        record_source_evidence(url, {"raw_content": "later body"})
+    assert trace["source_evidence"] == saved
+
+
+def test_observer_preserves_nested_capture_and_execution_isolation(manifest):
+    with capture_tools(manifest.budget) as outer_trace:
+        with capture_source_evidence() as outer:
+            record_source_evidence("https://example.invalid/outer", {"raw_content": "outer"})
+            with capture_source_evidence() as inner:
+                record_source_evidence("https://example.invalid/inner", {"raw_content": "inner"})
+        with capture_tools(manifest.budget) as nested_trace:
+            with capture_source_evidence():
+                record_source_evidence("https://example.invalid/nested", {"raw_content": "nested"})
+    assert [r["text"] for r in outer] == ["outer"]
+    assert [r["text"] for r in inner] == ["inner"]
+    assert [r["text"] for r in outer_trace["source_evidence"]] == ["outer", "inner"]
+    assert [r["text"] for r in nested_trace["source_evidence"]] == ["nested"]
+
+    def one(index):
+        with capture_tools(manifest.budget) as trace:
+            with capture_source_evidence():
+                # Retrieval's summary workers inherit the caller's context.
+                with ThreadPoolExecutor(max_workers=1) as workers:
+                    workers.submit(copy_context().run, record_source_evidence,
+                                   f"https://example.invalid/{index}", {"raw_content": str(index)}).result()
+        return trace["source_evidence"]
+
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        first, second = list(pool.map(one, [1, 2]))
+    assert [r["text"] for r in first] == ["1"]
+    assert [r["text"] for r in second] == ["2"]
+
+
 def test_safe_errors_and_secret_guard(tmp_path, monkeypatch):
     monkeypatch.setenv("UNIT_API_KEY", "unit-secret-do-not-persist")
     store = Store(tmp_path)
@@ -402,3 +559,58 @@ def test_cli_parsing_and_external_gate(tmp_path):
     assert stopped.value.code == 2
     assert not (tmp_path / "evolution.sqlite3").exists()
     assert "deep_research.research_agent_skills" not in sys.modules
+
+
+@pytest.mark.parametrize("path_variable", ["ATLAS_CONFIG_DB", "ATLAS_SUBMISSION_DB"])
+def test_cli_init_reads_environment_archive_with_empty_cache(tmp_path, manifest, parent, monkeypatch, path_variable):
+    from deep_research import atlas_runtime
+
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(config, "archive_path", ARCHIVE_PATH)
+    monkeypatch.setattr(atlas_runtime, "compatible_runtime", lambda: True)
+    monkeypatch.setenv("LANGGRAPH_RUNTIME_VARIANT", "inmem")
+    monkeypatch.setenv("LANGGRAPH_DISABLE_FILE_PERSISTENCE", "false")
+    monkeypatch.setenv("ATLAS_SUBMISSIONS_ENABLED", "true")
+    monkeypatch.delenv("ATLAS_CONFIG_DB", raising=False)
+    monkeypatch.delenv("ATLAS_SUBMISSION_DB", raising=False)
+    configured_path = tmp_path / "custom" / "archive.sqlite3"
+    monkeypatch.setenv(path_variable, str(configured_path))
+    archive_file = config.archive_path()
+    for identifier, definition in list(config._definitions.items()):
+        config.archive(identifier, definition)
+    assert archive_file.exists()
+    # Separate CLI commands cannot rely on the preceding process's memory/env.
+    config._definitions.clear()
+    monkeypatch.delenv(path_variable)
+    (tmp_path / ".env").write_text(f"{path_variable}='{configured_path.as_posix()}'\n", encoding="utf-8")
+    environment_loader = cli.load_environment
+
+    def load_test_environment():
+        # Use a temporary backend .env without touching production configuration.
+        with monkeypatch.context() as local:
+            local.setattr(runner, "ROOT", tmp_path)
+            environment_loader()
+
+    monkeypatch.setattr(cli, "load_environment", load_test_environment)
+    spec, document = tmp_path / "manifest.json", tmp_path / "product-comparison.md"
+    spec.write_text(manifest.model_dump_json(), encoding="utf-8")
+    document.write_text(parent, encoding="utf-8")
+    directory = tmp_path / "experiment"
+    assert main(["init", "--dir", str(directory), "--spec", str(spec), "--parent", str(document)]) == 0
+    assert config.archive_path() == archive_file
+    assert Store(directory).manifest == manifest
+    assert not (tmp_path / ".langgraph_api").exists()
+    assert "deep_research.research_agent_skills" not in sys.modules
+
+
+def test_cli_help_and_denied_calls_do_not_load_environment(tmp_path, monkeypatch):
+    def denied():
+        raise AssertionError("environment must not be loaded")
+
+    monkeypatch.setattr(cli, "load_environment", denied)
+    with pytest.raises(SystemExit) as help_exit:
+        main(["--help"])
+    assert help_exit.value.code == 0
+    with pytest.raises(SystemExit) as denied_exit:
+        main(["run", "--dir", str(tmp_path), "--split", "development", "--dataset", "unused.json"])
+    assert denied_exit.value.code == 2

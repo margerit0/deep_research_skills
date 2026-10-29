@@ -5,6 +5,7 @@ from contextvars import ContextVar
 from time import monotonic
 
 from deep_research.skill_evolution_store import safe_error, secret_check
+from deep_research.source_evidence import merge_source_evidence, observe_source_evidence
 
 _capture = ContextVar("skill_evolution_capture", default=None)
 
@@ -16,9 +17,20 @@ def capture_tools(budget):
              "budget": budget, "started": monotonic()}
     token = _capture.set(trace)
     try:
-        yield trace
+        with observe_source_evidence() as sources:
+            trace["source_evidence"] = sources
+            yield trace
     finally:
         _capture.reset(token)
+
+
+def retained_source_evidence(trace, output, constraints):
+    """Merge captured source bodies even when the graph never returned output."""
+    from deep_research.research_requirements import allowed_sources
+
+    records = trace["source_evidence"] + (output.get("source_evidence") or [])
+    sources = allowed_sources([{"url": item["url"]} for item in records], constraints)
+    return merge_source_evidence(records, sources=sources)
 
 
 def before_tool(name, args):

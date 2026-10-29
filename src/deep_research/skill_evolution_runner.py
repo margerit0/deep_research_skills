@@ -29,10 +29,11 @@ from deep_research.skill_evolution import (
     make_candidate,
     sha,
     skill_definition,
+    visible_evidence_complete,
 )
 from deep_research.skill_evolution_models import diagnose, evaluate_support, generate
 from deep_research.skill_evolution_store import Store, safe_error, secret_check
-from deep_research.skill_evolution_trace import capture_tools
+from deep_research.skill_evolution_trace import capture_tools, retained_source_evidence
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -124,7 +125,7 @@ def collect(store: Store, items: list[dict]):
         raise ValueError("empty evidence or duplicate run IDs")
     for item in evidence:
         check_evidence(manifest, item, "development", allow_unknown=True)
-        if any(v is None for v in item.versions.values()):
+        if any(v is None for v in item.versions.values()) or not visible_evidence_complete(item):
             item.trace_complete = False
         if item.skill_revision is not None and item.skill_revision != manifest.parent_revision:
             raise ValueError("development evidence has wrong parent")
@@ -259,6 +260,9 @@ def compare(store: Store, candidate_id: str, split="selection"):
             check_evidence(manifest, row.evidence, split)
             if row.evidence.run_id != row.run_id or row.evidence.skill_revision != expected:
                 raise ValueError("attempt evidence mismatch")
+            document = store.get("parent") if row.arm == "baseline" else candidate["document"]
+            if row.evidence.skill_body != skill_definition(document)["body"]:
+                raise ValueError("attempt Skill body mismatch")
     return decide(manifest, rows, candidate_id, split)
 
 
@@ -362,8 +366,9 @@ def evaluate(store: Store, split: str, dataset_path: Path):
             record.statistics = Statistics(searches=trace["searches"], seconds=time.monotonic() - start,
                                            failures=None, tokens=None)
             text = output.get("compressed_research", "")
+            sources = retained_source_evidence(trace, output, constraints)
             record.output_chars = len(text)
-            record.violations = constraint_violations(constraints, output.get("sources", []), trace["loaded"], text)
+            record.violations = constraint_violations(constraints, output.get("sources", []) + sources, trace["loaded"], text)
             dataset = manifest.datasets[split]
             record.evidence = Evidence(
                 experiment_id=manifest.experiment_id, run_id=run_id, example_id=example.id, split=split,
@@ -371,7 +376,7 @@ def evaluate(store: Store, split: str, dataset_path: Path):
                 task=inputs.get("research_topic") or inputs.get("research_brief") or "\n".join(str(m.content) for m in inputs["researcher_messages"] if m.type == "human"),
                 user_requirements=inputs.get("user_requirements", ""), constraints=constraints,
                 skill_revision=revision(definition), skill_body=definition["body"], loaded_skills=trace["loaded"],
-                tools=trace["tools"], source_evidence=output.get("source_evidence"), compressed_research=text,
+                tools=trace["tools"], source_evidence=sources, compressed_research=text,
                 errors=([error] if error else []) + [{"category": "research_failure"} for _ in output.get("research_errors", [])],
                 feedback=feedback, versions=versions(manifest), statistics=record.statistics,
                 trace_complete=record.status != "infrastructure_failure" and bool(output),

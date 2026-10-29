@@ -35,6 +35,8 @@
 
 `schema`、`versions`、参数解析、数据校验、collect、compare、report、account、freeze、晋升／回退本身均不调用模型或外部服务。`config` 会读取本地后端 `.env`、构造现有角色客户端并归档配置，**不发起模型请求**；它不是连通性检查。本轮没有执行 config。凭据值只从后端环境读取，不进入配置和报告。报告可能包含任务、来源正文和用户约束，属于本地研究材料；不要把环境文件或完整 HTTP 请求日志放入导入文件。
 
+所有访问实验目录的 CLI 命令（包括 `init`、晋升与回退）会先加载同一份仓库根目录后端 `.env`，再访问配置归档。这样独立进程也能按 `ATLAS_CONFIG_DB` 或 `ATLAS_SUBMISSION_DB` 定位历史修订；加载环境本身不构造模型。帮助和未获 `--allow-external` 许可的调用在加载环境前退出。
+
 ## 后续准备真实实验（本轮不执行）
 
 1. 准备相互独立的既有开发集、选择集、最终测试集导出；本功能不创建、扩充或上传测试数据。三个集合必须有不同 dataset_id，不允许重复 example ID 或完全相同的输入／参考内容哈希。语义近似题仍需数据维护者审查，哈希不能识别改写泄漏。
@@ -101,6 +103,10 @@ python -m scripts.research_agent.skill_evolution report --dir .local/evolution/E
 
 诊断区分内容、选择／加载、执行不遵循、检索访问、压缩／写作损失、基础设施、评估器、证据不足／混合八类。只有内容类且有实际加载正文、失败逐项 feedback 和可见轨迹时才允许生成候选。模型归因仍是待验证假设，包含证据引用、反证和验证建议。候选生成入口只接收开发证据和父正文，不能读取选择／最终数据文件；最终反馈没有回流入口。
 
+`trace_complete=true` 不能替代证据：导入缺少工具轨迹、来源记录或非空压缩结果时会降级为不完整。内容归因还要求成功的 `load_skill` 记录，其输出与登记正文逐字一致，并要求 coverage／grounding／support 的逐项失败明细；单独的低总分不能支持内容修改。来源记录的 `[]` 表示捕获后没有取得正文，`null` 表示缺失，二者不等价。证据不足时仍可保留其他分类的诊断。
+
+优化执行作用域独立捕获实际来源正文，不依赖研究图成功返回。如果工具内部或后续压缩／模型步骤异常，已取得的有界正文、哈希和位置仍进入失败记录；来源仍受原用户范围约束，失败状态与不完整标记保留。普通嵌套来源捕获、其他并发研究和摘要线程的上下文隔离保持不变。进程被强制终止前尚未落盘的内存记录不保证可恢复。
+
 候选包含父／子修订、完整正文、diff、理由、预期改善、影响范围和诊断哈希。确定性检查锁住 frontmatter/name/元数据与已有用户范围句，要求固定用户优先政策，限制长度，拦截新增具体 URL、日期、价格和开发答案／标准原句。**这些检查不能识别所有语义改写或所有易变事实**；实际使用时仍应审阅 diff，确认只有方法变化。生产 Skill 本轮没有修改。
 
 ## 比较、计费与完成性
@@ -110,6 +116,8 @@ python -m scripts.research_agent.skill_evolution report --dir .local/evolution/E
 保留原 `criteria_coverage_score`、`citation_grounding_score` 的 `score/comment/value` 和逐项内容。新增 `source_support_score` 使用真实 `source_evidence` 正文；对全部可见文本单元给出 supported／contradicted／insufficient，非事实单元单独标识。支持和矛盾必须携带正文哈希、来源索引、字符区间及程序提取的片段。遗漏、重复、越界、错误哈希均拒绝；位置正确只是可核对出处，不证明语义支持。截断正文／snippet 的局限保留。judge 失败保留缺失 feedback，不伪装成零分。
 
 门槛要求平均配对 coverage 改善达到预设增量、每题来源支持度达到底线、没有新增硬约束违规、每题每项回归在容忍内、成本与长度预算合规、运行／证据／评分完整。输出 `pass`、`reject` 或 `insufficient_evidence`；缺失运行、基础设施失败、评分缺失、统计未知优先归为证据不足，并保留已知质量问题。退出码 0 只表示命令完成，必须查看结果与门槛。
+
+基线和候选均须提供实际加载 `product-comparison` 的成功工具记录，且加载正文、声明的修订与对应版本一致。仅在执行配置中登记 Skill，或只有加载名称但没有相符正文，都不能通过门槛；即使其他分数和成本满足要求，也不能冻结或晋升。
 
 搜索工具调用数在调用前计数（失败也计），并有调用前上限；耗时覆盖研究与评分。tokens 和包含 SDK／raw HTTP 内部重试的失败总数默认未知，因为现有返回值不能证明完整。工具级失败仍在 trace 中保存。不能用成功请求 usage 代替全部成本。
 
@@ -145,4 +153,4 @@ python -m scripts.research_agent.skill_evolution rollback --dir .local/evolution
 
 只运行本功能纯数据测试、已检查为纯本地的既有加载器／来源证据测试、CLI 帮助、相关 Ruff 和编译检查。新测试通过 socket 拦截阻止网络；未运行任何模型替身研究流程或模拟改善批次。后续真实模型兼容性、语义归因可靠性、候选有效性、网关重试成本及真实配对表现仍待单独验证。
 
-本轮结果：45 项新增单元检查，加上既有加载器与来源证据的 15 项检查，共 **60 passed**。既有 `test_concurrent_and_nested_captures_do_not_leak` 需要 Windows asyncio 内部回环 socket，在本沙箱中未完成，已停止该进程并在最终检查中明确 deselect（1 项）；未改动该测试。新增模块／CLI／测试完整 Ruff、既有改动文件的错误级 Ruff、Python 编译与 `git diff --check` 通过。CLI 顶层／run 帮助与 accounting schema 输出可用。没有运行模型相关测试、评估批次、生产晋升或回退。
+修复前基线已保存为 `afd6bcc`，当时检查为 **60 passed、1 deselected**。2026-10-29 复核修复增加 28 项确定性检查，共 **88 passed、1 deselected**，覆盖实际加载门槛、缺失轨迹／逐项反馈、异常后的原文保留、嵌套与线程上下文隔离、清空缓存后从 `.env` 指定的归档初始化。既有 `test_concurrent_and_nested_captures_do_not_leak` 涉及 Windows asyncio 内部回环 socket，沿用此前沙箱限制下的 deselect，未改动该测试。新增模块／CLI／测试完整 Ruff、修改的既有来源模块错误级 Ruff、Python 语法与 `git diff --check` 通过。没有运行模型相关测试、评估批次、生产晋升或回退。

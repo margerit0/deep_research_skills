@@ -258,6 +258,50 @@ def evidence_index(evidence: list[Evidence]) -> dict:
     return refs
 
 
+def visible_evidence_complete(evidence: Evidence | None) -> bool:
+    """Check recorded observations instead of trusting the completeness flag."""
+    if (evidence is None or not evidence.trace_complete or not evidence.tools
+            or evidence.source_evidence is None or not evidence.compressed_research
+            or not evidence.compressed_research.strip()):
+        return False
+    return all(
+        isinstance(tool.get("input"), dict) and (
+            tool.get("status") == "complete" and isinstance(tool.get("output"), str)
+            or tool.get("status") == "failed" and isinstance(tool.get("error"), dict)
+        ) for tool in evidence.tools
+    )
+
+
+def skill_loading_observed(evidence: Evidence | None) -> bool:
+    """Require successful tool output matching the claimed Skill body."""
+    if (evidence is None or not evidence.skill_revision or not evidence.skill_body
+            or SKILL not in (evidence.loaded_skills or [])):
+        return False
+    loads = [tool for tool in evidence.tools or []
+             if tool.get("name") == "load_skill" and tool.get("status") == "complete"
+             and isinstance(tool.get("input"), dict) and tool["input"].get("skill_name") == SKILL]
+    return bool(loads) and all(tool.get("output") == evidence.skill_body for tool in loads)
+
+
+def has_item_failure(feedback: list[Feedback]) -> bool:
+    """Require failed item details, not just an unexplained aggregate score."""
+    for item in feedback:
+        if item.score is None or item.score >= 1:
+            continue
+        if item.key == "criteria_coverage_score":
+            details = item.value.get("individual_evaluations") or []
+            if any(isinstance(row, dict) and row.get("captured") is False for row in details):
+                return True
+        elif item.key in {"citation_grounding_score", "source_support_score"}:
+            details = item.value.get("claims") or []
+            if any(isinstance(row, dict) and (
+                row.get("is_grounded") is False or row.get("verdict") in {"contradicted", "insufficient"}
+                or item.value.get("has_sources_section") is False
+            ) for row in details):
+                return True
+    return False
+
+
 def validate_diagnosis(diagnosis: Diagnosis, evidence: list[Evidence]):
     """Reject fabricated references and hypotheses lacking loaded Skill evidence."""
     if diagnosis.evidence_digest != revision([e.model_dump() for e in evidence]):
@@ -270,10 +314,10 @@ def validate_diagnosis(diagnosis: Diagnosis, evidence: list[Evidence]):
             raise ValueError("unknown evidence reference")
         if hypothesis.cause == "skill_content":
             supported = any(
-                e.trace_complete and e.skill_body and SKILL in (e.loaded_skills or [])
+                visible_evidence_complete(e) and skill_loading_observed(e)
                 and f"{e.run_id}/skill_body" in hypothesis.evidence_refs
                 and f"{e.run_id}/feedback" in hypothesis.evidence_refs
-                and any(f.score is not None and f.score < 1 for f in e.feedback)
+                and has_item_failure(e.feedback)
                 for e in evidence
             )
             if not supported:
@@ -334,8 +378,11 @@ def decide(manifest: Manifest, attempts: list[Attempt], candidate: str, split: S
                 continue
             row = matches[0]
             rows.append(row)
-            if row.evidence is None or not row.evidence.trace_complete:
+            if not visible_evidence_complete(row.evidence):
                 unknown.append(f"{row.run_id}: missing complete visible evidence")
+            if (not skill_loading_observed(row.evidence)
+                    or row.evidence.skill_revision != row.skill_revision):
+                unknown.append(f"{row.run_id}: missing matching Skill load evidence")
             if row.status in {"running", "infrastructure_failure"}:
                 unknown.append(f"{row.run_id}: {row.status}")
             if row.status == "quality_failure":

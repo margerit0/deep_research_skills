@@ -29,6 +29,22 @@ class SourceEvidence(TypedDict):
 
 
 _evidence: ContextVar[list | None] = ContextVar("source_evidence", default=None)
+_observed_evidence: ContextVar[list | None] = ContextVar("observed_source_evidence", default=None)
+
+
+@contextmanager
+def observe_source_evidence():
+    """Retain retrieval records across inner captures, including exceptional exits.
+
+    This optional observer is independent of graph state and does not change
+    the isolation of ordinary nested captures. Nested observers remain isolated.
+    """
+    records = []
+    token = _observed_evidence.set(records)
+    try:
+        yield records
+    finally:
+        _observed_evidence.reset(token)
 
 
 @contextmanager
@@ -43,10 +59,11 @@ def capture_source_evidence():
 
 def record_source_evidence(url: str, result: dict) -> None:
     records = _evidence.get()
+    observed = _observed_evidence.get()
     body = result.get("raw_content") or result.get("content") or ""
-    if records is None or not isinstance(body, str) or not body.strip():
+    if (records is None and observed is None) or not isinstance(body, str) or not body.strip():
         return
-    records.append({
+    record = {
         "url": url, "title": result.get("title", ""),
         "retrieval": result.get("retrieval", "search"),
         "body_kind": "raw_content" if result.get("raw_content") else "snippet",
@@ -54,7 +71,11 @@ def record_source_evidence(url: str, result: dict) -> None:
         "body_characters": len(body), "start": 0,
         "end": min(len(body), SOURCE_LIMIT), "text": body[:SOURCE_LIMIT],
         "truncated": len(body) > SOURCE_LIMIT,
-    })
+    }
+    if records is not None:
+        records.append(record)
+    if observed is not None:
+        observed.append(dict(record))
 
 
 def merge_source_evidence(*groups, sources: list[dict]) -> list[SourceEvidence]:
