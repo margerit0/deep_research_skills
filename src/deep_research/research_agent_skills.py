@@ -105,14 +105,19 @@ def _has_real_search_results(messages) -> bool:
 
 def _invoke_tool(name, args, constraints):
     """Emit events only around actual invocations, including required Skills."""
+    from deep_research.skill_evolution_trace import after_tool, before_tool
+
+    before_tool(name, args)
     query = args.get("query" if name == "tavily_search" else "skill_name")
     emit_research_event("tool_started", tool=name, query=query)
     try:
         with source_scope(constraints) as audit:
             observation = tools_by_name[name].invoke(args)
-    except Exception:
+    except Exception as exc:
+        after_tool(name, error=exc)
         emit_research_event("tool_failed", tool=name, query=query if name == "load_skill" else None)
         raise
+    after_tool(name, observation, audit)
     failed = name == "load_skill" and message_text(observation).startswith("错误：")
     emit_research_event(
         "tool_failed" if failed else "tool_finished", tool=name,

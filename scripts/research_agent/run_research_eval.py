@@ -43,9 +43,6 @@ from deep_research.prompts import (
     RESEARCH_COVERAGE_PROMPT,
     RESEARCH_GROUNDING_PROMPT,
 )
-from deep_research.research_agent_skills import (
-    researcher_agent_skills as researcher_agent,
-)
 from deep_research.structured_output_fallback import (
     invoke_with_structured_output_fallback,
 )
@@ -133,7 +130,7 @@ def _judge_invoke(model, schema, prompt):
     return with_retry(_judge_invoke_once)(model, schema, prompt)
 
 
-def evaluate_criteria_coverage(outputs: dict, reference_outputs: dict) -> dict:
+def evaluate_criteria_coverage(outputs: dict, reference_outputs: dict, *, judge=None, invoke=None) -> dict:
     """逐条 (per criterion) 判断 compressed_research 是否覆盖了 ground-truth criteria。"""
     compressed_research = outputs.get("compressed_research") or ""
     success_criteria = reference_outputs["criteria"]
@@ -148,13 +145,14 @@ def evaluate_criteria_coverage(outputs: dict, reference_outputs: dict) -> dict:
             "value": {"individual_evaluations": []},
         }
 
-    model = _make_judge_model()
+    model = judge if judge is not None else _make_judge_model()
+    judge_invoke = invoke or _judge_invoke
     # 逐条 criterion 调 judge; 全局 judge 并发由 _JUDGE_SEMAPHORE 限制 (跨并发 example 生效),
     # 每条独立重试 —— 单条瞬时失败只重试该条, 不连累其余 criterion。
     responses = cast(
         list[Criteria],
         [
-            _judge_invoke(
+            judge_invoke(
                 model,
                 Criteria,
                 RESEARCH_COVERAGE_PROMPT.format(
@@ -197,7 +195,7 @@ def evaluate_criteria_coverage(outputs: dict, reference_outputs: dict) -> dict:
     }
 
 
-def evaluate_citation_grounding(outputs: dict) -> dict:
+def evaluate_citation_grounding(outputs: dict, *, judge=None, invoke=None) -> dict:
     """判断 compressed_research 中的具体事实声明是否被引用来源所支撑。"""
     compressed_research = outputs.get("compressed_research") or ""
 
@@ -210,10 +208,10 @@ def evaluate_citation_grounding(outputs: dict) -> dict:
             "value": {"has_sources_section": False, "claims": []},
         }
 
-    model = _make_judge_model()
+    model = judge if judge is not None else _make_judge_model()
     response = cast(
         GroundingEvaluation,
-        _judge_invoke(
+        (invoke or _judge_invoke)(
             model,
             GroundingEvaluation,
             RESEARCH_GROUNDING_PROMPT.format(compressed_research=compressed_research),
@@ -251,6 +249,8 @@ def evaluate_citation_grounding(outputs: dict) -> dict:
 
 def target_func(inputs: dict[str, Any]) -> dict[str, Any]:
     """对单条 example 调用 researcher_agent, 返回 ResearcherOutputState (含 compressed_research)。"""
+    from deep_research.research_agent_skills import researcher_agent_skills as researcher_agent
+
     config: RunnableConfig = {"configurable": {"thread_id": str(uuid.uuid4())}}
     return cast(
         dict[str, Any],

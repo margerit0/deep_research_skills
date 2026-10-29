@@ -1,5 +1,9 @@
 # 本地开发与维护
 
+## Skill 优化入口
+
+新增 `python -m scripts.research_agent.skill_evolution --help`，使用独立实验目录保存不可变 manifest、失败尝试、诊断、候选 diff 与报告，复用既有配置归档；详见 [操作说明](skill-evolution.md)。帮助／纯数据路径不导入研究图，真实诊断、生成与评估需显式 `--allow-external`。本轮仅做确定性检查，生产 Skill、模型和凭据配置不变；不要把未知费用或缺失评分补零。
+
 本文按当前 `src/deep_research/` 实现整理。历史排障记录中的旧包名、旧目录、配额状态和待办不作为当前开发指令。架构约定见 [架构决策](architecture-decisions.md)，历史实验见 [评估记录](evaluation-history.md)。
 
 ## 仓库材料管理

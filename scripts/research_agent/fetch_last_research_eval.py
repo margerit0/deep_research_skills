@@ -109,10 +109,12 @@ def main() -> int:
 
     for idx, run in enumerate(runs, 1):
         criteria: list[str] = []
+        reference_outputs = None
         if run.reference_example_id:
             try:
                 ex = client.read_example(run.reference_example_id)
                 ref = ex.outputs or {}
+                reference_outputs = ref
                 criteria = list(ref.get("criteria") or [])
             except Exception as exc:
                 print(
@@ -156,6 +158,11 @@ def main() -> int:
             "ground_truth_criteria": criteria,
             "agent_compressed_research": compressed,
             "agent_error": run.error,
+            # Exact identities for explicit evolution imports. Missing historical
+            # tool/Skill/version evidence is never reconstructed from compression.
+            "input_payload": run.inputs or {},
+            "reference_outputs": reference_outputs,
+            "source_evidence": out.get("source_evidence"),
             "judge_criteria_coverage": {
                 "score": cov_score,
                 "summary": cov.comment if cov else None,

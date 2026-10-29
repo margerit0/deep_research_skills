@@ -278,7 +278,7 @@ def selected_model(role, fallback, *, tools=None, retry=False):
     if snapshot is None:
         return fallback
     identifier = snapshot["selection"]["models"][role]
-    if identifier == _defaults.get(role):
+    if identifier == _defaults.get(role) and fallback is not None:
         return fallback
     definition = archive(identifier)
     key = (role, identifier, retry)
@@ -321,3 +321,16 @@ def active_skills():
         name: archive(identifier)
         for name, identifier in snapshot["skill_revisions"].items()
     }
+
+
+def with_skill_revision(snapshot, name, definition):
+    """Return an isolated snapshot without changing defaults or saved runs."""
+    validate_snapshot(snapshot)
+    if name not in snapshot["skill_revisions"] or definition.get("metadata", {}).get("name") != name:
+        raise ConfigurationError("skill_override_not_allowed")
+    identifier = revision(definition)
+    archive(identifier, definition)
+    isolated = deepcopy(snapshot)
+    isolated["skill_revisions"][name] = identifier
+    validate_snapshot(isolated)
+    return isolated
