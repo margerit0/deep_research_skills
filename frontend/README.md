@@ -142,7 +142,7 @@ npm test
 | `src/data/schema.ts`                                              | 运行、节点、会话类型和存储校验                        |
 | `src/data/mock.ts`                                                | 模拟运行、阶段与节点视图适配                          |
 | `src/data/example-nodes.json`                                     | 已确认示例中的静态数据                                |
-| `src/apple.css`                                                   | 从已确认主 HTML 提取的 Apple 色板与原始样式           |
+| `src/apple.css`                                                   | Apple 色板与基础样式，直接在此维护                    |
 | `src/app.css`                                                     | 独立应用的滚动、窄屏导航与布局适配                    |
 | `src/demo.css`                                                    | 演示播放器、图谱 / 消息动效与减少动态效果适配         |
 | `tests/workspace.spec.ts`                                         | 行为与响应式浏览器验证                                |
@@ -156,6 +156,6 @@ npm test
 | `tests/live-api.spec.ts`                                          | 显式启用的原生 LangGraph API / 真实模型联调           |
 | `../tests/atlas_fixture_server.py`                                | 使用独立目录、明确关闭持久化的普通原生 API 替身启动器 |
 
-`scripts/import-design.mjs` 记录一次性迁移方式。日常开发与构建不运行它；手动运行会重新生成 `apple.css` 和示例 JSON。应用不引用 `ui-drafts/`，也不依赖 `window.openai`、`Tweak`、`viz-carousel`、iframe 或宿主图标库。Lucide 图标随应用打包。
+设计迁移已完成，日常开发直接维护 `src/apple.css` 和 `src/data/example-nodes.json`。旧 HTML 设计稿与一次性导入脚本已从当前版本移除，历史查阅方法见 [仓库材料管理](../docs/maintenance.md#仓库材料管理)。应用不依赖 `window.openai`、`Tweak`、`viz-carousel`、iframe 或宿主图标库。Lucide 图标随应用打包。
 
 1A、1B、计划 2 与计划 3 的原生 API 验收命令见 [接口约定](docs/backend-contract.md)，均使用独立的临时持久化目录。下一步按 [后续计划](docs/next-steps.md) 补齐完整成功研究、严格首段时点与报告质量验收；服务端凭据继续留在后端 `.env`。

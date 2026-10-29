@@ -5,4 +5,5 @@ frontend/docs/provider-2026-10-15-kimi-fixes-report.md -text
 frontend/docs/provider-2026-10-15-kimi-fixes-reviewed-report.md -text
 
 # Preserve the exact bytes bound by video approval and verification manifests.
-product-video/** -text
+# Product demonstrations are documentation, not application source for language stats.
+product-video/** -text linguist-documentation

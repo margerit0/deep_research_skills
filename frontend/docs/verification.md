@@ -595,6 +595,8 @@ Windows 上通过 npm 自动启动 Vite 的旧验收方式曾卡在测试进程�
 
 日期：2026-10-10。实现基准为 `ui-drafts/atlas-workspace/APPLE_IMPLEMENTATION.md`、主 HTML 与 Apple 浅色 / 深色 / 窄屏 / 菜单参考截图。
 
+历史路径说明（2026-10-29）：上述设计稿已从当前版本移除，原文件可按 [仓库材料管理](../../docs/maintenance.md#仓库材料管理) 中的固定提交查阅。此处保留当时的验收依据；当前开发入口为 `frontend/`。
+
 ## 执行环境与检查
 
 - Windows，Node.js 22.17.0；React、TypeScript、Vite、Lucide、Playwright 版本固定于锁文件。

@@ -1,9 +1,5 @@
-# 前端交互稿已迁移
+# 前端开发入口
 
-「星图工作台」草稿已集中到 [ui-drafts/atlas-workspace](../../ui-drafts/atlas-workspace/README.md)。
+「星图工作台」已实现为独立 React 前端。开发与启动方式见 [前端说明](../../frontend/README.md)，当前接口见 [后端接口约定](../../frontend/docs/backend-contract.md)。
 
-- [当前交接说明](../../ui-drafts/atlas-workspace/HANDOFF.md)
-- [最新版可编辑稿](../../ui-drafts/atlas-workspace/atlas-conversation-workspace.html)
-- [可直接打开的预览](../../ui-drafts/atlas-workspace/preview/atlas-glass-preview.html)
-
-后续修改以新目录为准。本文件保留旧聊天中的交接路径。
+旧 HTML 设计稿及一次性导入脚本已于 2026-10-29 从当前版本移除。历史位置与查阅方法见 [仓库材料管理](../maintenance.md#仓库材料管理)。本文件保留旧交接路径，供历史链接跳转。

@@ -2,6 +2,19 @@
 
 本文按当前 `src/deep_research/` 实现整理。历史排障记录中的旧包名、旧目录、配额状态和待办不作为当前开发指令。架构约定见 [架构决策](architecture-decisions.md)，历史实验见 [评估记录](evaluation-history.md)。
 
+## 仓库材料管理
+
+正式前端在 `frontend/`；新设计草稿放入已忽略的 `open_design/` 或 `.local/`，定稿后将需要的源码整合进正式前端。构建输出与浏览器测试报告继续由前端 `.gitignore` 排除。
+
+2026-10-29 从当前版本移除 `ui-drafts/`、一次性设计迁移脚本 `frontend/scripts/import-design.mjs`，以及演示视频 v1/v2。清理前的完整快照为 Git 提交 `dac1870ec56e08603f3e93e58bb5a2e916a45456`；旧文件留在历史中，无需在主目录继续保存副本。例如：
+
+```powershell
+git show dac1870ec56e08603f3e93e58bb5a2e916a45456:ui-drafts/atlas-workspace/APPLE_IMPLEMENTATION.md
+git ls-tree -r --name-only dac1870ec56e08603f3e93e58bb5a2e916a45456 -- product-video/2026-10-25-v1 product-video/2026-10-25-v2
+```
+
+当前 [演示视频](../product-video/README.md) 保留 v3 成片、源码、批准记录与校验清单。原交付包的历史文字和版本来源字段不改写；当前说明置于包外。视频材料通过 `.gitattributes` 的 `linguist-documentation` 排除出语言统计，正式应用源码仍正常计入。旧版本的本地缓存继续忽略，不重新入库。
+
 ## 环境与入口
 
 在项目根目录执行：

@@ -22,3 +22,8 @@ research_eval_*.json
 
 # Open Design 本地出稿工作区（草稿不入库, 定稿手动缝合进 frontend/）
 open_design/
+
+# Retired design drafts and video versions are available in Git history.
+/ui-drafts/
+/product-video/2026-10-25-v1/
+/product-video/2026-10-25-v2/
