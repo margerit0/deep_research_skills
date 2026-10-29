@@ -28,6 +28,7 @@ from deep_research.structured_output_fallback import (
     invoke_with_structured_output_fallback,
     model_connection,
     should_disable_thinking_for_json_fallback,
+    structured_output_strategy,
 )
 from deep_research.state_research import Summary
 from deep_research.source_evidence import record_source_evidence
@@ -162,7 +163,8 @@ def summarize_webpage_content(webpage_content: str) -> str:
         selected = selected_model("SUMMARIZATION", summarization_model)
         prompt = summarize_webpage_prompt.format(webpage_content=webpage_content, date=get_today_str())
         base_url, api_key = model_connection(selected)
-        if should_disable_thinking_for_json_fallback(selected, base_url=base_url):
+        if (structured_output_strategy(selected) == "json_object"
+                or should_disable_thinking_for_json_fallback(selected, base_url=base_url)):
             summary = invoke_with_structured_output_fallback(selected, Summary, prompt, base_url=base_url, api_key=api_key)
         else:
             structured_model = selected.with_structured_output(Summary, method="function_calling")
