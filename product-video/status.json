@@ -1,8 +1,43 @@
 {
-  "currentVersion": "2026-10-29-v6",
+  "currentVersion": "2026-10-30-v7",
   "publishedVersion": "2026-10-29-v6",
   "currentEntry": "index.html",
   "versions": [
+    {
+      "id": "2026-10-30-v7",
+      "state": "complete",
+      "planSha256": "e4a800470a31919d401d85c0519585c8a3c1defd82e83e0cd610123bc6bfcfb6",
+      "approval": {
+        "planSha256": "e4a800470a31919d401d85c0519585c8a3c1defd82e83e0cd610123bc6bfcfb6",
+        "evidence": "用户在 2026-10-29 的请求中明确授权：检查 public 的最新README 演示视频，看看是否还有需要改进的地方包括配乐，如果有的话这次不用让我确认分镜，直接做完整视频；2026-10-30 在新会话要求继续该任务。"
+      },
+      "acceptance": {
+        "date": "2026-10-30",
+        "movieSha256": "bdf80ff5fe013bca572bbf9597c206081d9a2ed1724074275a07a3b5bb986221",
+        "subjectiveListening": "accepted",
+        "evidence": "用户试听当前成片后回复：听过了，满意。提交 v7 并切换 README",
+        "scope": "成片听感验收；授权提交 v7 并切换根 README。根 README 的播放器需要在 GitHub 网页上传的附件地址，提供地址后再切换。"
+      },
+      "changes": [
+        "重写原创配乐：D 大调、120 BPM，九段结构随镜头展开，有开场动机、章节留白、验证累积、动机再现与终止和弦",
+        "动作音效按事件区分并跟随当前和弦；响度提高到 -16 LUFS，保留段落起伏",
+        "章节卡与品牌收尾改为两段式转场：底色先盖住旧画面再显示新文字，退出时相反；页脚说明在遮盖完成后切换",
+        "19 秒看板顶栏等报告窗口离开后再淡入，左栏标题与章节标签同步替换",
+        "8 秒、13 秒镜头平移改为中途拉远的弧线运动",
+        "第二部分标题与图解标题用 0.2 秒淡入缓和硬切",
+        "全片改用灰阶字形渲染，避免文字抗锯齿在动画前后跳变"
+      ],
+      "coverage": "2026-10-30-v7/brief.json",
+      "preview": null,
+      "final": {
+        "video": "2026-10-30-v7/final/product-demo.mp4",
+        "page": "2026-10-30-v7/final/index.html",
+        "sheet": "2026-10-30-v7/final/check-sheet.png",
+        "verification": "2026-10-30-v7/final/verification.md",
+        "reproduce": "2026-10-30-v7/final/reproduce.md",
+        "sha256": "bdf80ff5fe013bca572bbf9597c206081d9a2ed1724074275a07a3b5bb986221"
+      }
+    },
     {
       "id": "2026-10-29-v6",
       "state": "complete",
@@ -121,7 +156,8 @@
   "readmeVersion": "2026-10-29-v6",
   "hostedPlayer": {
     "status": "configured",
-    "url": "https://github.com/user-attachments/assets/412eff30-c3d0-4f79-80b6-5f3d15ed8610"
+    "url": "https://github.com/user-attachments/assets/412eff30-c3d0-4f79-80b6-5f3d15ed8610",
+    "version": "2026-10-29-v6"
   },
-  "currentFinalVersion": "2026-10-29-v6"
+  "currentFinalVersion": "2026-10-30-v7"
 }

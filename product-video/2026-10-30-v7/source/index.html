@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>星图工作台 · v7 动效预览</title><link rel="stylesheet" href="./scene.css"></head>
+<body><main id="stage">
+  <link rel="stylesheet" href="./bridge.css">
+  <div id="native-shell"><iframe id="native" src="./native.html?export" title="真实组件与项目内置合成演示"></iframe></div>
+  <section id="chapter-card" aria-label="即将介绍的章节">
+    <header class="section-identity"><span class="mark">✳</span><b>星图工作台</b></header>
+    <div id="section-copy"><p id="section-eyebrow"></p><h2 id="section-heading"></h2><p id="section-subtitle"></p><div id="section-path"></div></div>
+  </section>
+  <section id="explanation">
+    <header class="identity"><span class="mark">✳</span><b>星图工作台</b><span class="rule"></span><span>深度研究 · 持续改进</span></header>
+    <div class="chapter"><span id="chapter-number"></span><i></i><span id="chapter-label"></span></div>
+    <section class="copy" id="current-copy"><h1 id="headline"></h1><p id="description"></p><div class="scope"><b>Skill = 研究方法</b><span>同一份「产品对比」Skill<br>从指导研究，到评估改进</span></div></section>
+    <section class="copy" id="previous-copy"><h1></h1><p></p><div class="scope"><b></b><span></span></div></section>
+    <section id="board">
+      <svg width="0" height="0" aria-hidden="true" style="position:absolute"><defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M2 2 L8 5 L2 8" fill="none" stroke="#b6c8dd" stroke-width="1.5"/></marker></defs></svg>
+      <header class="board-top"><span id="process-label">研究 → 评估 → 改进方法 → 验证后采纳</span><span class="schematic">机制示意 · 非实验结果</span></header>
+      <section class="diagram" data-shot="method">
+        <div class="diagram-heading" data-reveal="bridge-heading">刚才选的方法，如何影响研究？</div>
+        <p class="diagram-sub" data-reveal="bridge-heading">Skill 把研究经验写成可重复使用的步骤</p>
+        <div class="report-caption" data-reveal="method-reveal">刚才生成的报告<span>来自研究员按方法完成的工作</span></div>
+        <svg class="connections" viewBox="0 0 1200 650"><path data-draw="method-reveal" d="M565 322 H488"/></svg>
+        <span class="bridge-arrow-label" data-reveal="method-reveal">指导研究</span>
+        <div class="bottom-note neutral" data-reveal="method-reveal">前面选择的「产品对比」，就是现在这份研究方法</div>
+      </section>
+      <section class="diagram" data-shot="feedback">
+        <div class="diagram-heading">方法是否有效，需要评估来回答</div>
+        <p class="diagram-sub">评估研究员的结果与过程，找出值得改进的地方</p>
+        <div class="node feedback-card" data-reveal="feedback-review"><span class="eyebrow">研究员结果与执行记录</span><h3>研究做得怎么样？</h3><p>要求是否覆盖完整？<br>引用是否有证据支持？</p><div class="evaluation-inputs">实际 Skill 加载 · 工具轨迹 · 来源</div></div>
+        <svg class="connections" viewBox="0 0 1200 650"><path data-draw="feedback-route" d="M480 322 H560"/></svg>
+        <span class="bridge-arrow-label" data-reveal="feedback-route">定位问题</span>
+        <div class="bottom-note" data-reveal="feedback-purpose">若问题确实来自方法 → 修订这份 Skill，再验证是否值得采用</div>
+      </section>
+      <section id="shared-method" class="node">
+        <div class="method-top"><span>Skill · 前面已选</span><span class="method-tag">产品对比</span></div>
+        <h3>产品对比方法论</h3>
+        <p class="method-definition">告诉研究员，怎样完成这类研究。</p>
+        <div class="method-steps"><div><span>01</span><b>优先查哪些来源</b></div><div><span>02</span><b>怎样组织检索</b></div><div><span>03</span><b>何时停止，如何引用</b></div></div>
+        <p class="method-bottom">可读取、可修改、可版本追溯</p>
+      </section>
+      <section class="diagram" data-shot="diagnose">
+        <div class="diagram-heading">评估发现不足，先确认原因</div><p class="diagram-sub">下面展开：怎样从评估反馈走到方法修订</p>
+        <svg class="connections" viewBox="0 0 1200 650">
+          <path data-draw="diagnosis-enter" d="M366 204 H430 V345 H534"/><path data-draw="diagnosis-enter" d="M366 345 H534"/><path style="marker-end:none" data-draw="diagnosis-enter" d="M366 486 H430 V345"/>
+        </svg>
+        <div class="node evidence e1" data-reveal="evidence-enter"><span class="glyph">01</span><div><b>实际加载的 Skill</b><small>正文与版本是否一致</small></div></div>
+        <div class="node evidence e2" data-reveal="evidence-enter"><span class="glyph">02</span><div><b>工具轨迹与来源</b><small>检查检索与执行证据</small></div></div>
+        <div class="node evidence e3" data-reveal="evidence-enter"><span class="glyph">03</span><div><b>逐项失败反馈</b><small>定位覆盖与来源支持问题</small></div></div>
+        <div class="node diagnosis" data-reveal="diagnosis-enter"><span class="eyebrow">诊断归因</span><h3>是方法论内容问题吗？</h3><p>区分内容、加载、检索、执行<br>以及基础设施与评估器问题</p><div class="condition" data-reveal="diagnosis-route">内容归因成立 + 证据充分 → 允许修订</div></div>
+        <div class="bottom-note" data-reveal="diagnosis-route">其他归因或证据不足：保留诊断，停止修订</div>
+      </section>
+      <section class="diagram" data-shot="candidate">
+        <div class="diagram-heading">把修改变成可审查的版本</div><p class="diagram-sub">只读取开发证据与父版本正文</p>
+        <svg class="connections" viewBox="0 0 1200 650"><path data-draw="candidate-a" d="M364 344 H464 V224 H610"/><path data-draw="candidate-b" d="M464 344 V454 H610"/></svg>
+        <div class="node parent" data-reveal="candidate-enter"><span class="eyebrow">父版本</span><h3>产品对比 Skill</h3><p>保留原始方法论正文</p></div>
+        <div class="node candidate ca" data-reveal="candidate-a"><span class="version">A</span><div><b>候选修订 A</b><p>基于失败证据提出修改</p></div></div>
+        <div class="node candidate cb" data-reveal="candidate-b"><span class="version">B</span><div><b>候选修订 B</b><p>同一父版本，独立记录</p></div></div>
+        <div class="record-strip" data-reveal="candidate-records"><span>修订正文</span><span>差异对照</span><span>修改理由</span><span>预期改善</span></div>
+        <div class="bottom-note neutral">每个实验最多一轮改进、两个候选</div>
+      </section>
+      <section class="diagram" data-shot="validate">
+        <div class="diagram-heading">三套数据，各司其职</div><p class="diagram-sub">开发集生成候选 · 选择集筛选 · 最终集独立验证</p>
+        <svg class="connections" viewBox="0 0 1200 650"><path data-draw="freeze-candidate" d="M393 340 H446"/><path data-draw="final-unlock" d="M674 340 H733"/></svg>
+        <div class="node validation selection" data-reveal="selection-open"><span class="eyebrow">选择集 · 配对比较</span><h3>基线 ↔ 候选</h3><p>固定输入、模型、提示词<br>评估器与预算</p><div class="condition">通过全部门槛后 →</div></div>
+        <div class="node freeze" data-reveal="freeze-candidate"><svg viewBox="0 0 48 48" width="48" height="48" fill="none" stroke="currentColor" stroke-width="2"><rect x="12" y="22" width="24" height="20" rx="4"/><path d="M17 22V14a7 7 0 0 1 14 0v8M24 30v6"/></svg><b>冻结 1 个候选</b><small>随后才读取最终集</small></div>
+        <div class="node validation final" data-reveal="final-unlock"><span class="eyebrow">最终集 · 独立验证</span><h3>基线 ↔ 冻结候选</h3><p>再次配对比较<br>最终反馈不回流生成器</p><div class="condition">通过全部门槛 → 报告</div></div>
+        <div class="gates" data-reveal="gates-enter"><b>共同门槛</b><span>覆盖改善</span><span>来源支持</span><span>用户约束</span><span>回归检查</span><span>成本与长度</span><span>证据完整</span></div>
+        <div class="bottom-note neutral">缺失运行、评分或完整成本统计 → 证据不足，不能冻结或晋升</div>
+      </section>
+      <section class="diagram" data-shot="release">
+        <div class="diagram-heading">把验证过的方法，用于后续研究</div><p class="diagram-sub">操作者审阅并采纳；保留旧版本，必要时回退</p>
+        <svg class="connections" viewBox="0 0 1200 650"><path class="dashed" data-draw="manual-promote" d="M484 278 H646"/><path data-draw="rollback-path" d="M874 363 V435"/></svg>
+        <div class="node report" data-reveal="report-default"><span class="eyebrow">默认终点</span><h3>报告与结论</h3><ul><li>失败证据与诊断</li><li>候选差异与配对结果</li><li>门槛理由与失败记录</li></ul><div class="condition">保存结果，等待审阅</div></div>
+        <div class="node promote" data-reveal="manual-promote"><span class="eyebrow">最终门槛通过 · 审阅后</span><h3>显式晋升</h3><p>归档旧版本，替换默认 Skill<br>重启服务后，新请求生效</p></div>
+        <div class="node rollback" data-reveal="rollback-path"><b>需要时显式回退</b><small>核对修订，恢复归档正文</small></div>
+        <div class="bottom-note" data-reveal="stop-path">拒绝 / 证据不足 → 保留记录，不晋升</div>
+      </section>
+    </section>
+    <section id="end-card"><div class="end-content"><div class="end-mark">✳</div><p class="end-eyebrow">DEEP RESEARCH</p><h2>星图工作台</h2><p class="tagline">让研究的每一步，看得见。</p><div class="features"><span>明确范围</span><i></i><span>并行研究</span><i></i><span>汇成报告</span><i></i><span>评估改进</span></div></div></section>
+    <footer><span class="disclosure">合成演示 · 流程已压缩</span><span>机制示意；尚未运行真实模型优化实验，暂无效果提升结论。</span><span class="edition">v7 · 预览</span></footer>
+  </section>
+</main><nav id="controls"><button id="play">播放</button><input id="seek" type="range" min="0" value="0" aria-label="时间轴"><output id="time"></output></nav><script type="module" src="./scene.js"></script></body></html>

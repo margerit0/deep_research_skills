@@ -1,0 +1,17 @@
+{
+  "status": "approved",
+  "version": "2026-10-30-v7",
+  "date": "2026-10-30",
+  "timezone": "Asia/Shanghai",
+  "planSha256": "e4a800470a31919d401d85c0519585c8a3c1defd82e83e0cd610123bc6bfcfb6",
+  "basis": "user-preauthorized",
+  "evidence": "用户在 2026-10-29 的请求中明确授权：检查 public 的最新README 演示视频，看看是否还有需要改进的地方包括配乐，如果有的话这次不用让我确认分镜，直接做完整视频；2026-10-30 在新会话要求继续该任务。",
+  "scope": "53 秒、1920×1080、30 fps；沿用 v6 已确认的镜头顺序、文案与合成演示数据，重写原创配乐并修订转场与镜头运动。不包含发布、提交或修改根 README。",
+  "acceptance": {
+    "date": "2026-10-30",
+    "movieSha256": "bdf80ff5fe013bca572bbf9597c206081d9a2ed1724074275a07a3b5bb986221",
+    "subjectiveListening": "accepted",
+    "evidence": "用户试听当前成片后回复：听过了，满意。提交 v7 并切换 README",
+    "scope": "成片听感验收；授权提交 v7 并切换根 README。根 README 的播放器需要在 GitHub 网页上传的附件地址，提供地址后再切换。"
+  }
+}

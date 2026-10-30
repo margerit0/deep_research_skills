@@ -1,0 +1,442 @@
+{
+  "version": "2026-10-30-v7",
+  "state": "complete",
+  "date": "2026-10-30",
+  "timezone": "Asia/Shanghai",
+  "planSha256": "e4a800470a31919d401d85c0519585c8a3c1defd82e83e0cd610123bc6bfcfb6",
+  "request": "检查 public 的最新README 演示视频，看看是否还有需要改进的地方包括配乐，如果有的话这次不用让我确认分镜，直接做完整视频",
+  "product": "星图工作台 / Deep Research Agent",
+  "tagline": {
+    "text": "让研究的每一步，看得见。",
+    "source": "现有 v3 品牌文案"
+  },
+  "scenario": {
+    "type": "existing_original_synthetic",
+    "source": "frontend/src/data/demo.ts 与 mock.ts",
+    "question": "比较 AI 搜索产品的技术路线、商业模式和隐私风险，附可核验的来源。",
+    "clarification": "我会从技术路线、商业模式和隐私风险三个方向并行研究。先确认比较范围，再核验资料、汇总证据，最后整理成一份便于阅读的对比报告。",
+    "report": "研究摘要（模拟）\n\n01 · 技术路线\n围绕检索、生成与引用追溯建立统一比较维度，记录各项能力需要核验的证据。\n\n02 · 商业模式\n按免费入口、订阅服务与企业场景整理分析框架，标记价格与服务条款的核验位置。\n\n03 · 隐私风险\n将数据收集、保留期限和用户控制列为审查项目，区分已确认信息与待验证问题。\n\n下一步\n接入真实检索后逐项补充来源，交叉核验，再形成结论。此处仅演示报告呈现，不含真实产品评价。",
+    "reportKey": "demoReport",
+    "citations": [],
+    "sourceTitles": [],
+    "sourceExcerpts": [],
+    "limitation": "现有合成报告没有编号引用或真实来源原文；仅展示同一演示路径，不新增引用操作。"
+  },
+  "audience": "第一次了解项目的观众。先建立研究方法概念，再解释评估和修订的因果。",
+  "revision": {
+    "parentVersion": "2026-10-29-v6",
+    "durationBefore": 53,
+    "durationAfter": 53,
+    "review": {
+      "score": [
+        "响度范围仅 1.2 LU，配器全片不变，没有对应“研究 → 章节 → 优化 → 采纳”的起伏",
+        "综合响度 -19.1 LUFS，6 kHz 以上能量约 -56 dB，声音偏闷",
+        "9 小节和声循环与 8 小节旋律错位，旋律每拍不停，乐句没有停顿",
+        "讲解动作共用同一个 D5 短音，章节卡没有音乐标记，结尾靠淡出而不是终止"
+      ],
+      "picture": [
+        "16 秒和 19 秒章节卡直接叠化在密集报告上，标题与报告文字重影约 0.4 秒，页脚两段说明同时叠加",
+        "50 秒品牌收尾同样叠化在图解上",
+        "19 秒报告窗口缩入时压住看板顶栏文字",
+        "8 秒、13 秒镜头平移扫过大片空白",
+        "第二部分切换镜头时标题与图解标题硬切"
+      ]
+    },
+    "changes": [
+      "重写原创配乐：D 大调、120 BPM，九段结构随镜头展开，有开场动机、章节留白、验证累积、动机再现与终止和弦",
+      "动作音效按事件区分并跟随当前和弦；响度提高到 -16 LUFS，保留段落起伏",
+      "章节卡与品牌收尾改为两段式转场：底色先盖住旧画面再显示新文字，退出时相反；页脚说明在遮盖完成后切换",
+      "19 秒看板顶栏等报告窗口离开后再淡入，左栏标题与章节标签同步替换",
+      "8 秒、13 秒镜头平移改为中途拉远的弧线运动",
+      "第二部分标题与图解标题用 0.2 秒淡入缓和硬切",
+      "全片改用灰阶字形渲染，避免文字抗锯齿在动画前后跳变"
+    ],
+    "unchanged": [
+      "镜头顺序与时长",
+      "除版本标记外的屏幕文案",
+      "项目原创合成数据",
+      "4 次原生点击"
+    ],
+    "approval": "用户在 2026-10-29 的请求中明确授权：检查 public 的最新README 演示视频，看看是否还有需要改进的地方包括配乐，如果有的话这次不用让我确认分镜，直接做完整视频；2026-10-30 在新会话要求继续该任务。"
+  },
+  "bridgeFacts": [
+    {
+      "copy": "Skill 把研究经验写成可重复使用的步骤",
+      "source": "README.md / Skills 渐进式披露；src/deep_research/skills/product-comparison.md"
+    },
+    {
+      "copy": [
+        "优先查哪些来源",
+        "怎样组织检索",
+        "何时停止，如何引用"
+      ],
+      "source": "src/deep_research/skills/product-comparison.md / 信息源优先级、查询模式、停止判据、引用规范",
+      "treatment": "忠实概括，不伪造候选修订正文"
+    },
+    {
+      "copy": [
+        "要求是否覆盖完整？",
+        "引用是否有证据支持？"
+      ],
+      "source": "docs/skill-evolution.md / coverage、citation grounding、source support",
+      "treatment": "评估问题示意，无打分或失败判决；没有宣称片中报告已被评估"
+    },
+    {
+      "copy": "问题来自方法时才修订；验证通过、显式采纳后用于新研究",
+      "source": "docs/skill-evolution.md / 诊断归因、最终验证、晋升与重启",
+      "treatment": "保留操作者审阅；不称系统自动改写生产方法"
+    }
+  ],
+  "evolution": {
+    "type": "documentation_based_mechanism_animation",
+    "dataPolicy": "没有新增优化实验、假失败样本、候选正文、评估分数或提升结论。候选 A/B 仅标识功能允许的分支，并非实验产物。未使用单元 fixture 作为实验结果。",
+    "facts": [
+      {
+        "shot": "diagnose",
+        "source": "docs/skill-evolution.md / 证据诊断；src/deep_research/skill_evolution.py / validate_diagnosis",
+        "text": "只有内容归因成立且证据充分时才允许生成修订"
+      },
+      {
+        "shot": "candidate",
+        "source": "docs/skill-evolution.md；src/deep_research/skill_evolution.py / Manifest, Candidate",
+        "text": "首版仅 product-comparison；每实验最多一轮、两个候选；保存正文、diff、理由与预期改善"
+      },
+      {
+        "shot": "validate",
+        "source": "docs/skill-evolution.md / 冻结、最终验证、晋升和回退；skill_evolution_runner.py",
+        "text": "开发、选择、最终集分开；选择集配对通过后冻结一个候选，再读最终集；最终反馈不回流"
+      },
+      {
+        "shot": "release",
+        "source": "docs/skill-evolution.md；src/deep_research/skill_evolution_store.py / promote, rollback",
+        "text": "默认停在报告；门槛通过后显式晋升；归档旧版，重启生效；回退核对修订"
+      }
+    ],
+    "limitations": [
+      "后端 CLI、SQLite 和 Markdown 报告，不是新增前端界面",
+      "尚无真实模型优化实验与效果提升结论",
+      "研究员 compressed_research 的评估不直接代表 final_report 质量",
+      "缺失运行、反馈或完整成本不能冻结或晋升"
+    ]
+  },
+  "coverage": [
+    {
+      "item": "产品全貌",
+      "decision": "show",
+      "shotIds": [
+        "question"
+      ],
+      "evidence": "final/check-sheet.png · 1.5 秒",
+      "reason": "沿用 v6：完整工作台开场"
+    },
+    {
+      "item": "关键配置",
+      "decision": "show",
+      "shotIds": [
+        "skills"
+      ],
+      "evidence": "final/check-sheet.png · 5、7 秒",
+      "reason": "沿用 v6：原生菜单与选中结果，不展开额外模型配置"
+    },
+    {
+      "item": "核心操作",
+      "decision": "show",
+      "shotIds": [
+        "chapter-card",
+        "parallel",
+        "inspect",
+        "method",
+        "feedback",
+        "diagnose",
+        "candidate",
+        "validate"
+      ],
+      "evidence": "final/check-sheet.png · 9.5–42.5 秒",
+      "reason": "沿用 v6：原生流程、方法解释与优化机制；机制图解与原 UI 区分"
+    },
+    {
+      "item": "结果",
+      "decision": "show",
+      "shotIds": [
+        "report",
+        "release",
+        "brand"
+      ],
+      "evidence": "final/check-sheet.png · 14.5、48.5、51.5 秒",
+      "reason": "沿用 v6：原合成报告与采纳决策；无来源原文，未增加引用操作"
+    }
+  ],
+  "layout": {
+    "measuredNativeWindow": {
+      "x": 570,
+      "y": 164,
+      "width": 1272,
+      "height": 814
+    },
+    "nativeViewport": {
+      "viewport": [
+        1920,
+        1080
+      ],
+      "appViewport": [
+        1920,
+        1032
+      ],
+      "elements": [
+        {
+          "selector": ".cw-sidebar",
+          "box": {
+            "x": 11,
+            "y": 11,
+            "width": 146,
+            "height": 1010
+          },
+          "font": "14px"
+        },
+        {
+          "selector": ".cw-composer-wrap",
+          "box": {
+            "x": 496,
+            "y": 796.640625,
+            "width": 720,
+            "height": 224.359375
+          },
+          "font": "14px"
+        },
+        {
+          "selector": ".cw-graph-panel",
+          "box": {
+            "x": 1559,
+            "y": 79,
+            "width": 350,
+            "height": 942
+          },
+          "font": "14px"
+        },
+        {
+          "selector": ".cw-composer",
+          "box": {
+            "x": 508,
+            "y": 836.234375,
+            "width": 696,
+            "height": 146.171875
+          },
+          "font": "14px"
+        }
+      ]
+    },
+    "bridgeFinalReportWidth": 450,
+    "sharedMethodCard": {
+      "x": 1171,
+      "y": 410,
+      "width": 574,
+      "height": 400
+    },
+    "continuity": "使用同一实时原生 iframe，在测得的窗口边界连续缩放；没有切换为旧截图"
+  },
+  "spec": {
+    "video": {
+      "width": 1920,
+      "height": 1080,
+      "fps": "30",
+      "totalFrames": 1590,
+      "durationSeconds": 53.0
+    },
+    "audio": {
+      "bpm": 120.0,
+      "sampleRate": 48000,
+      "sampleCount": 2544000
+    },
+    "recommendation": "53 秒；沿用 v6 的镜头安排，章节卡 3 秒，进出各 0.5 秒、稳定阅读 2 秒。",
+    "preview": "用户预先授权本次无需确认分镜；未制作单独预览，当前成片为 final/product-demo.mp4"
+  },
+  "restrictions": {
+    "modelCalls": 0,
+    "searchCalls": 0,
+    "realUserData": false,
+    "publication": false,
+    "commitsCreated": false
+  },
+  "sources": [
+    {
+      "path": "product-video/2026-10-30-v7/source/app.html",
+      "sha256": "35f5b87d757343002f466734acedb20c3199b90f72eee81cb4c9314d5d5c8215"
+    },
+    {
+      "path": "product-video/2026-10-30-v7/source/app.tsx",
+      "sha256": "0e1393c101397134818ff9741f75f9fcb79788a4012e9f842288adcc4f3ff7bc"
+    },
+    {
+      "path": "product-video/2026-10-30-v7/source/bridge.css",
+      "sha256": "e46bf3270b67ddb804ea92d5e8c4c735834eaaa6c8ce2290d93c7c736b3f0776"
+    },
+    {
+      "path": "product-video/2026-10-30-v7/source/build.py",
+      "sha256": "09953f945faf562452b6921eee7e58c88bd991d61a8a792d2ec9dc740f5f47ef"
+    },
+    {
+      "path": "product-video/2026-10-30-v7/source/capture.mjs",
+      "sha256": "bac3849b22054a4cfb685632a35913697f29d64dfcc1e4e9aa83e7349ea5cf14"
+    },
+    {
+      "path": "product-video/2026-10-30-v7/source/finalize.py",
+      "sha256": "f41cfae8b7c4363ad268f08f81ff1c4ddadd7e8f0c8eabd0107c106f71efe08c"
+    },
+    {
+      "path": "product-video/2026-10-30-v7/source/index.html",
+      "sha256": "9de2a3ae0150b625d39c41f483426586a6241f85a10cfb7af8452496af60e938"
+    },
+    {
+      "path": "product-video/2026-10-30-v7/source/native-scene.css",
+      "sha256": "1c6d08206d71cbd44acc261b9e6ebb394a2d8bcac728d729ca5e5fcf75bbfba5"
+    },
+    {
+      "path": "product-video/2026-10-30-v7/source/native-scene.js",
+      "sha256": "dd7dd1b909b1e0b92f054b8d380df33e23bc9fcec5a5959091d9b3aaadfa215a"
+    },
+    {
+      "path": "product-video/2026-10-30-v7/source/native.html",
+      "sha256": "def7b53b804bbab45237caa29ed18d9c30ce8d596627de9d6c6782c8cc1ace60"
+    },
+    {
+      "path": "product-video/2026-10-30-v7/source/package-final.py",
+      "sha256": "3802c8e1b562ddebbfca18e3a2bb8c875c4accd7a072452eee61f4f4e7e8026f"
+    },
+    {
+      "path": "product-video/2026-10-30-v7/source/playback-final.mjs",
+      "sha256": "43b4c797d04cc5a4bf6efc5f56f6b401f1871cce7b51ecf176ff608c9686fd4a"
+    },
+    {
+      "path": "product-video/2026-10-30-v7/source/scene.css",
+      "sha256": "efac2fc3822d919c731b335c90f48ad6408ca870385e72c5a3ae0640285e0a87"
+    },
+    {
+      "path": "product-video/2026-10-30-v7/source/scene.js",
+      "sha256": "4c31b7a894bbcc5c08bb22d5b47c47a8d62ce9519f401aa1e988342846c4d072"
+    },
+    {
+      "path": "product-video/2026-10-30-v7/source/serve.mjs",
+      "sha256": "3a861ed82d9a73c0dbfd43f64e9c609496d9119f06d8d3005b790b576bc2821e"
+    },
+    {
+      "path": "product-video/2026-10-30-v7/source/synthesize-audio.mjs",
+      "sha256": "dc624c78bf5462db7a1c3e3a6a6bf7f5e3b1114fbff9d627375fd608b3327e73"
+    },
+    {
+      "path": "product-video/2026-10-30-v7/source/timeline.py",
+      "sha256": "44dfbc42459f2fd007165e3348edbf26e8d1a1ea6b2731d3f73a622d6babec5f"
+    },
+    {
+      "path": "product-video/2026-10-30-v7/source/verify-audio.mjs",
+      "sha256": "59aed17c9e09ab8722d77c6c7e91920fa7811230661e9edeeb7fe3c7b89a3235"
+    }
+  ],
+  "chapterCard": {
+    "copy": {
+      "headline": "Agent 自动进化",
+      "description": "评估驱动的 Skill 持续优化",
+      "eyebrow": "接下来 · 第二部分",
+      "path": "生成候选 → 独立验证 → 人工采纳",
+      "focus": "全屏章节标题，提前告知接下来介绍 Agent 自动进化；副标题限定为 Skill 优化",
+      "transition": "0.5 秒淡入，稳定阅读 2 秒，0.5 秒淡出，接回同一报告与方法卡"
+    },
+    "startSeconds": 16.0,
+    "durationSeconds": 3.0,
+    "scope": "标题沿用用户提出的介绍主题；副标题和流程说明将具体能力限定为 Skill 优化，并保留人工采纳。未新增无人审批晋升能力。"
+  },
+  "score": {
+    "type": "original_code_synthesis",
+    "key": "D major",
+    "bpm": 120,
+    "form": [
+      {
+        "section": "intro",
+        "seconds": [
+          0,
+          4
+        ],
+        "music": "和声垫、长低音与轻打击，开场动机首次出现"
+      },
+      {
+        "section": "skills",
+        "seconds": [
+          4,
+          8
+        ],
+        "music": "动机的回应句，两次原生点击留出空间"
+      },
+      {
+        "section": "groove",
+        "seconds": [
+          8,
+          16
+        ],
+        "music": "完整律动，三声部琶音在左中右走位，对应三个并行方向"
+      },
+      {
+        "section": "chapter",
+        "seconds": [
+          16,
+          19
+        ],
+        "music": "鼓点退出，低频与钟声标记章节，末尾上升音效接入第二部分"
+      },
+      {
+        "section": "explain",
+        "seconds": [
+          19,
+          27
+        ],
+        "music": "全片最安静，轻打击加拨弦提示，让位给阅读"
+      },
+      {
+        "section": "analyse",
+        "seconds": [
+          27,
+          37
+        ],
+        "music": "柔和琶音进入，和声转向关系小调"
+      },
+      {
+        "section": "validate",
+        "seconds": [
+          37,
+          44
+        ],
+        "music": "低音加密、打击逐层增加，末尾上升音效"
+      },
+      {
+        "section": "release",
+        "seconds": [
+          44,
+          50
+        ],
+        "music": "全片最响，完整律动与开场动机的明亮再现"
+      },
+      {
+        "section": "brand",
+        "seconds": [
+          50,
+          53
+        ],
+        "music": "主和弦与钟声琶音延音，最后 1 秒自然收束"
+      }
+    ],
+    "measurements": "final/verification-data.json"
+  },
+  "finalDelivery": {
+    "movieSha256": "bdf80ff5fe013bca572bbf9597c206081d9a2ed1724074275a07a3b5bb986221",
+    "planSha256": "e4a800470a31919d401d85c0519585c8a3c1defd82e83e0cd610123bc6bfcfb6",
+    "approval": "approval.json",
+    "subjectiveListening": "accepted_by_user",
+    "changes": [
+      "重写原创配乐：D 大调、120 BPM，九段结构随镜头展开，有开场动机、章节留白、验证累积、动机再现与终止和弦",
+      "动作音效按事件区分并跟随当前和弦；响度提高到 -16 LUFS，保留段落起伏",
+      "章节卡与品牌收尾改为两段式转场：底色先盖住旧画面再显示新文字，退出时相反；页脚说明在遮盖完成后切换",
+      "19 秒看板顶栏等报告窗口离开后再淡入，左栏标题与章节标签同步替换",
+      "8 秒、13 秒镜头平移改为中途拉远的弧线运动",
+      "第二部分标题与图解标题用 0.2 秒淡入缓和硬切",
+      "全片改用灰阶字形渲染，避免文字抗锯齿在动画前后跳变"
+    ]
+  }
+}
