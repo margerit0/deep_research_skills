@@ -1,0 +1,137 @@
+{
+  "planSha256": "ee144eb8a1cf0b7550aaa673a327f4eac7b36835ca29560725f1fd8998831f80",
+  "files": [
+    {
+      "path": "approved-brief.json",
+      "sha256": "3f1a3515171838825894789d7b32d6145e262660eba0976a7ef1bffee543bb91"
+    },
+    {
+      "path": "approved-index.html",
+      "sha256": "d1825cf229d2950779936279b421ac4d0ad15ea9c73e943c04c8e6f18c9017ad"
+    },
+    {
+      "path": "approved-timeline.json",
+      "sha256": "e41892a8b7ffaf53bf687271a5c0f5ef50be6f735c68621c9654269cda8da222"
+    },
+    {
+      "path": "frame-0045.png",
+      "sha256": "5631928f90b44471926cc9f72818fcc611bed852af6b919e79c65b0f1c914888"
+    },
+    {
+      "path": "frame-0105.png",
+      "sha256": "32f98fd0c1288d1788e41efecf1bd95851165a8f4e387ae131d1815862dc4df0"
+    },
+    {
+      "path": "frame-0150.png",
+      "sha256": "ed32ce48d262d1f869ac5c8942ec54d355f31de9023e703752065f1172ddb0e7"
+    },
+    {
+      "path": "frame-0210.png",
+      "sha256": "c324598590b6d9efaac4c0fa66a132f026ecbafab7ff06d0506879d6f859d4e6"
+    },
+    {
+      "path": "frame-0285.png",
+      "sha256": "59059b9bf9b95e010a723f99a495d7597f18f36341139c3fd43eb7361a48ed30"
+    },
+    {
+      "path": "frame-0375.png",
+      "sha256": "09a0e2471600815d0783a95234d22def018869fbc47515057b4b1dc63372182b"
+    },
+    {
+      "path": "frame-0435.png",
+      "sha256": "acdb6eed13fdd0935f929de0b70b0c0374de7e5a81309ab5b37048adb18711b4"
+    },
+    {
+      "path": "frame-0525.png",
+      "sha256": "da8ee1488782dd32166802b5c656227289c380b43cba70b1a7c72e31c8303f35"
+    },
+    {
+      "path": "frame-0585.png",
+      "sha256": "0e33488b100c89bd6d70382a834f49bb190b3c2dce84f684138561eeab775718"
+    },
+    {
+      "path": "frame-0645.png",
+      "sha256": "3c29d95ddf712962f29dfe78c2d50fd26b06140e2dead767862ecce45d0dddb5"
+    },
+    {
+      "path": "frame-0735.png",
+      "sha256": "2c1ae4fb15ec0879526099a5f1db5cf4fe754036edfd9f59cd1499ba12380030"
+    },
+    {
+      "path": "frame-0795.png",
+      "sha256": "5ff82e9ab2487909bf1ce75b7c7c55cbc476ef9fa3301544ae1ed6789aabdee2"
+    },
+    {
+      "path": "frame-0915.png",
+      "sha256": "bf3b041b59e0184070399c95ef6afa7422cf6e2efa52e914f1d0eed7578221a2"
+    },
+    {
+      "path": "frame-1065.png",
+      "sha256": "dfe2b7a6c8784e54624346c01f7e11825913bbdf6349bd45d3d9228784e10878"
+    },
+    {
+      "path": "frame-1170.png",
+      "sha256": "52da0424a5625ab0c0096be33eebc01b265fc61c3e1d305eb98be0011e8f2445"
+    },
+    {
+      "path": "frame-1275.png",
+      "sha256": "a4b2773e6cc3c8497e6e7d8619c3c0b9de816cf14f231aea1d120167c47af174"
+    },
+    {
+      "path": "frame-1350.png",
+      "sha256": "aee6031253964b823340dcfd4823895cdcd2ef0e4a30567ce2f814d6e4a9d4b3"
+    },
+    {
+      "path": "frame-1455.png",
+      "sha256": "f5594f2a32ea23c1862d826091db07fc8bda90cab95fd61daf936b9e508ff338"
+    },
+    {
+      "path": "frame-1545.png",
+      "sha256": "b84be1baf456a62e3a3e761018fbb41f535c3755417382620d87b323d8a60d60"
+    },
+    {
+      "path": "guard-verification.json",
+      "sha256": "691c8d16d4a723f0f8fa4dd9ac68bef6764d58a7cf2e66d290c14075a580eb2e"
+    },
+    {
+      "path": "index.html",
+      "sha256": "f683fce41f75352fbd337ffcf46b49d9c18e35b58986dbf528a39f95edb0fe73"
+    },
+    {
+      "path": "media-verification.json",
+      "sha256": "924cd658ec318bdf2dead2e3cf13c71946a7969b1d204094ff7e0a91558134af"
+    },
+    {
+      "path": "parent-comparison.json",
+      "sha256": "018b55a5a28594075127d7e1ef3d26c45ba717db053f560dcafbf63e8b4e7365"
+    },
+    {
+      "path": "playback-verification.json",
+      "sha256": "dc98ef5207aad1f9d26e59554f89adb2f379ecb5b3a5156e892bc1fe31583ee3"
+    },
+    {
+      "path": "report-transitions.png",
+      "sha256": "0b4f14f2200bfad46b764ca28f73b3e60ac630c6ed908ef0bb3cbe9edb45d12c"
+    },
+    {
+      "path": "report.mp4",
+      "sha256": "106c03f0d89a928dc798493433d96b674f7ff251feca845384fbf680ec9fb4cc"
+    },
+    {
+      "path": "reproduce.md",
+      "sha256": "864fa8d3883fe1b6ec44d6b464dbd2672293db6b56ed966bf4b7e2a880802794"
+    },
+    {
+      "path": "storyboard-overview.png",
+      "sha256": "c8d645cf01cd0b451619200b8a5cab8f9de66cec6c5acfb6d1455c2a81402ab7"
+    },
+    {
+      "path": "v7-v8-comparison.png",
+      "sha256": "8ebbac116ad4520ee2ac1b969f8a22ab18203d849a770b51f12f7db1eaf8aedf"
+    },
+    {
+      "path": "verification.md",
+      "sha256": "69dadc3c6052cf1cab78275930c016aabbaae5302895dfb205f19f92e5a57927"
+    }
+  ]
+}

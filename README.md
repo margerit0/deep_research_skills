@@ -10,9 +10,9 @@
 
 53 秒浏览完整工作台、选择 Skills、并行研究与报告阅读，再由“Agent 自动进化”章节卡引入**评估驱动的 Skill 持续优化**：先解释研究方法与评估的关系，再展示失败诊断、候选修订、独立验证，以及显式晋升与回退。包含原创配乐，点击下方播放器即可在本页观看。
 
-https://github.com/user-attachments/assets/412eff30-c3d0-4f79-80b6-5f3d15ed8610
+https://github.com/user-attachments/assets/eda07383-8f51-4c89-bae7-10d3967b84f1
 
-[下载 MP4](product-video/2026-10-29-v6/final/product-demo.mp4) · [制作与复现说明](product-video/README.md)
+[下载 MP4](product-video/2026-10-31-v8/final/product-demo.mp4) · [制作与复现说明](product-video/README.md)
 
 *合成演示 · 流程已压缩。使用项目内置模拟数据，演示时长不代表真实研究的响应速度。Skill 优化部分为机制示意，尚无真实模型优化实验的效果提升结论。*
 

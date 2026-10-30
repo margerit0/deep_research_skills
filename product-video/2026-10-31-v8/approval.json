@@ -1,0 +1,31 @@
+{
+  "status": "approved",
+  "version": "2026-10-31-v8",
+  "date": "2026-10-31",
+  "timezone": "Asia/Shanghai",
+  "planSha256": "ee144eb8a1cf0b7550aaa673a327f4eac7b36835ca29560725f1fd8998831f80",
+  "basis": "user-approved-preview",
+  "evidence": "用户在 v8 预览后明确回复：确认 v8 预览：左侧文案改为「下一步单独列出。」，卡片保留「51 秒」和「Qwen3.5」，开始制作完整视频。",
+  "scope": "53 秒、1920×1080、30 fps；沿用 v7 的镜头顺序、时长与配乐，报告片段同步为新版报告卡片，左侧说明第二行改为「下一步单独列出。」，卡片保留原生元信息。不包含发布、提交或修改根 README；听感验收另行记录。",
+  "previewSha256": {
+    "report.mp4": "106c03f0d89a928dc798493433d96b674f7ff251feca845384fbf680ec9fb4cc",
+    "storyboard-overview.png": "c8d645cf01cd0b451619200b8a5cab8f9de66cec6c5acfb6d1455c2a81402ab7",
+    "v7-v8-comparison.png": "8ebbac116ad4520ee2ac1b969f8a22ab18203d849a770b51f12f7db1eaf8aedf",
+    "index.html": "d1825cf229d2950779936279b421ac4d0ad15ea9c73e943c04c8e6f18c9017ad"
+  },
+  "acceptance": {
+    "date": "2026-10-31",
+    "movieSha256": "5f47574fe6ef610178d0bc01c8d8ddf4c5f1ea1f1f8e155851014627eda6f132",
+    "subjectiveListening": "accepted",
+    "evidence": "用户试听当前成片后回复：v8 成片试听通过，听感满意，写入验收并完成收尾。",
+    "scope": "成片听感验收；授权写入验收并更新产品演示入口、版本记录与说明。不包含提交、推送或修改根 README；根 README 的播放器需要在 GitHub 网页上传的附件地址，提供地址后再切换。"
+  },
+  "publication": {
+    "date": "2026-10-31",
+    "evidence": "用户回复：先不提交；我把附件地址发你后，切换根 README，再把 v8 和切换一起提交（不推送）。随后发来 GitHub 附件地址。",
+    "hostedPlayerUrl": "https://github.com/user-attachments/assets/eda07383-8f51-4c89-bae7-10d3967b84f1",
+    "attachmentSha256": "5f47574fe6ef610178d0bc01c8d8ddf4c5f1ea1f1f8e155851014627eda6f132",
+    "check": "用 gh 登录态下载附件，与 final/product-demo.mp4 逐字节相同；未登录访问 GitHub 附件返回 404，v6 附件同样如此。",
+    "scope": "根 README 的内嵌播放器与下载链接切换到 v8，并与 v8 一起提交；不推送。"
+  }
+}

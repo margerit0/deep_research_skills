@@ -1,0 +1,99 @@
+{
+  "planSha256": "ee144eb8a1cf0b7550aaa673a327f4eac7b36835ca29560725f1fd8998831f80",
+  "positiveFrames": [
+    375,
+    435,
+    585
+  ],
+  "rejected": [
+    {
+      "name": "写作阶段拍到 Suspense 回退态",
+      "frame": 375,
+      "rejectedBy": "Report card missing or raw Markdown 375"
+    },
+    {
+      "name": "报告镜头拍到 Suspense 回退态",
+      "frame": 435,
+      "rejectedBy": "Report card missing or raw Markdown 435"
+    },
+    {
+      "name": "卡片里残留原始 #",
+      "frame": 435,
+      "rejectedBy": "Report card missing or raw Markdown 435"
+    },
+    {
+      "name": "出现引用或来源控件",
+      "frame": 435,
+      "rejectedBy": "Report shows citation or source UI without sources 435"
+    },
+    {
+      "name": "报告被折叠",
+      "frame": 435,
+      "rejectedBy": "Report card header/footer mismatch {\"head\":true,\"fallback\":false,\"title\":\"研究摘要（模"
+    },
+    {
+      "name": "标题不符",
+      "frame": 435,
+      "rejectedBy": "Report card header/footer mismatch {\"head\":true,\"fallback\":false,\"title\":\"研究摘要\","
+    },
+    {
+      "name": "状态标签不符",
+      "frame": 435,
+      "rejectedBy": "Report card header/footer mismatch {\"head\":true,\"fallback\":false,\"title\":\"研究摘要（模"
+    },
+    {
+      "name": "免责声明缺失",
+      "frame": 435,
+      "rejectedBy": "Report card header/footer mismatch {\"head\":true,\"fallback\":false,\"title\":\"研究摘要（模"
+    },
+    {
+      "name": "章节标题不符",
+      "frame": 435,
+      "rejectedBy": "Report sections mismatch [{\"number\":\"01\",\"heading\":\"技术路线\",\"body\":\"围绕检索、生成与引用追溯建立"
+    },
+    {
+      "name": "章节编号不符",
+      "frame": 435,
+      "rejectedBy": "Report sections mismatch [{\"number\":\"01\",\"heading\":\"技术路线\",\"body\":\"围绕检索、生成与引用追溯建立"
+    },
+    {
+      "name": "少一个章节",
+      "frame": 435,
+      "rejectedBy": "Report sections mismatch [{\"number\":\"01\",\"heading\":\"技术路线\",\"body\":\"围绕检索、生成与引用追溯建立"
+    },
+    {
+      "name": "下一步正文不符",
+      "frame": 435,
+      "rejectedBy": "Report conclusion mismatch {\"heading\":\"下一步\",\"body\":\"结论已确认。\",\"summary\":null}"
+    },
+    {
+      "name": "卡片越出镜头",
+      "frame": 435,
+      "rejectedBy": "Report card not fully framed 435 {\"scale\":1.3816381906550974,\"card\":{\"x\":187.349"
+    },
+    {
+      "name": "底部说明越出卡片",
+      "frame": 435,
+      "rejectedBy": "Report card not fully framed 435 {\"scale\":1.3816381906550974,\"card\":{\"x\":187.349"
+    },
+    {
+      "name": "输入框压住卡片",
+      "frame": 435,
+      "rejectedBy": "Report card not fully framed 435 {\"scale\":1.3816381906550974,\"card\":{\"x\":187.349"
+    },
+    {
+      "name": "遮罩未退",
+      "frame": 435,
+      "rejectedBy": "Report card not fully framed 435 {\"scale\":1.3816381906550974,\"card\":{\"x\":187.349"
+    },
+    {
+      "name": "报告窗口压住看板顶栏",
+      "frame": 585,
+      "rejectedBy": "Report window over the board header 585"
+    }
+  ],
+  "blockedChunk": {
+    "message": "Report card chunk did not load",
+    "sceneLoaded": false
+  }
+}

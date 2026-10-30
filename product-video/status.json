@@ -1,8 +1,51 @@
 {
-  "currentVersion": "2026-10-30-v7",
-  "publishedVersion": "2026-10-29-v6",
+  "currentVersion": "2026-10-31-v8",
+  "publishedVersion": "2026-10-31-v8",
   "currentEntry": "index.html",
   "versions": [
+    {
+      "id": "2026-10-31-v8",
+      "state": "complete",
+      "planSha256": "ee144eb8a1cf0b7550aaa673a327f4eac7b36835ca29560725f1fd8998831f80",
+      "approval": {
+        "planSha256": "ee144eb8a1cf0b7550aaa673a327f4eac7b36835ca29560725f1fd8998831f80",
+        "evidence": "用户在 v8 预览后明确回复：确认 v8 预览：左侧文案改为「下一步单独列出。」，卡片保留「51 秒」和「Qwen3.5」，开始制作完整视频。"
+      },
+      "acceptance": {
+        "date": "2026-10-31",
+        "movieSha256": "5f47574fe6ef610178d0bc01c8d8ddf4c5f1ea1f1f8e155851014627eda6f132",
+        "subjectiveListening": "accepted",
+        "evidence": "用户试听当前成片后回复：v8 成片试听通过，听感满意，写入验收并完成收尾。",
+        "scope": "成片听感验收；授权写入验收并更新产品演示入口、版本记录与说明。不包含提交、推送或修改根 README；根 README 的播放器需要在 GitHub 网页上传的附件地址，提供地址后再切换。"
+      },
+      "changes": [
+        "13–16 秒报告镜头改为新版报告卡片：状态标签、元信息、三个编号章节、「下一步」框与底部说明",
+        "报告机位按真实卡片重新测量，完整卡片入镜，输入框留在画面外",
+        "16–19 秒章节卡进出场露出的报告、19–23.5 秒缩入并淡出的报告缩略图同步为新卡片",
+        "左侧说明第二行改为「下一步单独列出。」（用户已确认）",
+        "媒体适配层预加载报告卡片；捕获校验改为结构校验并逐帧执行"
+      ],
+      "coverage": "2026-10-31-v8/brief.json",
+      "preview": {
+        "page": "2026-10-31-v8/preview/index.html",
+        "sheet": "2026-10-31-v8/preview/storyboard-overview.png",
+        "verification": "2026-10-31-v8/preview/verification.md",
+        "clips": [
+          {
+            "label": "报告片段 · 13 秒",
+            "path": "2026-10-31-v8/preview/report.mp4"
+          }
+        ]
+      },
+      "final": {
+        "video": "2026-10-31-v8/final/product-demo.mp4",
+        "page": "2026-10-31-v8/final/index.html",
+        "sheet": "2026-10-31-v8/final/check-sheet.png",
+        "verification": "2026-10-31-v8/final/verification.md",
+        "reproduce": "2026-10-31-v8/final/reproduce.md",
+        "sha256": "5f47574fe6ef610178d0bc01c8d8ddf4c5f1ea1f1f8e155851014627eda6f132"
+      }
+    },
     {
       "id": "2026-10-30-v7",
       "state": "complete",
@@ -153,11 +196,12 @@
       }
     }
   ],
-  "readmeVersion": "2026-10-29-v6",
+  "readmeVersion": "2026-10-31-v8",
   "hostedPlayer": {
     "status": "configured",
-    "url": "https://github.com/user-attachments/assets/412eff30-c3d0-4f79-80b6-5f3d15ed8610",
-    "version": "2026-10-29-v6"
+    "url": "https://github.com/user-attachments/assets/eda07383-8f51-4c89-bae7-10d3967b84f1",
+    "version": "2026-10-31-v8",
+    "sha256": "5f47574fe6ef610178d0bc01c8d8ddf4c5f1ea1f1f8e155851014627eda6f132"
   },
-  "currentFinalVersion": "2026-10-30-v7"
+  "currentFinalVersion": "2026-10-31-v8"
 }
