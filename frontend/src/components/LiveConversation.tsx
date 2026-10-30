@@ -4,12 +4,14 @@ import {
   currentLiveNode,
   livePhaseText,
   liveStatusText,
+  reportDetails,
   safeHttpUrl,
   roleLabels,
 } from '../data/live'
 import { executionMessage } from '../data/executionRecovery'
 import { Composer } from './Composer'
 import { Icon } from './Icon'
+import { LazyReportCard } from './LazyReportCard'
 import { LiveReportDraft } from './LiveReportDraft'
 
 const MarkdownReport = lazy(() => import('./ReportText'))
@@ -274,15 +276,12 @@ export function LiveConversation({ controller }: { controller: WorkspaceControll
                   }
                 />
                 {run.report && (
-                  <div className="cw-report-message" data-testid="live-report">
-                    <div className="cw-row">
-                      <Icon name="file-check-2" />
-                      <span className="cw-strong">
-                        {run.status === 'partial' ? '研究报告 · 部分完成' : '研究报告'}
-                      </span>
-                    </div>
-                    <ReportText>{run.report}</ReportText>
-                  </div>
+                  <LazyReportCard
+                    {...reportDetails(run)}
+                    markdown={run.report}
+                    testId="live-report"
+                    disclaimer="报告由模型自动生成，事实与引用请以来源原文为准。"
+                  />
                 )}
                 {run.status === 'partial' && !run.report && run.notes.length > 0 && (
                   <details className="cw-report-message" open>

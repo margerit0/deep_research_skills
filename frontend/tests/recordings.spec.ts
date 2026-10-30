@@ -256,10 +256,7 @@ for (const record of records.filter((item) => item.id !== 'backoff')) {
       await page.screenshot({ path: testInfo.outputPath(`recorded-${record.id}-${width}.png`) })
       if (record.research.report) {
         await page.getByRole('button', { name: '跳转：实际报告与来源', exact: true }).click()
-        await page
-          .getByTestId('recorded-report')
-          .getByRole('heading', { name: '真实检查点报告', exact: true })
-          .scrollIntoViewIfNeeded()
+        await page.getByTestId('recorded-report').scrollIntoViewIfNeeded()
         await expect(page.getByTestId('recorded-report')).toBeVisible()
         expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
           true,

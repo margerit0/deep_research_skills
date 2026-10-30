@@ -61,6 +61,12 @@ export const activityText = {
   writing: '正在撰写最终报告',
   complete: '研究已完成',
 }
+export const mockReport = (run: Run) =>
+  [
+    '# 研究摘要（模拟）',
+    ...run.researchers.map((worker) => `## ${worker.title}\n\n模拟笔记已汇总。`),
+  ].join('\n\n')
+
 export const elapsed = { clarify: '00:03', research: '01:42', writing: '02:18', complete: '02:56' }
 const exampleResearchers: Researcher[] = ['a', 'b', 'c'].map((id, i) => {
   const key = id as 'a' | 'b' | 'c'

@@ -1,7 +1,8 @@
 import { lazy, Suspense } from 'react'
 import type { WorkspaceController } from '../state/useWorkspace'
-import { liveStatusText, roleLabels, safeHttpUrl } from '../data/live'
+import { liveStatusText, reportDetails, roleLabels, safeHttpUrl } from '../data/live'
 import { Icon } from './Icon'
+import { LazyReportCard } from './LazyReportCard'
 
 const ReportText = lazy(() => import('./ReportText'))
 
@@ -70,8 +71,12 @@ export function RecordedConversation({ controller }: { controller: WorkspaceCont
           </section>
         )}
         {run.report && (
-          <section className="cw-report-message" data-testid="recorded-report">
-            <h3>真实检查点报告</h3>
+          <LazyReportCard
+            {...reportDetails(run)}
+            markdown={run.report}
+            testId="recorded-report"
+            disclaimer="来自真实调用的离线回放，报告正文未改动。"
+          >
             {record.acceptanceNotes && (
               <aside className="cw-sync-note" aria-label="实录验收说明">
                 {record.acceptanceNotes.map((note) => (
@@ -79,10 +84,7 @@ export function RecordedConversation({ controller }: { controller: WorkspaceCont
                 ))}
               </aside>
             )}
-            <Suspense fallback={<p data-recording-loading>{run.report}</p>}>
-              <ReportText>{run.report}</ReportText>
-            </Suspense>
-          </section>
+          </LazyReportCard>
         )}
         {!!run.sources.length && (
           <section className="cw-report-message" aria-label="实录检索来源">

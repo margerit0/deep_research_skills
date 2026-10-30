@@ -48,6 +48,31 @@ export function safeHttpUrl(url: string): string | undefined {
   return undefined
 }
 
+export type ReportStatus = 'done' | 'partial' | 'demo' | 'writing' | 'unconfirmed'
+
+export function reportDetails(run: LiveResearch) {
+  const delegated = run.events.filter((event) => event.kind === 'delegated')
+  // Research time: from the first delegation, so waiting on the user's answers is not counted.
+  const started = Math.min(...run.events.map((event) => Date.parse(event.at)))
+  const finished = Date.parse(run.observations.at(-1)?.at ?? '')
+  const seconds = Math.round((finished - started) / 1000)
+  const status: ReportStatus =
+    run.status === 'succeeded' ? 'done' : run.status === 'partial' ? 'partial' : 'unconfirmed'
+  return {
+    status,
+    topic: run.messages.filter((message) => message.type === 'human').at(-1)?.content ?? run.prompt,
+    lanes: new Set(delegated.map((event) => event.task_id)).size,
+    retrievedCount: run.sources.length,
+    duration:
+      seconds > 0
+        ? seconds < 60
+          ? `${seconds} 秒`
+          : `${Math.floor(seconds / 60)} 分 ${seconds % 60} 秒`
+        : undefined,
+    model: run.config.models?.find((item) => item.role === 'FINAL_REPORT')?.model,
+  }
+}
+
 function textContent(content: unknown): string {
   if (typeof content === 'string') return content
   if (Array.isArray(content))

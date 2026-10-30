@@ -1,10 +1,19 @@
 import { useEffect, useRef } from 'react'
-import { activityText, currentNode, elapsed, getNodes, modelName, skillInfo } from '../data/mock'
+import {
+  activityText,
+  currentNode,
+  elapsed,
+  getNodes,
+  mockReport,
+  modelName,
+  skillInfo,
+} from '../data/mock'
 import type { WorkspaceController } from '../state/useWorkspace'
 import { Icon } from './Icon'
 import { StatusMark } from './StatusMark'
 import { Composer } from './Composer'
 import { demoReply, demoReport } from '../data/demo'
+import { LazyReportCard } from './LazyReportCard'
 import { LiveConversation } from './LiveConversation'
 import { RecordedConversation } from './RecordedConversation'
 
@@ -159,37 +168,27 @@ function MockConversation({ controller }: { controller: WorkspaceController }) {
                   </div>
                 )}
                 {(run.stage === 'complete' || (demo.active && run.stage === 'writing')) && (
-                  <div className="cw-report-message" data-writing={run.stage === 'writing'}>
-                    <div className="cw-row">
-                      <Icon name="file-check-2" />
-                      <span className="cw-strong">
-                        {run.stage === 'writing' ? '正在撰写演示报告' : '演示报告已生成'}
-                      </span>
-                    </div>
-                    <p className="cw-muted">研究主题：{run.prompt}</p>
-                    {demo.active ? (
-                      <p
-                        className="cw-demo-report"
-                        data-streaming={run.stage === 'writing' && streamProgress < 1}
-                      >
-                        {demoReport.slice(
-                          0,
-                          run.stage === 'writing'
-                            ? Math.ceil(streamProgress * demoReport.length)
-                            : undefined,
-                        )}
-                      </p>
-                    ) : (
-                      <ul>
-                        {run.researchers.map((w) => (
-                          <li key={w.id}>{w.title}：模拟笔记已汇总。</li>
-                        ))}
-                      </ul>
-                    )}
-                    <p className="cw-muted">
-                      这是本地报告占位内容。尚未检索真实来源，也未生成真实研究结论。
-                    </p>
-                  </div>
+                  <LazyReportCard
+                    markdown={
+                      demo.active
+                        ? demoReport.slice(
+                            0,
+                            run.stage === 'writing'
+                              ? Math.ceil(streamProgress * demoReport.length)
+                              : undefined,
+                          )
+                        : mockReport(run)
+                    }
+                    status={run.stage === 'writing' && streamProgress < 1 ? 'writing' : 'demo'}
+                    topic={run.prompt}
+                    lanes={run.researchers.length}
+                    duration={
+                      demo.active ? `${Math.floor(demo.elapsed / 1000)} 秒` : elapsed[run.stage]
+                    }
+                    model={modelName(run.config.model)}
+                    disclaimer="这是本地报告占位内容。尚未检索真实来源，也未生成真实研究结论。"
+                    className={demo.active ? 'cw-demo-report' : undefined}
+                  />
                 )}
               </div>
             </div>
