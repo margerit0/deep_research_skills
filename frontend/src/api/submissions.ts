@@ -1,6 +1,7 @@
 import { submissionReceiptSchema, sameSelection } from '../data/liveSchema'
 import type { LiveResearch, LiveThread, SubmissionReceipt } from '../data/liveSchema'
 import { ApiError } from './errors'
+import { sameWorkflowRef, matchesWorkflowBinding } from '../data/workflowRuntime'
 
 export class SubmissionError extends ApiError {
   readonly reason: string
@@ -26,7 +27,17 @@ async function request(thread: LiveThread, research: LiveResearch, suffix = '', 
     // Only two machine-readable 404 reasons affect retry eligibility. Never
     // retain or display arbitrary backend, gateway, or provider response bodies.
     const error = await response.json().catch(() => ({}))
-    const reason = ['submission_unknown', 'thread_missing'].includes(error.reason)
+    const reason = [
+      'submission_unknown',
+      'thread_missing',
+      'workflow_binding_conflict',
+      'legacy_workflow_locked',
+      'workflow_runtime_unavailable',
+      'workflow_runtime_incompatible',
+      'node_implementation_unavailable',
+      'workflow_archived',
+      'workflow_revision_not_found',
+    ].includes(error.reason)
       ? error.reason
       : 'request_failed'
     throw new SubmissionError(response.status, reason)
@@ -44,6 +55,12 @@ export function validateReceipt(
   const turn = research.turns.at(-1)!
   if (
     receipt.thread_id !== thread.threadId ||
+    !matchesWorkflowBinding(research.workflow, receipt.workflow_binding, thread.threadId) ||
+    (!!turn.workflowRef &&
+      !sameWorkflowRef(turn.workflowRef, receipt.workflow_binding?.workflow_ref)) ||
+    (!!research.execution?.workflow_binding &&
+      JSON.stringify(research.execution.workflow_binding) !==
+        JSON.stringify(receipt.workflow_binding)) ||
     (turn.selection && !sameSelection(turn.selection, receipt.configuration?.selection)) ||
     receipt.research_id !== research.id ||
     receipt.turn_id !== turn.id ||
@@ -68,6 +85,7 @@ export const submitResearch = (thread: LiveThread, research: LiveResearch) => {
     text: turn.text,
     expected_turn_id: turn.expectedTurnId ?? null,
     ...(turn.selection ? { selection: turn.selection } : {}),
+    ...(turn.workflowRef ? { workflow_ref: turn.workflowRef } : {}),
   })
 }
 export const resumeResearch = (thread: LiveThread, research: LiveResearch) => {

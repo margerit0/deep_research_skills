@@ -8,6 +8,7 @@ import { Inspector } from './Inspector'
 import { StatusMark } from './StatusMark'
 import { currentLiveNode, livePhaseText, liveStatusText } from '../data/live'
 import { currentResearcherNode } from '../data/researchEvents'
+import { WorkflowRunGraph } from './workflow/WorkflowRunGraph'
 
 interface Wire {
   d: string
@@ -16,6 +17,14 @@ interface Wire {
   flowing?: boolean
 }
 export function Graph({ controller }: { controller: WorkspaceController }) {
+  return controller.isLive && (controller.liveRun?.workflow || controller.thread.live?.workflow) ? (
+    <WorkflowRunGraph controller={controller} />
+  ) : (
+    <LegacyGraph controller={controller} />
+  )
+}
+
+function LegacyGraph({ controller }: { controller: WorkspaceController }) {
   const { state, dispatch, run, inspectNode, nodes, demo, isLive, liveRun, live, thread } =
     controller
   const actualMode = isLive || Boolean(demo.recording)

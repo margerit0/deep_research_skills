@@ -36,7 +36,11 @@ export function Inspector({
         report: 'FINAL_REPORT',
       } as Record<string, string>
     )[node.id]
-  const actualModel = liveRun?.config.models.find((model) => model.role === role)?.model ?? '待执行'
+  const actualModel =
+    liveRun?.config.models.find((model) => model.role === role)?.model ??
+    (liveRun?.workflow && ['start', 'end', 'prepare_research'].includes(node.backendId)
+      ? '无需模型'
+      : '待执行')
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([])
   const pending = node.status === 'pending'
   return (

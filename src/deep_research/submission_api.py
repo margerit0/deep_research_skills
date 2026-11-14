@@ -10,8 +10,19 @@ from pydantic import BaseModel, ConfigDict, Field, ValidationError, field_valida
 from starlette.exceptions import HTTPException
 from starlette.responses import JSONResponse
 
-from deep_research.atlas_runtime import flush_native, native_modules
+from deep_research.atlas_runtime import (
+    flush_native,
+    native_modules,
+    workflow_graph_registered,
+)
 from deep_research.event_journal import INSTANCE_ID
+from deep_research.run_configuration import (
+    ConfigurationError,
+    Selection,
+    normalize_selection,
+    resolve_selection,
+    validate_snapshot,
+)
 from deep_research.submission_journal import (
     SAFE_NODES,
     TERMINAL,
@@ -21,13 +32,9 @@ from deep_research.submission_journal import (
     state_digest,
 )
 from deep_research.workflow_contract import is_research_note
-from deep_research.run_configuration import (
-    ConfigurationError,
-    Selection,
-    normalize_selection,
-    resolve_selection,
-    validate_snapshot,
-)
+from deep_research.workflow_definition import WorkflowRef
+from deep_research.workflow_store import WorkflowStore, WorkflowStoreError
+from deep_research.workflow_validation import WorkflowContractError
 
 logger = logging.getLogger(__name__)
 
@@ -38,6 +45,7 @@ class Submission(BaseModel):
     text: str = Field(min_length=1, max_length=50000)
     expected_turn_id: str | None = Field(max_length=128)
     selection: Selection | None = None
+    workflow_ref: WorkflowRef | None = None
 
 
 class Recovery(BaseModel):
@@ -87,6 +95,7 @@ def matching_state(record, snapshot):
     return (
         values.get("active_research_id") == record["research_id"]
         and values.get("active_turn_id") == record["turn_id"]
+        and values.get("workflow_binding") == record.get("workflow_binding")
     )
 
 
@@ -103,6 +112,13 @@ def recovery_boundary(record, snapshot):
     values = snapshot.values
     if node not in SAFE_NODES:
         return {"allowed": False, "reason": "research_node_not_resumable"}
+    if record.get("workflow_binding"):
+        from deep_research.workflow_runtime import validate_record
+
+        try:
+            validate_record(record, for_execution=True)
+        except (WorkflowContractError, WorkflowStoreError) as exc:
+            return {"allowed": False, "reason": exc.reason}
     if (
         values.get("research_status") != "running"
         or values.get("research_phase") != SAFE_NODES[node]
@@ -128,6 +144,12 @@ def recovery_boundary(record, snapshot):
             return {"allowed": False, "reason": "configuration_changed"}
     if node == "final_report_generation" and not any(
         is_research_note(note) for note in values.get("notes", [])
+    ):
+        return denied
+    if (
+        node == "final_report_generation"
+        and values.get("organized_notes") is not None
+        and not is_research_note(values["organized_notes"])
     ):
         return denied
     checkpoint_id = snapshot.config.get("configurable", {}).get("checkpoint_id")
@@ -167,6 +189,11 @@ async def receipt(conn, record):
             if record.get("configuration")
             else {}
         ),
+        **(
+            {"workflow_binding": record["workflow_binding"]}
+            if record.get("workflow_binding")
+            else {}
+        ),
         "reason": "accepted",
         "retry_allowed": False,
         "recovery": {"allowed": False, "reason": "execution_active"},
@@ -188,6 +215,13 @@ async def receipt(conn, record):
     )
     if thread is None:
         return {**payload, "status": "blocked", "reason": "thread_missing"}
+    if record.get("workflow_binding"):
+        from deep_research.workflow_runtime import validate_record
+
+        try:
+            validate_record(record)
+        except (WorkflowContractError, WorkflowStoreError) as exc:
+            return {**payload, "status": "blocked", "reason": exc.reason}
     if attempt["rejected"]:
         return {**payload, "status": "rejected", "reason": "thread_conflict"}
     if run is None:
@@ -202,6 +236,13 @@ async def receipt(conn, record):
     if (
         run["metadata"].get("atlas_turn_id") != record["turn_id"]
         or run["metadata"].get("atlas_research_id") != record["research_id"]
+        or record.get("workflow_binding")
+        and (
+            run["metadata"].get("atlas_workflow_ref")
+            != record["workflow_binding"]["workflow_ref"]
+            or run["metadata"].get("atlas_workflow_hash")
+            != record["workflow_binding"]["semantic_hash"]
+        )
     ):
         return {**payload, "status": "blocked", "reason": "run_identity_mismatch"}
     try:
@@ -261,11 +302,22 @@ async def dispatch(conn, journal, record, headers):
         return
     if record.get("configuration"):
         validate_snapshot(record["configuration"])
+    from deep_research.workflow_runtime import GRAPH_ID, validate_record
+
+    workflow = validate_record(record, for_execution=True)
+    if workflow and not workflow_graph_registered():
+        raise WorkflowContractError("workflow_runtime_unavailable")
     run = native_run(conn, record["thread_id"], attempt["run_id"])
     if run is not None and (
         run["metadata"].get("atlas_turn_id") != record["turn_id"]
         or run["metadata"].get("atlas_research_id") != record["research_id"]
         or run["metadata"].get("atlas_attempt_id") != attempt["attempt_id"]
+        or workflow
+        and (
+            run["metadata"].get("atlas_workflow_ref")
+            != workflow[0].workflow_ref.model_dump()
+            or run["metadata"].get("atlas_workflow_hash") != workflow[0].semantic_hash
+        )
     ):
         raise SubmissionConflict("run_identity_mismatch")
     if run is not None and run["status"] in ("pending", "running"):
@@ -313,7 +365,7 @@ async def dispatch(conn, journal, record, headers):
         raise SubmissionConflict("thread_conflict")
     if run is None:
         payload = {
-            "assistant_id": "research_agent_full",
+            "assistant_id": GRAPH_ID if workflow else "research_agent_full",
             "input": None
             if attempt["kind"] == "resume"
             else {
@@ -332,6 +384,14 @@ async def dispatch(conn, journal, record, headers):
                 "atlas_turn_id": record["turn_id"],
                 "atlas_attempt_id": attempt["attempt_id"],
                 "atlas_submission_version": 1,
+                **(
+                    {
+                        "atlas_workflow_ref": workflow[0].workflow_ref.model_dump(),
+                        "atlas_workflow_hash": workflow[0].semantic_hash,
+                    }
+                    if workflow
+                    else {}
+                ),
             },
             "multitask_strategy": "reject",
             "if_not_exists": "reject",
@@ -380,6 +440,8 @@ async def handle(request, operation):
                 del body["selection"]
             else:
                 body["selection"] = normalize_selection(body["selection"])
+            if body["workflow_ref"] is None:
+                del body["workflow_ref"]
             if not body["text"].strip():
                 return response({"reason": "invalid_submission"}, 400)
         elif operation == "recover":
@@ -443,6 +505,36 @@ async def handle(request, operation):
                         and snapshot.values.get("research_status") != "awaiting_input"
                     ):
                         raise SubmissionConflict("research_already_completed")
+                    store = WorkflowStore(journal)
+                    has_history = bool(
+                        latest
+                        or (snapshot.config or {})
+                        .get("configurable", {})
+                        .get("checkpoint_id")
+                        or snapshot.values.get("messages")
+                        or any(
+                            str(item["thread_id"]) == thread_id
+                            for item in conn.store["runs"]
+                        )
+                    )
+                    reference = body.get("workflow_ref")
+                    candidate = store.selection(
+                        thread_id,
+                        WorkflowRef.model_validate(reference) if reference else None,
+                        has_history=has_history,
+                    )
+                    if candidate:
+                        from deep_research.workflow_runtime import require_executable
+
+                        if not workflow_graph_registered():
+                            raise WorkflowContractError("workflow_runtime_unavailable")
+                        require_executable(candidate[1])
+                    if snapshot.values.get("workflow_binding") is not None and (
+                        candidate is None
+                        or snapshot.values["workflow_binding"]
+                        != candidate[0].model_dump(mode="json")
+                    ):
+                        raise WorkflowContractError("workflow_binding_mismatch")
                     # The native thread must survive even if we exit after intent
                     # commit but before native run creation has completed.
                     flush_native()
@@ -479,8 +571,23 @@ async def handle(request, operation):
                                 raise SubmissionConflict("configuration_changed")
                         configuration = None
                     else:
-                        configuration = resolve_selection(body.get("selection"))
-                    record = journal.reserve(thread_id, turn_id, body, configuration)
+                        defaults = (
+                            candidate[1].document.definition.defaults.selection
+                            if candidate
+                            else None
+                        )
+                        configuration = resolve_selection(
+                            body.get("selection")
+                            or (defaults.model_dump(mode="json") if defaults else None)
+                        )
+                    record = store.accept(
+                        thread_id,
+                        turn_id,
+                        body,
+                        configuration,
+                        candidate,
+                        has_history=has_history,
+                    )
                 # Reposting the original turn always reconciles the latest attempt;
                 # it never restarts the initial input after a recovery was accepted.
                 await dispatch(conn, journal, record, request.headers)
@@ -529,6 +636,23 @@ async def handle(request, operation):
                 flush_native()
                 await dispatch(conn, journal, record, request.headers)
             return response(await receipt(conn, journal.get(thread_id, turn_id)))
+    except WorkflowStoreError as exc:
+        return response(exc.payload(), exc.status)
+    except WorkflowContractError as exc:
+        status = (
+            503
+            if exc.reason
+            in {
+                "workflow_runtime_unavailable",
+                "workflow_runtime_incompatible",
+                "node_implementation_unavailable",
+                "workflow_archive_invalid",
+                "workflow_definition_invalid",
+                "workflow_binding_missing",
+            }
+            else 409
+        )
+        return response({"reason": exc.reason}, status)
     except SubmissionConflict as exc:
         return response({"reason": str(exc)}, 409)
     except (ValidationError, JSONDecodeError, ConfigurationError):

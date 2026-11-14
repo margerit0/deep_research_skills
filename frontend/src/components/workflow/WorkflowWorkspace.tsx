@@ -342,6 +342,15 @@ export function WorkflowWorkspace({
                 onDraft={() => openWorkflow(route.id)}
                 onRevision={(revision) => openWorkflow(route.id, revision)}
                 onCopy={copy}
+                onUse={
+                  controller.live.connection.config?.workflow_execution_version === 1
+                    ? (revision) => {
+                        controller.dispatch({ type: 'new', source: 'live', workflow: revision })
+                        onExit()
+                        requestAnimationFrame(() => document.getElementById('cw-message')?.focus())
+                      }
+                    : undefined
+                }
                 registerNavigation={registerNavigation}
               />
             )}

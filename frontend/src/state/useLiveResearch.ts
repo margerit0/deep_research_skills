@@ -12,8 +12,24 @@ import { getResearcherNodes, mergeResearchEvents } from '../data/researchEvents'
 import { readReportPage, ReportReplayError, reportReplayDiagnostic } from '../api/reportReplay'
 import { savedReportStream } from '../data/reportEvents'
 import type { ReportReplay } from '../data/reportEvents'
+import { readWorkflowEventPage } from '../api/workflowEvents'
+import { savedWorkflowStream } from '../data/workflowRuntime'
+import type { WorkflowReplay } from '../data/workflowRuntime'
+import type { WorkflowNodeEvent } from '../data/workflowSchema'
+import { sameWorkflowDocument } from '../data/workflowSchema'
+import { workflowApi } from '../api/workflows'
 
 export type LiveUpdate =
+  | {
+      type: 'live-workflow-events'
+      threadId: string
+      serverUrl: string
+      researchId: string
+      turnId: string
+      runId: string
+      events: WorkflowNodeEvent[]
+      replay?: WorkflowReplay
+    }
   | {
       type: 'live-report-events'
       threadId: string
@@ -85,10 +101,111 @@ export function useLiveResearch(
   const syncRetries = useRef(new Map<string, Retry>())
   const reportReplays = useRef(new Map<string, AbortController>())
   const reportRetries = useRef(new Map<string, Retry>())
+  const workflowReplays = useRef(new Map<string, AbortController>())
+  const workflowRetries = useRef(new Map<string, Retry>())
+  const [workflowReplayStates, setWorkflowReplayStates] = useState<Record<string, ReplayState>>({})
   const capabilities = useRef(new Map<string, BackendConfig>())
   const [reportReplayStates, setReportReplayStates] = useState<Record<string, ReportReplayState>>(
     {},
   )
+
+  async function recoverWorkflowEvents(thread: Thread, research: LiveResearch, force: boolean) {
+    if (
+      !research.workflow ||
+      !research.execution?.workflow_binding ||
+      !thread.live ||
+      workflowReplays.current.has(thread.id)
+    )
+      return
+    const controller = new AbortController()
+    workflowReplays.current.set(thread.id, controller)
+    try {
+      for (const attempt of research.execution.attempts) {
+        const saved = savedWorkflowStream(thread.live, research, attempt.run_id)
+        const retry = workflowRetries.current.get(attempt.run_id)
+        if (
+          !force &&
+          (saved?.sealed ||
+            (saved?.unconfirmedBefore && attempt.run_id !== research.execution.run_id) ||
+            (retry && retry.at > Date.now()))
+        )
+          continue
+        let after = saved?.sequence ?? 0
+        let journalId = saved?.journalId
+        try {
+          for (let index = 0; index < 4; index++) {
+            const page = await readWorkflowEventPage(
+              thread.live,
+              research,
+              attempt.run_id,
+              after,
+              journalId,
+              controller.signal,
+            )
+            const latest = current.current.threads
+              .find((item) => item.id === thread.id)
+              ?.live?.researches.at(-1)
+            if (
+              !mounted.current ||
+              controller.signal.aborted ||
+              latest?.id !== research.id ||
+              latest.turns.at(-1)?.id !== research.turns.at(-1)?.id
+            )
+              return
+            const action: LiveUpdate = {
+              type: 'live-workflow-events',
+              threadId: thread.id,
+              serverUrl: thread.live.serverUrl,
+              researchId: research.id,
+              turnId: research.turns.at(-1)!.id,
+              runId: attempt.run_id,
+              events: page.events,
+              replay: {
+                journalId: page.journal_id ?? undefined,
+                sequence: page.next_sequence,
+                gap: page.gap || (latest.status !== 'running' && !page.sealed),
+                sealed: page.sealed,
+                reset: page.reset,
+                unconfirmedBefore: page.unconfirmed_before_sequence,
+              },
+            }
+            if (!commitRef.current(action, true)) {
+              commitRef.current({
+                ...action,
+                replay: { ...action.replay!, sequence: after, journalId, reset: false },
+              })
+              throw new Error('Workflow observation storage unavailable')
+            }
+            after = page.next_sequence
+            journalId = page.journal_id ?? undefined
+            setWorkflowReplayStates((previous) => ({
+              ...previous,
+              [thread.id]: {
+                runId: attempt.run_id,
+                state: action.replay!.gap ? 'incomplete' : 'ready',
+              },
+            }))
+            workflowRetries.current.delete(attempt.run_id)
+            if (!page.has_more) break
+          }
+        } catch {
+          if (!mounted.current || controller.signal.aborted) return
+          const failures = (retry?.failures ?? 0) + 1
+          workflowRetries.current.set(attempt.run_id, {
+            failures,
+            at: Date.now() + retryDelay(failures),
+          })
+          setWorkflowReplayStates((previous) => ({
+            ...previous,
+            [thread.id]: { runId: attempt.run_id, state: 'retrying' },
+          }))
+        }
+      }
+    } finally {
+      if (workflowReplays.current.get(thread.id) === controller)
+        workflowReplays.current.delete(thread.id)
+    }
+  }
 
   function supportsReports(thread: Thread, research: LiveResearch) {
     return (
@@ -456,6 +573,18 @@ export function useLiveResearch(
             events: [event],
           })
         },
+        onWorkflowEvent: (event) => {
+          if (!mounted.current || controller.signal.aborted) return
+          commitRef.current({
+            type: 'live-workflow-events',
+            threadId: thread.id,
+            serverUrl: thread.live!.serverUrl,
+            researchId: research.id,
+            turnId: turn.id,
+            runId: turn.runId!,
+            events: [event],
+          })
+        },
       })
         .then(() => {
           if (!controller.signal.aborted) updateEventConnection(thread.id, 'ended')
@@ -540,7 +669,11 @@ export function useLiveResearch(
         commitRef.current({ type: 'live', threadId, research: next })
         updateSync(threadId, { state: 'ready' })
         syncRetries.current.delete(threadId)
-        await Promise.all([recoverEvents(thread, next, force), recoverReports(thread, next, force)])
+        await Promise.all([
+          recoverEvents(thread, next, force),
+          recoverReports(thread, next, force),
+          recoverWorkflowEvents(thread, next, force),
+        ])
         return
       }
       const serverRun = await api.findRun(thread.live, research)
@@ -563,7 +696,11 @@ export function useLiveResearch(
       commitRef.current({ type: 'live', threadId, research: next })
       updateSync(threadId, { state: 'ready' })
       syncRetries.current.delete(threadId)
-      await Promise.all([recoverEvents(thread, next, force), recoverReports(thread, next, force)])
+      await Promise.all([
+        recoverEvents(thread, next, force),
+        recoverReports(thread, next, force),
+        recoverWorkflowEvents(thread, next, force),
+      ])
     } catch (error) {
       const latest = current.current.threads
         .find((item) => item.id === threadId)
@@ -591,7 +728,10 @@ export function useLiveResearch(
               : '暂时无法回读研究状态。已保留本地内容，将继续尝试连接；不会重复提交。',
       })
       // Progress can survive even when native dev run metadata was not flushed.
-      await recoverEvents(thread, research, force)
+      await Promise.all([
+        recoverEvents(thread, research, force),
+        recoverWorkflowEvents(thread, research, force),
+      ])
     } finally {
       syncing.current.delete(threadId)
     }
@@ -626,13 +766,42 @@ export function useLiveResearch(
         })
       return
     }
+    if (live.workflow) {
+      if (config.workflow_execution_version !== 1 || config.submission_recovery_version !== 1) {
+        sending.current.delete(thread.id)
+        updateSync(thread.id, {
+          state: 'error',
+          message: '当前后端不支持所选流程版本，研究问题已保留。请连接支持流程执行的后端。',
+        })
+        return
+      }
+      try {
+        const revision = await workflowApi(live.serverUrl).revision(
+          live.workflow.workflow_id,
+          live.workflow.revision_id,
+        )
+        if (
+          revision.semantic_hash !== live.workflow.semantic_hash ||
+          !sameWorkflowDocument(revision.document, live.workflow.document)
+        )
+          throw new Error('Workflow revision mismatch')
+      } catch {
+        sending.current.delete(thread.id)
+        updateSync(thread.id, {
+          state: 'error',
+          message: '无法核对所选流程的原发布版本，研究问题已保留。请重新连接后再发送。',
+        })
+        return
+      }
+    }
     const continuing = last?.status === 'awaiting_input'
     const selection = continuing
       ? last.config.selection
       : config.configuration_version === 1 &&
           config.submission_recovery_version === 1 &&
           config.catalog
-        ? (live.selection ?? {
+        ? (live.selection ??
+          live.workflow?.document.definition.defaults.selection ?? {
             version: 1 as const,
             models: config.catalog.defaults,
             skills: { mode: 'auto' as const, allowed: [] },
@@ -663,6 +832,14 @@ export function useLiveResearch(
       submittedAt: new Date().toISOString(),
       transport: 'sending' as const,
       ...(selection ? { selection: structuredClone(selection) } : {}),
+      ...(live.workflow
+        ? {
+            workflowRef: {
+              workflow_id: live.workflow.workflow_id,
+              revision_id: live.workflow.revision_id,
+            },
+          }
+        : {}),
       ...(config.submission_recovery_version === 1
         ? { submissionVersion: 1 as const, expectedTurnId: last?.turns.at(-1)?.id ?? null }
         : {}),
@@ -683,6 +860,12 @@ export function useLiveResearch(
       prompt: continuing ? last.prompt : prompt,
       createdAt: continuing ? last.createdAt : turn.submittedAt,
       config,
+      ...(live.workflow
+        ? {
+            workflow: structuredClone(live.workflow),
+            workflowStreams: continuing ? last.workflowStreams : undefined,
+          }
+        : {}),
       status: 'running',
       phase: 'clarify',
       turns: [...(continuing ? last.turns : []), turn],
@@ -877,6 +1060,8 @@ export function useLiveResearch(
       replays.current.clear()
       for (const controller of reportReplays.current.values()) controller.abort()
       reportReplays.current.clear()
+      for (const controller of workflowReplays.current.values()) controller.abort()
+      workflowReplays.current.clear()
     }
   }, [])
   useEffect(() => {
@@ -892,7 +1077,10 @@ export function useLiveResearch(
         const runId = last?.turns.at(-1)?.runId
         if (
           last?.status === 'running' ||
-          (runId && (replayRetries.current.has(runId) || reportRetries.current.has(runId)))
+          (runId &&
+            (replayRetries.current.has(runId) ||
+              reportRetries.current.has(runId) ||
+              workflowRetries.current.has(runId)))
         )
           void refresh(thread.id, false)
       }
@@ -903,6 +1091,7 @@ export function useLiveResearch(
       for (const retry of syncRetries.current.values()) retry.at = 0
       for (const retry of replayRetries.current.values()) retry.at = 0
       for (const retry of reportRetries.current.values()) retry.at = 0
+      for (const retry of workflowRetries.current.values()) retry.at = 0
       syncStreams()
       for (const thread of current.current.threads) {
         if (
@@ -931,6 +1120,7 @@ export function useLiveResearch(
     eventConnections,
     replayStates,
     reportReplayStates,
+    workflowReplayStates,
     retrySubmission,
     recoverExecution,
   }

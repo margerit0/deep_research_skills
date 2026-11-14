@@ -4,7 +4,8 @@
       "scope_research": "./src/deep_research/research_agent_scope.py:scope_research",
       "research_agent_skills": "./src/deep_research/research_agent_skills.py:researcher_agent_skills",
       "research_agent_supervisor": "./src/deep_research/multi_agent_supervisor.py:supervisor_agent",
-      "research_agent_full": "./src/deep_research/research_agent_full.py:agent"
+      "research_agent_full": "./src/deep_research/research_agent_full.py:agent",
+      "research_workflow": "deep_research.workflow_runtime:graph"
     },
     "python_version": "3.11",
     "env": ".env",

@@ -77,7 +77,18 @@ def state_digest(state) -> str:
             },
             "messages": messages,
             # Missing optional fields preserve legacy checkpoint digests.
-            **{key: state[key] for key in ("user_requirements", "research_constraints", "source_evidence", "report_reviews") if key in state},
+            **{
+                key: state[key]
+                for key in (
+                    "user_requirements",
+                    "research_constraints",
+                    "source_evidence",
+                    "report_reviews",
+                    "workflow_binding",
+                    "organized_notes",
+                )
+                if key in state
+            },
         }
     )
 
@@ -150,29 +161,43 @@ class SubmissionJournal:
 
     def get(self, thread_id, turn_id):
         with self.connection() as db:
-            row = db.execute(
-                "SELECT * FROM submissions WHERE thread_id=? AND turn_id=?",
+            return self.get_in_connection(db, thread_id, turn_id)
+
+    @staticmethod
+    def get_in_connection(db, thread_id, turn_id):
+        """Read a complete acceptance without opening a nested transaction."""
+        row = db.execute(
+            "SELECT * FROM submissions WHERE thread_id=? AND turn_id=?",
+            (thread_id, turn_id),
+        ).fetchone()
+        if row is None:
+            return None
+        result = dict(row)
+        result["payload"] = json.loads(result["payload"])
+        configuration = db.execute(
+            "SELECT snapshot FROM submission_configurations WHERE thread_id=? AND turn_id=?",
+            (thread_id, turn_id),
+        ).fetchone()
+        result["configuration"] = (
+            json.loads(configuration[0]) if configuration else None
+        )
+        result["attempts"] = [
+            dict(item)
+            for item in db.execute(
+                "SELECT * FROM attempts WHERE thread_id=? AND turn_id=? ORDER BY rowid",
                 (thread_id, turn_id),
-            ).fetchone()
-            if row is None:
-                return None
-            result = dict(row)
-            result["payload"] = json.loads(result["payload"])
-            configuration = db.execute(
-                "SELECT snapshot FROM submission_configurations WHERE thread_id=? AND turn_id=?",
-                (thread_id, turn_id),
-            ).fetchone()
-            result["configuration"] = (
-                json.loads(configuration[0]) if configuration else None
             )
-            result["attempts"] = [
-                dict(item)
-                for item in db.execute(
-                    "SELECT * FROM attempts WHERE thread_id=? AND turn_id=? ORDER BY rowid",
-                    (thread_id, turn_id),
-                )
-            ]
-            return result
+        ]
+        # Old databases need no workflow migration just to read their receipts.
+        if db.execute(
+            "SELECT 1 FROM sqlite_master WHERE name='workflow_submission_bindings'"
+        ).fetchone():
+            from deep_research.workflow_store import WorkflowStore
+
+            binding = WorkflowStore.submission_binding(db, thread_id, turn_id)
+            if binding is not None:
+                result["workflow_binding"] = binding.model_dump(mode="json")
+        return result
 
     def latest(self, thread_id):
         with self.connection() as db:
@@ -183,44 +208,58 @@ class SubmissionJournal:
         return self.get(thread_id, row[0]) if row else None
 
     def reserve(self, thread_id, turn_id, payload, configuration=None):
-        encoded = json.dumps(payload, sort_keys=True, ensure_ascii=False)
         with self.connection() as db:
-            prior = db.execute(
-                "SELECT payload_hash FROM submissions WHERE thread_id=? AND turn_id=?",
-                (thread_id, turn_id),
-            ).fetchone()
-            if prior:
-                if prior[0] != digest(payload):
-                    raise SubmissionConflict("submission_payload_conflict")
-            else:
-                db.execute(
-                    "INSERT INTO submissions VALUES (?, ?, ?, ?, ?, ?)",
-                    (
-                        thread_id,
-                        turn_id,
-                        payload["research_id"],
-                        encoded,
-                        digest(payload),
-                        time.time(),
-                    ),
-                )
-                db.execute(
-                    "INSERT INTO attempts (thread_id, turn_id, attempt_id, run_id, kind, created) VALUES (?, ?, ?, ?, 'submit', ?)",
-                    (thread_id, turn_id, turn_id, str(uuid4()), time.time()),
-                )
-                if configuration is not None:
-                    db.execute(
-                        "INSERT INTO submission_configurations VALUES (?, ?, ?)",
-                        (
-                            thread_id,
-                            turn_id,
-                            json.dumps(configuration, ensure_ascii=False),
-                        ),
-                    )
-        return self.get(thread_id, turn_id)
+            self.reserve_in_connection(db, thread_id, turn_id, payload, configuration)
+            return self.get_in_connection(db, thread_id, turn_id)
+
+    @staticmethod
+    def reserve_in_connection(db, thread_id, turn_id, payload, configuration=None):
+        """Reserve identities inside the caller's acceptance transaction."""
+        encoded = json.dumps(payload, sort_keys=True, ensure_ascii=False)
+        prior = db.execute(
+            "SELECT payload_hash FROM submissions WHERE thread_id=? AND turn_id=?",
+            (thread_id, turn_id),
+        ).fetchone()
+        if prior:
+            if prior[0] != digest(payload):
+                raise SubmissionConflict("submission_payload_conflict")
+            return
+        db.execute(
+            "INSERT INTO submissions VALUES (?, ?, ?, ?, ?, ?)",
+            (
+                thread_id,
+                turn_id,
+                payload["research_id"],
+                encoded,
+                digest(payload),
+                time.time(),
+            ),
+        )
+        db.execute(
+            "INSERT INTO attempts (thread_id, turn_id, attempt_id, run_id, kind, created) VALUES (?, ?, ?, ?, 'submit', ?)",
+            (thread_id, turn_id, turn_id, str(uuid4()), time.time()),
+        )
+        if configuration is not None:
+            db.execute(
+                "INSERT INTO submission_configurations VALUES (?, ?, ?)",
+                (
+                    thread_id,
+                    turn_id,
+                    json.dumps(configuration, ensure_ascii=False),
+                ),
+            )
 
     def reserve_recovery(self, record, attempt_id, parent_run_id, checkpoint_id, node):
         with self.connection() as db:
+            if record.get("workflow_binding"):
+                from deep_research.workflow_store import WorkflowStore
+
+                WorkflowStore.verify_record(db, record, for_execution=True)
+                saved = self.get_in_connection(
+                    db, record["thread_id"], record["turn_id"]
+                )
+                if saved["configuration"] != record["configuration"]:
+                    raise SubmissionConflict("configuration_snapshot_mismatch")
             prior = db.execute(
                 "SELECT * FROM attempts WHERE thread_id=? AND turn_id=? AND attempt_id=?",
                 (record["thread_id"], record["turn_id"], attempt_id),
@@ -297,6 +336,16 @@ class SubmissionJournal:
                 and json.loads(saved[0]) != state.get("effective_config")
             ):
                 raise SubmissionConflict("configuration_snapshot_mismatch")
+            record = self.get_in_connection(db, thread_id, row["turn_id"])
+            binding = record.get("workflow_binding")
+            if binding is not None:
+                from deep_research.workflow_store import WorkflowStore
+
+                WorkflowStore.verify_record(db, record, for_execution=True)
+                if (
+                    node != "prepare_research" or "workflow_binding" in state
+                ) and state.get("workflow_binding") != binding:
+                    raise SubmissionConflict("workflow_binding_mismatch")
             db.execute(
                 "UPDATE attempts SET owner_id=?, last_node=?, state_hash=?, dispatched=1 WHERE run_id=?",
                 (INSTANCE_ID, node, state_digest(state), run_id),

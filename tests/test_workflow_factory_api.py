@@ -27,11 +27,15 @@ TOPIC = "比较 Python 3.13 free-threaded 与默认构建。"
 
 
 class NativeFixture:
+    PARENT = ".local/atlas-workflow-m0"
+    SERVER = "tests/atlas_workflow_server.py"
+    IDENTITY = "/m0/identity"
+
     def __init__(self, test_name):
         self.test_name = test_name
         self.observed_runs = {}
         self.observed_states = {}
-        parent = ROOT / ".local" / "atlas-workflow-m0"
+        parent = ROOT / self.PARENT
         parent.mkdir(parents=True, exist_ok=True)
         self.directory = Path(tempfile.mkdtemp(prefix="case-", dir=parent))
         self.fixture_id = str(uuid4())
@@ -52,7 +56,7 @@ class NativeFixture:
         self.process = subprocess.Popen(
             [
                 sys.executable,
-                str(ROOT / "tests/atlas_workflow_server.py"),
+                str(ROOT / self.SERVER),
                 "--port",
                 str(self.port),
                 "--directory",
@@ -74,7 +78,7 @@ class NativeFixture:
                     )[-8000:]
                 )
             try:
-                identity = self.get("/m0/identity")
+                identity = self.get(self.IDENTITY)
                 if identity["fixture_id"] == self.fixture_id:
                     # Windows venv python.exe may be a launcher with a child PID.
                     # The random fixture identity associates this server with us.
@@ -96,14 +100,18 @@ class NativeFixture:
         if self.process is not None:
             if self.process.poll() is None:
                 try:
-                    self.last_identity = self.get("/m0/identity")
+                    self.last_identity = self.get(self.IDENTITY)
                 except httpx.HTTPError:
                     pass
                 if self.server_pid is not None and self.server_pid != self.process.pid:
                     try:
                         os.kill(self.server_pid, signal.SIGTERM)
-                    except ProcessLookupError:
-                        pass
+                    except OSError as exc:
+                        if (
+                            not isinstance(exc, ProcessLookupError)
+                            and getattr(exc, "winerror", None) != 87
+                        ):
+                            raise
                 # Stop our venv launcher as well as its identified server process.
                 self.process.kill()
             self.process.wait(timeout=10)
@@ -204,7 +212,7 @@ class NativeFixture:
     def audit(self, submission, kind):
         return [
             r
-            for r in self.get("/m0/identity")["audit"]
+            for r in self.get(self.IDENTITY)["audit"]
             if r["thread_id"] == submission["thread"] and r["kind"] == kind
         ]
 

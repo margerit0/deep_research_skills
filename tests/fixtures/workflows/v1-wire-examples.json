@@ -770,6 +770,7 @@
           ],
           "state_writes": {
             "final_report": "replace",
+            "messages": "merge_messages",
             "report_attempt_id": "replace",
             "report_research_id": "replace",
             "report_reviews": "replace",

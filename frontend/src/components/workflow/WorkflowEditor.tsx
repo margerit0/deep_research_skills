@@ -61,6 +61,7 @@ type Props = {
   onRevision: (revisionId: string) => void
   onDraft: () => void
   onCopy: (document: WorkflowDocument, revision?: WorkflowRevision) => void
+  onUse?: (revision: WorkflowRevision) => void
   registerNavigation: (guard: ((action: () => void) => void) | null) => void
 }
 const roleLabels: Record<string, string> = {
@@ -411,8 +412,15 @@ export function WorkflowEditor(props: Props) {
             v{revision.revision_number} · {workflowDate(revision.published_at)} · 已固定版本内容
             {revision.note && <span> · {revision.note}</span>}
             <br />
-            当前可查看与复制流程；发起研究将在执行功能开放后可用。
+            {props.onUse
+              ? '新研究将固定使用此版本；请先填写研究问题。'
+              : '当前可查看与复制流程；发起研究将在执行功能开放后可用。'}
           </p>
+          {props.onUse && !summary.archived && (
+            <button className="wf-button is-primary" onClick={() => props.onUse?.(revision)}>
+              使用此版本发起研究
+            </button>
+          )}
         </div>
       )}
       {summary.archived && (

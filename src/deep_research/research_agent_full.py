@@ -253,6 +253,13 @@ async def final_report_generation(state: AgentState):
     """Write from valid notes; an empty/failed writer leaves a partial result."""
     guard_execution(state, "final_report_generation")
     notes = [note for note in state.get("notes", []) if is_research_note(note)]
+    organized = state.get("organized_notes")
+    if organized is not None:
+        if not isinstance(organized, str) or not is_research_note(organized):
+            return _failure(
+                state, "final_report_generation", "organized_notes_empty",
+                "整理后的材料无效，已保留原始笔记和来源。",
+            )
     if not notes:
         return _failure(
             state,
@@ -260,6 +267,8 @@ async def final_report_generation(state: AgentState):
             "no_findings",
             "没有可用于撰写报告的有效研究结果。",
         )
+    if organized is not None:
+        notes = [organized]
     errors = list(state.get("research_errors", []))
     reviews = []
     review_context = ReportReviewContext()
@@ -280,14 +289,14 @@ async def final_report_generation(state: AgentState):
         prompt = final_report_generation_prompt.format(
             research_brief=state.get("research_brief", ""),
             findings=("实际来源正文完整附于下方，请直接据此回答研究简报。"
-                      if complete_evidence else "\n".join(notes)),
+                      if complete_evidence and organized is None else "\n".join(notes)),
             date=get_today_str(),
         )
         if approximate_report_length(state) is not None:
             prompt = (
                 "按系统中的原始要求直接写短报告。事实使用连续编号引用，末尾以 ### 来源"
                 "逐行列出编号、标题与实际采用的 URL。不要解释写作过程，不增加用户未要求的维度。\n"
-                + ("实际来源正文附于下方。" if complete_evidence
+                + ("实际来源正文附于下方。" if complete_evidence and organized is None
                    else "以下为派生研究笔记，需与附带原文核对：\n" + "\n".join(notes))
             )
         prompt += requirements_context(state)

@@ -102,3 +102,17 @@ def native_modules():
     from langgraph_runtime_inmem.ops import RUN_LOCK, Runs, Threads
 
     return connect, RUN_LOCK, Runs, Threads, create_valid_run
+
+
+def workflow_graph_registered() -> bool:
+    """Check the actual server registry before advertising or accepting workflows."""
+    if not submissions_enabled():
+        return False
+    try:
+        from langgraph_api.graph import GRAPHS
+
+        from deep_research.workflow_runtime import graph
+
+        return GRAPHS.get("research_workflow") is graph
+    except Exception:
+        return False

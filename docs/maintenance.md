@@ -117,6 +117,18 @@ Skills 自动模式固定当时全部可用正文；手选是允许自动加载�
 
 2026-10-10 用户确认当前网关问题由供应商后续修复，要求跳过连接排障并继续事件图谱开发。保持指定模型、地址、本地密钥与 `NO_PROXY=*`，未关闭 TLS 校验。供应商恢复前，替身验收不能代表完整真实研究已通过。
 
+## 已发布工作流（M3）
+
+正式入口为 `research_workflow`，在 `langgraph.json` 使用 `deep_research.workflow_runtime:graph` 注册。更新后重启后端；`/atlas/config` 只有实际工厂、节点实现和锁定运行时就绪时才声明执行及父事件能力。流程 JSON 不替代实现代码，不能为恢复旧版本换用最新图。
+
+流程、修订、thread 绑定、逐提交绑定副本和父事件共用受理 SQLite。工作流迁移为 `workflow_schema.version=2`，原受理 `user_version=2` 不变。父事件随受理记录保留，不受 `ATLAS_EVENT_RETENTION_DAYS` 清理；备份时保留受理库、配置归档、原生持久化和其他事件库整套数据。
+
+受理前解析模型／Skills 归档，随后同一连接事务固定流程、配置快照和 run 身份。不要在 `WorkflowStore.accept()` 内调用另开连接的 Journal／Store 方法。恢复摘要仅在字段存在时纳入 `workflow_binding/organized_notes`，旧摘要样本已有固定回归。
+
+编译器只对业务结果选择定义后继，不能同时保留旧 `Command.goto` 和正常静态边。计划优化同步替换简报与协调消息；材料整理仅写独立字段，显式空结果失败，不能静默回退。
+
+M3 原生测试在 `.local/graph-canvas-m3/` 专属目录启动，使用生产工厂和模型／搜索替身；启用变量为 `ATLAS_WORKFLOW_M3_API=1`。旧完整图测试现在自动隔离存储路径，配置能力检查也不能写默认库。阶段证据、一次默认库空表迁移审计和后续 M4 边界见 [M3 记录](graph-canvas-editor-m3-results.md)。
+
 ## 结构化输出与网关兼容
 
 2026-10-20 增加显式的流式 JSON 对象策略：共享 helper 可传 `strategy="json_object"`，或在模型构造 metadata 中设置 `structured_output_strategy: json_object`。默认仍为原生优先；普通配置和 `.env` 没有自动切换。新路径复用已有客户端的连接、超时、SDK 重试和共享限流，确认 `stop` / `[DONE]` 后做原 schema 校验，不修复无效流为成功。网页摘要仅显式选择时接入此路径，Qwen `/no_think`、空 choices 两次上限及诊断保留。两份固定简报真实读取 2/2 通过，完整原生样本因隔离遥测重复导入错误为 0/1，不能视为完整接入已验收；240 项后端测试和两个包装修复离线测试通过。新入口见 [JSON 流读取交接](../frontend/docs/handoff-after-glm-jsonstream-2026-10-20.md)，旧身份不可重跑。

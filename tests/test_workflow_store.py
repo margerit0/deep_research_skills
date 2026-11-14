@@ -80,7 +80,7 @@ def test_migration_preserves_submissions_configuration_and_run_ids(store):
     assert restarted.list().items[0].workflow_id == draft.workflow_id
     with journal.connection() as db:
         assert db.execute("PRAGMA user_version").fetchone()[0] == 2
-        assert db.execute("SELECT version FROM workflow_schema").fetchone()[0] == 1
+        assert db.execute("SELECT version FROM workflow_schema").fetchone()[0] == 2
         assert db.execute("PRAGMA foreign_key_check").fetchall() == []
 
 

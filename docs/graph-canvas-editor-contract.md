@@ -2,7 +2,7 @@
 
 冻结日期：2026-11-15（Asia/Shanghai）。用户已对[独立设计稿](graph-canvas-editor-design-review.md)明确回复“确认设计稿”。本契约作为 M2 编辑与版本管理、M3 编译与执行接入的共同依据。
 
-M1 已提供可运行的数据类型、节点目录、结构／发布上下文校验、绑定核对及前后端一致性检查。M2 已实现管理 HTTP 接口、草稿／修订事务和正式编辑页，见 [M2 记录](graph-canvas-editor-m2-results.md)。业务适配、受理绑定及事件投递仍由 M3 实现；当前生产服务只声明就绪的编辑能力，没有可用的生产发布上下文或流程执行能力。
+M1 已冻结数据类型、节点目录和校验语义，M2 已实现管理与正式编辑页。M3 已接入真实业务适配、发布上下文、原子受理绑定、父节点事件和正式运行视图，见 [M3 记录](graph-canvas-editor-m3-results.md)。能力根据实际存储、工厂注册、实现和运行时就绪状态分别声明。
 
 ## 1. 类型与版本
 
@@ -71,7 +71,7 @@ M1 已提供可运行的数据类型、节点目录、结构／发布上下文�
 
 ## 4. M2 保存、校验和发布协议
 
-以下管理接口已在 M2 实现；客户端只在 `workflow_editor_version: 1` 明确存在时显示正式编辑入口。生产发布上下文尚未接入时，校验／发布返回 503 `workflow_runtime_unavailable`，不使用占位实现放行。
+以下管理接口已在 M2 实现；客户端只在 `workflow_editor_version: 1` 明确存在时显示正式编辑入口。M3 的生产发布上下文检查实际处理器和配置；执行上下文不可用时，校验／发布返回 503 `workflow_runtime_unavailable`，不使用占位实现放行。
 
 | 接口 | 请求／返回内容 |
 | --- | --- |
@@ -89,7 +89,7 @@ M1 已提供可运行的数据类型、节点目录、结构／发布上下文�
 
 分页参数为 `after=0` 起始、`limit=30` 默认且最多 100；流程筛选为 `archived=active|archived|all`，默认 `active`。流程按创建序号倒序，保存不改变分页位置；修订按 `revision_number` 倒序。`next_cursor` 是下一页的排他游标，无更多记录时为 `null`。归档只在首次操作时核对草稿版本，已经归档的流程重复请求返回其摘要。
 
-存储迁移在受理连接的事务内进行，使用 `workflow_schema.version=1`，不改写受理库的 `user_version=2`。修订、创建／发布回执及预留绑定表有禁止更新／删除的约束；修订回读另外校验包含展示快照的完整记录摘要。请求体在解码前限制为 278528 字节，文档规范化后仍限 256 KiB。重复 JSON 键和非有限值也拒绝。
+存储迁移在受理连接的事务内进行。M2 使用 `workflow_schema.version=1`，M3 追加逐提交绑定和父事件表后升级为 **2**，受理库的 `user_version=2` 不变。修订、创建／发布回执、绑定及父事件有禁止更新／删除的约束；修订回读另外校验包含展示快照的完整记录摘要。请求体在解码前限制为 278528 字节，文档规范化后仍限 256 KiB。重复 JSON 键和非有限值也拒绝。
 
 ### 草稿保存
 
@@ -145,7 +145,7 @@ M1 已提供可运行的数据类型、节点目录、结构／发布上下文�
 
 流程表、草稿表、修订表、发布请求表及 `workflow_thread_bindings` 放在现有受理 SQLite。修订记录使用追加约束；编号和幂等键用唯一索引；绑定对 thread 唯一并引用原修订。
 
-**同一连接、同一 `BEGIN IMMEDIATE` 事务**必须同时写入或核对：原修订引用及内容／版本、thread 绑定、现有 `submission_configurations` 的有效配置快照、submission payload／摘要和固定 run UUID 的 attempt。现有 `SubmissionJournal.reserve()` 需要提供可复用的内部连接事务入口；不能先调用独立 WorkflowStore 提交绑定，再调用另一个连接受理。
+**同一连接、同一 `BEGIN IMMEDIATE` 事务**同时写入或核对：原修订引用及内容／版本、thread 绑定、逐提交绑定副本、`submission_configurations` 的有效配置快照、submission payload／摘要和固定 run UUID 的 attempt。实现使用 `SubmissionJournal.reserve_in_connection()`，不先在独立连接提交绑定。受理回执在存在绑定时增加 `workflow_binding`，不改写原 payload。
 
 模型和 Skills 的完整内容归档仍使用现有配置归档，在受理事务之前完成解析、归档和完整性检查。同事务固定的是有效配置快照及引用；不能把多个 SQLite 文件宣称为一个原子提交。保留既有归档与备份规则，事务失败可留下未被引用的不可变配置，但不能留下缺少绑定或快照的已受理研究。
 
@@ -159,9 +159,11 @@ M1 已提供可运行的数据类型、节点目录、结构／发布上下文�
 
 恢复白名单仍为 `clarify_with_user/write_research_brief/final_report_generation`。两类扩展节点和研究子图内部均不声明可恢复。M3 扩展 `state_digest()` 时仅在键实际存在时加入 `workflow_binding/organized_notes`，不能用 `.get()` 给旧检查点补 `null`；旧摘要必须保持字节级一致。恢复以精确 checkpoint 和 `input: null` 使用原修订、原输入及原配置。
 
-新增父节点事件使用 `atlas.workflow_event`，载荷为 `WorkflowNodeEvent`。事件 UUID、归属标识、原生 run、attempt、修订、节点和连续序号必须核对；先持久化再投递。动态研究员继续使用原事件，不成为设计时节点。前端实际完成状态来自节点事件与检查点，业务成功仍要求研究终态、正确报告归属及有效产物。
+父节点事件使用 `atlas.workflow_event`，载荷为 `WorkflowNodeEvent`。事件 UUID、归属标识、原生 run、attempt、修订、节点和连续序号必须核对；先持久化再投递。开始／结束编译为系统边界，不创建业务调用或父事件。动态研究员继续使用原事件，不成为设计时节点。前端实际完成状态来自节点事件与检查点，业务成功仍要求研究终态、正确报告归属及有效产物。
 
-生产能力分开声明：M2 的 `workflow_editor_version`，M3 通过原生验收后的 `workflow_execution_version` 和 `workflow_events_version`。只有草稿能力时不能出现可真实执行的版本入口；旧后端不支持所选流程时拒绝，不静默运行内置图。M2 可用替身验证发布事务和界面；真实发布校验依赖可用的编译器与节点实现，尚未实现的扩展节点不能用占位处理器冒充通过，须等 M3 就绪。
+回放入口为 `GET /atlas/threads/{thread_id}/runs/{run_id}/workflow-events`，必需 query 为 `research_id/turn_id/attempt_id`，可选 `after=0/limit=50/journal_id`，`limit` 上限 100。返回原事件分页公共字段及 `attempt_id/workflow_ref/semantic_hash`；按 run 连续计数，先校验完整归属再返回。事件在受理库保留，`sealed` 不是业务成功标记。旧进程的未完成尝试返回 `gap` 与 `unconfirmed_before_sequence`，前端不会继续显示其未确认节点为运行中。
+
+生产能力分开声明：`workflow_editor_version`、`workflow_execution_version` 和 `workflow_events_version`。M3 已通过原生替身验收；当前服务还须实际注册生产工厂并具备兼容实现，才声明执行和事件版本。只有编辑能力时不能出现可真实执行的版本入口；旧后端不支持所选流程时拒绝，不静默运行内置图。真实发布校验依赖实际节点实现，不能使用占位处理器冒充可执行。
 
 ## 7. 已冻结的后续验收
 
@@ -182,4 +184,4 @@ M1 已提供可运行的数据类型、节点目录、结构／发布上下文�
 | M3 · 兼容与事件 | 缺失实现可查看完整旧归档但不能执行；刷新、重连和历史回放不新增 run |
 | M4 · 实际质量／性能 | 按计划书运行有界真实验收、画布和发布性能测量；不以替身结果替代报告质量 |
 
-上述表格是分阶段验收条件。M1 和 M2 的实际命令及结果分别见 [M1 记录](graph-canvas-editor-m1-results.md)、[M2 记录](graph-canvas-editor-m2-results.md)；M2 的发布采用测试上下文验证。M3–M4 尚未交付，不据此声明原生流程执行或真实研究质量。
+上述表格是分阶段验收条件。M1、M2 和 M3 已完成，实际结果见各阶段记录；M2 的发布测试上下文限制已由 M3 的生产实现接续。M4 尚未交付，M3 的模型／搜索替身验收不代表真实研究质量。

@@ -2,7 +2,7 @@
 
 All writes use SubmissionJournal.connection's FULL/WAL, BEGIN IMMEDIATE
 transaction. The workflow migration has its own version; it does not repurpose
-the submission journal's user_version or claim to implement M3 acceptance.
+the submission journal's user_version.
 """
 
 from __future__ import annotations
@@ -31,9 +31,11 @@ from deep_research.workflow_definition import (
     PublishWorkflowRequest,
     SaveDraftRequest,
     WireModel,
+    WorkflowBinding,
     WorkflowDocument,
     WorkflowDraft,
     WorkflowPage,
+    WorkflowRef,
     WorkflowRevision,
     WorkflowRevisionPage,
     WorkflowRevisionSummary,
@@ -42,7 +44,12 @@ from deep_research.workflow_definition import (
     semantic_hash,
 )
 from deep_research.workflow_registry import standard_document
-from deep_research.workflow_validation import PublicationContext, validate_document
+from deep_research.workflow_validation import (
+    PublicationContext,
+    WorkflowContractError,
+    validate_document,
+    verify_binding,
+)
 
 ContextProvider = Callable[[WorkflowDocument], PublicationContext]
 
@@ -121,8 +128,10 @@ def _migrate(db: sqlite3.Connection) -> None:
     )
     row = db.execute("SELECT version FROM workflow_schema WHERE singleton=1").fetchone()
     if row is not None:
-        if row[0] != 1:
+        if row[0] not in (1, 2):
             raise WorkflowStoreError("workflow_storage_incompatible", 503)
+        if row[0] == 1:
+            _migrate_execution(db)
         return
     # Do not use executescript: it commits the surrounding transaction early.
     statements = (
@@ -156,8 +165,6 @@ def _migrate(db: sqlite3.Connection) -> None:
             FOREIGN KEY(workflow_id, revision_id)
                 REFERENCES workflow_revisions(workflow_id, revision_id)
         )""",
-        # M3 must insert/check this row in the same connection as reserve,
-        # effective configuration and fixed run UUID. M2 never creates bindings.
         """CREATE TABLE workflow_thread_bindings (
             thread_id TEXT PRIMARY KEY, workflow_id TEXT NOT NULL,
             revision_id TEXT NOT NULL, binding TEXT NOT NULL,
@@ -179,6 +186,39 @@ def _migrate(db: sqlite3.Connection) -> None:
                 "BEGIN SELECT RAISE(ABORT, 'immutable_workflow_record'); END"
             )
     db.execute("INSERT INTO workflow_schema VALUES (1, 1)")
+    _migrate_execution(db)
+
+
+def _migrate_execution(db: sqlite3.Connection) -> None:
+    """Keep per-submission binding evidence and parent events with acceptance."""
+    for statement in (
+        """CREATE TABLE workflow_submission_bindings (
+            thread_id TEXT NOT NULL REFERENCES workflow_thread_bindings(thread_id),
+            turn_id TEXT NOT NULL, binding TEXT NOT NULL,
+            PRIMARY KEY(thread_id, turn_id),
+            FOREIGN KEY(thread_id, turn_id) REFERENCES submissions(thread_id, turn_id)
+        )""",
+        """CREATE TABLE workflow_event_runs (
+            run_id TEXT PRIMARY KEY REFERENCES attempts(run_id),
+            journal_id TEXT NOT NULL, owner_id TEXT NOT NULL,
+            last_sequence INTEGER NOT NULL DEFAULT 0,
+            sealed INTEGER NOT NULL DEFAULT 0
+        )""",
+        """CREATE TABLE workflow_node_events (
+            run_id TEXT NOT NULL REFERENCES workflow_event_runs(run_id),
+            sequence INTEGER NOT NULL, event_id TEXT NOT NULL UNIQUE,
+            payload TEXT NOT NULL,
+            PRIMARY KEY(run_id, sequence)
+        )""",
+    ):
+        db.execute(statement)
+    for table in ("workflow_submission_bindings", "workflow_node_events"):
+        for operation in ("UPDATE", "DELETE"):
+            db.execute(
+                f"CREATE TRIGGER {table}_no_{operation.lower()} BEFORE {operation} ON {table} "
+                "BEGIN SELECT RAISE(ABORT, 'immutable_workflow_record'); END"
+            )
+    db.execute("UPDATE workflow_schema SET version=2 WHERE singleton=1")
 
 
 def get_workflow_store() -> WorkflowStore | None:
@@ -186,7 +226,11 @@ def get_workflow_store() -> WorkflowStore | None:
     if os.getenv("ATLAS_WORKFLOW_EDITOR_ENABLED", "true").lower() == "false":
         return None
     journal = get_submission_journal()
-    return WorkflowStore(journal) if journal is not None else None
+    if journal is None:
+        return None
+    from deep_research.workflow_runtime import publication_context
+
+    return WorkflowStore(journal, publication_context=publication_context)
 
 
 class WorkflowStore:
@@ -198,11 +242,7 @@ class WorkflowStore:
         *,
         publication_context: ContextProvider | None = None,
     ):
-        """Inject actual runtime checks, or fail closed until M3 provides them.
-
-        Tests may supply a deterministic context. Production has no compiler
-        yet, so the default cannot publish even the standard template.
-        """
+        """Inject explicit runtime checks; direct storage users fail closed."""
         self.journal = (
             SubmissionJournal(journal) if isinstance(journal, Path) else journal
         )
@@ -219,6 +259,193 @@ class WorkflowStore:
         """Verify management storage before advertising the editor capability."""
         with self.connection() as db:
             db.execute("SELECT workflow_id FROM workflow_drafts LIMIT 1").fetchone()
+
+    @staticmethod
+    def _binding(db, thread_id: str) -> WorkflowBinding | None:
+        row = db.execute(
+            "SELECT * FROM workflow_thread_bindings WHERE thread_id=?", (thread_id,)
+        ).fetchone()
+        if row is None:
+            return None
+        try:
+            binding = WorkflowBinding.model_validate_json(row["binding"])
+            if binding.thread_id != thread_id or binding.workflow_ref != WorkflowRef(
+                workflow_id=row["workflow_id"], revision_id=row["revision_id"]
+            ):
+                raise ValueError("Binding index mismatch")
+            return binding
+        except (TypeError, ValueError) as exc:
+            raise WorkflowContractError("workflow_binding_mismatch") from exc
+
+    @staticmethod
+    def submission_binding(db, thread_id, turn_id) -> WorkflowBinding | None:
+        """Read independent evidence so losing a binding cannot select the old graph."""
+        row = db.execute(
+            "SELECT binding FROM workflow_submission_bindings WHERE thread_id=? AND turn_id=?",
+            (thread_id, turn_id),
+        ).fetchone()
+        binding = WorkflowStore._binding(db, thread_id)
+        if row is None:
+            if binding is not None:
+                raise WorkflowContractError("workflow_binding_missing")
+            return None
+        try:
+            accepted = WorkflowBinding.model_validate_json(row[0])
+        except (TypeError, ValueError) as exc:
+            raise WorkflowContractError("workflow_binding_mismatch") from exc
+        if binding is None or binding != accepted:
+            raise WorkflowContractError("workflow_binding_mismatch")
+        return accepted
+
+    @staticmethod
+    def verify_record(db, record, *, for_execution=False):
+        """Check accepted identity and immutable content using the caller's connection."""
+        binding = WorkflowStore.submission_binding(
+            db, record["thread_id"], record["turn_id"]
+        )
+        if binding is None:
+            if record.get("workflow_binding") or record["payload"].get("workflow_ref"):
+                raise WorkflowContractError("workflow_binding_missing")
+            return None
+        if binding.model_dump(mode="json") != record.get("workflow_binding"):
+            raise WorkflowContractError("workflow_binding_mismatch")
+        reference = binding.workflow_ref
+        revision = WorkflowStore._revision(
+            db, reference.workflow_id, reference.revision_id
+        )
+        requested = record["payload"].get("workflow_ref")
+        verify_binding(
+            binding,
+            revision,
+            thread_id=record["thread_id"],
+            requested_ref=WorkflowRef.model_validate(requested) if requested else None,
+            for_execution=for_execution,
+        )
+        return binding, revision
+
+    def resolve(self, thread_id, *, requested_ref=None, for_execution=False):
+        """Resolve an existing thread without inferring a default or latest version."""
+        with self.connection() as db:
+            binding = self._binding(db, thread_id)
+            if binding is None:
+                raise WorkflowContractError("workflow_binding_missing")
+            reference = binding.workflow_ref
+            revision = self._revision(db, reference.workflow_id, reference.revision_id)
+            verify_binding(
+                binding,
+                revision,
+                thread_id=thread_id,
+                requested_ref=requested_ref,
+                for_execution=for_execution,
+            )
+            return binding, revision
+
+    def selection(self, thread_id, requested_ref, *, has_history):
+        """Prepare a candidate; this read never persists a thread binding."""
+        with self.connection() as db:
+            binding = self._binding(db, thread_id)
+            if binding is None:
+                if requested_ref is None:
+                    return None
+                if (
+                    has_history
+                    or db.execute(
+                        "SELECT 1 FROM submissions WHERE thread_id=? LIMIT 1",
+                        (thread_id,),
+                    ).fetchone()
+                ):
+                    raise WorkflowContractError("legacy_workflow_locked")
+                if self._row(db, requested_ref.workflow_id)["archived_at"] is not None:
+                    raise WorkflowStoreError("workflow_archived", 409)
+                revision = self._revision(
+                    db, requested_ref.workflow_id, requested_ref.revision_id
+                )
+                binding = WorkflowBinding(
+                    thread_id=thread_id,
+                    workflow_ref=requested_ref,
+                    semantic_hash=revision.semantic_hash,
+                    compatibility=revision.compatibility,
+                    bound_at=_now(),
+                )
+            else:
+                reference = binding.workflow_ref
+                revision = self._revision(
+                    db, reference.workflow_id, reference.revision_id
+                )
+            verify_binding(
+                binding,
+                revision,
+                thread_id=thread_id,
+                requested_ref=requested_ref,
+                for_execution=True,
+            )
+            return binding, revision
+
+    def accept(
+        self, thread_id, turn_id, payload, configuration, candidate, *, has_history
+    ):
+        """Commit binding, configuration, payload and fixed run UUID atomically."""
+        from deep_research.submission_journal import SubmissionConflict, digest
+        from deep_research.workflow_runtime import require_executable
+
+        with self.connection() as db:
+            prior = db.execute(
+                "SELECT payload_hash FROM submissions WHERE thread_id=? AND turn_id=?",
+                (thread_id, turn_id),
+            ).fetchone()
+            if prior:
+                if prior[0] != digest(payload):
+                    raise SubmissionConflict("submission_payload_conflict")
+                return self.journal.get_in_connection(db, thread_id, turn_id)
+            bound = self._binding(db, thread_id)
+            if candidate is None:
+                if bound is not None:
+                    raise WorkflowContractError("workflow_binding_conflict")
+            else:
+                binding, checked_revision = candidate
+                reference = binding.workflow_ref
+                revision = self._revision(
+                    db, reference.workflow_id, reference.revision_id
+                )
+                if revision != checked_revision:
+                    raise WorkflowContractError("workflow_archive_invalid")
+                verify_binding(
+                    binding, revision, thread_id=thread_id, for_execution=True
+                )
+                require_executable(revision)
+                if bound is not None and bound != binding:
+                    raise WorkflowContractError("workflow_binding_conflict")
+                if bound is None:
+                    if (
+                        has_history
+                        or db.execute(
+                            "SELECT 1 FROM submissions WHERE thread_id=? LIMIT 1",
+                            (thread_id,),
+                        ).fetchone()
+                    ):
+                        raise WorkflowContractError("legacy_workflow_locked")
+                    if self._row(db, reference.workflow_id)["archived_at"] is not None:
+                        raise WorkflowStoreError("workflow_archived", 409)
+                    db.execute(
+                        "INSERT INTO workflow_thread_bindings VALUES (?, ?, ?, ?)",
+                        (
+                            thread_id,
+                            reference.workflow_id,
+                            reference.revision_id,
+                            _json(binding),
+                        ),
+                    )
+                if configuration is None:
+                    raise WorkflowContractError("workflow_configuration_missing")
+            self.journal.reserve_in_connection(
+                db, thread_id, turn_id, payload, configuration
+            )
+            if candidate is not None:
+                db.execute(
+                    "INSERT INTO workflow_submission_bindings VALUES (?, ?, ?)",
+                    (thread_id, turn_id, _json(candidate[0])),
+                )
+            return self.journal.get_in_connection(db, thread_id, turn_id)
 
     @staticmethod
     def _row(db, workflow_id: str):

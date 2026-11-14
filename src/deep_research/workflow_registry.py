@@ -300,6 +300,7 @@ _NODE_TYPES = (
         ),
         writes={
             **_FAILURE_WRITES,
+            "messages": "merge_messages",
             **dict.fromkeys(
                 (
                     "research_phase",

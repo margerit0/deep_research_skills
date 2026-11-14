@@ -270,7 +270,21 @@ SQLite 受理意图包含固定 run UUID，在创建原生 run 之前提交。�
 
 ## 恢复保证与边界
 
-正常状态每 2 秒回读，连接失败使用带少量抖动、最高 30 秒的退避；SSE、状态回读、事件回放分别管理。刷新、切换会话、窗口重新聚焦或网络恢复时也会对账，同一 run 在当前页面只有一个 SSE 观察连接。后台真实研究可在用户查看另一会话或演示时继续完成并接收事件。界面保留四个主阶段，研究员节点由实际委派动态加入。
+正常状态每 2 秒回读，连接失败使用带少量抖动、最高 30 秒的退避；SSE、状态回读、事件回放分别管理。刷新、切换会话、窗口重新聚焦或网络恢复时也会对账，同一 run 在当前页面只有一个 SSE 观察连接。后台真实研究可在用户查看另一会话或演示时继续完成并接收事件。旧图保留四个主阶段；发布流程按固定定义展示父节点，研究员节点均由实际委派动态加入。
+
+## 发布流程执行（M3）
+
+`workflow_execution_version: 1` 与 `workflow_events_version: 1` 表示生产工厂及父事件能力，独立于编辑能力。后端须注册 `research_workflow: deep_research.workflow_runtime:graph` 并具备兼容实现；同名测试图不构成能力。
+
+研究受理体可增加 `workflow_ref: {workflow_id, revision_id}`。省略或 `null` 在摘要前移除。成功回执另含 `workflow_binding`，匹配所选文档的流程、修订、摘要、兼容版本及 thread。新空 thread 可绑定未归档发布版；既有绑定固定不变，省略引用从受理库解析。不同显式版本返回 `workflow_binding_conflict`，旧图历史返回 `legacy_workflow_locked`。归档不使既有受支持绑定失效；旧后端不能以默认图替代选定流程。
+
+原修订、thread 绑定及逐提交副本、有效配置、原请求摘要和固定 run UUID 在同一受理 SQLite 事务固定。模型／Skills 内容仍在独立配置库预先归档。原生 thread 先刷盘，run 后创建，恢复使用精确 checkpoint 和 `input: null`，白名单仍是三个核心父节点。
+
+`atlas.workflow_event` 是 `WorkflowNodeEvent`，与动态研究员事件分开。只读分页入口为 `GET /atlas/threads/{thread_id}/runs/{run_id}/workflow-events`，必需 query 为 `research_id/turn_id/attempt_id`，可选 `after=0/limit=50/journal_id`，最多 100 条。
+
+分页沿用 `status/journal_id/events/next_sequence/last_sequence/has_more/sealed/gap/reset/unconfirmed_before_sequence`，另含 `attempt_id/workflow_ref/semantic_hash`。每个 attempt 的 run 从 1 连续计数，事件先落受理库再投递。前端核对归属、节点类型、UUID 和连续序号；旧进程未完成节点不会继续显示为运行中，`sealed` 不等于业务成功。
+
+M3 原生测试须显式设置 `ATLAS_WORKFLOW_M3_API=1`；浏览器测试代理 `ATLAS_BACKEND_URL` 与 `ATLAS_WORKFLOW_M3_PORT` 一致。入口、完整命令与实测边界见 [M3 记录](../../docs/graph-canvas-editor-m3-results.md)。
 
 旧版 `atlas-workspace:v1` 数据保持兼容；没有 `source` 的旧会话按模拟数据解释。新真实会话单独存储 `live` 映射和报告缓存。服务端会话不存在、接口不可达或提交结果不明时保留本地内容并停止新提交，不自动创建替代 thread。清除浏览器存储后，本轮没有按账号重新发现远端会话的功能。
 
