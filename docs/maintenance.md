@@ -21,6 +21,8 @@ git ls-tree -r --name-only dac1870ec56e08603f3e93e58bb5a2e916a45456 -- product-v
 
 ## 环境与入口
 
+Graph 流程编辑器已完成 M1 核心契约与设计确认，当前进入 M2，见 [实施交接](graph-canvas-editor-handoff.md)。契约模块不导入研究图或模型，修改类型／目录后运行 `uv run --locked --extra dev python -m scripts.export_workflow_contract`，再用 `--check` 核对生成物并运行两端契约测试。完整命令及阶段边界见 [M1 验证记录](graph-canvas-editor-m1-results.md)；生产工作流管理和执行能力尚未开放。
+
 在项目根目录执行：
 
 ```powershell

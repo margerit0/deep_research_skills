@@ -1,0 +1,1325 @@
+{
+  "$defs": {
+    "CreateWorkflowRequest": {
+      "additionalProperties": false,
+      "description": "Give creation an idempotency key before any HTTP request is sent.",
+      "properties": {
+        "name": {
+          "maxLength": 120,
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Name",
+          "type": "string"
+        },
+        "request_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$",
+          "title": "Request Id",
+          "type": "string"
+        },
+        "source": {
+          "discriminator": {
+            "mapping": {
+              "import": "#/$defs/ImportSource",
+              "revision": "#/$defs/RevisionSource",
+              "template": "#/$defs/TemplateSource"
+            },
+            "propertyName": "kind"
+          },
+          "oneOf": [
+            {
+              "$ref": "#/$defs/TemplateSource"
+            },
+            {
+              "$ref": "#/$defs/RevisionSource"
+            },
+            {
+              "$ref": "#/$defs/ImportSource"
+            }
+          ],
+          "title": "Source"
+        }
+      },
+      "required": [
+        "request_id",
+        "name",
+        "source"
+      ],
+      "title": "CreateWorkflowRequest",
+      "type": "object"
+    },
+    "EdgeDefinition": {
+      "additionalProperties": false,
+      "description": "Connect normal control-flow ports, without arbitrary expressions.",
+      "properties": {
+        "id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$",
+          "title": "Id",
+          "type": "string"
+        },
+        "source": {
+          "maxLength": 64,
+          "minLength": 1,
+          "pattern": "^[a-z][a-z0-9_-]*$",
+          "title": "Source",
+          "type": "string"
+        },
+        "source_port": {
+          "const": "out",
+          "default": "out",
+          "title": "Source Port",
+          "type": "string"
+        },
+        "target": {
+          "maxLength": 64,
+          "minLength": 1,
+          "pattern": "^[a-z][a-z0-9_-]*$",
+          "title": "Target",
+          "type": "string"
+        },
+        "target_port": {
+          "const": "in",
+          "default": "in",
+          "title": "Target Port",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "source",
+        "target"
+      ],
+      "title": "EdgeDefinition",
+      "type": "object"
+    },
+    "ImportSource": {
+      "additionalProperties": false,
+      "description": "Import document content only, excluding revisions and run records.",
+      "properties": {
+        "document": {
+          "$ref": "#/$defs/WorkflowDocument"
+        },
+        "kind": {
+          "const": "import",
+          "title": "Kind",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "document"
+      ],
+      "title": "ImportSource",
+      "type": "object"
+    },
+    "NodeDefinition": {
+      "additionalProperties": false,
+      "description": "Identify a node independently of its editable display label.",
+      "properties": {
+        "id": {
+          "maxLength": 64,
+          "minLength": 1,
+          "pattern": "^[a-z][a-z0-9_-]*$",
+          "title": "Id",
+          "type": "string"
+        },
+        "parameters": {
+          "additionalProperties": {
+            "maxLength": 4000,
+            "type": "string"
+          },
+          "maxProperties": 1,
+          "propertyNames": {
+            "const": "instructions"
+          },
+          "title": "Parameters",
+          "type": "object"
+        },
+        "type": {
+          "maxLength": 64,
+          "minLength": 1,
+          "pattern": "^[a-z][a-z0-9_-]*$",
+          "title": "Type",
+          "type": "string"
+        },
+        "type_version": {
+          "default": 1,
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "title": "Type Version",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "id",
+        "type"
+      ],
+      "title": "NodeDefinition",
+      "type": "object"
+    },
+    "NodePresentation": {
+      "additionalProperties": false,
+      "description": "Save one optional label and position for a node.",
+      "properties": {
+        "label": {
+          "maxLength": 120,
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Label",
+          "type": "string"
+        },
+        "node_id": {
+          "maxLength": 64,
+          "minLength": 1,
+          "pattern": "^[a-z][a-z0-9_-]*$",
+          "title": "Node Id",
+          "type": "string"
+        },
+        "position": {
+          "$ref": "#/$defs/Position"
+        }
+      },
+      "required": [
+        "node_id",
+        "label",
+        "position"
+      ],
+      "title": "NodePresentation",
+      "type": "object"
+    },
+    "NodeTypeDescription": {
+      "additionalProperties": false,
+      "description": "Expose safe editor metadata and the normal-route/state contract.",
+      "properties": {
+        "default_parameters": {
+          "additionalProperties": true,
+          "title": "Default Parameters",
+          "type": "object"
+        },
+        "fixed_id": {
+          "anyOf": [
+            {
+              "maxLength": 64,
+              "minLength": 1,
+              "pattern": "^[a-z][a-z0-9_-]*$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Fixed Id"
+        },
+        "input_label": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Input Label"
+        },
+        "kind": {
+          "enum": [
+            "system",
+            "core",
+            "extension"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "label": {
+          "title": "Label",
+          "type": "string"
+        },
+        "max_instances": {
+          "anyOf": [
+            {
+              "maximum": 30,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Max Instances"
+        },
+        "min_instances": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Min Instances",
+          "type": "integer"
+        },
+        "model_roles": {
+          "items": {
+            "enum": [
+              "SCOPING",
+              "SUPERVISOR",
+              "RESEARCHER",
+              "SUMMARIZATION",
+              "COMPRESSION",
+              "FINAL_REPORT"
+            ],
+            "type": "string"
+          },
+          "title": "Model Roles",
+          "type": "array"
+        },
+        "outcomes": {
+          "items": {
+            "enum": [
+              "continue",
+              "awaiting_input",
+              "failed",
+              "partial"
+            ],
+            "type": "string"
+          },
+          "title": "Outcomes",
+          "type": "array"
+        },
+        "output_label": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Output Label"
+        },
+        "parameter_fields": {
+          "items": {
+            "const": "instructions",
+            "type": "string"
+          },
+          "title": "Parameter Fields",
+          "type": "array"
+        },
+        "parameters_schema": {
+          "additionalProperties": true,
+          "title": "Parameters Schema",
+          "type": "object"
+        },
+        "safe_recovery": {
+          "title": "Safe Recovery",
+          "type": "boolean"
+        },
+        "state_reads": {
+          "items": {
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$",
+            "type": "string"
+          },
+          "title": "State Reads",
+          "type": "array"
+        },
+        "state_writes": {
+          "additionalProperties": {
+            "enum": [
+              "replace",
+              "overwrite",
+              "merge_messages"
+            ],
+            "type": "string"
+          },
+          "title": "State Writes",
+          "type": "object"
+        },
+        "successor_types": {
+          "items": {
+            "maxLength": 64,
+            "minLength": 1,
+            "pattern": "^[a-z][a-z0-9_-]*$",
+            "type": "string"
+          },
+          "title": "Successor Types",
+          "type": "array"
+        },
+        "type": {
+          "maxLength": 64,
+          "minLength": 1,
+          "pattern": "^[a-z][a-z0-9_-]*$",
+          "title": "Type",
+          "type": "string"
+        },
+        "type_version": {
+          "default": 1,
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "title": "Type Version",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "type",
+        "label",
+        "kind",
+        "min_instances",
+        "max_instances",
+        "fixed_id",
+        "input_label",
+        "output_label",
+        "successor_types",
+        "model_roles",
+        "parameter_fields",
+        "parameters_schema",
+        "default_parameters",
+        "state_reads",
+        "state_writes",
+        "outcomes",
+        "safe_recovery"
+      ],
+      "title": "NodeTypeDescription",
+      "type": "object"
+    },
+    "Position": {
+      "additionalProperties": false,
+      "description": "Store finite canvas coordinates within a bounded editing area.",
+      "properties": {
+        "x": {
+          "maximum": 1000000,
+          "minimum": -1000000,
+          "title": "X",
+          "type": "number"
+        },
+        "y": {
+          "maximum": 1000000,
+          "minimum": -1000000,
+          "title": "Y",
+          "type": "number"
+        }
+      },
+      "required": [
+        "x",
+        "y"
+      ],
+      "title": "Position",
+      "type": "object"
+    },
+    "PublishWorkflowRequest": {
+      "additionalProperties": false,
+      "description": "Reuse the same key and content when a publication response is lost.",
+      "properties": {
+        "expected_edit_version": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "title": "Expected Edit Version",
+          "type": "integer"
+        },
+        "note": {
+          "default": "",
+          "maxLength": 2000,
+          "title": "Note",
+          "type": "string"
+        },
+        "request_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$",
+          "title": "Request Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "expected_edit_version",
+        "request_id"
+      ],
+      "title": "PublishWorkflowRequest",
+      "type": "object"
+    },
+    "RevisionSource": {
+      "additionalProperties": false,
+      "description": "Copy a published revision without inheriting its identity.",
+      "properties": {
+        "kind": {
+          "const": "revision",
+          "title": "Kind",
+          "type": "string"
+        },
+        "workflow_ref": {
+          "$ref": "#/$defs/WorkflowRef"
+        }
+      },
+      "required": [
+        "kind",
+        "workflow_ref"
+      ],
+      "title": "RevisionSource",
+      "type": "object"
+    },
+    "SaveDraftRequest": {
+      "additionalProperties": false,
+      "description": "Reject stale edits rather than silently replacing a newer draft.",
+      "properties": {
+        "document": {
+          "$ref": "#/$defs/WorkflowDocument"
+        },
+        "expected_edit_version": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "title": "Expected Edit Version",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "expected_edit_version",
+        "document"
+      ],
+      "title": "SaveDraftRequest",
+      "type": "object"
+    },
+    "TemplateSource": {
+      "additionalProperties": false,
+      "description": "Create from the built-in standard research template.",
+      "properties": {
+        "kind": {
+          "const": "template",
+          "title": "Kind",
+          "type": "string"
+        },
+        "template_id": {
+          "const": "standard_research",
+          "title": "Template Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "template_id"
+      ],
+      "title": "TemplateSource",
+      "type": "object"
+    },
+    "ValidateWorkflowRequest": {
+      "additionalProperties": false,
+      "description": "Validate only an exact stored edit version.",
+      "properties": {
+        "expected_edit_version": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "title": "Expected Edit Version",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "expected_edit_version"
+      ],
+      "title": "ValidateWorkflowRequest",
+      "type": "object"
+    },
+    "ValidationIssue": {
+      "additionalProperties": false,
+      "description": "Expose safe messages and stable locations, without provider payloads.",
+      "properties": {
+        "code": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$",
+          "title": "Code",
+          "type": "string"
+        },
+        "edge_id": {
+          "anyOf": [
+            {
+              "maxLength": 128,
+              "minLength": 1,
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Edge Id"
+        },
+        "field": {
+          "anyOf": [
+            {
+              "maxLength": 500,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Field"
+        },
+        "message": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Message",
+          "type": "string"
+        },
+        "node_id": {
+          "anyOf": [
+            {
+              "maxLength": 64,
+              "minLength": 1,
+              "pattern": "^[a-z][a-z0-9_-]*$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Node Id"
+        },
+        "severity": {
+          "default": "error",
+          "enum": [
+            "error",
+            "warning"
+          ],
+          "title": "Severity",
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "message"
+      ],
+      "title": "ValidationIssue",
+      "type": "object"
+    },
+    "Viewport": {
+      "additionalProperties": false,
+      "description": "Save the viewport independently of executable node parameters.",
+      "properties": {
+        "x": {
+          "maximum": 1000000,
+          "minimum": -1000000,
+          "title": "X",
+          "type": "number"
+        },
+        "y": {
+          "maximum": 1000000,
+          "minimum": -1000000,
+          "title": "Y",
+          "type": "number"
+        },
+        "zoom": {
+          "maximum": 2.0,
+          "minimum": 0.2,
+          "title": "Zoom",
+          "type": "number"
+        }
+      },
+      "required": [
+        "x",
+        "y",
+        "zoom"
+      ],
+      "title": "Viewport",
+      "type": "object"
+    },
+    "WorkflowBinding": {
+      "additionalProperties": false,
+      "description": "Pin a native thread to a revision in the submission transaction.",
+      "properties": {
+        "bound_at": {
+          "format": "date-time",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,6})?(?:Z|[+-]\\d{2}:\\d{2})$",
+          "title": "Bound At",
+          "type": "string"
+        },
+        "compatibility": {
+          "$ref": "#/$defs/WorkflowCompatibility"
+        },
+        "schema_version": {
+          "default": 1,
+          "maximum": 1,
+          "minimum": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "semantic_hash": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Semantic Hash",
+          "type": "string"
+        },
+        "thread_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$",
+          "title": "Thread Id",
+          "type": "string"
+        },
+        "workflow_ref": {
+          "$ref": "#/$defs/WorkflowRef"
+        }
+      },
+      "required": [
+        "thread_id",
+        "workflow_ref",
+        "semantic_hash",
+        "compatibility",
+        "bound_at"
+      ],
+      "title": "WorkflowBinding",
+      "type": "object"
+    },
+    "WorkflowBusinessResult": {
+      "additionalProperties": false,
+      "description": "Return a routing outcome without exposing an arbitrary goto target.\n\nRuntime updates remain in the graph adapter because they can include\nLangChain messages and Overwrite objects, which are not public JSON.",
+      "properties": {
+        "outcome": {
+          "enum": [
+            "continue",
+            "awaiting_input",
+            "failed",
+            "partial"
+          ],
+          "title": "Outcome",
+          "type": "string"
+        }
+      },
+      "required": [
+        "outcome"
+      ],
+      "title": "WorkflowBusinessResult",
+      "type": "object"
+    },
+    "WorkflowCompatibility": {
+      "additionalProperties": false,
+      "description": "Pin implementations independently of the API's schema version.",
+      "properties": {
+        "compiler_version": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "title": "Compiler Version",
+          "type": "integer"
+        },
+        "graph_id": {
+          "const": "research_workflow",
+          "default": "research_workflow",
+          "title": "Graph Id",
+          "type": "string"
+        },
+        "node_registry_version": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "title": "Node Registry Version",
+          "type": "integer"
+        },
+        "state_schema_version": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "title": "State Schema Version",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "compiler_version",
+        "node_registry_version",
+        "state_schema_version"
+      ],
+      "title": "WorkflowCompatibility",
+      "type": "object"
+    },
+    "WorkflowConflict": {
+      "additionalProperties": false,
+      "description": "Return enough information to preserve a local draft and reload safely.",
+      "properties": {
+        "current_edit_version": {
+          "anyOf": [
+            {
+              "maximum": 9007199254740991,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Current Edit Version"
+        },
+        "reason": {
+          "enum": [
+            "workflow_edit_conflict",
+            "workflow_request_conflict",
+            "workflow_archived",
+            "workflow_binding_conflict",
+            "legacy_workflow_locked"
+          ],
+          "title": "Reason",
+          "type": "string"
+        }
+      },
+      "required": [
+        "reason"
+      ],
+      "title": "WorkflowConflict",
+      "type": "object"
+    },
+    "WorkflowDefaults": {
+      "additionalProperties": false,
+      "description": "Supply optional defaults; acceptance still fixes the effective snapshot.",
+      "properties": {
+        "selection": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/WorkflowSelection"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "title": "WorkflowDefaults",
+      "type": "object"
+    },
+    "WorkflowDefinition": {
+      "additionalProperties": false,
+      "description": "Keep executable fields separate from layout and transient run state.",
+      "properties": {
+        "defaults": {
+          "$ref": "#/$defs/WorkflowDefaults"
+        },
+        "edges": {
+          "items": {
+            "$ref": "#/$defs/EdgeDefinition"
+          },
+          "maxItems": 60,
+          "title": "Edges",
+          "type": "array"
+        },
+        "nodes": {
+          "items": {
+            "$ref": "#/$defs/NodeDefinition"
+          },
+          "maxItems": 30,
+          "title": "Nodes",
+          "type": "array"
+        },
+        "schema_version": {
+          "default": 1,
+          "maximum": 1,
+          "minimum": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "nodes",
+        "edges"
+      ],
+      "title": "WorkflowDefinition",
+      "type": "object"
+    },
+    "WorkflowDocument": {
+      "additionalProperties": false,
+      "description": "Represent the content saved atomically with an optimistic edit version.",
+      "properties": {
+        "definition": {
+          "$ref": "#/$defs/WorkflowDefinition"
+        },
+        "name": {
+          "maxLength": 120,
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Name",
+          "type": "string"
+        },
+        "presentation": {
+          "$ref": "#/$defs/WorkflowPresentation"
+        }
+      },
+      "required": [
+        "name",
+        "definition"
+      ],
+      "title": "WorkflowDocument",
+      "type": "object"
+    },
+    "WorkflowDraft": {
+      "additionalProperties": false,
+      "description": "Describe the current replaceable draft and its concurrency token.",
+      "properties": {
+        "base_revision_id": {
+          "anyOf": [
+            {
+              "maxLength": 128,
+              "minLength": 1,
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Base Revision Id"
+        },
+        "document": {
+          "$ref": "#/$defs/WorkflowDocument"
+        },
+        "edit_version": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "title": "Edit Version",
+          "type": "integer"
+        },
+        "schema_version": {
+          "default": 1,
+          "maximum": 1,
+          "minimum": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,6})?(?:Z|[+-]\\d{2}:\\d{2})$",
+          "title": "Updated At",
+          "type": "string"
+        },
+        "workflow_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$",
+          "title": "Workflow Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "workflow_id",
+        "edit_version",
+        "document",
+        "updated_at"
+      ],
+      "title": "WorkflowDraft",
+      "type": "object"
+    },
+    "WorkflowNodeCatalog": {
+      "additionalProperties": false,
+      "description": "Version the node directory independently of any execution capability.",
+      "properties": {
+        "node_types": {
+          "items": {
+            "$ref": "#/$defs/NodeTypeDescription"
+          },
+          "title": "Node Types",
+          "type": "array"
+        },
+        "registry_version": {
+          "default": 1,
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "title": "Registry Version",
+          "type": "integer"
+        },
+        "schema_version": {
+          "default": 1,
+          "maximum": 1,
+          "minimum": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "node_types"
+      ],
+      "title": "WorkflowNodeCatalog",
+      "type": "object"
+    },
+    "WorkflowNodeEvent": {
+      "additionalProperties": false,
+      "description": "Describe parent-node observations separately from dynamic researchers.",
+      "properties": {
+        "at": {
+          "format": "date-time",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,6})?(?:Z|[+-]\\d{2}:\\d{2})$",
+          "title": "At",
+          "type": "string"
+        },
+        "attempt_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$",
+          "title": "Attempt Id",
+          "type": "string"
+        },
+        "elapsed_ms": {
+          "maximum": 9007199254740991,
+          "minimum": 0,
+          "title": "Elapsed Ms",
+          "type": "integer"
+        },
+        "id": {
+          "pattern": "^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "started",
+            "completed",
+            "awaiting_input",
+            "failed",
+            "partial"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "node_id": {
+          "maxLength": 64,
+          "minLength": 1,
+          "pattern": "^[a-z][a-z0-9_-]*$",
+          "title": "Node Id",
+          "type": "string"
+        },
+        "node_type": {
+          "maxLength": 64,
+          "minLength": 1,
+          "pattern": "^[a-z][a-z0-9_-]*$",
+          "title": "Node Type",
+          "type": "string"
+        },
+        "research_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$",
+          "title": "Research Id",
+          "type": "string"
+        },
+        "run_id": {
+          "pattern": "^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$",
+          "title": "Run Id",
+          "type": "string"
+        },
+        "semantic_hash": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Semantic Hash",
+          "type": "string"
+        },
+        "sequence": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "title": "Sequence",
+          "type": "integer"
+        },
+        "summary": {
+          "default": "",
+          "maxLength": 2000,
+          "title": "Summary",
+          "type": "string"
+        },
+        "thread_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$",
+          "title": "Thread Id",
+          "type": "string"
+        },
+        "turn_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$",
+          "title": "Turn Id",
+          "type": "string"
+        },
+        "version": {
+          "default": 1,
+          "maximum": 1,
+          "minimum": 1,
+          "title": "Version",
+          "type": "integer"
+        },
+        "workflow_ref": {
+          "$ref": "#/$defs/WorkflowRef"
+        }
+      },
+      "required": [
+        "id",
+        "thread_id",
+        "research_id",
+        "turn_id",
+        "run_id",
+        "attempt_id",
+        "workflow_ref",
+        "semantic_hash",
+        "node_id",
+        "node_type",
+        "sequence",
+        "at",
+        "kind",
+        "elapsed_ms"
+      ],
+      "title": "WorkflowNodeEvent",
+      "type": "object"
+    },
+    "WorkflowPresentation": {
+      "additionalProperties": false,
+      "description": "Allow omitted positions so a new draft can receive automatic layout.",
+      "properties": {
+        "nodes": {
+          "items": {
+            "$ref": "#/$defs/NodePresentation"
+          },
+          "maxItems": 30,
+          "title": "Nodes",
+          "type": "array"
+        },
+        "schema_version": {
+          "default": 1,
+          "maximum": 1,
+          "minimum": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "viewport": {
+          "$ref": "#/$defs/Viewport"
+        }
+      },
+      "title": "WorkflowPresentation",
+      "type": "object"
+    },
+    "WorkflowRef": {
+      "additionalProperties": false,
+      "description": "Reference a server-owned publication, never a browser execution graph.",
+      "properties": {
+        "revision_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$",
+          "title": "Revision Id",
+          "type": "string"
+        },
+        "workflow_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$",
+          "title": "Workflow Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "workflow_id",
+        "revision_id"
+      ],
+      "title": "WorkflowRef",
+      "type": "object"
+    },
+    "WorkflowRevision": {
+      "additionalProperties": false,
+      "description": "Describe one append-only revision; validate archive integrity on read.",
+      "properties": {
+        "compatibility": {
+          "$ref": "#/$defs/WorkflowCompatibility"
+        },
+        "document": {
+          "$ref": "#/$defs/WorkflowDocument"
+        },
+        "note": {
+          "default": "",
+          "maxLength": 2000,
+          "title": "Note",
+          "type": "string"
+        },
+        "published_at": {
+          "format": "date-time",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,6})?(?:Z|[+-]\\d{2}:\\d{2})$",
+          "title": "Published At",
+          "type": "string"
+        },
+        "revision_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$",
+          "title": "Revision Id",
+          "type": "string"
+        },
+        "revision_number": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "title": "Revision Number",
+          "type": "integer"
+        },
+        "schema_version": {
+          "default": 1,
+          "maximum": 1,
+          "minimum": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "semantic_hash": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Semantic Hash",
+          "type": "string"
+        },
+        "source_edit_version": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "title": "Source Edit Version",
+          "type": "integer"
+        },
+        "workflow_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$",
+          "title": "Workflow Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "workflow_id",
+        "revision_id",
+        "revision_number",
+        "source_edit_version",
+        "semantic_hash",
+        "compatibility",
+        "document",
+        "published_at"
+      ],
+      "title": "WorkflowRevision",
+      "type": "object"
+    },
+    "WorkflowSelection": {
+      "additionalProperties": false,
+      "description": "Keep six role revisions; instances cannot override their role's model.",
+      "properties": {
+        "models": {
+          "additionalProperties": {
+            "pattern": "^[a-f0-9]{64}$",
+            "type": "string"
+          },
+          "propertyNames": {
+            "enum": [
+              "SCOPING",
+              "SUPERVISOR",
+              "RESEARCHER",
+              "SUMMARIZATION",
+              "COMPRESSION",
+              "FINAL_REPORT"
+            ]
+          },
+          "title": "Models",
+          "type": "object"
+        },
+        "skills": {
+          "$ref": "#/$defs/WorkflowSkills"
+        },
+        "version": {
+          "default": 1,
+          "maximum": 1,
+          "minimum": 1,
+          "title": "Version",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "models",
+        "skills"
+      ],
+      "title": "WorkflowSelection",
+      "type": "object"
+    },
+    "WorkflowSkills": {
+      "additionalProperties": false,
+      "description": "Describe allowed Skills using the existing selection semantics.",
+      "properties": {
+        "allowed": {
+          "items": {
+            "maxLength": 120,
+            "minLength": 1,
+            "pattern": "\\S",
+            "type": "string"
+          },
+          "maxItems": 100,
+          "title": "Allowed",
+          "type": "array"
+        },
+        "mode": {
+          "enum": [
+            "auto",
+            "manual"
+          ],
+          "title": "Mode",
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "allowed"
+      ],
+      "title": "WorkflowSkills",
+      "type": "object"
+    },
+    "WorkflowValidation": {
+      "additionalProperties": false,
+      "description": "Associate validation with the exact saved version when supplied.",
+      "properties": {
+        "checked_edit_version": {
+          "anyOf": [
+            {
+              "maximum": 9007199254740991,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Checked Edit Version"
+        },
+        "issues": {
+          "items": {
+            "$ref": "#/$defs/ValidationIssue"
+          },
+          "maxItems": 100,
+          "title": "Issues",
+          "type": "array"
+        },
+        "schema_version": {
+          "default": 1,
+          "maximum": 1,
+          "minimum": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "scope": {
+          "default": "structure",
+          "enum": [
+            "structure",
+            "publication"
+          ],
+          "title": "Scope",
+          "type": "string"
+        },
+        "truncated": {
+          "default": false,
+          "title": "Truncated",
+          "type": "boolean"
+        },
+        "valid": {
+          "title": "Valid",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "valid",
+        "issues"
+      ],
+      "title": "WorkflowValidation",
+      "type": "object"
+    }
+  },
+  "$id": "urn:atlas:workflow:v1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Atlas workflow contract v1"
+}

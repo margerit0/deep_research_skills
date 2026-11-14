@@ -1,0 +1,1317 @@
+{
+  "examples": {
+    "CreateWorkflowRequest": {
+      "name": "新流程",
+      "request_id": "create-example",
+      "source": {
+        "kind": "template",
+        "template_id": "standard_research"
+      }
+    },
+    "PublishWorkflowRequest": {
+      "expected_edit_version": 7,
+      "note": "",
+      "request_id": "publish-example"
+    },
+    "SaveDraftRequest": {
+      "document": {
+        "definition": {
+          "defaults": {
+            "selection": null
+          },
+          "edges": [
+            {
+              "id": "edge_1",
+              "source": "start",
+              "source_port": "out",
+              "target": "prepare_research",
+              "target_port": "in"
+            },
+            {
+              "id": "edge_2",
+              "source": "prepare_research",
+              "source_port": "out",
+              "target": "clarify_with_user",
+              "target_port": "in"
+            },
+            {
+              "id": "edge_3",
+              "source": "clarify_with_user",
+              "source_port": "out",
+              "target": "write_research_brief",
+              "target_port": "in"
+            },
+            {
+              "id": "edge_4",
+              "source": "write_research_brief",
+              "source_port": "out",
+              "target": "supervisor_subgraph",
+              "target_port": "in"
+            },
+            {
+              "id": "edge_5",
+              "source": "supervisor_subgraph",
+              "source_port": "out",
+              "target": "final_report_generation",
+              "target_port": "in"
+            },
+            {
+              "id": "edge_6",
+              "source": "final_report_generation",
+              "source_port": "out",
+              "target": "end",
+              "target_port": "in"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "start",
+              "parameters": {},
+              "type": "start",
+              "type_version": 1
+            },
+            {
+              "id": "prepare_research",
+              "parameters": {},
+              "type": "prepare_research",
+              "type_version": 1
+            },
+            {
+              "id": "clarify_with_user",
+              "parameters": {},
+              "type": "clarify_with_user",
+              "type_version": 1
+            },
+            {
+              "id": "write_research_brief",
+              "parameters": {},
+              "type": "write_research_brief",
+              "type_version": 1
+            },
+            {
+              "id": "supervisor_subgraph",
+              "parameters": {},
+              "type": "supervisor_subgraph",
+              "type_version": 1
+            },
+            {
+              "id": "final_report_generation",
+              "parameters": {},
+              "type": "final_report_generation",
+              "type_version": 1
+            },
+            {
+              "id": "end",
+              "parameters": {},
+              "type": "end",
+              "type_version": 1
+            }
+          ],
+          "schema_version": 1
+        },
+        "name": "标准深度研究",
+        "presentation": {
+          "nodes": [],
+          "schema_version": 1,
+          "viewport": {
+            "x": 0.0,
+            "y": 0.0,
+            "zoom": 1.0
+          }
+        }
+      },
+      "expected_edit_version": 7
+    },
+    "ValidateWorkflowRequest": {
+      "expected_edit_version": 7
+    },
+    "WorkflowBinding": {
+      "bound_at": "2026-11-15T00:00:00Z",
+      "compatibility": {
+        "compiler_version": 1,
+        "graph_id": "research_workflow",
+        "node_registry_version": 1,
+        "state_schema_version": 1
+      },
+      "schema_version": 1,
+      "semantic_hash": "83fbeb3d4447f8f46d9b50f8c865887305e362f1125b46783eee60110404ed20",
+      "thread_id": "thread-example",
+      "workflow_ref": {
+        "revision_id": "revision-example",
+        "workflow_id": "workflow-example"
+      }
+    },
+    "WorkflowBusinessResult": {
+      "outcome": "continue"
+    },
+    "WorkflowConflict": {
+      "current_edit_version": 8,
+      "reason": "workflow_edit_conflict"
+    },
+    "WorkflowDocument": {
+      "definition": {
+        "defaults": {
+          "selection": null
+        },
+        "edges": [
+          {
+            "id": "edge_1",
+            "source": "start",
+            "source_port": "out",
+            "target": "prepare_research",
+            "target_port": "in"
+          },
+          {
+            "id": "edge_2",
+            "source": "prepare_research",
+            "source_port": "out",
+            "target": "clarify_with_user",
+            "target_port": "in"
+          },
+          {
+            "id": "edge_3",
+            "source": "clarify_with_user",
+            "source_port": "out",
+            "target": "write_research_brief",
+            "target_port": "in"
+          },
+          {
+            "id": "edge_4",
+            "source": "write_research_brief",
+            "source_port": "out",
+            "target": "supervisor_subgraph",
+            "target_port": "in"
+          },
+          {
+            "id": "edge_5",
+            "source": "supervisor_subgraph",
+            "source_port": "out",
+            "target": "final_report_generation",
+            "target_port": "in"
+          },
+          {
+            "id": "edge_6",
+            "source": "final_report_generation",
+            "source_port": "out",
+            "target": "end",
+            "target_port": "in"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "start",
+            "parameters": {},
+            "type": "start",
+            "type_version": 1
+          },
+          {
+            "id": "prepare_research",
+            "parameters": {},
+            "type": "prepare_research",
+            "type_version": 1
+          },
+          {
+            "id": "clarify_with_user",
+            "parameters": {},
+            "type": "clarify_with_user",
+            "type_version": 1
+          },
+          {
+            "id": "write_research_brief",
+            "parameters": {},
+            "type": "write_research_brief",
+            "type_version": 1
+          },
+          {
+            "id": "supervisor_subgraph",
+            "parameters": {},
+            "type": "supervisor_subgraph",
+            "type_version": 1
+          },
+          {
+            "id": "final_report_generation",
+            "parameters": {},
+            "type": "final_report_generation",
+            "type_version": 1
+          },
+          {
+            "id": "end",
+            "parameters": {},
+            "type": "end",
+            "type_version": 1
+          }
+        ],
+        "schema_version": 1
+      },
+      "name": "标准深度研究",
+      "presentation": {
+        "nodes": [],
+        "schema_version": 1,
+        "viewport": {
+          "x": 0.0,
+          "y": 0.0,
+          "zoom": 1.0
+        }
+      }
+    },
+    "WorkflowDraft": {
+      "base_revision_id": null,
+      "document": {
+        "definition": {
+          "defaults": {
+            "selection": null
+          },
+          "edges": [
+            {
+              "id": "edge_1",
+              "source": "start",
+              "source_port": "out",
+              "target": "prepare_research",
+              "target_port": "in"
+            },
+            {
+              "id": "edge_2",
+              "source": "prepare_research",
+              "source_port": "out",
+              "target": "clarify_with_user",
+              "target_port": "in"
+            },
+            {
+              "id": "edge_3",
+              "source": "clarify_with_user",
+              "source_port": "out",
+              "target": "write_research_brief",
+              "target_port": "in"
+            },
+            {
+              "id": "edge_4",
+              "source": "write_research_brief",
+              "source_port": "out",
+              "target": "supervisor_subgraph",
+              "target_port": "in"
+            },
+            {
+              "id": "edge_5",
+              "source": "supervisor_subgraph",
+              "source_port": "out",
+              "target": "final_report_generation",
+              "target_port": "in"
+            },
+            {
+              "id": "edge_6",
+              "source": "final_report_generation",
+              "source_port": "out",
+              "target": "end",
+              "target_port": "in"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "start",
+              "parameters": {},
+              "type": "start",
+              "type_version": 1
+            },
+            {
+              "id": "prepare_research",
+              "parameters": {},
+              "type": "prepare_research",
+              "type_version": 1
+            },
+            {
+              "id": "clarify_with_user",
+              "parameters": {},
+              "type": "clarify_with_user",
+              "type_version": 1
+            },
+            {
+              "id": "write_research_brief",
+              "parameters": {},
+              "type": "write_research_brief",
+              "type_version": 1
+            },
+            {
+              "id": "supervisor_subgraph",
+              "parameters": {},
+              "type": "supervisor_subgraph",
+              "type_version": 1
+            },
+            {
+              "id": "final_report_generation",
+              "parameters": {},
+              "type": "final_report_generation",
+              "type_version": 1
+            },
+            {
+              "id": "end",
+              "parameters": {},
+              "type": "end",
+              "type_version": 1
+            }
+          ],
+          "schema_version": 1
+        },
+        "name": "标准深度研究",
+        "presentation": {
+          "nodes": [],
+          "schema_version": 1,
+          "viewport": {
+            "x": 0.0,
+            "y": 0.0,
+            "zoom": 1.0
+          }
+        }
+      },
+      "edit_version": 7,
+      "schema_version": 1,
+      "updated_at": "2026-11-15T00:00:00Z",
+      "workflow_id": "workflow-example"
+    },
+    "WorkflowNodeCatalog": {
+      "node_types": [
+        {
+          "default_parameters": {},
+          "fixed_id": "start",
+          "input_label": null,
+          "kind": "system",
+          "label": "开始",
+          "max_instances": 1,
+          "min_instances": 1,
+          "model_roles": [],
+          "outcomes": [
+            "continue"
+          ],
+          "output_label": "研究问题",
+          "parameter_fields": [],
+          "parameters_schema": {
+            "additionalProperties": false,
+            "description": "Disallow arbitrary models, prompts, tools or code on core nodes.",
+            "properties": {},
+            "title": "EmptyParameters",
+            "type": "object"
+          },
+          "safe_recovery": false,
+          "state_reads": [],
+          "state_writes": {},
+          "successor_types": [
+            "prepare_research"
+          ],
+          "type": "start",
+          "type_version": 1
+        },
+        {
+          "default_parameters": {},
+          "fixed_id": "prepare_research",
+          "input_label": "研究问题",
+          "kind": "system",
+          "label": "研究初始化",
+          "max_instances": 1,
+          "min_instances": 1,
+          "model_roles": [],
+          "outcomes": [
+            "continue",
+            "failed"
+          ],
+          "output_label": "本轮研究上下文",
+          "parameter_fields": [],
+          "parameters_schema": {
+            "additionalProperties": false,
+            "description": "Disallow arbitrary models, prompts, tools or code on core nodes.",
+            "properties": {},
+            "title": "EmptyParameters",
+            "type": "object"
+          },
+          "safe_recovery": false,
+          "state_reads": [
+            "messages",
+            "research_id",
+            "turn_id",
+            "active_research_id",
+            "active_turn_id",
+            "research_status"
+          ],
+          "state_writes": {
+            "active_research_id": "replace",
+            "active_turn_id": "replace",
+            "effective_config": "replace",
+            "final_report": "replace",
+            "messages": "overwrite",
+            "notes": "overwrite",
+            "organized_notes": "replace",
+            "raw_notes": "overwrite",
+            "report_attempt_id": "replace",
+            "report_research_id": "replace",
+            "report_reviews": "replace",
+            "report_run_id": "replace",
+            "report_turn_id": "replace",
+            "report_writing_attempt_id": "replace",
+            "research_brief": "replace",
+            "research_constraints": "replace",
+            "research_errors": "replace",
+            "research_events": "replace",
+            "research_iterations": "replace",
+            "research_phase": "replace",
+            "research_status": "replace",
+            "source_evidence": "replace",
+            "sources": "replace",
+            "supervisor_messages": "overwrite",
+            "supervisor_status": "replace",
+            "user_requirements": "replace"
+          },
+          "successor_types": [
+            "clarify_with_user",
+            "write_research_brief"
+          ],
+          "type": "prepare_research",
+          "type_version": 1
+        },
+        {
+          "default_parameters": {},
+          "fixed_id": "clarify_with_user",
+          "input_label": "研究问题与补充回答",
+          "kind": "core",
+          "label": "澄清需求",
+          "max_instances": 1,
+          "min_instances": 0,
+          "model_roles": [
+            "SCOPING"
+          ],
+          "outcomes": [
+            "continue",
+            "awaiting_input",
+            "failed"
+          ],
+          "output_label": "明确的研究要求",
+          "parameter_fields": [],
+          "parameters_schema": {
+            "additionalProperties": false,
+            "description": "Disallow arbitrary models, prompts, tools or code on core nodes.",
+            "properties": {},
+            "title": "EmptyParameters",
+            "type": "object"
+          },
+          "safe_recovery": true,
+          "state_reads": [
+            "messages",
+            "research_errors"
+          ],
+          "state_writes": {
+            "final_report": "replace",
+            "messages": "merge_messages",
+            "report_research_id": "replace",
+            "research_errors": "replace",
+            "research_phase": "replace",
+            "research_status": "replace"
+          },
+          "successor_types": [
+            "write_research_brief"
+          ],
+          "type": "clarify_with_user",
+          "type_version": 1
+        },
+        {
+          "default_parameters": {},
+          "fixed_id": "write_research_brief",
+          "input_label": "明确的研究要求",
+          "kind": "core",
+          "label": "研究简报",
+          "max_instances": 1,
+          "min_instances": 1,
+          "model_roles": [
+            "SCOPING"
+          ],
+          "outcomes": [
+            "continue",
+            "failed"
+          ],
+          "output_label": "研究简报",
+          "parameter_fields": [],
+          "parameters_schema": {
+            "additionalProperties": false,
+            "description": "Disallow arbitrary models, prompts, tools or code on core nodes.",
+            "properties": {},
+            "title": "EmptyParameters",
+            "type": "object"
+          },
+          "safe_recovery": true,
+          "state_reads": [
+            "messages",
+            "research_errors"
+          ],
+          "state_writes": {
+            "final_report": "replace",
+            "report_research_id": "replace",
+            "research_brief": "replace",
+            "research_constraints": "replace",
+            "research_errors": "replace",
+            "research_phase": "replace",
+            "research_status": "replace",
+            "supervisor_messages": "overwrite",
+            "user_requirements": "replace"
+          },
+          "successor_types": [
+            "optimize_plan",
+            "supervisor_subgraph"
+          ],
+          "type": "write_research_brief",
+          "type_version": 1
+        },
+        {
+          "default_parameters": {
+            "instructions": "补充研究维度与验证路径，保留用户原始要求，标明待验证的信息。"
+          },
+          "fixed_id": null,
+          "input_label": "研究简报",
+          "kind": "extension",
+          "label": "研究计划优化",
+          "max_instances": null,
+          "min_instances": 0,
+          "model_roles": [
+            "SCOPING"
+          ],
+          "outcomes": [
+            "continue",
+            "failed"
+          ],
+          "output_label": "优化后的研究简报",
+          "parameter_fields": [
+            "instructions"
+          ],
+          "parameters_schema": {
+            "additionalProperties": false,
+            "description": "Treat requirements as literal text, never as a template expression.",
+            "properties": {
+              "instructions": {
+                "description": "作为纯文本处理要求使用，不执行模板变量、表达式或代码。",
+                "maxLength": 4000,
+                "minLength": 1,
+                "pattern": "\\S",
+                "title": "处理要求",
+                "type": "string"
+              }
+            },
+            "required": [
+              "instructions"
+            ],
+            "title": "ProcessingParameters",
+            "type": "object"
+          },
+          "safe_recovery": false,
+          "state_reads": [
+            "research_brief",
+            "user_requirements",
+            "research_constraints"
+          ],
+          "state_writes": {
+            "research_brief": "replace",
+            "supervisor_messages": "overwrite"
+          },
+          "successor_types": [
+            "optimize_plan",
+            "supervisor_subgraph"
+          ],
+          "type": "optimize_plan",
+          "type_version": 1
+        },
+        {
+          "default_parameters": {},
+          "fixed_id": "supervisor_subgraph",
+          "input_label": "研究简报",
+          "kind": "core",
+          "label": "研究协调子流程",
+          "max_instances": 1,
+          "min_instances": 1,
+          "model_roles": [
+            "SUPERVISOR",
+            "RESEARCHER",
+            "SUMMARIZATION",
+            "COMPRESSION"
+          ],
+          "outcomes": [
+            "continue",
+            "failed"
+          ],
+          "output_label": "有效研究笔记与来源",
+          "parameter_fields": [],
+          "parameters_schema": {
+            "additionalProperties": false,
+            "description": "Disallow arbitrary models, prompts, tools or code on core nodes.",
+            "properties": {},
+            "title": "EmptyParameters",
+            "type": "object"
+          },
+          "safe_recovery": false,
+          "state_reads": [
+            "research_brief",
+            "supervisor_messages",
+            "user_requirements",
+            "research_constraints",
+            "research_errors"
+          ],
+          "state_writes": {
+            "final_report": "replace",
+            "notes": "overwrite",
+            "raw_notes": "overwrite",
+            "report_research_id": "replace",
+            "research_errors": "replace",
+            "research_events": "replace",
+            "research_iterations": "replace",
+            "research_phase": "replace",
+            "research_status": "replace",
+            "source_evidence": "replace",
+            "sources": "replace",
+            "supervisor_messages": "overwrite",
+            "supervisor_status": "replace"
+          },
+          "successor_types": [
+            "organize_notes",
+            "final_report_generation"
+          ],
+          "type": "supervisor_subgraph",
+          "type_version": 1
+        },
+        {
+          "default_parameters": {
+            "instructions": "按研究主题整理已有有效笔记，保留不同观点和来源定位，不生成新的检索来源。"
+          },
+          "fixed_id": null,
+          "input_label": "有效研究笔记与来源",
+          "kind": "extension",
+          "label": "材料整理",
+          "max_instances": null,
+          "min_instances": 0,
+          "model_roles": [
+            "COMPRESSION"
+          ],
+          "outcomes": [
+            "continue",
+            "failed"
+          ],
+          "output_label": "整理后的材料",
+          "parameter_fields": [
+            "instructions"
+          ],
+          "parameters_schema": {
+            "additionalProperties": false,
+            "description": "Treat requirements as literal text, never as a template expression.",
+            "properties": {
+              "instructions": {
+                "description": "作为纯文本处理要求使用，不执行模板变量、表达式或代码。",
+                "maxLength": 4000,
+                "minLength": 1,
+                "pattern": "\\S",
+                "title": "处理要求",
+                "type": "string"
+              }
+            },
+            "required": [
+              "instructions"
+            ],
+            "title": "ProcessingParameters",
+            "type": "object"
+          },
+          "safe_recovery": false,
+          "state_reads": [
+            "notes",
+            "organized_notes",
+            "sources",
+            "source_evidence",
+            "research_brief"
+          ],
+          "state_writes": {
+            "organized_notes": "replace"
+          },
+          "successor_types": [
+            "organize_notes",
+            "final_report_generation"
+          ],
+          "type": "organize_notes",
+          "type_version": 1
+        },
+        {
+          "default_parameters": {},
+          "fixed_id": "final_report_generation",
+          "input_label": "有效研究材料",
+          "kind": "core",
+          "label": "最终报告",
+          "max_instances": 1,
+          "min_instances": 1,
+          "model_roles": [
+            "FINAL_REPORT"
+          ],
+          "outcomes": [
+            "continue",
+            "failed",
+            "partial"
+          ],
+          "output_label": "含来源引用的研究报告",
+          "parameter_fields": [],
+          "parameters_schema": {
+            "additionalProperties": false,
+            "description": "Disallow arbitrary models, prompts, tools or code on core nodes.",
+            "properties": {},
+            "title": "EmptyParameters",
+            "type": "object"
+          },
+          "safe_recovery": true,
+          "state_reads": [
+            "notes",
+            "organized_notes",
+            "sources",
+            "source_evidence",
+            "research_brief",
+            "user_requirements",
+            "research_constraints",
+            "research_errors",
+            "active_research_id"
+          ],
+          "state_writes": {
+            "final_report": "replace",
+            "report_attempt_id": "replace",
+            "report_research_id": "replace",
+            "report_reviews": "replace",
+            "report_run_id": "replace",
+            "report_turn_id": "replace",
+            "report_writing_attempt_id": "replace",
+            "research_errors": "replace",
+            "research_phase": "replace",
+            "research_status": "replace"
+          },
+          "successor_types": [
+            "end"
+          ],
+          "type": "final_report_generation",
+          "type_version": 1
+        },
+        {
+          "default_parameters": {},
+          "fixed_id": "end",
+          "input_label": "本轮研究成果",
+          "kind": "system",
+          "label": "结束",
+          "max_instances": 1,
+          "min_instances": 1,
+          "model_roles": [],
+          "outcomes": [
+            "continue"
+          ],
+          "output_label": null,
+          "parameter_fields": [],
+          "parameters_schema": {
+            "additionalProperties": false,
+            "description": "Disallow arbitrary models, prompts, tools or code on core nodes.",
+            "properties": {},
+            "title": "EmptyParameters",
+            "type": "object"
+          },
+          "safe_recovery": false,
+          "state_reads": [],
+          "state_writes": {},
+          "successor_types": [],
+          "type": "end",
+          "type_version": 1
+        }
+      ],
+      "registry_version": 1,
+      "schema_version": 1
+    },
+    "WorkflowNodeEvent": {
+      "at": "2026-11-15T00:00:00Z",
+      "attempt_id": "turn-example",
+      "elapsed_ms": 0,
+      "id": "00000000-0000-4000-8000-000000000001",
+      "kind": "started",
+      "node_id": "write_research_brief",
+      "node_type": "write_research_brief",
+      "research_id": "research-example",
+      "run_id": "00000000-0000-4000-8000-000000000002",
+      "semantic_hash": "83fbeb3d4447f8f46d9b50f8c865887305e362f1125b46783eee60110404ed20",
+      "sequence": 1,
+      "summary": "",
+      "thread_id": "thread-example",
+      "turn_id": "turn-example",
+      "version": 1,
+      "workflow_ref": {
+        "revision_id": "revision-example",
+        "workflow_id": "workflow-example"
+      }
+    },
+    "WorkflowRef": {
+      "revision_id": "revision-example",
+      "workflow_id": "workflow-example"
+    },
+    "WorkflowRevision": {
+      "compatibility": {
+        "compiler_version": 1,
+        "graph_id": "research_workflow",
+        "node_registry_version": 1,
+        "state_schema_version": 1
+      },
+      "document": {
+        "definition": {
+          "defaults": {
+            "selection": null
+          },
+          "edges": [
+            {
+              "id": "edge_1",
+              "source": "start",
+              "source_port": "out",
+              "target": "prepare_research",
+              "target_port": "in"
+            },
+            {
+              "id": "edge_2",
+              "source": "prepare_research",
+              "source_port": "out",
+              "target": "clarify_with_user",
+              "target_port": "in"
+            },
+            {
+              "id": "edge_3",
+              "source": "clarify_with_user",
+              "source_port": "out",
+              "target": "write_research_brief",
+              "target_port": "in"
+            },
+            {
+              "id": "edge_4",
+              "source": "write_research_brief",
+              "source_port": "out",
+              "target": "supervisor_subgraph",
+              "target_port": "in"
+            },
+            {
+              "id": "edge_5",
+              "source": "supervisor_subgraph",
+              "source_port": "out",
+              "target": "final_report_generation",
+              "target_port": "in"
+            },
+            {
+              "id": "edge_6",
+              "source": "final_report_generation",
+              "source_port": "out",
+              "target": "end",
+              "target_port": "in"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "start",
+              "parameters": {},
+              "type": "start",
+              "type_version": 1
+            },
+            {
+              "id": "prepare_research",
+              "parameters": {},
+              "type": "prepare_research",
+              "type_version": 1
+            },
+            {
+              "id": "clarify_with_user",
+              "parameters": {},
+              "type": "clarify_with_user",
+              "type_version": 1
+            },
+            {
+              "id": "write_research_brief",
+              "parameters": {},
+              "type": "write_research_brief",
+              "type_version": 1
+            },
+            {
+              "id": "supervisor_subgraph",
+              "parameters": {},
+              "type": "supervisor_subgraph",
+              "type_version": 1
+            },
+            {
+              "id": "final_report_generation",
+              "parameters": {},
+              "type": "final_report_generation",
+              "type_version": 1
+            },
+            {
+              "id": "end",
+              "parameters": {},
+              "type": "end",
+              "type_version": 1
+            }
+          ],
+          "schema_version": 1
+        },
+        "name": "标准深度研究",
+        "presentation": {
+          "nodes": [],
+          "schema_version": 1,
+          "viewport": {
+            "x": 0.0,
+            "y": 0.0,
+            "zoom": 1.0
+          }
+        }
+      },
+      "note": "",
+      "published_at": "2026-11-15T00:00:00Z",
+      "revision_id": "revision-example",
+      "revision_number": 1,
+      "schema_version": 1,
+      "semantic_hash": "83fbeb3d4447f8f46d9b50f8c865887305e362f1125b46783eee60110404ed20",
+      "source_edit_version": 7,
+      "workflow_id": "workflow-example"
+    },
+    "WorkflowValidation": {
+      "checked_edit_version": 7,
+      "issues": [],
+      "schema_version": 1,
+      "scope": "structure",
+      "truncated": false,
+      "valid": true
+    }
+  },
+  "hash_examples": {
+    "configured": {
+      "definition": {
+        "defaults": {
+          "selection": {
+            "models": {
+              "COMPRESSION": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "FINAL_REPORT": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "RESEARCHER": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "SCOPING": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "SUMMARIZATION": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "SUPERVISOR": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            "skills": {
+              "allowed": [
+                "beta",
+                "alpha"
+              ],
+              "mode": "manual"
+            },
+            "version": 1
+          }
+        },
+        "edges": [
+          {
+            "id": "edge_1",
+            "source": "start",
+            "source_port": "out",
+            "target": "prepare_research",
+            "target_port": "in"
+          },
+          {
+            "id": "edge_2",
+            "source": "prepare_research",
+            "source_port": "out",
+            "target": "clarify_with_user",
+            "target_port": "in"
+          },
+          {
+            "id": "edge_3",
+            "source": "clarify_with_user",
+            "source_port": "out",
+            "target": "write_research_brief",
+            "target_port": "in"
+          },
+          {
+            "id": "edge_4",
+            "source": "write_research_brief",
+            "source_port": "out",
+            "target": "supervisor_subgraph",
+            "target_port": "in"
+          },
+          {
+            "id": "edge_5",
+            "source": "supervisor_subgraph",
+            "source_port": "out",
+            "target": "final_report_generation",
+            "target_port": "in"
+          },
+          {
+            "id": "edge_6",
+            "source": "final_report_generation",
+            "source_port": "out",
+            "target": "end",
+            "target_port": "in"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "start",
+            "parameters": {},
+            "type": "start",
+            "type_version": 1
+          },
+          {
+            "id": "prepare_research",
+            "parameters": {},
+            "type": "prepare_research",
+            "type_version": 1
+          },
+          {
+            "id": "clarify_with_user",
+            "parameters": {},
+            "type": "clarify_with_user",
+            "type_version": 1
+          },
+          {
+            "id": "write_research_brief",
+            "parameters": {},
+            "type": "write_research_brief",
+            "type_version": 1
+          },
+          {
+            "id": "supervisor_subgraph",
+            "parameters": {},
+            "type": "supervisor_subgraph",
+            "type_version": 1
+          },
+          {
+            "id": "final_report_generation",
+            "parameters": {},
+            "type": "final_report_generation",
+            "type_version": 1
+          },
+          {
+            "id": "end",
+            "parameters": {},
+            "type": "end",
+            "type_version": 1
+          }
+        ],
+        "schema_version": 1
+      },
+      "semantic_hash": "bb20cb33398a2312e94ef3ed1962563a5b7076428ccb63603dab7cdcdf38b57c"
+    },
+    "processing": {
+      "definition": {
+        "defaults": {
+          "selection": {
+            "models": {
+              "COMPRESSION": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "FINAL_REPORT": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "RESEARCHER": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "SCOPING": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "SUMMARIZATION": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "SUPERVISOR": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            "skills": {
+              "allowed": [
+                "beta",
+                "alpha"
+              ],
+              "mode": "manual"
+            },
+            "version": 1
+          }
+        },
+        "edges": [
+          {
+            "id": "edge_1",
+            "source": "start",
+            "source_port": "out",
+            "target": "prepare_research",
+            "target_port": "in"
+          },
+          {
+            "id": "edge_2",
+            "source": "prepare_research",
+            "source_port": "out",
+            "target": "clarify_with_user",
+            "target_port": "in"
+          },
+          {
+            "id": "edge_3",
+            "source": "clarify_with_user",
+            "source_port": "out",
+            "target": "write_research_brief",
+            "target_port": "in"
+          },
+          {
+            "id": "edge_4",
+            "source": "write_research_brief",
+            "source_port": "out",
+            "target": "plan_a",
+            "target_port": "in"
+          },
+          {
+            "id": "edge_5",
+            "source": "supervisor_subgraph",
+            "source_port": "out",
+            "target": "final_report_generation",
+            "target_port": "in"
+          },
+          {
+            "id": "edge_6",
+            "source": "final_report_generation",
+            "source_port": "out",
+            "target": "end",
+            "target_port": "in"
+          },
+          {
+            "id": "edge_plan",
+            "source": "plan_a",
+            "source_port": "out",
+            "target": "supervisor_subgraph",
+            "target_port": "in"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "start",
+            "parameters": {},
+            "type": "start",
+            "type_version": 1
+          },
+          {
+            "id": "prepare_research",
+            "parameters": {},
+            "type": "prepare_research",
+            "type_version": 1
+          },
+          {
+            "id": "clarify_with_user",
+            "parameters": {},
+            "type": "clarify_with_user",
+            "type_version": 1
+          },
+          {
+            "id": "write_research_brief",
+            "parameters": {},
+            "type": "write_research_brief",
+            "type_version": 1
+          },
+          {
+            "id": "supervisor_subgraph",
+            "parameters": {},
+            "type": "supervisor_subgraph",
+            "type_version": 1
+          },
+          {
+            "id": "final_report_generation",
+            "parameters": {},
+            "type": "final_report_generation",
+            "type_version": 1
+          },
+          {
+            "id": "end",
+            "parameters": {},
+            "type": "end",
+            "type_version": 1
+          },
+          {
+            "id": "plan_a",
+            "parameters": {
+              "instructions": "比较市场。\n保留来源 😀   对照不同观点。"
+            },
+            "type": "optimize_plan",
+            "type_version": 1
+          }
+        ],
+        "schema_version": 1
+      },
+      "semantic_hash": "facfa592b1111494122eb1df9a0c2c6b8c0f5e3876db7408695859f8885757dc"
+    },
+    "standard": {
+      "definition": {
+        "defaults": {
+          "selection": null
+        },
+        "edges": [
+          {
+            "id": "edge_1",
+            "source": "start",
+            "source_port": "out",
+            "target": "prepare_research",
+            "target_port": "in"
+          },
+          {
+            "id": "edge_2",
+            "source": "prepare_research",
+            "source_port": "out",
+            "target": "clarify_with_user",
+            "target_port": "in"
+          },
+          {
+            "id": "edge_3",
+            "source": "clarify_with_user",
+            "source_port": "out",
+            "target": "write_research_brief",
+            "target_port": "in"
+          },
+          {
+            "id": "edge_4",
+            "source": "write_research_brief",
+            "source_port": "out",
+            "target": "supervisor_subgraph",
+            "target_port": "in"
+          },
+          {
+            "id": "edge_5",
+            "source": "supervisor_subgraph",
+            "source_port": "out",
+            "target": "final_report_generation",
+            "target_port": "in"
+          },
+          {
+            "id": "edge_6",
+            "source": "final_report_generation",
+            "source_port": "out",
+            "target": "end",
+            "target_port": "in"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "start",
+            "parameters": {},
+            "type": "start",
+            "type_version": 1
+          },
+          {
+            "id": "prepare_research",
+            "parameters": {},
+            "type": "prepare_research",
+            "type_version": 1
+          },
+          {
+            "id": "clarify_with_user",
+            "parameters": {},
+            "type": "clarify_with_user",
+            "type_version": 1
+          },
+          {
+            "id": "write_research_brief",
+            "parameters": {},
+            "type": "write_research_brief",
+            "type_version": 1
+          },
+          {
+            "id": "supervisor_subgraph",
+            "parameters": {},
+            "type": "supervisor_subgraph",
+            "type_version": 1
+          },
+          {
+            "id": "final_report_generation",
+            "parameters": {},
+            "type": "final_report_generation",
+            "type_version": 1
+          },
+          {
+            "id": "end",
+            "parameters": {},
+            "type": "end",
+            "type_version": 1
+          }
+        ],
+        "schema_version": 1
+      },
+      "semantic_hash": "83fbeb3d4447f8f46d9b50f8c865887305e362f1125b46783eee60110404ed20"
+    }
+  },
+  "schema_version": 1
+}
