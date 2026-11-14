@@ -34,6 +34,7 @@ export const backendConfigSchema = z.object({
   report_event_replay_version: z.literal(1).optional(),
   submission_recovery_version: z.literal(1).optional(),
   configuration_version: z.literal(1).optional(),
+  workflow_editor_version: z.literal(1).optional(),
   selection: selectionSchema.optional(),
   skill_revisions: z.record(z.string(), z.string()).optional(),
   catalog: z

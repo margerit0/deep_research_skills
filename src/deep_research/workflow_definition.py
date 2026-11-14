@@ -355,6 +355,51 @@ class PublishWorkflowRequest(ValidateWorkflowRequest):
     note: str = Field(default="", max_length=2000)
 
 
+class ArchiveWorkflowRequest(ValidateWorkflowRequest):
+    """Archive only the draft version the user reviewed."""
+
+
+class WorkflowRevisionSummary(WireModel):
+    """Project a publication without loading its document into a list view."""
+
+    workflow_id: Identifier
+    revision_id: Identifier
+    revision_number: PositiveVersion
+    source_edit_version: PositiveVersion
+    semantic_hash: Digest
+    note: str = Field(max_length=2000)
+    published_at: Timestamp
+
+
+class WorkflowSummary(WireModel):
+    """Describe a workflow and its current draft, including archived records."""
+
+    workflow_id: Identifier
+    name: Name
+    archived: bool
+    edit_version: PositiveVersion
+    base_revision_id: Identifier | None
+    latest_revision: WorkflowRevisionSummary | None
+    created_at: Timestamp
+    updated_at: Timestamp
+
+
+class WorkflowPage(WireModel):
+    """Page newest-created workflows with an exclusive creation-order cursor."""
+
+    schema_version: VersionOne = 1
+    items: list[WorkflowSummary] = Field(max_length=100)
+    next_cursor: PositiveVersion | None
+
+
+class WorkflowRevisionPage(WireModel):
+    """Page immutable revisions in descending revision-number order."""
+
+    schema_version: VersionOne = 1
+    items: list[WorkflowRevisionSummary] = Field(max_length=100)
+    next_cursor: PositiveVersion | None
+
+
 class WorkflowConflict(WireModel):
     """Return enough information to preserve a local draft and reload safely."""
 

@@ -21,7 +21,11 @@ git ls-tree -r --name-only dac1870ec56e08603f3e93e58bb5a2e916a45456 -- product-v
 
 ## 环境与入口
 
-Graph 流程编辑器已完成 M1 核心契约与设计确认，当前进入 M2，见 [实施交接](graph-canvas-editor-handoff.md)。契约模块不导入研究图或模型，修改类型／目录后运行 `uv run --locked --extra dev python -m scripts.export_workflow_contract`，再用 `--check` 核对生成物并运行两端契约测试。完整命令及阶段边界见 [M1 验证记录](graph-canvas-editor-m1-results.md)；生产工作流管理和执行能力尚未开放。
+Graph 流程编辑器已实现 M2 正式编辑与版本管理，见 [实施交接](graph-canvas-editor-handoff.md)及 [M2 记录](graph-canvas-editor-m2-results.md)。契约模块不导入研究图或模型，修改类型／目录后运行 `uv run --locked --extra dev python -m scripts.export_workflow_contract`，再用 `--check` 核对生成物并运行两端契约测试。
+
+流程表与受理表共用 `ATLAS_SUBMISSION_DB` 指定的数据库，默认 `.langgraph_api/atlas-submissions.sqlite3`。首次管理请求在现有连接内进行追加迁移，工作流 schema 为 1、受理 `user_version` 仍为 2；保留数据库及 WAL／SHM，备份沿用 SQLite 一致性备份或停服后的完整副本，不能仅拷贝正在写入的主文件。迁移失败会回滚工作流表，不改写已存在的受理和 run 身份。`workflow_thread_bindings` 仅预留，M2 不创建生产运行绑定。
+
+后端重启后，在受理持久化环境受支持且流程存储就绪时，`/atlas/config` 增加 `workflow_editor_version: 1`；前端显示“流程管理”。`ATLAS_WORKFLOW_EDITOR_ENABLED=false` 可关闭入口与管理路由的服务能力。M2 默认没有实际发布上下文，生产校验／发布返回明确的暂不可用；不要注入测试上下文、删除可用性检查或声明执行／事件能力来绕过 M3。操作说明见 [流程编辑器](../frontend/docs/workflow-editor.md)。
 
 在项目根目录执行：
 

@@ -356,3 +356,11 @@ npm test -- tests/submission-api.spec.ts --workers=1 --output test-results/submi
 真实模式当前使用 **600 秒**澄清观察窗口，单测试整体最多 **1800 秒（30 分钟）**。第二次提交后的终态等待取整体剩余时间并预留 **30 秒**回读，替代此前固定的 1140 秒阶段窗口；Kimi 旧用例仍按当时的 1140 秒超时如实记录，不回写成新预算已通过。这些是浏览器观察期限，不会增加 SDK / helper / 节点的有限重试次数，也不会在观察失败时重新提交问题。替身模式仍使用原 180 / 660 / 900 秒预算。真实复测应显式设置测试级 `retries: 0`，为专属后端设置清理期限，结束前先回读受理回执及所属终态检查点；超时只能记为未完成，不能用原生 run 的 `success` 推断报告交付。
 
 离线实录通过 `recordings.json` 保存公开配置、安全对话、笔记、来源、研究事件和客户端请求计数。界面以独立内存会话分章节展示，不调用提交、恢复或事件回放 API，也不宣称补齐服务器历史。最后的 `running` 是中断前快照，显示为记录中断而不改写业务状态。详见 [实录约定](recorded-runs.md)。
+
+## Graph 流程管理（M2）
+
+`/atlas/config` 仅在流程存储检查通过后提供可选 `workflow_editor_version: 1`。编辑入口和请求客户端分别为 `components/workflow/` 与 `api/workflows.ts`，管理数据使用 `workflowSchema.ts`，不复用研究运行的 `NodeDetail` 作为执行定义。
+
+管理路径为 `/atlas/workflow-node-types`、`/atlas/workflows`，及单流程的 `/summary`、`/draft`、`/validate`、`/publish`、`/revisions`、`/revisions/{revision_id}`、`/archive`。请求／响应、分页、并发、幂等与大小限制以 [v1 契约](../../docs/graph-canvas-editor-contract.md)第 4 节和 [机器 Schema](../../docs/contracts/workflow-v1.schema.json)为准。归档不删除历史引用，导入只接受文档内容。
+
+生产发布上下文在 M3 接入前，`validate`／`publish` 返回 503 `workflow_runtime_unavailable`；M2 不声明 `workflow_execution_version` 或 `workflow_events_version`，不提交 `workflow_ref`，也不向内置图回退执行所选流程。测试专用的 `PublicationContext` 只用于管理事务与 UI 验收，不是生产实现。既有 submissions、事件、配置快照与恢复摘要保持原语义。

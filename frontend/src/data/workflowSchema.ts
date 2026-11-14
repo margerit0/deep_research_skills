@@ -186,6 +186,36 @@ export const publishWorkflowRequestSchema = validateWorkflowRequestSchema.extend
   request_id: identifier,
   note: text(2000).default(''),
 })
+export const archiveWorkflowRequestSchema = validateWorkflowRequestSchema
+export const workflowRevisionSummarySchema = workflowRevisionSchema.pick({
+  workflow_id: true,
+  revision_id: true,
+  revision_number: true,
+  source_edit_version: true,
+  semantic_hash: true,
+  note: true,
+  published_at: true,
+})
+export const workflowSummarySchema = z.strictObject({
+  workflow_id: identifier,
+  name,
+  archived: z.boolean(),
+  edit_version: positiveVersion,
+  base_revision_id: identifier.nullable(),
+  latest_revision: workflowRevisionSummarySchema.nullable(),
+  created_at: timestamp,
+  updated_at: timestamp,
+})
+export const workflowPageSchema = z.strictObject({
+  schema_version: z.literal(1).default(1),
+  items: z.array(workflowSummarySchema).max(100),
+  next_cursor: positiveVersion.nullable(),
+})
+export const workflowRevisionPageSchema = z.strictObject({
+  schema_version: z.literal(1).default(1),
+  items: z.array(workflowRevisionSummarySchema).max(100),
+  next_cursor: positiveVersion.nullable(),
+})
 export const workflowConflictSchema = z.strictObject({
   reason: z.enum([
     'workflow_edit_conflict',
@@ -249,6 +279,10 @@ export type WorkflowDefinition = z.infer<typeof workflowDefinitionSchema>
 export type WorkflowDocument = z.infer<typeof workflowDocumentSchema>
 export type WorkflowDraft = z.infer<typeof workflowDraftSchema>
 export type WorkflowRevision = z.infer<typeof workflowRevisionSchema>
+export type WorkflowSummary = z.infer<typeof workflowSummarySchema>
+export type WorkflowRevisionSummary = z.infer<typeof workflowRevisionSummarySchema>
+export type CreateWorkflowRequest = z.infer<typeof createWorkflowRequestSchema>
+export type PublishWorkflowRequest = z.infer<typeof publishWorkflowRequestSchema>
 export type WorkflowRef = z.infer<typeof workflowRefSchema>
 export type WorkflowBinding = z.infer<typeof workflowBindingSchema>
 export type WorkflowIssue = z.infer<typeof workflowIssueSchema>
@@ -256,6 +290,21 @@ export type WorkflowValidation = z.infer<typeof workflowValidationSchema>
 export type WorkflowNodeCatalog = z.infer<typeof workflowNodeCatalogSchema>
 export type WorkflowNodeType = z.infer<typeof workflowNodeTypeSchema>
 export type WorkflowNodeEvent = z.infer<typeof workflowNodeEventSchema>
+
+/** Compare the complete saved content; a semantic hash excludes names and layout. */
+export function sameWorkflowDocument(a: WorkflowDocument, b: WorkflowDocument): boolean {
+  const stable = (value: unknown): unknown => {
+    if (Array.isArray(value)) return value.map(stable)
+    if (value && typeof value === 'object')
+      return Object.fromEntries(
+        Object.entries(value)
+          .sort(([a], [b]) => a.localeCompare(b))
+          .map(([key, item]) => [key, stable(item)]),
+      )
+    return value
+  }
+  return JSON.stringify(stable(a)) === JSON.stringify(stable(b))
+}
 
 const processingParametersSchema = z.strictObject({ instructions: text(4000, 1).regex(/\S/) })
 const emptyParametersSchema = z.strictObject({})

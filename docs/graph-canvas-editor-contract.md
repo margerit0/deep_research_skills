@@ -2,7 +2,7 @@
 
 冻结日期：2026-11-15（Asia/Shanghai）。用户已对[独立设计稿](graph-canvas-editor-design-review.md)明确回复“确认设计稿”。本契约作为 M2 编辑与版本管理、M3 编译与执行接入的共同依据。
 
-M1 已提供可运行的数据类型、节点目录、结构／发布上下文校验、绑定核对及前后端一致性检查。下面的 HTTP 接口、数据库事务、业务节点适配与事件投递是后续阶段的实现约束，当前生产服务尚未开放这些接口或声明流程执行能力。
+M1 已提供可运行的数据类型、节点目录、结构／发布上下文校验、绑定核对及前后端一致性检查。M2 已实现管理 HTTP 接口、草稿／修订事务和正式编辑页，见 [M2 记录](graph-canvas-editor-m2-results.md)。业务适配、受理绑定及事件投递仍由 M3 实现；当前生产服务只声明就绪的编辑能力，没有可用的生产发布上下文或流程执行能力。
 
 ## 1. 类型与版本
 
@@ -71,20 +71,25 @@ M1 已提供可运行的数据类型、节点目录、结构／发布上下文�
 
 ## 4. M2 保存、校验和发布协议
 
-以下接口均为待实现接口；客户端只在 `workflow_editor_version: 1` 明确存在时显示正式编辑入口。
+以下管理接口已在 M2 实现；客户端只在 `workflow_editor_version: 1` 明确存在时显示正式编辑入口。生产发布上下文尚未接入时，校验／发布返回 503 `workflow_runtime_unavailable`，不使用占位实现放行。
 
 | 接口 | 请求／返回内容 |
 | --- | --- |
 | `GET /atlas/workflow-node-types` | 返回 `WorkflowNodeCatalog` |
-| `GET /atlas/workflows` | 返回流程摘要，至少含流程 ID、名称、归档状态、草稿版本及最新发布引用；分页细节在 M2 固定 |
+| `GET /atlas/workflows` | 返回 `WorkflowPage`，含 `WorkflowSummary` 列表及下一页游标 |
 | `POST /atlas/workflows` | `CreateWorkflowRequest`；从标准模板、发布引用或导入文档新建流程，返回 `WorkflowDraft` |
 | `GET /atlas/workflows/{id}` | 返回当前 `WorkflowDraft`；只读查询不创建或发布新内容 |
+| `GET /atlas/workflows/{id}/summary` | 返回 `WorkflowSummary`，供直接打开页面时核对归档状态和最新发布引用 |
 | `PUT /atlas/workflows/{id}/draft` | `SaveDraftRequest`；返回保存后的 `WorkflowDraft` |
 | `POST /atlas/workflows/{id}/validate` | `ValidateWorkflowRequest`；返回 `scope: publication` 的 `WorkflowValidation` |
 | `POST /atlas/workflows/{id}/publish` | `PublishWorkflowRequest`；返回已固定的 `WorkflowRevision` |
-| `GET /atlas/workflows/{id}/revisions` | 返回发布摘要列表，字段从 `WorkflowRevision` 投影；分页细节在 M2 固定 |
+| `GET /atlas/workflows/{id}/revisions` | 返回 `WorkflowRevisionPage`；条目为从修订投影的 `WorkflowRevisionSummary` |
 | `GET /atlas/workflows/{id}/revisions/{revision_id}` | 返回完整不可变 `WorkflowRevision` |
-| `POST /atlas/workflows/{id}/archive` | 标记流程归档，不删除发布记录或运行绑定 |
+| `POST /atlas/workflows/{id}/archive` | `ArchiveWorkflowRequest` 含预期草稿版本；返回归档后的 `WorkflowSummary`，不删除记录或运行绑定 |
+
+分页参数为 `after=0` 起始、`limit=30` 默认且最多 100；流程筛选为 `archived=active|archived|all`，默认 `active`。流程按创建序号倒序，保存不改变分页位置；修订按 `revision_number` 倒序。`next_cursor` 是下一页的排他游标，无更多记录时为 `null`。归档只在首次操作时核对草稿版本，已经归档的流程重复请求返回其摘要。
+
+存储迁移在受理连接的事务内进行，使用 `workflow_schema.version=1`，不改写受理库的 `user_version=2`。修订、创建／发布回执及预留绑定表有禁止更新／删除的约束；修订回读另外校验包含展示快照的完整记录摘要。请求体在解码前限制为 278528 字节，文档规范化后仍限 256 KiB。重复 JSON 键和非有限值也拒绝。
 
 ### 草稿保存
 
@@ -177,4 +182,4 @@ M1 已提供可运行的数据类型、节点目录、结构／发布上下文�
 | M3 · 兼容与事件 | 缺失实现可查看完整旧归档但不能执行；刷新、重连和历史回放不新增 run |
 | M4 · 实际质量／性能 | 按计划书运行有界真实验收、画布和发布性能测量；不以替身结果替代报告质量 |
 
-上述表格是已确定的验收条件，不是已执行的 M2–M4 验收结果。M1 的实际命令及通过数量见 [M1 验证记录](graph-canvas-editor-m1-results.md)。
+上述表格是分阶段验收条件。M1 和 M2 的实际命令及结果分别见 [M1 记录](graph-canvas-editor-m1-results.md)、[M2 记录](graph-canvas-editor-m2-results.md)；M2 的发布采用测试上下文验证。M3–M4 尚未交付，不据此声明原生流程执行或真实研究质量。

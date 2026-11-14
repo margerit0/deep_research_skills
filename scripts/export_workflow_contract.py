@@ -29,6 +29,11 @@ MODELS = (
     wire.SaveDraftRequest,
     wire.ValidateWorkflowRequest,
     wire.PublishWorkflowRequest,
+    wire.ArchiveWorkflowRequest,
+    wire.WorkflowSummary,
+    wire.WorkflowRevisionSummary,
+    wire.WorkflowPage,
+    wire.WorkflowRevisionPage,
     wire.WorkflowConflict,
     wire.WorkflowNodeEvent,
     wire.WorkflowBusinessResult,
@@ -51,6 +56,19 @@ def artifacts() -> dict[Path, str]:
         compatibility=COMPATIBILITY,
         document=document,
         published_at=at,
+    )
+    revision_summary = wire.WorkflowRevisionSummary.model_validate(
+        revision.model_dump(include=set(wire.WorkflowRevisionSummary.model_fields))
+    )
+    summary = wire.WorkflowSummary(
+        workflow_id=reference.workflow_id,
+        name=document.name,
+        archived=False,
+        edit_version=8,
+        base_revision_id=reference.revision_id,
+        latest_revision=revision_summary,
+        created_at=at,
+        updated_at=at,
     )
     examples = {
         "WorkflowDocument": document,
@@ -85,6 +103,13 @@ def artifacts() -> dict[Path, str]:
         ),
         "PublishWorkflowRequest": wire.PublishWorkflowRequest(
             expected_edit_version=7, request_id="publish-example"
+        ),
+        "ArchiveWorkflowRequest": wire.ArchiveWorkflowRequest(expected_edit_version=8),
+        "WorkflowSummary": summary,
+        "WorkflowRevisionSummary": revision_summary,
+        "WorkflowPage": wire.WorkflowPage(items=[summary], next_cursor=None),
+        "WorkflowRevisionPage": wire.WorkflowRevisionPage(
+            items=[revision_summary], next_cursor=None
         ),
         "WorkflowConflict": wire.WorkflowConflict(
             reason="workflow_edit_conflict", current_edit_version=8

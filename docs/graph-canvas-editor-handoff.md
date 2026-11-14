@@ -4,7 +4,7 @@
 
 本文件为新实施聊天提供入口、当前状态和下一步。完整范围、设计与排期见 [项目计划书](graph-canvas-editor-plan.md)。后续实施时，更新本文件的当前状态，并链接实际代码、提交和验证记录；不要将预期结果写成已验证事实。
 
-**设计确认（2026-11-15）：用户在展示设计稿后明确回复“确认设计稿”。** 设计确认门槛与 M1 核心契约已完成，无需重复请求设计批准。下一步按定稿和 [v1 契约](graph-canvas-editor-contract.md)推进 M2 正式编辑器及版本管理；M3 执行接入仍需对应验证。
+**设计确认（2026-11-15）：用户在展示设计稿后明确回复“确认设计稿”，随后明确要求执行 M2。** M0、M1 与 M2 已完成，无需重复请求设计批准。下一步按 [v1 契约](graph-canvas-editor-contract.md)推进 M3 生产编译与执行接入；先阅读 [M2 记录](graph-canvas-editor-m2-results.md)中的交付与运行边界。
 
 ## 1. 当前起点
 
@@ -14,12 +14,15 @@
 | 当前分支与代码基线 | `codex/graph-canvas-editor`；从 `d8caa38` 开始 |
 | 计划提交 | `f8e4af7`：计划书与初始交接 |
 | M0 提交 | `62ba7da`：流程修订、恢复验证与独立画布原型 |
+| M1 提交 | `622ffb8`：v1 契约、目录与校验 |
 | 实施分支 | 已创建，继续使用当前分支 |
-| 实施进度 | M0、M1 完成；可点击设计稿已获用户确认；下一步 M2，M2–M4 尚未实施 |
+| 实施进度 | M0–M2 完成；正式编辑与版本管理已接入；下一步 M3，M3–M4 尚未实施 |
 | 已有证据 | M0 后端 20 项、画布浏览器 3 项通过；相关后端回归、类型检查、两种构建和静态检查通过，详见 [M0 验证记录](graph-canvas-editor-m0-results.md) |
 | 设计评审 | 独立原型 14 个交互场景通过，5 个尺寸／主题组合检查完成；入口、截图和限制见[设计评审记录](graph-canvas-editor-design-review.md) |
 | M1 验证 | 后端及回归 124 项、前端契约 60 项通过；类型、构建、静态检查及生成物检查通过，见 [M1 记录](graph-canvas-editor-m1-results.md) |
-| 尚缺证据 | 正式存储与事务、保存／发布／执行闭环、不同模型／Skills 与流程的组合矩阵、性能、真实模型业务验收 |
+| M2 验证 | 后端及回归 174 项、前端 164 项通过；含正式编辑器 25 项、契约 65 项及旧页 74 项，见 [M2 记录](graph-canvas-editor-m2-results.md) |
+| 生产能力 | 管理存储就绪后声明 `workflow_editor_version: 1`；默认生产发布上下文未接入，校验／发布返回暂不可用；没有执行／事件能力声明 |
+| 尚缺证据 | 生产编译器与发布上下文、受理绑定事务、真实执行和事件闭环、模型／Skills 组合、性能与真实模型业务验收 |
 | 其他工作区内容 | `frontend/design-mockups/` 在本任务前已存在且未跟踪，不自动纳入本功能提交 |
 
 进入实施时，以实际 `git status`、当前分支及 `git log` 更新上述状态。分支已存在就接续使用，不因本表的初始记录重复创建。
@@ -107,15 +110,27 @@ M0 已验证 React Flow／Dagre 和“一个原生 thread 绑定一个流程修�
 4. 固定图工厂的执行／观察行为与缺失实现的处置，沿用三个安全恢复边界；M0 无绑定原生请求会形成 error run，正式入口须明确受理前校验。
 5. 设计完整编辑页和验收用例。原型入口 `/m0/workflow.html` 只验证基础交互，不包含保存、发布或真实执行选择。
 
-M3 生产执行接入通过验收前，不声明生产 `workflow_execution_version`；原型 `/m0` 测试路由不加入生产服务。下一阶段优先读取 v1 契约与 M1 记录，M0 的工厂与恢复证据作为补充依据。
+M3 生产执行接入通过验收前，不声明生产 `workflow_execution_version`；原型 `/m0` 测试路由不加入生产服务。下一阶段优先读取 v1 契约与 M2 记录，M0 的工厂与恢复证据作为补充依据。
 
-### 下一阶段：M2 编辑与版本管理
+### 已完成：M2 编辑与版本管理
 
 1. 按 v1 契约实现正式 WorkflowStore 与管理 API，沿用受理数据库、迁移和持久化约束；验证草稿版本冲突、发布请求幂等、归档及副本身份。
 2. 将已确认的三栏界面落到正式 React／React Flow 页面，接入节点目录、参数、撤销、保存状态、校验及发布只读视图。使用 `workflowSchema.ts`，不复制独立 HTML 中的模拟保存逻辑。
 3. 加入工作台／流程管理入口及窄屏查看布局。原 `Graph.tsx` 的运行观察职责保留，动态研究员不成为可删除的设计时节点。
 4. 以 API／存储替身和浏览器检查完成 M2 验收。真实发布校验必须核对可用实现；未实现的扩展节点等待 M3，不用占位处理器冒充可执行。
 5. M2 仅在对应管理能力就绪时声明 `workflow_editor_version`；真实执行入口及事件能力由 M3 原生验收后开放。
+
+上述交付已接入正式源码，并完成 [M2 验证](graph-canvas-editor-m2-results.md)。编辑入口为 `/#workflows`，使用方法见 [前端说明](../frontend/docs/workflow-editor.md)。创建／发布请求提前保存标识，完整文档回读不覆盖新输入；复制浏览器标签页后，各窗口保留独立的恢复副本。
+
+存储放在现有受理 SQLite，追加迁移使用 `workflow_schema.version=1`，受理库版本仍为 2。不可变修订、幂等回执和草稿新基线同事务提交。预留的 `workflow_thread_bindings` 尚无生产写入；默认 `WorkflowStore.publication_context=None` 明确阻止生产发布，测试替身不代表可用实现。
+
+### 下一阶段：M3 编译与运行接入
+
+1. 实现真实节点适配器与图编译器，拆分旧 `Command.goto` 与正常后继选择，验证新增／删除节点的实际调用顺序和唯一调度。计划优化使用 `Overwrite` 替换协调消息；材料整理写独立 `organized_notes`，不覆盖原笔记或来源。
+2. 为 WorkflowStore 接入实际的 `PublicationContext`：核对编译器、节点实现、运行时、模型修订及 Skills，不能直接复用测试上下文解锁生产发布。
+3. 改造受理入口，在同一 `SubmissionJournal.connection()` 事务固定修订、thread 绑定、有效配置快照与 submission／run 身份。不要在事务内调用另开连接的 Store／Journal 公开方法；M2 已有内部按连接读取修订的方法，可据此复用校验。
+4. 新建原生 thread 选择已发布修订；同 thread 的澄清和恢复沿用原绑定。省略新字段时维持旧请求与摘要语义；`workflow_binding/organized_notes` 仅在存在时加入新恢复摘要。
+5. 实现父节点事件日志与前端运行适配，动态研究员继续使用原观察模型。通过两个修订、重启、并发发布、绑定事务故障及三个安全恢复边界的原生验收后，才开放新研究选择并声明执行／事件能力。
 
 ## 6. 实现与验证入口
 
@@ -129,6 +144,9 @@ M3 生产执行接入通过验收前，不声明生产 `workflow_execution_versi
 | 前端构建 | [package.json](../frontend/package.json)、[Playwright 配置](../frontend/playwright.config.ts) |
 | 原生受理故障测试 | [submission-api.spec.ts](../frontend/tests/submission-api.spec.ts)、[atlas_submission_server.py](../tests/atlas_submission_server.py) |
 | 原生事件恢复测试 | [recovery-api.spec.ts](../frontend/tests/recovery-api.spec.ts)、[atlas_recovery_fixture.py](../tests/atlas_recovery_fixture.py) |
+| 工作流管理与迁移 | [workflow_store.py](../src/deep_research/workflow_store.py)、[workflow_api.py](../src/deep_research/workflow_api.py) |
+| 正式流程编辑器 | [WorkflowWorkspace.tsx](../frontend/src/components/workflow/WorkflowWorkspace.tsx)、[useWorkflowEditor.ts](../frontend/src/state/useWorkflowEditor.ts)、[workflows.ts](../frontend/src/api/workflows.ts) |
+| M2 验收 | [test_workflow_store.py](../tests/test_workflow_store.py)、[test_workflow_api.py](../tests/test_workflow_api.py)、[workflow-editor.spec.ts](../frontend/tests/workflow-editor.spec.ts) |
 
 以下相关回归、类型检查和构建已在 M0 执行；详细命令和结果以验证记录为准。Windows pytest 使用记录中的全新项目内 `--basetemp`，避免旧系统临时目录的权限问题：
 

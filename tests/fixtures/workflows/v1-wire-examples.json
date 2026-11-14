@@ -1,5 +1,8 @@
 {
   "examples": {
+    "ArchiveWorkflowRequest": {
+      "expected_edit_version": 8
+    },
     "CreateWorkflowRequest": {
       "name": "新流程",
       "request_id": "create-example",
@@ -836,6 +839,30 @@
         "workflow_id": "workflow-example"
       }
     },
+    "WorkflowPage": {
+      "items": [
+        {
+          "archived": false,
+          "base_revision_id": "revision-example",
+          "created_at": "2026-11-15T00:00:00Z",
+          "edit_version": 8,
+          "latest_revision": {
+            "note": "",
+            "published_at": "2026-11-15T00:00:00Z",
+            "revision_id": "revision-example",
+            "revision_number": 1,
+            "semantic_hash": "83fbeb3d4447f8f46d9b50f8c865887305e362f1125b46783eee60110404ed20",
+            "source_edit_version": 7,
+            "workflow_id": "workflow-example"
+          },
+          "name": "标准深度研究",
+          "updated_at": "2026-11-15T00:00:00Z",
+          "workflow_id": "workflow-example"
+        }
+      ],
+      "next_cursor": null,
+      "schema_version": 1
+    },
     "WorkflowRef": {
       "revision_id": "revision-example",
       "workflow_id": "workflow-example"
@@ -960,6 +987,48 @@
       "schema_version": 1,
       "semantic_hash": "83fbeb3d4447f8f46d9b50f8c865887305e362f1125b46783eee60110404ed20",
       "source_edit_version": 7,
+      "workflow_id": "workflow-example"
+    },
+    "WorkflowRevisionPage": {
+      "items": [
+        {
+          "note": "",
+          "published_at": "2026-11-15T00:00:00Z",
+          "revision_id": "revision-example",
+          "revision_number": 1,
+          "semantic_hash": "83fbeb3d4447f8f46d9b50f8c865887305e362f1125b46783eee60110404ed20",
+          "source_edit_version": 7,
+          "workflow_id": "workflow-example"
+        }
+      ],
+      "next_cursor": null,
+      "schema_version": 1
+    },
+    "WorkflowRevisionSummary": {
+      "note": "",
+      "published_at": "2026-11-15T00:00:00Z",
+      "revision_id": "revision-example",
+      "revision_number": 1,
+      "semantic_hash": "83fbeb3d4447f8f46d9b50f8c865887305e362f1125b46783eee60110404ed20",
+      "source_edit_version": 7,
+      "workflow_id": "workflow-example"
+    },
+    "WorkflowSummary": {
+      "archived": false,
+      "base_revision_id": "revision-example",
+      "created_at": "2026-11-15T00:00:00Z",
+      "edit_version": 8,
+      "latest_revision": {
+        "note": "",
+        "published_at": "2026-11-15T00:00:00Z",
+        "revision_id": "revision-example",
+        "revision_number": 1,
+        "semantic_hash": "83fbeb3d4447f8f46d9b50f8c865887305e362f1125b46783eee60110404ed20",
+        "source_edit_version": 7,
+        "workflow_id": "workflow-example"
+      },
+      "name": "标准深度研究",
+      "updated_at": "2026-11-15T00:00:00Z",
       "workflow_id": "workflow-example"
     },
     "WorkflowValidation": {

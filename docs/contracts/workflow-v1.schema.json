@@ -1,5 +1,22 @@
 {
   "$defs": {
+    "ArchiveWorkflowRequest": {
+      "additionalProperties": false,
+      "description": "Archive only the draft version the user reviewed.",
+      "properties": {
+        "expected_edit_version": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "title": "Expected Edit Version",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "expected_edit_version"
+      ],
+      "title": "ArchiveWorkflowRequest",
+      "type": "object"
+    },
     "CreateWorkflowRequest": {
       "additionalProperties": false,
       "description": "Give creation an idempotency key before any HTTP request is sent.",
@@ -1062,6 +1079,46 @@
       "title": "WorkflowNodeEvent",
       "type": "object"
     },
+    "WorkflowPage": {
+      "additionalProperties": false,
+      "description": "Page newest-created workflows with an exclusive creation-order cursor.",
+      "properties": {
+        "items": {
+          "items": {
+            "$ref": "#/$defs/WorkflowSummary"
+          },
+          "maxItems": 100,
+          "title": "Items",
+          "type": "array"
+        },
+        "next_cursor": {
+          "anyOf": [
+            {
+              "maximum": 9007199254740991,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Next Cursor"
+        },
+        "schema_version": {
+          "default": 1,
+          "maximum": 1,
+          "minimum": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "items",
+        "next_cursor"
+      ],
+      "title": "WorkflowPage",
+      "type": "object"
+    },
     "WorkflowPresentation": {
       "additionalProperties": false,
       "description": "Allow omitted positions so a new draft can receive automatic layout.",
@@ -1188,6 +1245,105 @@
       "title": "WorkflowRevision",
       "type": "object"
     },
+    "WorkflowRevisionPage": {
+      "additionalProperties": false,
+      "description": "Page immutable revisions in descending revision-number order.",
+      "properties": {
+        "items": {
+          "items": {
+            "$ref": "#/$defs/WorkflowRevisionSummary"
+          },
+          "maxItems": 100,
+          "title": "Items",
+          "type": "array"
+        },
+        "next_cursor": {
+          "anyOf": [
+            {
+              "maximum": 9007199254740991,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Next Cursor"
+        },
+        "schema_version": {
+          "default": 1,
+          "maximum": 1,
+          "minimum": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "items",
+        "next_cursor"
+      ],
+      "title": "WorkflowRevisionPage",
+      "type": "object"
+    },
+    "WorkflowRevisionSummary": {
+      "additionalProperties": false,
+      "description": "Project a publication without loading its document into a list view.",
+      "properties": {
+        "note": {
+          "maxLength": 2000,
+          "title": "Note",
+          "type": "string"
+        },
+        "published_at": {
+          "format": "date-time",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,6})?(?:Z|[+-]\\d{2}:\\d{2})$",
+          "title": "Published At",
+          "type": "string"
+        },
+        "revision_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$",
+          "title": "Revision Id",
+          "type": "string"
+        },
+        "revision_number": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "title": "Revision Number",
+          "type": "integer"
+        },
+        "semantic_hash": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Semantic Hash",
+          "type": "string"
+        },
+        "source_edit_version": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "title": "Source Edit Version",
+          "type": "integer"
+        },
+        "workflow_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$",
+          "title": "Workflow Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "workflow_id",
+        "revision_id",
+        "revision_number",
+        "source_edit_version",
+        "semantic_hash",
+        "note",
+        "published_at"
+      ],
+      "title": "WorkflowRevisionSummary",
+      "type": "object"
+    },
     "WorkflowSelection": {
       "additionalProperties": false,
       "description": "Keep six role revisions; instances cannot override their role's model.",
@@ -1257,6 +1413,84 @@
         "allowed"
       ],
       "title": "WorkflowSkills",
+      "type": "object"
+    },
+    "WorkflowSummary": {
+      "additionalProperties": false,
+      "description": "Describe a workflow and its current draft, including archived records.",
+      "properties": {
+        "archived": {
+          "title": "Archived",
+          "type": "boolean"
+        },
+        "base_revision_id": {
+          "anyOf": [
+            {
+              "maxLength": 128,
+              "minLength": 1,
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Base Revision Id"
+        },
+        "created_at": {
+          "format": "date-time",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,6})?(?:Z|[+-]\\d{2}:\\d{2})$",
+          "title": "Created At",
+          "type": "string"
+        },
+        "edit_version": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "title": "Edit Version",
+          "type": "integer"
+        },
+        "latest_revision": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/WorkflowRevisionSummary"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "name": {
+          "maxLength": 120,
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Name",
+          "type": "string"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,6})?(?:Z|[+-]\\d{2}:\\d{2})$",
+          "title": "Updated At",
+          "type": "string"
+        },
+        "workflow_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$",
+          "title": "Workflow Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "workflow_id",
+        "name",
+        "archived",
+        "edit_version",
+        "base_revision_id",
+        "latest_revision",
+        "created_at",
+        "updated_at"
+      ],
+      "title": "WorkflowSummary",
       "type": "object"
     },
     "WorkflowValidation": {
