@@ -21,6 +21,12 @@ git ls-tree -r --name-only dac1870ec56e08603f3e93e58bb5a2e916a45456 -- product-v
 
 ## 环境与入口
 
+Graph 流程编辑器已接入正式编辑、发布与执行，见[实施交接](graph-canvas-editor-handoff.md)。契约模块不导入研究图或模型，修改类型／目录后运行 `uv run --locked --extra dev python -m scripts.export_workflow_contract`，再用 `--check` 核对生成物并运行两端契约测试。
+
+流程表与受理表共用 `ATLAS_SUBMISSION_DB` 指定的数据库，默认 `.langgraph_api/atlas-submissions.sqlite3`。工作流 schema 为 2、受理 `user_version` 仍为 2；生产执行在受理事务中创建工作流绑定。备份使用 SQLite 一致性备份或停服后的完整副本，不能仅拷贝正在写入的主文件。追加迁移不改写已存在的受理和 run 身份。
+
+后端重启后，在受理持久化环境受支持且流程存储就绪时，`/atlas/config` 声明 `workflow_editor_version: 1`；前端显示“流程管理”。发布和执行还需要已注册的生产工厂、编译器和节点实现；能力不足时明确拒绝，不静默换用内置图。`ATLAS_WORKFLOW_EDITOR_ENABLED=false` 可关闭管理能力，`ATLAS_WORKFLOW_EXECUTION_ENABLED=false` 可关闭新执行。操作说明见[流程编辑器](../frontend/docs/workflow-editor.md)。
+
 在项目根目录执行：
 
 ```powershell
@@ -105,11 +111,25 @@ Skills 自动模式固定当时全部可用正文；手选是允许自动加载�
 
 1B 默认受理库为 `.langgraph_api/atlas-submissions.sqlite3`，`ATLAS_SUBMISSION_DB` 非空时可改路径。受理记录不随事件保留期删除；原文、内容摘要、run / attempt 身份与终态位置均属于本地后端数据。备份或移动服务时保留受理库、原生 `.langgraph_api` 和事件库；缺少任一执行依据时不猜测请求未发生。
 
-`atlas_runtime.py` 将私有运行时依赖集中到版本适配层，仅启用已经验收的 LangGraph 1.1.3 / API 0.8.7 / inmem 0.28.1。它为原生持久化对象安装串行同步写入，在受理、节点调用和确认终态前设置刷盘边界，不修改安装目录中的包文件。升级依赖后先重跑故障测试，再更新版本支持；不要仅删除版本限制。`ATLAS_SUBMISSIONS_ENABLED=false` 可关闭新能力；旧提交仍按旧协议回读。
+`atlas_runtime.py` 将私有运行时依赖集中到版本适配层，仅启用已经验收的 LangGraph 1.1.3 / API 0.8.7 / inmem 0.28.1 / checkpoint 4.1.0。它为原生持久化对象安装串行同步写入，在受理、节点调用和确认终态前设置刷盘边界，不修改安装目录中的包文件。升级依赖后先重跑故障测试，再更新版本支持；不要仅删除版本限制。`ATLAS_SUBMISSIONS_ENABLED=false` 可关闭新能力；旧提交仍按旧协议回读。
+
+M4 修正原生回读：为状态／历史临时构造的 JSON saver 只共享主 saver 的存储，不注册、加载或刷写同名文件；JSON 视图只保留 reducer 需要的 `Overwrite` 指令，不放开其它类型解码。轮询最新状态可能看到待提交的写入；只有按相同 checkpoint ID 独立读到同一尝试的终态，才把该位置持久化到回执。无需迁移、重放或修补旧检查点。
 
 `test_submission_journal.py` 验证并发固定身份、旧进程阻止执行、检查点归属 / 输入摘要、终态位置及迁移。`live-submissions.spec.ts` 验证响应丢失、重试、冲突、恢复记录落盘、结果隔离和成果保留。`submission-api.spec.ts` 在 `.local/atlas-submission-api/case-*` 启动专属原生后端，立即在受理、模型或工具内部停止进程，检查实际 run 列表与持久工具计数；不等待十秒后台刷盘，不读取生产 `.env`。普通 API、1A、1B 的默认专用端口和复现命令均见接口文档。
 
 2026-10-10 用户确认当前网关问题由供应商后续修复，要求跳过连接排障并继续事件图谱开发。保持指定模型、地址、本地密钥与 `NO_PROXY=*`，未关闭 TLS 校验。供应商恢复前，替身验收不能代表完整真实研究已通过。
+
+## 已发布工作流（M3）
+
+正式入口为 `research_workflow`，在 `langgraph.json` 使用 `deep_research.workflow_runtime:graph` 注册。更新后重启后端；`/atlas/config` 只有实际工厂、节点实现和锁定运行时就绪时才声明执行及父事件能力。流程 JSON 不替代实现代码，不能为恢复旧版本换用最新图。
+
+流程、修订、thread 绑定、逐提交绑定副本和父事件共用受理 SQLite。工作流迁移为 `workflow_schema.version=2`，原受理 `user_version=2` 不变。父事件随受理记录保留，不受 `ATLAS_EVENT_RETENTION_DAYS` 清理；备份时保留受理库、配置归档、原生持久化和其他事件库整套数据。
+
+受理前解析模型／Skills 归档，随后同一连接事务固定流程、配置快照和 run 身份。不要在 `WorkflowStore.accept()` 内调用另开连接的 Journal／Store 方法。恢复摘要仅在字段存在时纳入 `workflow_binding/organized_notes`，旧摘要样本已有固定回归。
+
+编译器只对业务结果选择定义后继，不能同时保留旧 `Command.goto` 和正常静态边。计划优化同步替换简报与协调消息；材料整理仅写独立字段，显式空结果失败，不能静默回退。
+
+原生回归使用生产工厂和模型／搜索替身；`ATLAS_WORKFLOW_M3_API=1` 将用例隔离在 `.local/graph-canvas-m3/`。`ATLAS_WORKFLOW_M4_PERF=1` 启用 30 节点本地 HTTP 校验／发布基准和浏览器拖动基准，使用 `.local/graph-canvas-m4/` 单独留存证据。旧完整图回归也自动隔离存储路径。见 [M3 记录](graph-canvas-editor-m3-results.md)与 [M4 记录](graph-canvas-editor-m4-results.md)。
 
 ## 结构化输出与网关兼容
 

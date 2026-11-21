@@ -41,6 +41,8 @@ export async function createThread(thread: LiveThread) {
 }
 
 export async function createRun(thread: LiveThread, research: LiveResearch, turn: LiveTurn) {
+  if (thread.workflow || research.workflow || turn.workflowRef)
+    throw new Error('Published workflows require durable workflow acceptance')
   return runSchema.parse(
     await request(thread.serverUrl, `/threads/${thread.threadId}/runs`, {
       method: 'POST',

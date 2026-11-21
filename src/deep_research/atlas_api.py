@@ -4,15 +4,26 @@ LangGraph loads the root .env before importing apps/graphs. Standalone scripts
 must do the same before importing graph modules.
 """
 
+import sys
+from contextlib import asynccontextmanager
+
 from starlette.applications import Starlette
 from starlette.concurrency import run_in_threadpool
 from starlette.responses import JSONResponse
 from starlette.routing import Route
 
-from deep_research.model_config import MODEL_ROLES, public_model_config
+from deep_research.atlas_runtime import (
+    initialize_native_runtime,
+    workflow_graph_registered,
+)
 from deep_research.event_journal import EventIdentity, get_event_journal
-from deep_research.submission_api import get_receipt, recover, submit
+from deep_research.model_config import MODEL_ROLES, public_model_config
 from deep_research.report_streaming import get_report_journal
+from deep_research.submission_api import get_receipt, recover, submit
+from deep_research.workflow_api import routes as workflow_routes
+from deep_research.workflow_events import events as workflow_events
+from deep_research.workflow_runtime import check_ready as workflow_runtime_ready
+from deep_research.workflow_store import get_workflow_store
 
 
 async def config(request):
@@ -22,6 +33,18 @@ async def config(request):
         return JSONResponse(
             {"detail": "Research models are not ready."}, status_code=503
         )
+    try:
+        store = get_workflow_store()
+        if store is not None:
+            await run_in_threadpool(store.check_ready)
+            payload["workflow_editor_version"] = 1
+            if workflow_graph_registered():
+                await run_in_threadpool(workflow_runtime_ready)
+                payload["workflow_execution_version"] = 1
+                payload["workflow_events_version"] = 1
+    except Exception:
+        # A storage failure must not remove existing research capabilities.
+        pass
     return JSONResponse(payload, headers={"Cache-Control": "no-store"})
 
 
@@ -71,8 +94,18 @@ async def events(request):
     return JSONResponse(payload, headers={"Cache-Control": "no-store"})
 
 
+@asynccontextmanager
+async def lifespan(_app):
+    """Configure the already loaded native server, not standalone Atlas clients."""
+    if "langgraph_runtime_inmem.ops" in sys.modules:
+        initialize_native_runtime()
+    yield
+
+
 app = Starlette(
+    lifespan=lifespan,
     routes=[
+        *workflow_routes,
         Route("/atlas/config", config, methods=["GET"]),
         Route(
             "/atlas/threads/{thread_id:uuid}/submissions/{turn_id:uuid}",
@@ -95,9 +128,14 @@ app = Starlette(
             methods=["GET"],
         ),
         Route(
+            "/atlas/threads/{thread_id:uuid}/runs/{run_id:uuid}/workflow-events",
+            workflow_events,
+            methods=["GET"],
+        ),
+        Route(
             "/atlas/threads/{thread_id:uuid}/runs/{run_id:uuid}/report-events",
             events,
             methods=["GET"],
         ),
-    ]
+    ],
 )

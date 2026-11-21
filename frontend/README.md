@@ -1,6 +1,8 @@
 # 星图工作台 · Apple 银白
 
-独立的 React + TypeScript + Vite 前端。真实模式连接现有 LangGraph API 的 `research_agent_full`，支持澄清续问、研究简报、研究、报告和检索来源。原有 Apple 银白 / 石墨界面和全流程动画演示继续保留。
+独立的 React + TypeScript + Vite 前端。真实模式默认使用 LangGraph 的 `research_agent_full`，也可选择通过 `research_workflow` 执行已发布的研究流程。原有 Apple 银白 / 石墨界面和全流程动画演示继续保留。
+
+后端工作流能力就绪时，侧栏显示 **流程管理**。从标准模板创建草稿后，可在画布上编排节点、修改参数并保存、校验及发布。在发布页点击 **使用此版本发起研究**，新会话会固定使用该版本；已有会话和演示记录不受新版发布影响。使用方法见[流程编辑器](docs/workflow-editor.md)，开发与验证见[实施交接](../docs/graph-canvas-editor-handoff.md)和 [M4 验收记录](../docs/graph-canvas-editor-m4-results.md)。
 
 继续开发先读 [P1 与后续任务交接](docs/handoff-p1-after-deepseek-replay-2026-10-19.md)：P0 已完成，DeepSeek 成功实录已设为默认；文档包含当前提交基线、实验配置、复现入口与验证边界。
 
@@ -115,9 +117,9 @@ npm test
 
 模拟会话和完整模拟里的模型 / Skills 菜单只是示例，不代表真实后端支持按次切换。其回复、阶段、耗时、来源数量、节点输入输出、事件与报告都来自 `mock.ts` / `demo.ts`。真实记录回放使用独立的 `deepseek-p0-recording.json` 和历史 `recordings.json`，请求演示时才加载，按实测配置和安全事件展示，不以模拟结果补齐缺失数据。在线真实会话继续使用 `live` 状态和 LangGraph 接口。
 
-模拟示例沿用三个研究员，模拟新问题使用两个研究员。真实图谱保留四个主阶段，只根据实际事件增加研究任务节点；后续协调轮次的委派有独立任务标识，不从示例推断研究员数量。缺少完成事件的任务不会因为运行结束就显示完成。
+模拟示例沿用三个研究员，模拟新问题使用两个研究员。真实图谱只根据实际事件增加研究任务节点；后续协调轮次的委派有独立任务标识，不从示例推断研究员数量。缺少完成事件的任务不会因为运行结束就显示完成。
 
-完整图仍按 `clarify_with_user → write_research_brief → supervisor_subgraph → final_report_generation` 展示。研究员内部的模型 / 工具循环和 `compress_research` 保留在检查器里。
+默认图仍按 `clarify_with_user → write_research_brief → supervisor_subgraph → final_report_generation` 展示。自定义流程按发布版本显示步骤，超过 20 个研究任务时分组展开，也可直接定位活动任务。研究员内部的模型 / 工具循环和 `compress_research` 保留在检查器里。
 
 ## 代码结构
 

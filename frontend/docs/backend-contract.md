@@ -25,6 +25,8 @@
 
 ## 标识及生命周期
 
+Graph 流程编辑器的增量协议已在 2026-11-15 冻结，见 [v1 核心契约](../../docs/graph-canvas-editor-contract.md)及 [M1 验证记录](../../docs/graph-canvas-editor-m1-results.md)。当前后端仍使用本页原有接口；工作流管理、可选 `workflow_ref` 与新的能力标记需在 M2／M3 正式接入后开放，不能仅凭前端类型存在就发送新执行请求。
+
 | 标识                              | 所属层                    | 规则                                                   |
 | --------------------------------- | ------------------------- | ------------------------------------------------------ |
 | `Thread.id` / `live.threadId`     | 工作台 / LangGraph thread | 新真实会话使用同一个 UUID，首次发送才创建服务端 thread |
@@ -211,7 +213,7 @@
 
 ## 提交确认与执行恢复 · v1
 
-`submission_recovery_version: 1` 只在锁定的 LangGraph 1.1.3、API 0.8.7、inmem runtime 0.28.1 且原生文件持久化启用时声明。`ATLAS_SUBMISSIONS_ENABLED=false` 可关闭能力。版本更新后默认关闭，先跑原生故障验收再调整 `atlas_runtime.py`；不要仅修改版本断言。普通非持久化替身和 1A 专项仍使用旧契约。
+`submission_recovery_version: 1` 只在锁定的 LangGraph 1.1.3、API 0.8.7、inmem runtime 0.28.1、checkpoint 4.1.0 且原生文件持久化启用时声明。`ATLAS_SUBMISSIONS_ENABLED=false` 可关闭能力。版本更新后默认关闭，先跑原生故障验收再调整 `atlas_runtime.py`；不要仅修改版本断言。普通非持久化替身和 1A 专项仍使用旧契约。终态回执的 `checkpoint_id` 来自可按原 ID 独立回读的已提交快照；运行中的最新视图可包含待提交写入，不单独作为完成依据。
 
 初次提交先以原生 `POST /threads` 创建 UUID 会话，再调用受理接口。请求必须包含不可变内容与前一 turn，服务端不接受客户端模型参数、任意 checkpoint 或运行策略：
 
@@ -268,7 +270,21 @@ SQLite 受理意图包含固定 run UUID，在创建原生 run 之前提交。�
 
 ## 恢复保证与边界
 
-正常状态每 2 秒回读，连接失败使用带少量抖动、最高 30 秒的退避；SSE、状态回读、事件回放分别管理。刷新、切换会话、窗口重新聚焦或网络恢复时也会对账，同一 run 在当前页面只有一个 SSE 观察连接。后台真实研究可在用户查看另一会话或演示时继续完成并接收事件。界面保留四个主阶段，研究员节点由实际委派动态加入。
+正常状态每 2 秒回读，连接失败使用带少量抖动、最高 30 秒的退避；SSE、状态回读、事件回放分别管理。刷新、切换会话、窗口重新聚焦或网络恢复时也会对账，同一 run 在当前页面只有一个 SSE 观察连接。后台真实研究可在用户查看另一会话或演示时继续完成并接收事件。旧图保留四个主阶段；发布流程按固定定义展示父节点，研究员节点均由实际委派动态加入。
+
+## 发布流程执行（M3）
+
+`workflow_execution_version: 1` 与 `workflow_events_version: 1` 表示生产工厂及父事件能力，独立于编辑能力。后端须注册 `research_workflow: deep_research.workflow_runtime:graph` 并具备兼容实现；同名测试图不构成能力。
+
+研究受理体可增加 `workflow_ref: {workflow_id, revision_id}`。省略或 `null` 在摘要前移除。成功回执另含 `workflow_binding`，匹配所选文档的流程、修订、摘要、兼容版本及 thread。新空 thread 可绑定未归档发布版；既有绑定固定不变，省略引用从受理库解析。不同显式版本返回 `workflow_binding_conflict`，旧图历史返回 `legacy_workflow_locked`。归档不使既有受支持绑定失效；旧后端不能以默认图替代选定流程。
+
+原修订、thread 绑定及逐提交副本、有效配置、原请求摘要和固定 run UUID 在同一受理 SQLite 事务固定。模型／Skills 内容仍在独立配置库预先归档。原生 thread 先刷盘，run 后创建，恢复使用精确 checkpoint 和 `input: null`，白名单仍是三个核心父节点。
+
+`atlas.workflow_event` 是 `WorkflowNodeEvent`，与动态研究员事件分开。只读分页入口为 `GET /atlas/threads/{thread_id}/runs/{run_id}/workflow-events`，必需 query 为 `research_id/turn_id/attempt_id`，可选 `after=0/limit=50/journal_id`，最多 100 条。
+
+分页沿用 `status/journal_id/events/next_sequence/last_sequence/has_more/sealed/gap/reset/unconfirmed_before_sequence`，另含 `attempt_id/workflow_ref/semantic_hash`。每个 attempt 的 run 从 1 连续计数，事件先落受理库再投递。前端核对归属、节点类型、UUID 和连续序号；旧进程未完成节点不会继续显示为运行中，`sealed` 不等于业务成功。
+
+M3 原生测试须显式设置 `ATLAS_WORKFLOW_M3_API=1`；浏览器测试代理 `ATLAS_BACKEND_URL` 与 `ATLAS_WORKFLOW_M3_PORT` 一致。入口、完整命令与实测边界见 [M3 记录](../../docs/graph-canvas-editor-m3-results.md)。
 
 旧版 `atlas-workspace:v1` 数据保持兼容；没有 `source` 的旧会话按模拟数据解释。新真实会话单独存储 `live` 映射和报告缓存。服务端会话不存在、接口不可达或提交结果不明时保留本地内容并停止新提交，不自动创建替代 thread。清除浏览器存储后，本轮没有按账号重新发现远端会话的功能。
 
@@ -354,3 +370,11 @@ npm test -- tests/submission-api.spec.ts --workers=1 --output test-results/submi
 真实模式当前使用 **600 秒**澄清观察窗口，单测试整体最多 **1800 秒（30 分钟）**。第二次提交后的终态等待取整体剩余时间并预留 **30 秒**回读，替代此前固定的 1140 秒阶段窗口；Kimi 旧用例仍按当时的 1140 秒超时如实记录，不回写成新预算已通过。这些是浏览器观察期限，不会增加 SDK / helper / 节点的有限重试次数，也不会在观察失败时重新提交问题。替身模式仍使用原 180 / 660 / 900 秒预算。真实复测应显式设置测试级 `retries: 0`，为专属后端设置清理期限，结束前先回读受理回执及所属终态检查点；超时只能记为未完成，不能用原生 run 的 `success` 推断报告交付。
 
 离线实录通过 `recordings.json` 保存公开配置、安全对话、笔记、来源、研究事件和客户端请求计数。界面以独立内存会话分章节展示，不调用提交、恢复或事件回放 API，也不宣称补齐服务器历史。最后的 `running` 是中断前快照，显示为记录中断而不改写业务状态。详见 [实录约定](recorded-runs.md)。
+
+## Graph 流程管理（M2）
+
+`/atlas/config` 仅在流程存储检查通过后提供可选 `workflow_editor_version: 1`。编辑入口和请求客户端分别为 `components/workflow/` 与 `api/workflows.ts`，管理数据使用 `workflowSchema.ts`，不复用研究运行的 `NodeDetail` 作为执行定义。
+
+管理路径为 `/atlas/workflow-node-types`、`/atlas/workflows`，及单流程的 `/summary`、`/draft`、`/validate`、`/publish`、`/revisions`、`/revisions/{revision_id}`、`/archive`。请求／响应、分页、并发、幂等与大小限制以 [v1 契约](../../docs/graph-canvas-editor-contract.md)第 4 节和 [机器 Schema](../../docs/contracts/workflow-v1.schema.json)为准。归档不删除历史引用，导入只接受文档内容。
+
+生产发布上下文在 M3 接入前，`validate`／`publish` 返回 503 `workflow_runtime_unavailable`；M2 不声明 `workflow_execution_version` 或 `workflow_events_version`，不提交 `workflow_ref`，也不向内置图回退执行所选流程。测试专用的 `PublicationContext` 只用于管理事务与 UI 验收，不是生产实现。既有 submissions、事件、配置快照与恢复摘要保持原语义。

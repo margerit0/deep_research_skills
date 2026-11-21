@@ -74,6 +74,14 @@ export function applyReceipt(
 }
 
 export function executionMessage(receipt: SubmissionReceipt): string {
+  if (
+    [
+      'node_implementation_unavailable',
+      'workflow_runtime_incompatible',
+      'workflow_runtime_unavailable',
+    ].includes(receipt.reason)
+  )
+    return '原流程版本的执行实现当前不可用。历史成果仍可查看，恢复需要原版本的兼容实现。'
   if (receipt.status === 'retryable') return '提交已记录，执行尚未开始。可以安全重试同一提交。'
   if (receipt.reason === 'thread_missing') return '服务端会话已不存在。已保留本地成果，请新建研究。'
   if (receipt.status === 'blocked')
@@ -87,6 +95,8 @@ export function executionMessage(receipt: SubmissionReceipt): string {
       : '执行已中断，可从已验证的检查点继续。当前澄清或简报模型可能再次调用。'
   }
   return receipt.reason === 'research_node_not_resumable'
-    ? '研究执行已中断，当前研究子流程尚不能安全续跑。已保留确认过的笔记与来源，可新建研究。'
+    ? receipt.workflow_binding
+      ? '研究执行已中断，当前节点尚不能安全续跑。已保留确认过的笔记与来源，可新建研究。'
+      : '研究执行已中断，当前研究子流程尚不能安全续跑。已保留确认过的笔记与来源，可新建研究。'
     : '执行已中断，当前检查点尚不能安全续跑。已保留确认过的成果，可重新读取状态或新建研究。'
 }

@@ -8,6 +8,8 @@ import { currentLiveNode, getLiveNodes } from '../data/live'
 import { useLiveResearch } from './useLiveResearch'
 import type { LiveUpdate } from './useLiveResearch'
 import type { RunSelection } from '../data/liveSchema'
+import type { WorkflowRevision } from '../data/workflowSchema'
+import { getWorkflowNodes, workflowNodeId, mergeWorkflowEvents } from '../data/workflowRuntime'
 import { mergeResearchEvents } from '../data/researchEvents'
 import { recoveryScope, savedRecovery } from '../data/eventRecovery'
 import { applyReceipt } from '../data/executionRecovery'
@@ -20,7 +22,7 @@ type Action =
   | { type: 'theme'; theme: Workspace['theme'] }
   | { type: 'draft'; text: string }
   | { type: 'send' }
-  | { type: 'new'; source?: 'mock' | 'live' }
+  | { type: 'new'; source?: 'mock' | 'live'; workflow?: WorkflowRevision }
   | { type: 'switch'; id: string }
   | { type: 'graph'; open: boolean }
   | { type: 'inspect'; node: string; runId?: string }
@@ -29,7 +31,7 @@ type Action =
   | { type: 'advance' }
   | LiveUpdate
 
-function emptyThread(source: 'mock' | 'live'): Thread {
+function emptyThread(source: 'mock' | 'live', workflow?: WorkflowRevision): Thread {
   const id = crypto.randomUUID()
   return {
     id,
@@ -38,7 +40,16 @@ function emptyThread(source: 'mock' | 'live'): Thread {
     draft: '',
     runs: [],
     selectedRunId: null,
-    ...(source === 'live' ? { live: { threadId: id, serverUrl: apiUrl, researches: [] } } : {}),
+    ...(source === 'live'
+      ? {
+          live: {
+            threadId: id,
+            serverUrl: apiUrl,
+            researches: [],
+            ...(workflow ? { workflow: structuredClone(workflow) } : {}),
+          },
+        }
+      : {}),
   }
 }
 
@@ -109,18 +120,21 @@ function reducer(state: Workspace, action: Action): Workspace {
       )
     case 'new': {
       const source = action.source ?? thread.source ?? 'mock'
-      const empty = state.threads.find(
-        (t) =>
-          (t.source ?? 'mock') === source &&
-          t.runs.length === 0 &&
-          !t.live?.researches.length &&
-          !t.draft,
-      )
-      const next = empty ?? emptyThread(source)
+      const empty =
+        !action.workflow &&
+        state.threads.find(
+          (t) =>
+            (t.source ?? 'mock') === source &&
+            t.runs.length === 0 &&
+            !t.live?.researches.length &&
+            !t.live?.workflow &&
+            !t.draft,
+        )
+      const next = empty || emptyThread(source, action.workflow)
       return {
         ...state,
         activeThreadId: next.id,
-        selectedNode: 'clarify',
+        selectedNode: action.workflow ? 'prepare_research' : 'clarify',
         threads: empty ? state.threads : [next, ...state.threads],
       }
     }
@@ -162,6 +176,35 @@ function reducer(state: Workspace, action: Action): Workspace {
         { ...thread, runs: thread.runs.map((r) => (r.id === run.id ? next : r)) },
         { selectedNode: currentNode(next) },
       )
+    }
+    case 'live-workflow-events': {
+      const target = state.threads.find((item) => item.id === action.threadId)
+      const existing = target?.live?.researches.at(-1)
+      if (
+        !target?.live ||
+        !existing ||
+        existing.id !== action.researchId ||
+        existing.turns.at(-1)?.id !== action.turnId ||
+        target.live.serverUrl !== action.serverUrl
+      )
+        return state
+      const workflowStreams = mergeWorkflowEvents(
+        target.live,
+        existing,
+        action.runId,
+        action.events,
+        action.replay,
+      )
+      if (JSON.stringify(workflowStreams) === JSON.stringify(existing.workflowStreams)) return state
+      return update({
+        ...target,
+        live: {
+          ...target.live,
+          researches: target.live.researches.map((item) =>
+            item === existing ? { ...item, workflowStreams } : item,
+          ),
+        },
+      })
     }
     case 'live-report-events': {
       const target = state.threads.find((item) => item.id === action.threadId)
@@ -270,13 +313,18 @@ function reducer(state: Workspace, action: Action): Workspace {
                           : mergeResearchEvents(action.research, r.events),
                         eventRecovery: action.submission ? undefined : r.eventRecovery,
                         reportStreams: action.submission ? undefined : r.reportStreams,
+                        workflowStreams: action.submission
+                          ? action.research.workflowStreams
+                          : r.workflowStreams,
                       }
                     : r,
                 )
               : [...target.live.researches, action.research],
           },
         },
-        action.submission && state.activeThreadId === target.id ? { selectedNode: 'clarify' } : {},
+        action.submission && state.activeThreadId === target.id
+          ? { selectedNode: currentLiveNode(action.research) }
+          : {},
       )
     }
   }
@@ -338,6 +386,7 @@ export function useWorkspace() {
     demo.recordedRun ??
     (isLive ? thread.live?.researches.find((r) => r.id === thread.selectedRunId) : undefined)
   const inspectNode = (node: string, runId?: string) => {
+    if (isLive && thread.live?.workflow) node = workflowNodeId(node)
     dispatch({ type: 'inspect', node, runId })
     // On narrow screens the graph follows the conversation; bring the requested
     // detail into view instead of silently changing a panel below the fold.
@@ -352,7 +401,13 @@ export function useWorkspace() {
       })
     }
   }
-  const nodes = demo.active ? demo.nodes : isLive ? getLiveNodes(liveRun) : getNodes(run)
+  const nodes = demo.active
+    ? demo.nodes
+    : isLive
+      ? thread.live?.workflow
+        ? getWorkflowNodes(liveRun, thread.live.workflow)
+        : getLiveNodes(liveRun)
+      : getNodes(run)
   return {
     state,
     dispatch,

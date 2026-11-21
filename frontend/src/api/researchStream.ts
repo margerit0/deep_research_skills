@@ -1,6 +1,8 @@
 import { researchEventSchema, reportEventSchema } from '../data/liveSchema'
 import type { LiveThread, ResearchEvent, ReportEvent } from '../data/liveSchema'
 import { ApiError } from './errors'
+import { workflowNodeEventSchema } from '../data/workflowSchema'
+import type { WorkflowNodeEvent } from '../data/workflowSchema'
 
 interface StreamOptions {
   signal: AbortSignal
@@ -9,6 +11,7 @@ interface StreamOptions {
   onCursor: (id: string) => void
   onEvent: (event: ResearchEvent) => void
   onReportEvent?: (event: ReportEvent) => void
+  onWorkflowEvent?: (event: WorkflowNodeEvent) => void
 }
 
 // Joining is read-only. Disconnecting this observer never cancels the research.
@@ -39,7 +42,7 @@ export async function streamResearchEvents(
 
 export async function readResearchEvents(
   body: ReadableStream<Uint8Array>,
-  options: Pick<StreamOptions, 'onCursor' | 'onEvent' | 'onReportEvent'>,
+  options: Pick<StreamOptions, 'onCursor' | 'onEvent' | 'onReportEvent' | 'onWorkflowEvent'>,
 ) {
   const reader = body.getReader()
   const decoder = new TextDecoder()
@@ -87,6 +90,16 @@ export async function readResearchEvents(
             ) {
               const parsed = reportEventSchema.safeParse(payload.event)
               if (parsed.success) options.onReportEvent?.(parsed.data)
+            }
+            if (
+              payload &&
+              typeof payload === 'object' &&
+              'type' in payload &&
+              payload.type === 'atlas.workflow_event' &&
+              'event' in payload
+            ) {
+              const parsed = workflowNodeEventSchema.safeParse(payload.event)
+              if (parsed.success) options.onWorkflowEvent?.(parsed.data)
             }
           }
           if (eventId && !eventId.includes('\0')) options.onCursor(eventId)

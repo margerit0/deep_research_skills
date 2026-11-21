@@ -3,6 +3,7 @@ import { sameSelection } from './liveSchema'
 import type { NodeDetail, NodeStatus } from './schema'
 import type { ServerRun } from '../api/langgraph'
 import { eventTimeline, getResearcherNodes, mergeResearchEvents } from './researchEvents'
+import { matchesWorkflowBinding, currentWorkflowNode, getWorkflowNodes } from './workflowRuntime'
 
 export const liveStatusText = {
   running: '运行中',
@@ -27,15 +28,17 @@ export const roleLabels: Record<string, string> = {
   FINAL_REPORT: '最终报告',
 }
 export const currentLiveNode = (run?: LiveResearch) =>
-  !run
-    ? 'clarify'
-    : {
-        clarify: 'clarify',
-        brief: 'brief',
-        research: 'supervisor',
-        writing: 'report',
-        complete: 'report',
-      }[run.phase]
+  run?.workflow
+    ? currentWorkflowNode(run)
+    : !run
+      ? 'clarify'
+      : {
+          clarify: 'clarify',
+          brief: 'brief',
+          research: 'supervisor',
+          writing: 'report',
+          complete: 'report',
+        }[run.phase]
 
 export function safeHttpUrl(url: string): string | undefined {
   try {
@@ -93,6 +96,7 @@ export function applySnapshot(
   const matches =
     values.active_research_id === run.id &&
     values.active_turn_id === turn.id &&
+    matchesWorkflowBinding(run.workflow, values.workflow_binding, server.thread_id) &&
     (!turn.selection || sameSelection(turn.selection, values.effective_config?.selection))
   const apiFailed = ['error', 'timeout', 'interrupted'].includes(server.status)
   const apiRunning = ['pending', 'running'].includes(server.status)
@@ -106,6 +110,7 @@ export function applySnapshot(
     next.config = values.effective_config ?? run.config
     next.phase = values.research_phase ?? run.phase
     next.brief = values.research_brief ?? ''
+    if (run.workflow) next.organizedNotes = values.organized_notes
     next.notes = (values.notes ?? []).filter(
       (note) => note.trim() && !note.trimStart().startsWith('## 研究未完成'),
     )
@@ -230,6 +235,7 @@ export function applySnapshot(
 }
 
 export function getLiveNodes(run?: LiveResearch): NodeDetail[] {
+  if (run?.workflow) return getWorkflowNodes(run)
   const ids = ['clarify', 'brief', 'supervisor', 'report']
   const active = ids.indexOf(currentLiveNode(run))
   const titles = ['澄清需求', '研究简报', '研究协调器', '最终报告']

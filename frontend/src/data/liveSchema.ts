@@ -1,4 +1,10 @@
 import { z } from 'zod'
+import {
+  workflowBindingSchema,
+  workflowNodeEventSchema,
+  workflowRefSchema,
+  workflowRevisionSchema,
+} from './workflowSchema'
 
 export const selectionSchema = z.object({
   version: z.literal(1),
@@ -34,6 +40,9 @@ export const backendConfigSchema = z.object({
   report_event_replay_version: z.literal(1).optional(),
   submission_recovery_version: z.literal(1).optional(),
   configuration_version: z.literal(1).optional(),
+  workflow_editor_version: z.literal(1).optional(),
+  workflow_execution_version: z.literal(1).optional(),
+  workflow_events_version: z.literal(1).optional(),
   selection: selectionSchema.optional(),
   skill_revisions: z.record(z.string(), z.string()).optional(),
   catalog: z
@@ -191,6 +200,29 @@ export const reportStreamSchema = z.object({
   archived: z.boolean().optional(),
 })
 export type ReportStream = z.infer<typeof reportStreamSchema>
+export const workflowStreamSchema = z.object({
+  serverUrl: z.string(),
+  threadId: z.string(),
+  researchId: z.string(),
+  turnId: z.string(),
+  runId: z.uuid(),
+  attemptId: z.string(),
+  events: z.array(workflowNodeEventSchema).max(100),
+  sequence: z.number().int().nonnegative(),
+  journalId: z.uuid().optional(),
+  gap: z.boolean(),
+  sealed: z.boolean(),
+  unconfirmedBefore: z.number().int().nonnegative(),
+  conflicts: z.array(z.number().int().positive()),
+})
+export type WorkflowStream = z.infer<typeof workflowStreamSchema>
+export const workflowEventPageSchema = eventPageSchema.extend({
+  attempt_id: z.string(),
+  workflow_ref: workflowRefSchema,
+  semantic_hash: z.string().regex(/^[a-f0-9]{64}$/),
+  events: z.array(workflowNodeEventSchema).max(100),
+})
+export type WorkflowEventPage = z.infer<typeof workflowEventPageSchema>
 export const eventRecoverySchema = z.object({
   serverUrl: z.string(),
   threadId: z.string(),
@@ -224,6 +256,7 @@ export const serverRunSchema = z.object({
 export const submissionReceiptSchema = z.object({
   version: z.literal(1),
   configuration: backendConfigSchema.optional(),
+  workflow_binding: workflowBindingSchema.optional(),
   thread_id: z.string(),
   research_id: z.string(),
   turn_id: z.string(),
@@ -258,6 +291,7 @@ export const turnSchema = z.object({
   eventRunId: z.string().optional(),
   submissionVersion: z.literal(1).optional(),
   selection: selectionSchema.optional(),
+  workflowRef: workflowRefSchema.optional(),
   expectedTurnId: z.string().nullable().optional(),
   recoveryRequest: z
     .object({
@@ -274,6 +308,9 @@ export const liveResearchSchema = z.object({
   prompt: z.string(),
   createdAt: z.string(),
   config: backendConfigSchema,
+  workflow: workflowRevisionSchema.optional(),
+  workflowStreams: z.array(workflowStreamSchema).optional().catch(undefined),
+  organizedNotes: z.string().nullable().optional(),
   turns: z.array(turnSchema).min(1),
   status: researchStatusSchema,
   phase: researchPhaseSchema,
@@ -306,6 +343,7 @@ export const liveThreadSchema = z.object({
   serverUrl: z.string(),
   researches: z.array(liveResearchSchema),
   selection: selectionSchema.optional(),
+  workflow: workflowRevisionSchema.optional(),
 })
 export type BackendConfig = z.infer<typeof backendConfigSchema>
 export type LiveResearch = z.infer<typeof liveResearchSchema>
@@ -314,6 +352,8 @@ export type LiveTurn = z.infer<typeof turnSchema>
 
 // Deliberately ignore raw tool traces and provider errors from native API payloads.
 export const graphValuesSchema = z.object({
+  workflow_binding: workflowBindingSchema.optional(),
+  organized_notes: z.string().nullable().optional(),
   active_research_id: z.string().optional(),
   active_turn_id: z.string().optional(),
   report_research_id: z.string().optional(),

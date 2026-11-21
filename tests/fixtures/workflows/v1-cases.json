@@ -1,0 +1,433 @@
+{
+  "schema_version": 1,
+  "cases": [
+    {
+      "id": "standard",
+      "base": null,
+      "changes": [],
+      "schema_valid": true,
+      "codes": []
+    },
+    {
+      "id": "without_clarification",
+      "base": "standard",
+      "changes": [
+        { "op": "remove", "path": "/definition/nodes/2" },
+        {
+          "op": "set",
+          "path": "/definition/edges/1/target",
+          "value": "write_research_brief"
+        },
+        { "op": "remove", "path": "/definition/edges/2" }
+      ],
+      "schema_valid": true,
+      "codes": []
+    },
+    {
+      "id": "extensions",
+      "base": "standard",
+      "changes": [
+        {
+          "op": "append",
+          "path": "/definition/nodes",
+          "value": {
+            "id": "plan_a",
+            "type": "optimize_plan",
+            "type_version": 1,
+            "parameters": { "instructions": "补充竞争格局，优先一手来源。" }
+          }
+        },
+        {
+          "op": "append",
+          "path": "/definition/nodes",
+          "value": {
+            "id": "materials_a",
+            "type": "organize_notes",
+            "type_version": 1,
+            "parameters": { "instructions": "归类材料，保留来源与不同观点。" }
+          }
+        },
+        {
+          "op": "set",
+          "path": "/definition/edges/3/target",
+          "value": "plan_a"
+        },
+        {
+          "op": "append",
+          "path": "/definition/edges",
+          "value": {
+            "id": "edge_plan",
+            "source": "plan_a",
+            "source_port": "out",
+            "target": "supervisor_subgraph",
+            "target_port": "in"
+          }
+        },
+        {
+          "op": "set",
+          "path": "/definition/edges/4/target",
+          "value": "materials_a"
+        },
+        {
+          "op": "append",
+          "path": "/definition/edges",
+          "value": {
+            "id": "edge_materials",
+            "source": "materials_a",
+            "source_port": "out",
+            "target": "final_report_generation",
+            "target_port": "in"
+          }
+        }
+      ],
+      "schema_valid": true,
+      "codes": []
+    },
+    {
+      "id": "repeated_processing",
+      "base": "extensions",
+      "changes": [
+        {
+          "op": "append",
+          "path": "/definition/nodes",
+          "value": {
+            "id": "plan_b",
+            "type": "optimize_plan",
+            "type_version": 1,
+            "parameters": { "instructions": "补充核验计划。" }
+          }
+        },
+        {
+          "op": "set",
+          "path": "/definition/edges/6/target",
+          "value": "plan_b"
+        },
+        {
+          "op": "append",
+          "path": "/definition/edges",
+          "value": {
+            "id": "edge_plan_b",
+            "source": "plan_b",
+            "source_port": "out",
+            "target": "supervisor_subgraph",
+            "target_port": "in"
+          }
+        }
+      ],
+      "schema_valid": true,
+      "codes": []
+    },
+    {
+      "id": "missing_required_report",
+      "base": "standard",
+      "changes": [
+        { "op": "remove", "path": "/definition/nodes/5" },
+        { "op": "set", "path": "/definition/edges/4/target", "value": "end" },
+        { "op": "remove", "path": "/definition/edges/5" }
+      ],
+      "schema_valid": true,
+      "codes": ["node_count", "stage_order_invalid"]
+    },
+    {
+      "id": "disconnected_extension",
+      "base": "extensions",
+      "changes": [{ "op": "remove", "path": "/definition/edges/6" }],
+      "schema_valid": true,
+      "codes": ["input_count", "node_unreachable", "output_count"]
+    },
+    {
+      "id": "self_loop",
+      "base": "extensions",
+      "changes": [
+        {
+          "op": "append",
+          "path": "/definition/edges",
+          "value": { "id": "self_loop", "source": "plan_a", "target": "plan_a" }
+        }
+      ],
+      "schema_valid": true,
+      "codes": ["cycle", "input_count", "output_count"]
+    },
+    {
+      "id": "parallel_branch",
+      "base": "standard",
+      "changes": [
+        {
+          "op": "append",
+          "path": "/definition/edges",
+          "value": {
+            "id": "branch",
+            "source": "write_research_brief",
+            "target": "final_report_generation"
+          }
+        }
+      ],
+      "schema_valid": true,
+      "codes": ["input_count", "output_count", "stage_order_invalid"]
+    },
+    {
+      "id": "missing_edge_endpoint",
+      "base": "standard",
+      "changes": [
+        {
+          "op": "set",
+          "path": "/definition/edges/3/target",
+          "value": "missing_node"
+        }
+      ],
+      "schema_valid": true,
+      "codes": [
+        "edge_node_missing",
+        "input_count",
+        "node_unreachable",
+        "output_count"
+      ]
+    },
+    {
+      "id": "renamed_core_identity",
+      "base": "standard",
+      "changes": [
+        {
+          "op": "set",
+          "path": "/definition/nodes/3/id",
+          "value": "renamed_brief"
+        },
+        {
+          "op": "set",
+          "path": "/definition/edges/2/target",
+          "value": "renamed_brief"
+        },
+        {
+          "op": "set",
+          "path": "/definition/edges/3/source",
+          "value": "renamed_brief"
+        }
+      ],
+      "schema_valid": true,
+      "codes": ["core_node_id"]
+    },
+    {
+      "id": "unknown_node_type",
+      "base": "extensions",
+      "changes": [
+        {
+          "op": "set",
+          "path": "/definition/nodes/7/type",
+          "value": "python_step"
+        }
+      ],
+      "schema_valid": true,
+      "codes": ["node_type_unknown"]
+    },
+    {
+      "id": "unsupported_type_version",
+      "base": "extensions",
+      "changes": [
+        { "op": "set", "path": "/definition/nodes/7/type_version", "value": 2 }
+      ],
+      "schema_valid": true,
+      "codes": ["node_type_version_unsupported"]
+    },
+    {
+      "id": "empty_processing_requirements",
+      "base": "extensions",
+      "changes": [
+        {
+          "op": "set",
+          "path": "/definition/nodes/7/parameters/instructions",
+          "value": "  \n  "
+        }
+      ],
+      "schema_valid": true,
+      "codes": ["node_parameters_invalid"]
+    },
+    {
+      "id": "unrecognized_parameter",
+      "base": "extensions",
+      "changes": [
+        {
+          "op": "set",
+          "path": "/definition/nodes/7/parameters/api_key",
+          "value": "synthetic-sensitive-value"
+        }
+      ],
+      "schema_valid": false,
+      "codes": ["schema_invalid"]
+    },
+    {
+      "id": "core_model_override",
+      "base": "standard",
+      "changes": [
+        {
+          "op": "set",
+          "path": "/definition/nodes/3/parameters/model",
+          "value": "per-node-model"
+        }
+      ],
+      "schema_valid": false,
+      "codes": ["schema_invalid"]
+    },
+    {
+      "id": "duplicate_node_identity",
+      "base": "standard",
+      "changes": [
+        {
+          "op": "append",
+          "path": "/definition/nodes",
+          "value": {
+            "id": "prepare_research",
+            "type": "prepare_research",
+            "parameters": {}
+          }
+        }
+      ],
+      "schema_valid": true,
+      "codes": ["node_count", "node_id_duplicate"]
+    },
+    {
+      "id": "duplicate_connection",
+      "base": "standard",
+      "changes": [
+        {
+          "op": "append",
+          "path": "/definition/edges",
+          "value": {
+            "id": "another_edge",
+            "source": "start",
+            "target": "prepare_research"
+          }
+        }
+      ],
+      "schema_valid": true,
+      "codes": ["edge_duplicate", "input_count", "output_count"]
+    },
+    {
+      "id": "duplicate_edge_identity",
+      "base": "standard",
+      "changes": [
+        { "op": "set", "path": "/definition/edges/1/id", "value": "edge_1" }
+      ],
+      "schema_valid": true,
+      "codes": ["edge_id_duplicate"]
+    },
+    {
+      "id": "unknown_port",
+      "base": "standard",
+      "changes": [
+        {
+          "op": "set",
+          "path": "/definition/edges/2/source_port",
+          "value": "needs_information"
+        }
+      ],
+      "schema_valid": false,
+      "codes": ["schema_invalid"]
+    },
+    {
+      "id": "boolean_version",
+      "base": "standard",
+      "changes": [
+        { "op": "set", "path": "/definition/schema_version", "value": true }
+      ],
+      "schema_valid": false,
+      "codes": ["schema_invalid"]
+    },
+    {
+      "id": "string_version",
+      "base": "standard",
+      "changes": [
+        {
+          "op": "set",
+          "path": "/definition/nodes/0/type_version",
+          "value": "1"
+        }
+      ],
+      "schema_valid": false,
+      "codes": ["schema_invalid"]
+    },
+    {
+      "id": "runtime_state_in_definition",
+      "base": "standard",
+      "changes": [
+        {
+          "op": "set",
+          "path": "/definition/runtime_state",
+          "value": { "run_id": "unexpected" }
+        }
+      ],
+      "schema_valid": false,
+      "codes": ["schema_invalid"]
+    },
+    {
+      "id": "orphan_presentation",
+      "base": "standard",
+      "changes": [
+        {
+          "op": "append",
+          "path": "/presentation/nodes",
+          "value": {
+            "node_id": "missing",
+            "label": "不存在的节点",
+            "position": { "x": 10, "y": 20 }
+          }
+        }
+      ],
+      "schema_valid": true,
+      "codes": ["presentation_node_missing"]
+    },
+    {
+      "id": "duplicate_presentation",
+      "base": "standard",
+      "changes": [
+        {
+          "op": "append",
+          "path": "/presentation/nodes",
+          "value": {
+            "node_id": "start",
+            "label": "开始",
+            "position": { "x": 10, "y": 20 }
+          }
+        },
+        {
+          "op": "append",
+          "path": "/presentation/nodes",
+          "value": {
+            "node_id": "start",
+            "label": "开始",
+            "position": { "x": 30, "y": 40 }
+          }
+        }
+      ],
+      "schema_valid": true,
+      "codes": ["presentation_duplicate"]
+    },
+    {
+      "id": "unknown_schema_version",
+      "base": "standard",
+      "changes": [
+        { "op": "set", "path": "/definition/schema_version", "value": 2 }
+      ],
+      "schema_valid": false,
+      "codes": ["schema_invalid"]
+    },
+    {
+      "id": "invalid_zoom",
+      "base": "standard",
+      "changes": [
+        { "op": "set", "path": "/presentation/viewport/zoom", "value": 0 }
+      ],
+      "schema_valid": false,
+      "codes": ["schema_invalid"]
+    },
+    {
+      "id": "empty_draft",
+      "base": "standard",
+      "changes": [
+        { "op": "set", "path": "/definition/nodes", "value": [] },
+        { "op": "set", "path": "/definition/edges", "value": [] }
+      ],
+      "schema_valid": true,
+      "codes": ["node_count"]
+    }
+  ]
+}

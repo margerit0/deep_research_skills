@@ -15,7 +15,12 @@ export function Composer({ controller }: { controller: WorkspaceController }) {
       (lastLive?.execution && lastLive.execution.status !== 'completed') ||
       (lastLive && live.sync[thread.id]?.state !== 'ready'))
   const canSend =
-    !demo.active && (!isLive || (!!live.connection.config && !liveBusy && !storageError))
+    !demo.active &&
+    (!isLive ||
+      (!!live.connection.config &&
+        !liveBusy &&
+        !storageError &&
+        (!thread.live?.workflow || live.connection.config.workflow_execution_version === 1)))
   const [localOpen, setLocalOpen] = useState<'model' | 'skill' | null>(null)
   const open = demo.active ? demo.menu : localOpen
   const setOpen = (value: 'model' | 'skill' | null) =>
@@ -63,6 +68,22 @@ export function Composer({ controller }: { controller: WorkspaceController }) {
                 : '模型与 Skills 用于本次研究'}
         </span>
       </div>
+      {isLive && thread.live?.workflow && (
+        <div className="cw-workflow-choice">
+          <Icon name="workflow" />
+          <span>
+            {thread.live.workflow.document.name} · v{thread.live.workflow.revision_number}
+          </span>
+          <a
+            href={`#workflows/${encodeURIComponent(thread.live.workflow.workflow_id)}/revisions/${encodeURIComponent(thread.live.workflow.revision_id)}`}
+          >
+            查看流程
+          </a>
+          {live.connection.config && live.connection.config.workflow_execution_version !== 1 && (
+            <span role="alert">当前后端不支持此流程执行</span>
+          )}
+        </div>
+      )}
       <form
         ref={form}
         className="cw-composer"
@@ -146,7 +167,9 @@ export function Composer({ controller }: { controller: WorkspaceController }) {
               selection={
                 lastLive && (liveBusy || lastLive.status === 'awaiting_input')
                   ? lastLive.config.selection
-                  : thread.live?.selection
+                  : (thread.live?.selection ??
+                    thread.live?.workflow?.document.definition.defaults.selection ??
+                    undefined)
               }
               locked={!!liveBusy || lastLive?.status === 'awaiting_input'}
               skillOpen={open === 'skill'}

@@ -6,10 +6,12 @@ export function Sidebar({
   controller,
   mobileOpen,
   onClose,
+  onWorkflows,
 }: {
   controller: WorkspaceController
   mobileOpen: boolean
   onClose: () => void
+  onWorkflows?: () => void
 }) {
   const { state, dispatch } = controller
   const dialog = useRef<HTMLDialogElement>(null)
@@ -46,6 +48,19 @@ export function Sidebar({
         <Icon name="edit" />
         新研究
       </button>
+      {onWorkflows && (
+        <button
+          type="button"
+          className="cw-workflows-entry"
+          onClick={() => {
+            onWorkflows()
+            onClose()
+          }}
+        >
+          <Icon name="workflow" />
+          流程管理
+        </button>
+      )}
       <div className="cw-sidebar-label">最近对话</div>
       <div className="cw-thread-list">
         {state.threads.map((thread) => (

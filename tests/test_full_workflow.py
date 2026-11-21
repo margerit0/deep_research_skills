@@ -39,6 +39,18 @@ from deep_research.workflow_contract import extract_search_sources, merge_source
 SOURCE = {"title": "Source A", "url": "https://example.com/research"}
 
 
+@pytest.fixture(autouse=True)
+def isolated_storage(tmp_path, monkeypatch):
+    """Keep even configuration capability discovery away from the default store."""
+    for variable, filename in (
+        ("ATLAS_SUBMISSION_DB", "submissions.sqlite3"),
+        ("ATLAS_CONFIG_DB", "configs.sqlite3"),
+        ("ATLAS_EVENT_DB", "events.sqlite3"),
+        ("ATLAS_REPORT_EVENT_DB", "reports.sqlite3"),
+    ):
+        monkeypatch.setenv(variable, str(tmp_path / filename))
+
+
 def invoke(coro):
     return asyncio.run(coro)
 
