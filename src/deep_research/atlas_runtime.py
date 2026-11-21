@@ -18,6 +18,7 @@ _PERSIST_LOCK = threading.RLock()
 TESTED_RUNTIME = {
     "langgraph": "1.1.3",
     "langgraph-api": "0.8.7",
+    "langgraph-checkpoint": "4.1.0",
     "langgraph-runtime-inmem": "0.28.1",
 }
 
@@ -66,6 +67,84 @@ def _sync(store) -> None:
                 temporary.unlink(missing_ok=True)
 
 
+def _install_sync(store):
+    if not getattr(store, "_atlas_sync", False):
+        store.sync = partial(_sync, store)
+        store._atlas_sync = True
+
+
+def _preserve_checkpoint_overwrite(decode):
+    from langgraph.checkpoint.serde.jsonplus import EXT_CONSTRUCTOR_KW_ARGS
+    from langgraph.types import Overwrite
+    from ormsgpack import OPT_NON_STR_KEYS, unpackb
+
+    def read_extension(code, data):
+        # Native State.get and history decode to JSON before applying pending
+        # writes. Preserve this one reducer instruction, not arbitrary types.
+        if code == EXT_CONSTRUCTOR_KW_ARGS:
+            try:
+                module, name, kwargs = unpackb(
+                    data, ext_hook=decode, option=OPT_NON_STR_KEYS
+                )
+            except (TypeError, ValueError):
+                pass
+            else:
+                if (
+                    (module, name) == ("langgraph.types", "Overwrite")
+                    and isinstance(kwargs, dict)
+                    and kwargs.keys() == {"value"}
+                ):
+                    return Overwrite(kwargs["value"])
+        return decode(code, data)
+
+    return read_extension
+
+
+def _bind_checkpoints(checkpoint, register, ops):
+    # 0.28.1 constructs three temporary PersistentDicts when selecting a
+    # JSON serializer for State.get/history, then immediately swaps in the
+    # shared dictionaries. Registering the temporaries replaces the real
+    # flush-loop weakrefs. They must neither read nor write these files.
+    saver = checkpoint.Checkpointer()
+    if getattr(saver, "_atlas_primary_stores", False):
+        return saver
+    primary = {
+        store.filename: store for store in (saver.blobs, saver.writes, saver.storage)
+    }
+
+    def register_checkpoint(store):
+        owner = primary.get(store.filename)
+        if checkpoint.MEMORY is saver and owner is not None and store is not owner:
+            store.load = store.sync = lambda: None
+        else:
+            register(store)
+
+    checkpoint.register_persistent_dict = register_checkpoint
+    ops._msgpack_ext_hook_to_json = _preserve_checkpoint_overwrite(
+        ops._msgpack_ext_hook_to_json
+    )
+    for store in primary.values():
+        _install_sync(store)
+        register(store)
+    saver._atlas_primary_stores = True
+    return saver
+
+
+def _native_checkpoints():
+    from langgraph_runtime_inmem import _persistence, checkpoint, ops
+
+    if _persistence.DISABLE_FILE_PERSISTENCE or checkpoint.DISABLE_FILE_PERSISTENCE:
+        raise RuntimeError("Native persistence is disabled")
+    with _PERSIST_LOCK:
+        return _bind_checkpoints(checkpoint, _persistence.register_persistent_dict, ops)
+
+
+def initialize_native_runtime() -> None:
+    """Install the version-gated adapters before native HTTP reads start."""
+    if submissions_enabled():
+        _native_checkpoints()
+
+
 def flush_native(*, checkpoints: bool = False) -> None:
     """Persist native identities before dispatch and parent checkpoints before calls.
 
@@ -75,20 +154,17 @@ def flush_native(*, checkpoints: bool = False) -> None:
     """
     if not submissions_enabled():
         raise RuntimeError("Unsupported Atlas execution runtime")
-    from langgraph_runtime_inmem import _persistence, checkpoint, database
+    from langgraph_runtime_inmem import _persistence, database
 
-    if _persistence.DISABLE_FILE_PERSISTENCE or checkpoint.DISABLE_FILE_PERSISTENCE:
-        raise RuntimeError("Native persistence is disabled")
-    stores = [database.GLOBAL_STORE, database.GLOBAL_RETRY_COUNTER._counters]
-    if checkpoints:
-        saver = checkpoint.Checkpointer()
-        stores = [saver.blobs, saver.writes, saver.storage, *stores]
     with _PERSIST_LOCK:
+        saver = _native_checkpoints()
+        stores = [database.GLOBAL_STORE, database.GLOBAL_RETRY_COUNTER._counters]
+        if checkpoints:
+            stores = [saver.blobs, saver.writes, saver.storage, *stores]
         for ref in list(_persistence._stores.values()):
             store = ref()
-            if store is not None and not getattr(store, "_atlas_sync", False):
-                store.sync = partial(_sync, store)
-                store._atlas_sync = True
+            if store is not None:
+                _install_sync(store)
         for store in stores:
             store.sync()
 
@@ -101,6 +177,7 @@ def native_modules():
     from langgraph_runtime_inmem.database import connect
     from langgraph_runtime_inmem.ops import RUN_LOCK, Runs, Threads
 
+    _native_checkpoints()
     return connect, RUN_LOCK, Runs, Threads, create_valid_run
 
 

@@ -5,6 +5,7 @@ import json
 import os
 import sqlite3
 import time
+import traceback
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -209,6 +210,21 @@ async def create_native(conn, thread_id, payload, headers, run_id):
 
 
 submission_api.create_native = create_native
+
+original_read_snapshot = submission_api.read_snapshot
+
+
+async def read_snapshot(*args, **kwargs):
+    try:
+        return await original_read_snapshot(*args, **kwargs)
+    except Exception:
+        # The production API returns only a safe reason. Keep the underlying
+        # error in this isolated fixture's server log for offline debugging.
+        traceback.print_exc()
+        raise
+
+
+submission_api.read_snapshot = read_snapshot
 if (directory / "missing-plan").exists():
     original_implementations = workflow_runtime.implementations
     workflow_runtime.implementations = lambda: {
@@ -239,4 +255,7 @@ async def identity(request):
 
 
 agent = fixture.agent
-app = Starlette(routes=[*atlas_app.routes, Route("/m3/identity", identity)])
+app = Starlette(
+    routes=[*atlas_app.routes, Route("/m3/identity", identity)],
+    lifespan=atlas_app.router.lifespan_context,
+)

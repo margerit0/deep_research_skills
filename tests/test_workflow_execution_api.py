@@ -245,6 +245,11 @@ def test_native_acceptance_faults_and_lost_response_never_duplicate_runs(native,
     except httpx.HTTPError:
         assert fault != "lose-response"
     if fault != "lose-response":
+        # The fault exits the server itself. Wait for the Windows venv launcher
+        # to observe that exit instead of racing it with a forced termination.
+        assert f.process.wait(timeout=10) == (
+            86 if fault == "exit-in-transaction" else 87
+        )
         f.stop()
         marker.unlink(missing_ok=True)
         with sqlite3.connect(f.directory / "submissions.sqlite3") as db:

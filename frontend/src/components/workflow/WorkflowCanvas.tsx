@@ -189,20 +189,26 @@ function Canvas(props: Props) {
         })),
       )
   }, [generated])
-  const edges: Edge[] = definition.edges
-    .filter((edge) => positions.has(edge.source) && positions.has(edge.target))
-    .map((edge) => ({
-      id: edge.id,
-      source: edge.source,
-      target: edge.target,
-      sourceHandle: 'out',
-      targetHandle: 'in',
-      type: 'smoothstep',
-      selected: selectedEdge === edge.id,
-      markerEnd: { type: MarkerType.ArrowClosed, width: 15, height: 15 },
-      ariaLabel: `${workflowNodeLabel(document, catalog, edge.source)} → ${workflowNodeLabel(document, catalog, edge.target)}`,
-      interactionWidth: 24,
-    }))
+  // Node positions change on every drag frame; the edge definitions do not.
+  // Stable identities let React Flow update just the incident paths.
+  const edges = useMemo<Edge[]>(
+    () =>
+      definition.edges
+        .filter((edge) => positions.has(edge.source) && positions.has(edge.target))
+        .map((edge) => ({
+          id: edge.id,
+          source: edge.source,
+          target: edge.target,
+          sourceHandle: 'out',
+          targetHandle: 'in',
+          type: 'smoothstep',
+          selected: selectedEdge === edge.id,
+          markerEnd: { type: MarkerType.ArrowClosed, width: 15, height: 15 },
+          ariaLabel: `${workflowNodeLabel(document, catalog, edge.source)} → ${workflowNodeLabel(document, catalog, edge.target)}`,
+          interactionWidth: 24,
+        })),
+    [definition.edges, positions, document, catalog, selectedEdge],
+  )
 
   const persistViewport = () => props.onViewport(flow.getViewport())
   useImperativeHandle(props.ref, () => ({

@@ -4,12 +4,18 @@ LangGraph loads the root .env before importing apps/graphs. Standalone scripts
 must do the same before importing graph modules.
 """
 
+import sys
+from contextlib import asynccontextmanager
+
 from starlette.applications import Starlette
 from starlette.concurrency import run_in_threadpool
 from starlette.responses import JSONResponse
 from starlette.routing import Route
 
-from deep_research.atlas_runtime import workflow_graph_registered
+from deep_research.atlas_runtime import (
+    initialize_native_runtime,
+    workflow_graph_registered,
+)
 from deep_research.event_journal import EventIdentity, get_event_journal
 from deep_research.model_config import MODEL_ROLES, public_model_config
 from deep_research.report_streaming import get_report_journal
@@ -88,7 +94,16 @@ async def events(request):
     return JSONResponse(payload, headers={"Cache-Control": "no-store"})
 
 
+@asynccontextmanager
+async def lifespan(_app):
+    """Configure the already loaded native server, not standalone Atlas clients."""
+    if "langgraph_runtime_inmem.ops" in sys.modules:
+        initialize_native_runtime()
+    yield
+
+
 app = Starlette(
+    lifespan=lifespan,
     routes=[
         *workflow_routes,
         Route("/atlas/config", config, methods=["GET"]),
@@ -122,5 +137,5 @@ app = Starlette(
             events,
             methods=["GET"],
         ),
-    ]
+    ],
 )

@@ -1,10 +1,10 @@
 # Graph 流程编辑器实施交接
 
-更新日期：2026-11-15（Asia/Shanghai）。
+更新日期：2026-11-21。
 
 本文件为新实施聊天提供入口、当前状态和下一步。完整范围、设计与排期见 [项目计划书](graph-canvas-editor-plan.md)。后续实施时，更新本文件的当前状态，并链接实际代码、提交和验证记录；不要将预期结果写成已验证事实。
 
-**设计确认（2026-11-15）：用户在展示设计稿后明确回复“确认设计稿”，随后要求执行 M2 和继续 M3。** M0–M3 已完成，无需重复请求设计批准。M3 的生产编译、原子受理绑定、事件和正式界面已接入；先阅读 [M3 记录](graph-canvas-editor-m3-results.md)。下一阶段为 M4 有界真实质量与性能验收。
+**设计确认（2026-11-15）：用户在展示设计稿后明确回复“确认设计稿”，随后要求执行 M2 和继续 M3。** M0–M3 已完成，无需重复请求设计批准。M4 接续稳定性与性能，当前结果及待复验项见 [M4 记录](graph-canvas-editor-m4-results.md)。按用户要求先跳过需要真实模型的测试。
 
 ## 1. 当前起点
 
@@ -16,15 +16,16 @@
 | M0 提交 | `62ba7da`：流程修订、恢复验证与独立画布原型 |
 | M1 提交 | `622ffb8`：v1 契约、目录与校验 |
 | 实施分支 | 已创建，继续使用当前分支 |
-| 实施进度 | M0–M3 完成；正式编辑、发布、编译、受理和运行观察均已接入；M4 尚未实施 |
-| M2 提交 | `574e655`：正式流程编辑器与版本管理；M3 与本交接同批提交，未推送 |
+| 实施进度 | M0–M3 完成；M4 的原生持久化／终态回读修复、动态任务分组和离线基准已实现 |
+| M2／M3 提交 | `574e655`：正式流程编辑器与版本管理；`ae3c524`：发布工作流的生产执行 |
 | 已有证据 | M0 后端 20 项、画布浏览器 3 项通过；相关后端回归、类型检查、两种构建和静态检查通过，详见 [M0 验证记录](graph-canvas-editor-m0-results.md) |
 | 设计评审 | 独立原型 14 个交互场景通过，5 个尺寸／主题组合检查完成；入口、截图和限制见[设计评审记录](graph-canvas-editor-design-review.md) |
 | M1 验证 | 后端及回归 124 项、前端契约 60 项通过；类型、构建、静态检查及生成物检查通过，见 [M1 记录](graph-canvas-editor-m1-results.md) |
 | M2 验证 | 后端及回归 174 项、前端 164 项通过；含正式编辑器 25 项、契约 65 项及旧页 74 项，见 [M2 记录](graph-canvas-editor-m2-results.md) |
 | M3 验证 | 后端 226 项、原生 API 14 项、前端 230 项、原生浏览器 1 项通过；见 [M3 记录](graph-canvas-editor-m3-results.md) |
 | 生产能力 | 编辑存储就绪后声明 `workflow_editor_version: 1`；实际生产工厂注册、运行时和实现就绪后声明 `workflow_execution_version: 1`、`workflow_events_version: 1` |
-| 尚缺证据 | 有界真实模型业务验收、调用／费用范围与性能测量；替身测试不能证明报告质量 |
+| M4 验证 | 229 项确定性后端、14 项隔离原生 HTTP 通过；离线基准已有证据，体感与数值边界见 [M4 记录](graph-canvas-editor-m4-results.md) |
+| 尚缺证据 | 两个旧工作区浏览器用例与一个原生浏览器用例的超时复验；真实模型报告质量及费用暂缓，替身测试不能代替 |
 | 其他工作区内容 | `frontend/design-mockups/` 在本任务前已存在且未跟踪，不自动纳入本功能提交 |
 
 进入实施时，以实际 `git status`、当前分支及 `git log` 更新上述状态。分支已存在就接续使用，不因本表的初始记录重复创建。
@@ -136,12 +137,11 @@ M2 阶段存储放在现有受理 SQLite，工作流迁移为 1，受理库版�
 
 一次旧配置回归测试触发了默认受理库的空工作流表迁移，未新增受理或运行；已修正该测试模块的存储隔离，并通过默认库哈希不变的复测。详情及只读完整性核对见 M3 记录，不要为此降级或删除原数据库。
 
-### 下一阶段：M4 真实质量与性能
+### M4 剩余验收
 
-1. 先确定标准流程、扩展流程及澄清续问的有界样本、尝试次数和费用范围，再开启真实模型／检索验收。
-2. 回读业务终态、报告归属、正文、原始要求满足情况和实际来源；不能把原生 run 成功或替身测试通过作为真实质量证据。
-3. 按计划测量发布延迟、画布交互和较多动态任务的观察性能；当前没有这些指标的实测承诺。
-4. 更新 M4 结果及本交接；保留运行时版本约束、既有配置归档、研究成果和默认库。无需重做设计或 M0–M3。
+1. 从 [M4 记录](graph-canvas-editor-m4-results.md)取三项浏览器超时的 trace 和复验命令；单 worker 独立执行，不与性能基准并跑。
+2. 需要重测基准时使用隔离 HTTP 和仅展示画布；30 个可发布节点的限制不变。保留配置归档、研究成果、版本约束和默认库。
+3. 暂不启动真实模型／检索。恢复此项前由用户确认供应商认证、样本、尝试和费用范围；然后核对业务终态、报告归属、正文、要求满足情况和实际来源。
 
 ## 6. 实现与验证入口
 
@@ -161,6 +161,7 @@ M2 阶段存储放在现有受理 SQLite，工作流迁移为 1，受理库版�
 | M3 生产编译与节点 | [workflow_runtime.py](../src/deep_research/workflow_runtime.py)、[workflow_compiler.py](../src/deep_research/workflow_compiler.py)、[workflow_nodes.py](../src/deep_research/workflow_nodes.py) |
 | M3 运行观察 | [workflow_events.py](../src/deep_research/workflow_events.py)、[workflowRuntime.ts](../frontend/src/data/workflowRuntime.ts)、[WorkflowRunGraph.tsx](../frontend/src/components/workflow/WorkflowRunGraph.tsx) |
 | M3 验收 | [test_workflow_execution.py](../tests/test_workflow_execution.py)、[test_workflow_execution_api.py](../tests/test_workflow_execution_api.py)、[workflow-execution.spec.ts](../frontend/tests/workflow-execution.spec.ts)、[workflow-execution-api.spec.ts](../frontend/tests/workflow-execution-api.spec.ts) |
+| M4 验收 | [test_atlas_native_checkpoints.py](../tests/test_atlas_native_checkpoints.py)、[test_workflow_m4_performance.py](../tests/test_workflow_m4_performance.py)、[workflow-performance.spec.ts](../frontend/tests/workflow-performance.spec.ts) |
 
 以下相关回归、类型检查和构建已在 M0 执行；详细命令和结果以验证记录为准。Windows pytest 使用记录中的全新项目内 `--basetemp`，避免旧系统临时目录的权限问题：
 

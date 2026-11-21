@@ -41,7 +41,17 @@ Apple 银白 / 石墨双主题，左侧管理会话，中间展示研究对话�
 
 </details>
 
-启动方式见下方[快速开始](#快速开始)，完整交互、代理配置与运行边界见 [前端说明](frontend/README.md)。
+### 可视化研究流程
+
+星图工作台的 **流程管理** 可以把研究步骤编排成可执行的画布，而不只是查看运行图谱。
+
+1. 按[快速开始](#快速开始)启动前后端，在桌面侧栏点击 **流程管理 → 使用标准模板**，创建草稿。
+2. 添加 **研究计划优化** 或 **材料整理** 节点，调整连线与处理要求，再保存、校验并发布。
+3. 在发布页点击 **使用此版本发起研究**，输入问题并发送。运行图谱会显示该版本的步骤、实际委派的研究员和节点详情。
+
+发布版本不可变，同一研究会话的澄清、重试与受支持的恢复都沿用原版。发布新版本不会修改旧会话；不选择流程版本时仍使用内置流程。流程管理和发布执行需要后端提供相应能力，独立前端演示不会执行已发布流程。
+
+详见[流程编辑器使用指南](frontend/docs/workflow-editor.md)、[M4 验收记录](docs/graph-canvas-editor-m4-results.md)和[前端启动与代理配置](frontend/README.md)。
 
 ---
 
@@ -113,7 +123,7 @@ flowchart TB
 
 ### LangGraph 图入口
 
-`langgraph.json` 注册了 4 张可独立运行的图，便于分阶段调试：
+`langgraph.json` 注册了以下图入口。固定图可独立运行以便分阶段调试，已发布流程使用专用图工厂：
 
 | 图名 | 说明 | 实现文件 |
 |---|---|---|
@@ -121,6 +131,7 @@ flowchart TB
 | `research_agent_skills` | 单个 skills 研究员（检索 + 压缩循环） | `research_agent_skills.py` |
 | `research_agent_supervisor` | supervisor 并行调度多个研究员 | `multi_agent_supervisor.py` |
 | `research_agent_full` | Scope → Research → Write 端到端全流程 | `research_agent_full.py` |
+| `research_workflow` | 执行工作台受理并绑定的已发布流程版本 | `workflow_runtime.py` |
 
 ---
 
@@ -129,6 +140,7 @@ flowchart TB
 - **Skills 渐进式披露**：研究员先看到 skills 索引（仅 name + description），需要时用 `load_skill` 工具加载完整方法论正文（见 `skills/*.md`）。
 - **多智能体并行**：supervisor 把子课题并行派发给多个研究员，各研究员上下文隔离、互不干扰，显著缩短深度研究的墙钟时间。
 - **可配置模型路由**：每个逻辑角色（SCOPING / RESEARCHER / SUPERVISOR / SUMMARIZATION / COMPRESSION / FINAL_REPORT）都能独立指定模型、端点与 key。同一套图可无缝对接 OpenAI、Anthropic 或任意 OpenAI 兼容网关（详见 `model_config.py`）。
+- **[可视化研究流程](#可视化研究流程)**：编辑并发布可执行的研究画布；使用特定版本发起研究，并按该版本观察进度、回读历史。
 - **稳健性设计**：结构化输出带回退重试（`structured_output_fallback.py`）、Tavily 瞬时故障多级退避重试、网关 RPM 限速（`AGENT_RPM`，避免并发洪峰触发 WAF 封禁）。
 - **评估闭环**：scoping / research / supervisor 三套基于 LangSmith 的评估脚本，每套含「上传数据集 / 跑评估 / 回读结果」三件套。
 - **评估驱动的 Skill 持续优化**：从开发集失败证据诊断方法论问题，生成候选修订，经独立数据集配对验证后显式晋升或回退；首版支持 `product-comparison`，详见[功能说明](docs/skill-evolution.md)。

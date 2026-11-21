@@ -99,6 +99,17 @@ def matching_state(record, snapshot):
     )
 
 
+def completed_state(record, attempt, snapshot):
+    """Check that a terminal snapshot belongs to the exact accepted attempt."""
+    return (
+        matching_state(record, snapshot)
+        and not snapshot.next
+        and bool((snapshot.config or {}).get("configurable", {}).get("checkpoint_id"))
+        and snapshot.values.get("research_status") in TERMINAL
+        and str((snapshot.metadata or {}).get("run_id", "")) == attempt["run_id"]
+    )
+
+
 def recovery_boundary(record, snapshot):
     attempt = record["attempts"][-1]
     denied = {"allowed": False, "reason": "checkpoint_unverified"}
@@ -246,30 +257,35 @@ async def receipt(conn, record):
     ):
         return {**payload, "status": "blocked", "reason": "run_identity_mismatch"}
     try:
-        snapshot = await read_snapshot(conn, thread_id, attempt["completed_checkpoint"])
+        pinned = attempt["completed_checkpoint"]
+        requested_checkpoint = pinned
+        snapshot = await read_snapshot(conn, thread_id, requested_checkpoint)
+        if not pinned and completed_state(record, attempt, snapshot):
+            # Reading the latest state can apply a worker's pending node writes
+            # before it commits the next checkpoint. Only seal the same terminal
+            # state when it is independently readable by its exact checkpoint ID.
+            requested_checkpoint = str(snapshot.config["configurable"]["checkpoint_id"])
+            snapshot = await read_snapshot(conn, thread_id, requested_checkpoint)
     except Exception:
         return {**payload, "status": "blocked", "reason": "checkpoint_unavailable"}
-    complete = (
-        matching_state(record, snapshot)
-        and not snapshot.next
-        and snapshot.values.get("research_status") in TERMINAL
-        and str((snapshot.metadata or {}).get("run_id", "")) == attempt["run_id"]
-    )
-    if complete:
-        checkpoint_id = str(snapshot.config["configurable"]["checkpoint_id"])
-        if not attempt["completed_checkpoint"]:
+    if completed_state(record, attempt, snapshot) and requested_checkpoint == str(
+        snapshot.config["configurable"]["checkpoint_id"]
+    ):
+        if not pinned:
             # Confirmation must outlive both a crash and subsequent turns. This
             # persists evidence only: it does not create/resume or mark a run.
             flush_native(checkpoints=True)
-            get_submission_journal().confirm_completed(attempt["run_id"], checkpoint_id)
+            get_submission_journal().confirm_completed(
+                attempt["run_id"], requested_checkpoint
+            )
         return {
             **payload,
             "status": "completed",
-            "checkpoint_id": checkpoint_id,
+            "checkpoint_id": requested_checkpoint,
             "reason": "checkpoint_completed",
             "recovery": {"allowed": False, "reason": "already_completed"},
         }
-    if attempt["completed_checkpoint"]:
+    if pinned:
         return {**payload, "status": "blocked", "reason": "checkpoint_unavailable"}
     if attempt["owner_id"] not in (None, INSTANCE_ID) or run["status"] not in (
         "pending",

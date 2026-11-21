@@ -14,10 +14,14 @@ def main():
     parser.add_argument("--fixture-id", required=True)
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[1]
-    parent = (root / ".local/graph-canvas-m3").resolve()
+    parents = [
+        (root / f".local/graph-canvas-{stage}").resolve() for stage in ("m3", "m4")
+    ]
     directory = args.directory.resolve()
-    if not directory.is_relative_to(parent) or directory == parent:
-        parser.error("directory must be a case under .local/graph-canvas-m3")
+    if not any(
+        directory != parent and directory.is_relative_to(parent) for parent in parents
+    ):
+        parser.error("directory must be a case under the M3 or M4 evidence root")
     directory.mkdir(parents=True, exist_ok=True)
     with socket.socket() as probe:
         probe.bind(("127.0.0.1", args.port))
@@ -46,6 +50,7 @@ def main():
         "LANGSMITH_TRACING": "false",
         "LANGCHAIN_TRACING_V2": "false",
         "LANGGRAPH_DISABLE_FILE_PERSISTENCE": "false",
+        "LANGGRAPH_NO_VERSION_CHECK": "1",
         "NO_PROXY": "*",
         "LLM_BASE_URL": "http://127.0.0.1:1/v1",
         "OPENAI_API_KEY": "fixture-not-a-real-key",

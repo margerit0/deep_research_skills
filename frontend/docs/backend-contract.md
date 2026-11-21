@@ -213,7 +213,7 @@ Graph 流程编辑器的增量协议已在 2026-11-15 冻结，见 [v1 核心契
 
 ## 提交确认与执行恢复 · v1
 
-`submission_recovery_version: 1` 只在锁定的 LangGraph 1.1.3、API 0.8.7、inmem runtime 0.28.1 且原生文件持久化启用时声明。`ATLAS_SUBMISSIONS_ENABLED=false` 可关闭能力。版本更新后默认关闭，先跑原生故障验收再调整 `atlas_runtime.py`；不要仅修改版本断言。普通非持久化替身和 1A 专项仍使用旧契约。
+`submission_recovery_version: 1` 只在锁定的 LangGraph 1.1.3、API 0.8.7、inmem runtime 0.28.1、checkpoint 4.1.0 且原生文件持久化启用时声明。`ATLAS_SUBMISSIONS_ENABLED=false` 可关闭能力。版本更新后默认关闭，先跑原生故障验收再调整 `atlas_runtime.py`；不要仅修改版本断言。普通非持久化替身和 1A 专项仍使用旧契约。终态回执的 `checkpoint_id` 来自可按原 ID 独立回读的已提交快照；运行中的最新视图可包含待提交写入，不单独作为完成依据。
 
 初次提交先以原生 `POST /threads` 创建 UUID 会话，再调用受理接口。请求必须包含不可变内容与前一 turn，服务端不接受客户端模型参数、任意 checkpoint 或运行策略：
 

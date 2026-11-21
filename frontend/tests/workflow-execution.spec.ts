@@ -4,6 +4,7 @@ import type {
   GraphValues,
   LiveResearch,
   LiveThread,
+  ResearchEvent,
   SubmissionReceipt,
 } from '../src/data/liveSchema'
 import { workflowFixture, catalog } from './workflow-fixture'
@@ -175,6 +176,7 @@ async function backend(page: Page) {
     wrongSnapshot: false,
     wrongEvents: false,
     completed: true,
+    researcherCount: 0,
   }
   const creations: string[] = []
   const submissions: { thread: string; turn: string; body: Record<string, unknown> }[] = []
@@ -208,7 +210,40 @@ async function backend(page: Page) {
       if (request.method() === 'POST') {
         const body = request.postDataJSON()
         submissions.push({ thread, turn, body })
-        if (!records.has(turn)) records.set(turn, runData(revision, thread, turn, body.research_id))
+        if (!records.has(turn)) {
+          const record = runData(revision, thread, turn, body.research_id)
+          if (control.researcherCount) {
+            record.research.config.research_event_replay_version = 1
+            const events: ResearchEvent[] = []
+            for (let i = 1; i <= control.researcherCount; i++) {
+              const task = {
+                version: 1 as const,
+                task_id: crypto.randomUUID(),
+                at,
+                round: 1,
+                research_id: body.research_id,
+                turn_id: turn,
+                topic: `实际任务 ${i}`,
+                elapsed_ms: 10,
+              }
+              events.push({
+                ...task,
+                id: crypto.randomUUID(),
+                sequence: events.length + 1,
+                kind: 'delegated',
+              })
+              if (i < control.researcherCount)
+                events.push({
+                  ...task,
+                  id: crypto.randomUUID(),
+                  sequence: events.length + 1,
+                  kind: 'completed',
+                })
+            }
+            record.research.events = events
+          }
+          records.set(turn, record)
+        }
         if (control.loseResponse) {
           control.loseResponse = false
           return route.abort()
@@ -296,6 +331,30 @@ async function backend(page: Page) {
         unconfirmed_before_sequence: 0,
       })
     }
+    const tasks = path.match(/^\/atlas\/threads\/([^/]+)\/runs\/([^/]+)\/events$/)
+    if (tasks) {
+      const record = [...records.values()].find((r) => r.receipt.run_id === tasks[2])!
+      const after = Number(url.searchParams.get('after') ?? 0)
+      const all = record.research.events
+      const events = all.slice(after, after + Number(url.searchParams.get('limit') ?? 50))
+      const next = after + events.length
+      return reply({
+        version: 1,
+        thread_id: tasks[1],
+        run_id: tasks[2],
+        research_id: record.research.id,
+        turn_id: record.receipt.turn_id,
+        status: 'ready',
+        journal_id: tasks[2],
+        events,
+        last_sequence: all.length,
+        next_sequence: next,
+        has_more: next < all.length,
+        sealed: control.completed,
+        gap: false,
+        reset: false,
+      })
+    }
     return reply({}, 404)
   })
   const open = async () => {
@@ -311,6 +370,58 @@ async function backend(page: Page) {
   }
   return { ...publishedVersion, control, creations, submissions, records, reads, open, send }
 }
+
+test('120 replayed researcher tasks expand on demand and locate the active group by keyboard', async ({
+  page,
+}, testInfo) => {
+  const f = await backend(page)
+  f.control.researcherCount = 120
+  f.control.completed = false
+  await page.emulateMedia({ colorScheme: 'dark', reducedMotion: 'reduce' })
+  await f.open()
+  await f.send()
+  const researchers = page.getByLabel('动态研究员', { exact: true })
+  await expect(researchers).toContainText('120 个任务', { timeout: 15000 })
+  const group = researchers.getByRole('button', { name: '研究员 1–20', exact: true })
+  const last = researchers.getByRole('button', { name: '研究员 101–120', exact: true })
+  const taskButtons = researchers.locator('[data-flow-node]')
+  await expect(taskButtons).toHaveCount(0)
+
+  const durations: Record<string, number> = {}
+  await group.focus()
+  let start = performance.now()
+  await page.keyboard.press('Enter')
+  await expect(taskButtons).toHaveCount(20)
+  durations.expandMs = performance.now() - start
+  start = performance.now()
+  await page.keyboard.press('Space')
+  await expect(taskButtons).toHaveCount(0)
+  durations.collapseMs = performance.now() - start
+
+  const locate = page.getByRole('button', { name: '定位当前', exact: true })
+  await locate.focus()
+  start = performance.now()
+  await page.keyboard.press('Enter')
+  const active = researchers.getByRole('button', { name: /^研究员 120，/ })
+  await expect(last).toHaveAttribute('aria-expanded', 'true')
+  await expect(taskButtons).toHaveCount(20)
+  await expect(active).toHaveAttribute('data-status', 'running')
+  await expect(active).toBeFocused()
+  await expect(active).toBeInViewport()
+  durations.locateMs = performance.now() - start
+  await expect(page.locator('#cw-inspector')).toContainText('研究员 120')
+
+  await last.click()
+  await expect(taskButtons).toHaveCount(0)
+  await page.getByRole('button', { name: '收起节点检查器' }).click()
+  await expect(last).toBeFocused()
+  expect(f.submissions).toHaveLength(1)
+  expect(f.reads.filter((path) => /^POST .*\/runs/.test(path))).toEqual([])
+  await testInfo.attach('researcher-group-timings', {
+    contentType: 'application/json',
+    body: JSON.stringify({ researchers: 120, ...durations }, null, 2),
+  })
+})
 
 test('published version opens a new question draft and only sends after input', async ({
   page,
